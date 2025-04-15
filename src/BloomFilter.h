@@ -15,10 +15,11 @@ class BloomFilter{
     public:
         static BloomFilter& createBloomFilter(int arrSize);
         ~BloomFilter();
-
-
-
-}
-
+        void markBit(int bitNum);
+        bool isCellValid(int bitNum);
+        bool isBitOff(int bitNum);
+        int getBitSign(int bitNum);
+        const std::vector<int>& getBlommFilterArr() const;
+};
 
 #endif
