@@ -1,6 +1,3 @@
-#ifndef BLOOMFILTER_H
-#define BLOOMFILTER_H
-
 #include <vector>
 
 class BloomFilter{
@@ -15,10 +12,9 @@ class BloomFilter{
     public:
         static BloomFilter& createBloomFilter(int arrSize);
         ~BloomFilter();
-
-
-
-}
-
-
-#endif
+        void markBit(int bitNum);
+        bool isCellValid(int bitNum);
+        bool isBitOff(int bitNum);
+        int getBitSign(int bitNum);
+        const std::vector<int>& getBlommFilterArr() const;
+};
