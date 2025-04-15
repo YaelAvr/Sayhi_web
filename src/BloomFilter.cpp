@@ -32,9 +32,9 @@ bool isBitOff(int bitNum){
 int getBitSign(int bitNum) {
     if (isCellValid(bitNum)){ 
         return bloomFilterArr.at(bitNum);
+    }else{
+        return -1;
     }
-    //צריך לחשוב מה לעשות אם אכן חורג
-    //לזרוק שגיאה???
 }
 
 const std::vector<int>& getBlommFilterArr() const {
