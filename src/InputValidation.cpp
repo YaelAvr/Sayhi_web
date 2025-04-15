@@ -1,6 +1,6 @@
 #include "InputValidation.h"
 
-//spliting by space
+// Splits a string by spaces into tokens
 std::vector<std::string> InputValidation::splitBySpace(const std::string& line){
     std::vector<std::string> tokens;
     std:: string c_not_space;
@@ -20,7 +20,7 @@ std::vector<std::string> InputValidation::splitBySpace(const std::string& line){
     return tokens;
 }
 
-//checks if string is a positive number
+// Returns true if the string is a positive integer (non-empty, digits only)
 bool InputValidation::isPositiveInteger(const std::string& s) {
     if (s.empty()) {
         return false;
@@ -33,16 +33,18 @@ bool InputValidation::isPositiveInteger(const std::string& s) {
     return true;
 }
 
+
+// Main validation function: checks if the input line is valid according to the expected formats
 bool InputValidation::isValidConfigLine(const std::string& line) {
     std::vector<std::string> tokens = splitBySpace(line);
     if (tokens.empty()){
         return false;
     }
-    //we will need to check this option when we'll check the input type
+    // Case: add/check command (type 1 or 2)
     if (tokens[0]== "1"|| tokens[0] == "2") {
         return tokens.size() ==2;
     }
-    //configuration line:
+    // Case: configuration line (must contain only positive integers)
     if (tokens.size() < 2){
         return false;
     }
@@ -52,7 +54,7 @@ bool InputValidation::isValidConfigLine(const std::string& line) {
             return false;
         }
         if (token == "0") {
-            return false;
+            return false; // 0 is not allowed
         }
     }
     return true;
