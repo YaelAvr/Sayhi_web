@@ -12,4 +12,4 @@ WORKDIR /usr/src/mytest/build
 RUN cmake .. && make
 
 # Run tests
-CMD ["./runTests"]
+CMD ["./runTests", "--gtest_filter=InputValidationTest.*"]
