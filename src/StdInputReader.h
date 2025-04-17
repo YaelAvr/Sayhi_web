@@ -4,7 +4,10 @@
 #include <string>
 using namespace std;
 
-// A global function for reciving text from user
-string GetSTDInput();
+class StdInputReader {
+    public:
+    // A function that reciving text from user
+    string GetSTDInput();
+};
 
 #endif
