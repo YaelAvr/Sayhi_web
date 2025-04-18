@@ -14,7 +14,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(runTests BloomFilter.cpp Blacklist.cpp TestBlacklist.cpp TestBloomFilter.cpp Test_InputValidation.cpp InputValidation.cpp SplitString.cpp
+add_executable(runTests BloomFilter.cpp Blacklist.cpp TestBlacklist.cpp TestBloomFilter.cpp Test_InputValidation.cpp InputValidation.cpp SplitString.cpp InputClassify.cpp Test_InputClassify.cpp
 )
 
 target_link_libraries(runTests gtest_main)

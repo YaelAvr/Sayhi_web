@@ -1,24 +1,28 @@
 #include <gtest/gtest.h>
 #include "InputClassify.h"
 
-TEST (InputClassify, ZeroAfterOneAtFirstLineReturnsMinusOne) {
+// Test: First line with a non-numeric token should return -1
+TEST(InputClassifierTest, FirstLineWithNonNumericTokenReturnsMinusOne) {
      InputClassify::reset();
-     EXPECT_EQ(InputClassifier::classify("1 0"), -1) << "Expected -1 when '1 0' is first line";
-}
-
-TEST (InputClassify, ZeroAfterTwoAtFirstLineReturnsMinusOne) {
-     InputClassify::reset();
-     EXPECT_EQ(InputClassifier::classify("2 0"), -1) << "Expected -1 when '2 0' is first line";
-}
-
-TEST(InputClassifierTest, SecondLineReturns1) {
-     InputClassifier::call_count = 0;
- 
-     InputClassifier::classify("256 3 7");  // שורה ראשונה, אמור להחזיר 0
-     EXPECT_EQ(InputClassifier::classify("1 0"), 1) << "Expected 1 when '1 0' is second line";
+     EXPECT_EQ(InputClassify::classify("1 www.example.com0"), -1);
  }
-     
- TEST(InputClassifierTest, ValidConfigLineAsFirstReturnsZero) {
-     InputClassifier::call_count = 0;
-     EXPECT_EQ(InputClassifier::classify("256 3 7"), 0);
+
+ // Test: First line with two positive integers should return 0
+ TEST(InputClassifierTest, FirstLineWithTwoPositiveIntegersReturnsZero) {
+     InputClassify::reset();
+     EXPECT_EQ(InputClassify::classify("128 2"), 0);
+ }
+
+// Test: Second line with command "1" and valid URL should return 1
+ TEST(InputClassifierTest, LinesThatAreNotFirst1WithValidURLReturns1) {
+     InputClassify::reset();
+     InputClassify::classify("128 2");  
+     EXPECT_EQ(InputClassify::classify("1 www.example.com0"), 1);
+ }
+
+// Test: Second line with command "2" and valid URL should return 1
+ TEST(InputClassifierTest, LinesThatAreNotFirst2WithValidURLReturns1) {
+     InputClassify::reset();
+     InputClassify::classify("128 2"); 
+     EXPECT_EQ(InputClassify::classify("2 www.example.com0"), 2);
  }
