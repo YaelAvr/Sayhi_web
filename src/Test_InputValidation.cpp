@@ -1,54 +1,22 @@
-#include <iostream>
+#include <gtest/gtest.h>
 #include "InputValidation.h"
-
-int main() {
-    int fails=0;
-     // ---------- INVALID INPUT TESTS ----------
-    if (InputValidation::isValidConfigLine("256"))
-        fails++;
-    if (InputValidation::isValidConfigLine("0 1"))
-        fails++;    
-    if (InputValidation::isValidConfigLine("256 0"))
-        fails++;
-    if (InputValidation::isValidConfigLine("256 -1 2"))
-        fails++;
-    if (InputValidation::isValidConfigLine("abc, abc"))
-        fails++;
-    if (InputValidation::isValidConfigLine("256 2 3 f"))
-        fails++;
-    if (InputValidation::isValidConfigLine("256, 1"))
-        fails++;
-    if (InputValidation::isValidConfigLine("1   "))
-        fails++;
-    if (InputValidation::isValidConfigLine("abc, abc"))
-        fails++;
-    if (fails > 0) {
-        std::cout << "FAILED: " << fails << " invalid inputs were accepted\n";
-        }
-    else {
-    std::cout << "PASSED: all invalid inputs were correctly rejected\n";
+//invalid inputs test
+TEST (InputValidationTest, InvalidInputs) {
+    std::vector<std::string> invalid_inputs = {
+        "256", "0 1", "256 0", "256 -1 2", "abc abc", "256 2 3 f", "256, 1", "1  "
+    };
+    for(const std::string& input : invalid_inputs) {
+        EXPECT_FALSE (InputValidation::isValidConfigLine(input)) << "Failed on: " << input;
     }
+}
 
 
-    int test_valid_inputs = 0;
-    // ---------- VALID INPUT TESTS ----------
-    if (InputValidation::isValidConfigLine("256 2 3")) {
-        test_valid_inputs++;
+//valid inputs test
+TEST (InputValidationTest, ValidInputs) {
+    std::vector<std::string> valid_inputs = {
+        "256 2 3", "1 dggfdr", "2 68", "2 dggfdr", "256 2 3 5 8 12"
+    };
+    for(const std::string& input : valid_inputs) {
+        EXPECT_TRUE (InputValidation::isValidConfigLine(input)) << "Failed on: " << input;
     }
-    if (InputValidation::isValidConfigLine("1 dggfdr")) {
-        test_valid_inputs++;
-    }
-    if (InputValidation::isValidConfigLine("2 6485")) {
-        test_valid_inputs++;
-    }
-    if (InputValidation::isValidConfigLine("2 fdgrrr")) {
-        test_valid_inputs++;
-    }
-    if (InputValidation::isValidConfigLine("256 2 3 5 8 5 12 57")) {
-        test_valid_inputs++;
-    }
-    std::cout << test_valid_inputs;  // Expecting to print 5
-    return 1;
-
-
 }
