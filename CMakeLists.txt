@@ -14,6 +14,9 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(BloomFilter BloomFilter.cpp)
+# file(GLOB SOURCES "src/*.cpp")
+# add_executable(runTests ${SOURCES})
 
-# target_link_libraries(runTests gtest_main)
+add_executable(runTests src/TestBackupFile.cpp src/BackupFile.cpp)
+
+target_link_libraries(runTests gtest_main)
