@@ -6,9 +6,9 @@
 class BackupFile {
 public:
     /* open a file named "BloomFilterBackup.txt" in the "data" folder 
-    and initialize it with the array size and hush function
+    and initialize it with the array size
     and zeros that represent a new Bloom filter array */ 
-    static void createBackupFile(std::string firstInputsLine, int arraySize);
+    static void createBackupFile(int arraySize);
 
     // update a specific cell in the "Bloom-filter" array to 1
     // static void updateBloomFilterBeckup(int cell);

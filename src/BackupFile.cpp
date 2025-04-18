@@ -1,5 +1,4 @@
 #include "BackupFile.h"
-// #include "InputValidation.h"
 #include <fstream>
 #include <string>
 using namespace std;
@@ -7,7 +6,7 @@ using namespace std;
 /* open a file named "BloomFilterBackup.txt" in the "data" folder 
 and initialize it with the array size 
 and zeros that represent a new Bloom filter array */ 
-void BackupFile::createBackupFile(string firstInputsLine, int arraySize){
+void BackupFile::createBackupFile(int arraySize){
     //TO-DO: check what to do in case this file already exist
 
     // Create a file named BloomFilterBackup and open it for writing
@@ -18,7 +17,7 @@ void BackupFile::createBackupFile(string firstInputsLine, int arraySize){
     }
 
     // enter the Bloom-filter-array size to the first line
-    backupFile << firstInputsLine << endl;
+    backupFile << arraySize << endl;
 
     // enter zeros to match the Bloom-filter-array
     for (int i = 0; i < arraySize; i++) {
