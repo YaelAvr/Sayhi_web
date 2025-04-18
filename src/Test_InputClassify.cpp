@@ -26,3 +26,24 @@ TEST(InputClassifierTest, FirstLineWithNonNumericTokenReturnsMinusOne) {
      InputClassify::classify("128 2"); 
      EXPECT_EQ(InputClassify::classify("2 www.example.com0"), 2);
  }
+
+
+ TEST(InputClassifierTest, InvalidLineDoesNotIncrementCallCount) {
+     InputClassify::reset();
+     EXPECT_EQ(InputClassify::classify("256 0"), -1);  // invalid config line
+     EXPECT_EQ(InputClassify::classify("256 3"), 0);   // should still be treated as first line
+ }
+
+ TEST(InputClassifierTest, ThirdLineHandledCorrectlyAfterValidFirstTwo) {
+     InputClassify::reset();
+     InputClassify::classify("128 2");  // first line → 0
+     InputClassify::classify("1 www.example.com0");  // second → 1
+     EXPECT_EQ(InputClassify::classify("2 www.example.com0"), 2);  // third → 2
+ }
+
+ TEST(InputClassifierTest, InvalidLinesIgnoredBeforeFirstLine) {
+     InputClassify::reset();
+     EXPECT_EQ(InputClassify::classify("256 two"), -1);  // invalid
+     EXPECT_EQ(InputClassify::classify("1 bla.com"), -1); // invalid
+     EXPECT_EQ(InputClassify::classify("256 3"), 0); // still first valid line
+ }
