@@ -36,7 +36,7 @@ void BackupFile::createBackupFile(string firstInputsLine, int arraySize){
 //     if (!backupFile) {
 //         throw runtime_error("not able to open file");
 //     }
-// }
+// } 
 
 
 // add a new URL to the end on the "Blacklist" array.
