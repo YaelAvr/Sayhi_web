@@ -20,4 +20,3 @@ FetchContent_MakeAvailable(googletest)
 add_executable(runTests src/TestBackupFile.cpp src/BackupFile.cpp)
 
 target_link_libraries(runTests gtest_main)
-target_link_libraries(runTests gtest_main)
