@@ -17,7 +17,6 @@ FetchContent_MakeAvailable(googletest)
 # file(GLOB SOURCES "src/*.cpp")
 # add_executable(runTests ${SOURCES})
 
-add_executable(runTests src/TestBackupFile.cpp src/BackupFile.cpp)
+add_executable(runTests src/TestHashManager.cpp src/HashManager.cpp src/HashManager.h)
 
-target_link_libraries(runTests gtest_main)
 target_link_libraries(runTests gtest_main)
