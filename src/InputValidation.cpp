@@ -1,24 +1,6 @@
 #include "InputValidation.h"
-
-// Splits a string by spaces into tokens
-std::vector<std::string> InputValidation::splitBySpace(const std::string& line){
-    std::vector<std::string> tokens;
-    std:: string c_not_space;
-    for (char c : line) {
-        if (c == ' ') {
-            if (!c_not_space.empty()) {
-                tokens.push_back(c_not_space);
-                c_not_space.clear();
-            }
-        } else {
-            c_not_space += c;
-        }
-    }
-    if (!c_not_space.empty()) {
-        tokens.push_back(c_not_space);
-    }
-    return tokens;
-}
+#include "SplitString.h"
+#include <regex> 
 
 // Returns true if the string is a positive integer (non-empty, digits only)
 bool InputValidation::isPositiveInteger(const std::string& s) {
@@ -33,16 +15,21 @@ bool InputValidation::isPositiveInteger(const std::string& s) {
     return true;
 }
 
+bool InputValidation::isValidURL(const std::string& url) {
+    const std::regex urlRegex(R"(^((https?://)?[a-z0-9.-]+\.[a-z]{2,10}[0-9]*(/.*)?)$)");
+    return std::regex_match(url, urlRegex);
+}
+
 
 // Main validation function: checks if the input line is valid according to the expected formats
 bool InputValidation::isValidConfigLine(const std::string& line) {
-    std::vector<std::string> tokens = splitBySpace(line);
+    std::vector<std::string> tokens = SplitString::SplitBySpace(line);
     if (tokens.empty()){
         return false;
     }
     // Case: add/check command (type 1 or 2)
-    if (tokens[0]== "1"|| tokens[0] == "2") {
-        return tokens.size() ==2;
+    if ((tokens[0] == "1" || tokens[0] == "2") && tokens.size() == 2) {
+        return isValidURL(tokens[1]);
     }
     // Case: configuration line (must contain only positive integers)
     if (tokens.size() < 2){
