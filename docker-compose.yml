@@ -1,0 +1,6 @@
+services:
+  bloom-filter-backup:
+    build: .
+    volumes:
+      - ./data:/usr/gmail-project/data
+    command: ./runTests
