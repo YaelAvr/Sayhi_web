@@ -6,8 +6,8 @@ using namespace std;
 
 class StdInputReader {
     public:
-    // A function that reciving text from user
-    string GetSTDInput();
+        // A function that reciving text from user
+        string GetSTDInput();
 };
 
 #endif
