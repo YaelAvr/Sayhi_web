@@ -26,8 +26,6 @@ streampos BackupFile::iterArrayInFile(int cell){
 and initialize it with the array size 
 and zeros that represent a new Bloom filter array */ 
 void BackupFile::createBackupFile(int arraySize){
-    //TO-DO: check what to do in case this file already exist
-
     // Create a file named BloomFilterBackup and open it for writing
     ofstream backupFile("../data/BloomFilterBackup.txt"); 
 

@@ -33,7 +33,6 @@ TEST(BackupTest, InitFile) {
     
     //make sure the next 8 lines = 0
     while (getline(file, line)) {
-        // getline(file, line);
         EXPECT_EQ(line, "0");
         count++;
     }
@@ -94,8 +93,6 @@ TEST(BackupTest, updateBlackList) {
     //find if the line is the correct URL and if it was the 10th line of the 
     EXPECT_EQ(lastLine, "www.example.com0");
     EXPECT_EQ(lineCounter, 10);
-    // cout << "line "<< lineCounter <<endl;
-
     file.close();
 }
 int main(int argc, char **argv) {
