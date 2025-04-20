@@ -17,9 +17,7 @@ Blacklist& Blacklist::createBlacklist(){
 // setter
 //Add URL to blacklist
 void Blacklist::addUrl(std::string url) {
-    if (!isUrlBlacklisted(url)) {
         BlacklistArr.push_back(url);
-    }
 }
 
 //Check if URL already exists in the blacklist
