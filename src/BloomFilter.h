@@ -1,3 +1,5 @@
+#ifndef BLOOM_FILTER_H
+#define BLOOM_FILTER_H
 #include <vector>
 
 class BloomFilter{
@@ -18,3 +20,4 @@ class BloomFilter{
         int getBitSign(int bitNum);
         const std::vector<int>& getBlommFilterArr() const;
 };
+#endif

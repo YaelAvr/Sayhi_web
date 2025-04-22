@@ -1,3 +1,5 @@
+#ifndef BLACKLIST_H
+#define BLACKLIST_H
 #include <vector>
 #include <string>
 
@@ -17,3 +19,4 @@ class Blacklist{
         bool isUrlBlacklisted(std::string url);
         const std::vector<std::string>& getBlacklistArr() const;
 };
+#endif
