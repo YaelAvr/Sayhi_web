@@ -105,7 +105,14 @@ Test(BackupTest, loadToBF) {
 
     BloomFilter& obj = BloomFilter::createBloomFilter(8);
     BackupFile::loadBloomFilter(obj, 8);
-    EXPECT_EQ(obj.getBitSign(), 1);
+    for (int i = 0; i < 8; i++){
+        if (i == 3) {
+            EXPECT_EQ(obj.getBitSign(i), 1);
+        } else{
+            // make sur the rest = 0
+            EXPECT_EQ(obj.getBitSign(i), 0);
+        }
+    }
 }
 
 // test if after load the blacklist have the string
