@@ -1,4 +1,6 @@
 #include "BackupFile.h"
+#include "Blacklist.h"
+#include "BloomFilter.h"
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
@@ -95,6 +97,28 @@ TEST(BackupTest, updateBlackList) {
     EXPECT_EQ(lineCounter, 10);
     file.close();
 }
+
+// test if after load the bloom filter have the same bit on
+Test(BackupTest, loadToBF) {
+    BackupFile::createBackupFile(8);
+    BackupFile::updateBloomFilterBeckup(4);
+
+    BloomFilter& obj = BloomFilter::createBloomFilter(8);
+    BackupFile::loadBloomFilter(obj, 8);
+    EXPECT_EQ(obj.getBitSign(), 1);
+}
+
+// test if after load the blacklist have the string
+Test(BackupTest, loadToBl) {
+    BackupFile::createBackupFile(8);
+    BackupFile::updateBlacklistBeckup("www.example.com0");
+
+    Blacklist& obj = Blacklist::createBlacklist();
+    BackupFile::loadBlacklist(obj, 8);
+    std::vector<std::string>& blArray = obj.getBlacklistArr();
+    EXPECT_EQ(blArray.at(0), "www.example.com0");
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
