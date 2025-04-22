@@ -1,7 +1,8 @@
 #ifndef BACKUP_FILE_H
 #define BACKUP_FILE_H
 #include <string>
-
+#include "Blacklist.h"
+#include "BloomFilter.h"
 class BackupFile {
 private:
     //this func goes to the given cell of the array that is in the (cell + 1) line
@@ -17,5 +18,9 @@ public:
 
     // add a new URL to the end on the "Blacklist" array.
     static void updateBlacklistBeckup(std::string url);
+// #include "Blacklist.h"
+// #include "BloomFilter.h"
+    static void loadBlacklist(Blacklist& bl, int arraySize);
+    static void loadBloomFilter(BloomFilter& bf, int arraySize);
 };
 #endif
