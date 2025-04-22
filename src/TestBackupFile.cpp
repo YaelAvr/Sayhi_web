@@ -99,31 +99,32 @@ TEST(BackupTest, updateBlackList) {
 }
 
 // test if after load the bloom filter have the same bit on
-Test(BackupTest, loadToBF) {
+TEST(BackupTest, loadToBF) {
     BackupFile::createBackupFile(8);
     BackupFile::updateBloomFilterBeckup(4);
 
     BloomFilter& obj = BloomFilter::createBloomFilter(8);
     BackupFile::loadBloomFilter(obj, 8);
     for (int i = 0; i < 8; i++){
-        if (i == 3) {
+        if (i == 4) {
             EXPECT_EQ(obj.getBitSign(i), 1);
         } else{
-            // make sur the rest = 0
+            // make sure the rest = 0
             EXPECT_EQ(obj.getBitSign(i), 0);
         }
     }
 }
 
 // test if after load the blacklist have the string
-Test(BackupTest, loadToBl) {
+TEST(BackupTest, loadToBl) {
     BackupFile::createBackupFile(8);
     BackupFile::updateBlacklistBeckup("www.example.com0");
 
     Blacklist& obj = Blacklist::createBlacklist();
     BackupFile::loadBlacklist(obj, 8);
-    std::vector<std::string>& blArray = obj.getBlacklistArr();
+    const std::vector<std::string>& blArray = obj.getBlacklistArr();
     EXPECT_EQ(blArray.at(0), "www.example.com0");
+    EXPECT_EQ(blArray.size(), 1);
 }
 
 int main(int argc, char **argv) {
