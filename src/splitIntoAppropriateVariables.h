@@ -7,6 +7,9 @@
 class splitIntoAppropriateVariables{
 
     public:
+    // Splits a space-separated string into a pair:
+    // - First number (int)
+    // - Vector of remaining numbers
     static std::pair<int, std::vector<int>> splitHashsLine(const std::string& line);
 
 };

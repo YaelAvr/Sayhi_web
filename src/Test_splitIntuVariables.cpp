@@ -4,6 +4,8 @@
 #include <string>
 #include "splitIntoAppropriateVariables.h"
 
+// Input: "5 10 20 30"
+// Expected output: first = 5, second = {10, 20, 30}
 TEST(SplitHashsLineTest, SplitsLineIntoNumberAndVectorCorrectly) {
     std::string line = "5 10 20 30";
     std::pair<int, std::vector<int>> result = splitIntoAppropriateVariables::splitHashsLine(line);
