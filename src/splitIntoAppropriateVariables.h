@@ -11,6 +11,7 @@ class splitIntoAppropriateVariables{
     // - First number (int)
     // - Vector of remaining numbers
     static std::pair<int, std::vector<int>> splitHashsLine(const std::string& line);
+    static std::string extractUrlFromLine(const std::string& line);
 
 };
 

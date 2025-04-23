@@ -19,7 +19,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(runTests
     src/splitIntoAppropriateVariables.cpp
-    src/Test_splitIntuVariables.cpp
+    src/Test_splitIntoVariables.cpp
     src/SplitString.cpp
 )
 

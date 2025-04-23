@@ -20,3 +20,9 @@ std::pair<int, std::vector<int>> splitIntoAppropriateVariables::splitHashsLine(c
     }
     return result;
 }
+
+
+std::string splitIntoAppropriateVariables::extractUrlFromLine(const std::string& line) {
+    std::string url = "-1";
+    return url;
+}

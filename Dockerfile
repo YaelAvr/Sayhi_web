@@ -15,4 +15,4 @@ RUN cmake .. && make
 
 # Run tests
 #CMD ["./runTests"]
-CMD ["./runTests", "--gtest_filter=SplitHashsLineTest.*"]
+CMD ["./runTests", "--gtest_filter=ExtractUrlTest.*"]
