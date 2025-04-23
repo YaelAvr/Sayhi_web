@@ -1,4 +1,6 @@
 #include "BackupFile.h"
+#include "Blacklist.h"
+#include "BloomFilter.h"
 #include <fstream>
 #include <string>
 using namespace std;
@@ -78,4 +80,40 @@ void BackupFile::updateBlacklistBeckup(string url){
     }
     backupFile << url << endl;
     backupFile.close();
+}
+
+void BackupFile::loadBlacklist(Blacklist& bl, int arraySize){
+    ifstream backupFile("../data/BloomFilterBackup.txt");
+    if (!backupFile) {
+        throw runtime_error("not able to open file");
+    }
+
+    // skip the bloom filter array
+    // arraySize is outside of the array
+    streampos pos = BackupFile::iterArrayInFile(arraySize); 
+    backupFile.seekg(pos);
+    string line;
+    while (getline(backupFile, line))
+    {
+        bl.addUrl(line);
+    }
+}
+
+void BackupFile::loadBloomFilter(BloomFilter& bf, int arraySize){
+    ifstream backupFile("../data/BloomFilterBackup.txt");
+    if (!backupFile) {
+        throw runtime_error("not able to open file");
+    }
+
+    // skip the first line
+    string line;
+    int bitLine;
+    getline(backupFile, line);
+
+    for (int i = 0; i < arraySize; i++){
+        getline(backupFile, line);
+        // bitLine = stoi(line);
+        if(stoi(line) == 0) {continue;}
+        bf.markBit(i);
+    }
 }
