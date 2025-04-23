@@ -23,6 +23,7 @@ std::pair<int, std::vector<int>> splitIntoAppropriateVariables::splitHashsLine(c
 
 
 std::string splitIntoAppropriateVariables::extractUrlFromLine(const std::string& line) {
-    std::string url = "-1";
+    std::vector<std::string> tokens = SplitString::SplitBySpace(line);
+    std::string url = tokens[1];
     return url;
 }
