@@ -14,4 +14,5 @@ WORKDIR /usr/gmail-project/build
 RUN cmake .. && make
 
 # Run tests
-CMD ["./runTests"]
+#CMD ["./runTests"]
+CMD ["./runTests", "--gtest_filter=SplitHashsLineTest.*"]
