@@ -17,10 +17,6 @@ FetchContent_MakeAvailable(googletest)
 # file(GLOB SOURCES "src/*.cpp")
 # add_executable(runTests ${SOURCES})
 
-add_executable(runTests
-    src/splitIntoAppropriateVariables.cpp
-    src/Test_splitIntoVariables.cpp
-    src/SplitString.cpp
-)
+add_executable(runTests src/main.cpp src/BackupFile.cpp)
 
 target_link_libraries(runTests gtest_main)

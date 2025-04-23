@@ -23,7 +23,9 @@ std::pair<int, std::vector<int>> splitIntoAppropriateVariables::splitHashsLine(c
 
 
 std::string splitIntoAppropriateVariables::extractUrlFromLine(const std::string& line) {
+    // Split the input line by spaces into tokens
     std::vector<std::string> tokens = SplitString::SplitBySpace(line);
+    // Take the second token (index 1), which is assumed to be a URL
     std::string url = tokens[1];
     return url;
 }
