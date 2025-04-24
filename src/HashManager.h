@@ -1,3 +1,5 @@
+#ifndef HASHMANAGER_H
+#define HASHMANAGER_H
 #include <string>
 
 class HashManager {
@@ -14,3 +16,5 @@ public:
     // Applies modulo operation to int value
     static int modulo(size_t value, int mod);
 };
+
+#endif
