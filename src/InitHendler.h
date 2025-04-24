@@ -5,9 +5,12 @@
 // #include <string>
 // #include "InputValidation.h"
 class InitHendler : public IMenuCommand{
-// private:
-// /* data */
 public:
+    /*
+    A function that will execute the functionality of
+    initolaizing the program- creats new objects or 
+    load existing versions
+    */
     void execute();
 };
 #endif

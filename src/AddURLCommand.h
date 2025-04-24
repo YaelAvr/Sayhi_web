@@ -5,8 +5,8 @@
 class AddURLCommand : public IMenuCommand {
 public:
     /*
-    An abstract function that will send the program to 
-    the correct acction.
+    A function that will execute the functionality of
+    adding a URL to the blacklisted list 
     */
     void execute();
 };

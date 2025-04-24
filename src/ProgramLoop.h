@@ -8,8 +8,12 @@ private:
     map<int, IMenuCommand*> commands;
 public:
     ProgramLoop(map<int, IMenuCommand*> commands) : commands(commands){};
-    // ProgramLoop(IMenuCommand* menu, map<int, IMenuCommand*> commands) : menu(menu), commands(commands){};
-    static void startLoop();
+    /*
+    this function will be the main project loop that 
+    execute the functionality of the project
+    based on the user input.
+    */ 
+    void startLoop();
 };
 #endif
 
