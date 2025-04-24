@@ -6,8 +6,11 @@ using namespace std;
 
 int main() {
     map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu();
+    
+    // start loop
     ProgramLoop programLoop(commands);
     programLoop.startLoop();
+    // delete allocated objects
     CommandMenuInitializer::deleteCommandMenu(commands);
     return 0;
 }
