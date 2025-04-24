@@ -4,7 +4,10 @@
 
 class BloomFilter{
     private:
+        //the bloom filter array
         std::vector<int> bloomFilterArr; 
+
+        //builders
         BloomFilter(int arrSize);
         BloomFilter(const BloomFilter& other) = delete;
         BloomFilter& operator=(const BloomFilter&) = delete;
@@ -14,10 +17,11 @@ class BloomFilter{
     public:
         static BloomFilter& createBloomFilter(int arrSize);
         ~BloomFilter();
-        void markBit(int bitNum);
+        void markBit(int bitNum); // setter
         bool isCellValid(int bitNum);
         bool isBitOff(int bitNum);
-        int getBitSign(int bitNum);
+        //getters
+        int getBitSign(int bitNum); 
         const std::vector<int>& getBlommFilterArr() const;
 };
 #endif
