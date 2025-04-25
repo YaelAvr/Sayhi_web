@@ -103,7 +103,8 @@ TEST(BackupTest, loadToBF) {
     BackupFile::createBackupFile(8);
     BackupFile::updateBloomFilterBeckup(4);
 
-    BloomFilter& obj = BloomFilter::createBloomFilter(8);
+    BloomFilter obj;
+    obj.createBloomFilter(8);
     BackupFile::loadBloomFilter(obj, 8);
     for (int i = 0; i < 8; i++){
         if (i == 4) {
@@ -120,7 +121,7 @@ TEST(BackupTest, loadToBl) {
     BackupFile::createBackupFile(8);
     BackupFile::updateBlacklistBeckup("www.example.com0");
 
-    Blacklist& obj = Blacklist::createBlacklist();
+    Blacklist obj;
     BackupFile::loadBlacklist(obj, 8);
     const std::vector<std::string>& blArray = obj.getBlacklistArr();
     EXPECT_EQ(blArray.at(0), "www.example.com0");

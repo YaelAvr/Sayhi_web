@@ -1,16 +1,17 @@
 #include "BloomFilter.h"
-//using namespace BloomFilter;
 #include <vector>
 
 // Constructor for the BloomFilter class.
-BloomFilter::BloomFilter(int arrSize){
-    bloomFilterArr = std::vector<int>(arrSize, 0);
+BloomFilter::BloomFilter(){
+    bloomFilterArr = std::vector<int>();
 }
 
-// Static method that returns a singleton instance of BloomFilter.
-BloomFilter& BloomFilter::createBloomFilter(int arrSize){
-    static BloomFilter bloomFilterObject(arrSize);
-    return bloomFilterObject;
+//initialize bloomfilter
+void BloomFilter::createBloomFilter(int arrSize){ 
+    for (int i = 0; i < arrSize; i++)
+    {
+        bloomFilterArr.push_back(0); //set all the bits to equal 0
+    }
 }
 
 // setter
