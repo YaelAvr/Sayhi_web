@@ -5,15 +5,15 @@
 class BloomFilter{
     private:
         std::vector<int> bloomFilterArr; 
-        BloomFilter(int arrSize);
         BloomFilter(const BloomFilter& other) = delete;
         BloomFilter& operator=(const BloomFilter&) = delete;
         BloomFilter(BloomFilter&& other) noexcept = delete;
         BloomFilter& operator=(BloomFilter&& other) noexcept = delete;
         
     public:
-        static BloomFilter& createBloomFilter(int arrSize);
+        BloomFilter();
         ~BloomFilter();
+        void createBloomFilter(int arrSize);
         void markBit(int bitNum);
         bool isCellValid(int bitNum);
         bool isBitOff(int bitNum);

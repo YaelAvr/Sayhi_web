@@ -20,7 +20,8 @@ TEST(BloomFilterLogicTest, Check) { //checks if the bits that return from hash i
 
 TEST(BloomFilterLogicTest, IfBitsEqualAllBitsAreZero) { // checks given all the bits equal 0 in the bloomfilter, if return false
     int arrSize =20;
-    BloomFilter& bloomFilter = BloomFilter::createBloomFilter(arrSize); //create bloomfilter that all the bits equal 0
+    BloomFilter bloomFilter;
+    bloomFilter.createBloomFilter(arrSize); //create bloomfilter that all the bits equal 0
     std::vector<int> hashFunctions = {1, 2, 3};
     std::vector<int> bitsReturnFromHash = BloomFilterLogic::check(hashFunctions, "www.example.com0", arrSize);
     ASSERT_FALSE(BloomFilterLogic::ifBitsEqual(bloomFilter, bitsReturnFromHash)); //all the bits equal 0, so we expect the result will be false
@@ -28,7 +29,8 @@ TEST(BloomFilterLogicTest, IfBitsEqualAllBitsAreZero) { // checks given all the 
 
 TEST(BloomFilterLogicTest, IfBitsEqualAllBitsAreOne) { // checks given all the bits equal 1 in the bloomfilter, if return true
     int arrSize =20;
-    BloomFilter& bloomFilter = BloomFilter::createBloomFilter(arrSize);
+    BloomFilter bloomFilter;
+    bloomFilter.createBloomFilter(arrSize);
     for (int i = 0; i < arrSize; i++)
     {
         bloomFilter.markBit(i); //change all the bits to equal 1
