@@ -127,8 +127,3 @@ TEST(BackupTest, loadToBl) {
     EXPECT_EQ(blArray.at(0), "www.example.com0");
     EXPECT_EQ(blArray.size(), 1);
 }
-
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
