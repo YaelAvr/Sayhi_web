@@ -9,7 +9,7 @@ int BloomFilterLogic::bloomFilterUsingHash(int hashIterations, std::string url, 
     return HashManager::modulo(hashResult, arraySize); // do modulo in order to get the number that corresponds to the array size
 }
 
-std::vector<int> BloomFilterLogic::check(std::vector<int> hashsVector, std::string url, int arraySize){
+std::vector<int> BloomFilterLogic::activateMultipleHash(std::vector<int> hashsVector, std::string url, int arraySize){
     std::vector<int> bitsReturnFromHash;
     int hashRes =0;
     for (int i = 0; i < hashsVector.size(); i++)
