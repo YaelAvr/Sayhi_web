@@ -12,7 +12,7 @@ TEST(BloomFilterLogicTest, BloomFilterUsingHash) { //checks if the result in ran
     ASSERT_LT(result, 10);
 }
 
-TEST(BloomFilterLogicTest, Check) { //checks if the bits that return from hash is equal to the amount of hash functions
+TEST(BloomFilterLogicTest, activateMultipleHash) { //checks if the bits that return from hash is equal to the amount of hash functions
     std::vector<int> hashFunctions = {1, 2, 3};
     std::vector<int> bitsReturnFromHash = BloomFilterLogic::activateMultipleHash(hashFunctions, "www.example.com0", 20);
     ASSERT_EQ(bitsReturnFromHash.size(), hashFunctions.size());

@@ -6,20 +6,16 @@
 #include "BackupFile.h"
 #include <fstream>
 
-
-
-
 void InitHendler::execute(std::string line) {
     std::pair<int, std::vector<int>> curPair = splitIntoAppropriateVariables::splitHashsLine(line);
     arraySize = curPair.first;
     hashFunctions = curPair.second;
     bloomfilter.createBloomFilter(arraySize);
     int is_file_exist = BackupChecker::backupExists();
-    if (is_file_exist ==1) {
+    if (is_file_exist == 1) {
         BackupFile::loadBloomFilter(bloomfilter, arraySize);
         BackupFile::loadBlacklist(blacklist, arraySize);
-    }
-    else {
-        std::ofstream create("../data/BloomFilterBackup.txt");
+    } else {
+        BackupFile::createBackupFile(arraySize);
     }
 }
