@@ -18,9 +18,9 @@ public:
     void execute(std::string line);
 
     // add a url to the blacklist array and update the file
-    void addUrlToBlacklist();
+    void addUrlToBlacklist(std::string url);
     /* check if adding us needed, and if it does, 
     add a url to the bloomfilter array and update the file*/
-    void addUrlToBloomFilter();
+    void addUrlToBloomFilter(std::vector<int> hush);
 };
 #endif
