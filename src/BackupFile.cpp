@@ -118,9 +118,9 @@ void BackupFile::loadBloomFilter(BloomFilter& bf, int arraySize){
     int bitLine;
     getline(backupFile, line);
 
+    // copy bits that equal 1 to the bloom filter
     for (int i = 0; i < arraySize; i++){
         getline(backupFile, line);
-        // bitLine = stoi(line);
         if(stoi(line) == 0) {continue;}
         bf.markBit(i);
     }
