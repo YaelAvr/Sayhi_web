@@ -12,9 +12,12 @@ so that we can execute a command while protecting polymorphism.
 */
 map<int, IMenuCommand*> CommandMenuInitializer::createCommandMenu() {
     map<int, IMenuCommand*> commands;
-    commands[0] = new InitHendler();
-    commands[1] = new AddURLCommand();
-    commands[2] = new CheckURLCommand();
+
+    InitHendler* init = new InitHendler();
+    
+    commands[0] = init;
+    commands[1] = new AddURLCommand(init);
+    commands[2] = new CheckURLCommand(init);
 
     return commands;
 }
@@ -28,3 +31,4 @@ void deleteCommandMenu(map<int, IMenuCommand*>commands) {
         delete pair.second;
     }
 }
+

@@ -1,17 +1,10 @@
 #include "Blacklist.h"
-//using namespace Blacklist;
 #include <vector>
 #include <algorithm>
 
 // Constructor for the Blacklist class.
 Blacklist::Blacklist(){
     BlacklistArr = std::vector<std::string>();
-}
-
-// Static method that returns a singleton instance of Blacklist.
-Blacklist& Blacklist::createBlacklist(){
-    static Blacklist BlacklistObject;
-    return BlacklistObject;
 }
 
 // setter

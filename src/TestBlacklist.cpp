@@ -4,7 +4,7 @@
 #include "Blacklist.h"
 
 TEST(BlacklistArrayTest, AddUrl) {
-    Blacklist& obj = Blacklist::createBlacklist();
+    Blacklist obj;
     obj.addUrl("http://example.com");
     EXPECT_TRUE(obj.isUrlBlacklisted("http://example.com"));
 }

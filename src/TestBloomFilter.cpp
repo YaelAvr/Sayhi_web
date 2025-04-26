@@ -2,7 +2,8 @@
 #include "BloomFilter.h"
 
 TEST(BloomFilterArrayTest, OutOfRange) {
-    BloomFilter& obj = BloomFilter::createBloomFilter(8);
+    BloomFilter obj;
+    obj.createBloomFilter(8);
     // sanity test
     EXPECT_TRUE(obj.isCellValid(3));
     EXPECT_EQ(obj.getBitSign(1), 0); 

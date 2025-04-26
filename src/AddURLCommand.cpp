@@ -1,3 +1,4 @@
+#include "InitHendler.h"
 #include "AddURLCommand.h"
 #include "BloomFilterLogic.h"
 #include <string>
@@ -9,8 +10,8 @@
 A function that will execute the functionality of
 adding a URL to the blacklisted list 
 */
-void execute(){
-    
+void AddURLCommand::execute(std::string line) {
+    // המימוש של הפונקציה
 }
 
 // add a url to the blacklist array and update the file

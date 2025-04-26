@@ -20,8 +20,3 @@ TEST(HashManagerTest, EqualUrlEqualIterations) {
     size_t hashResult2 = HashManager::runHash(1, url);
     EXPECT_EQ(hashResult1, hashResult2);
 }
-
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
