@@ -12,9 +12,9 @@ using namespace std;
 
 // this test will find if the bloom filter was aptated correctly
 TEST(AddUrlTest, AddToBloomFilter) {
+    //init the program and activate Add
     InitHendler* init = new InitHendler();
     AddURLCommand* addCommand = new AddURLCommand(init);
-
     init->execute("8 1");
     addCommand->execute("1 www.example.com0");
     ifstream file("../data/BloomFilterBackup.txt");
@@ -30,7 +30,7 @@ TEST(AddUrlTest, AddToBloomFilter) {
         bitVal = (init->getFilter()).getBitSign(i);
         EXPECT_EQ(stoi(line), bitVal);
     }
-    
+
     //close
     delete init;
     delete addCommand;
@@ -39,7 +39,7 @@ TEST(AddUrlTest, AddToBloomFilter) {
 
 // this test will find if the bloom filter was aptated correctly
 TEST(AddUrlTest, AddToBlackList) {
-    //init the program and actuvate Add
+    //init the program and activate Add
     InitHendler* init = new InitHendler();
     AddURLCommand* addCommand = new AddURLCommand(init);
     init->execute("8 1");

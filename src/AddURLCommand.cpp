@@ -22,16 +22,21 @@ void AddURLCommand::execute(std::string line) {
 
 // add a url to the blacklist array and update the file
 void AddURLCommand::addUrlToBlacklist(string url) {
+    // add url to object 
     (init->getBlacklist()).addUrl(url);
+    // add url to file
     BackupFile::updateBlacklistBeckup(url);
 }
 
 /* check if adding us needed, and if it does, 
 add a url to the bloomfilter array and update the file*/
 void AddURLCommand::addUrlToBloomFilter(vector<int> hush) {
+    // go over every bit in the hash array and turn on that bit
     for(int bit : hush){
         if((init->getFilter()).isBitOff(bit)){
+            // change bit in file
             BackupFile::updateBloomFilterBeckup(bit);
+            // change bit in object 
             (init->getFilter()).markBit(bit);
         }
     }
