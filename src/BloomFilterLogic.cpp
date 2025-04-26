@@ -20,7 +20,7 @@ std::vector<int> BloomFilterLogic::activateMultipleHash(std::vector<int> hashsVe
     return bitsReturnFromHash;
 }
 
-bool BloomFilterLogic::ifBitsEqual(BloomFilter& bloomFilter, std::vector<int> bitsReturnFromHash){
+bool BloomFilterLogic::bitsMatchBloomFilter(BloomFilter& bloomFilter, std::vector<int> bitsReturnFromHash){
     for (int i = 0; i < bitsReturnFromHash.size(); i++)
     {
         if(bloomFilter.getBitSign(bitsReturnFromHash[i]) != 1){

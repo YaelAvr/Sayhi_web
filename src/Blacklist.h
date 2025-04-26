@@ -15,7 +15,7 @@ class Blacklist{
         Blacklist();
         ~Blacklist();
         void addUrl(std::string url);
-        bool isUrlBlacklisted(std::string url);
+        bool isUrlBlacklisted(std::string url) const;
         const std::vector<std::string>& getBlacklistArr() const;
 };
 #endif

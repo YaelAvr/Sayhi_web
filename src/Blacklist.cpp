@@ -14,7 +14,7 @@ void Blacklist::addUrl(std::string url) {
 }
 
 //Check if URL already exists in the blacklist
-bool Blacklist::isUrlBlacklisted(std::string url) {
+bool Blacklist::isUrlBlacklisted(std::string url) const{
     return std::find(BlacklistArr.begin(), BlacklistArr.end(), url) != BlacklistArr.end();
 }
 

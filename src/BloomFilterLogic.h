@@ -11,7 +11,7 @@ public:
 // checks which bit to mark on the bit array
     static int bloomFilterUsingHash(int hashIterations, std::string url, int arraySize);
     static std::vector<int> activateMultipleHash(std::vector<int> hashsVector, std::string url, int arraySize);
-    static bool ifBitsEqual(BloomFilter& bloomFilter, std::vector<int> bitsReturnFromHash);
+    static bool bitsMatchBloomFilter(BloomFilter& bloomFilter, std::vector<int> bitsReturnFromHash);
 };
 
 

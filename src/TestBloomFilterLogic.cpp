@@ -18,16 +18,16 @@ TEST(BloomFilterLogicTest, activateMultipleHash) { //checks if the bits that ret
     ASSERT_EQ(bitsReturnFromHash.size(), hashFunctions.size());
 }
 
-TEST(BloomFilterLogicTest, IfBitsEqualAllBitsAreZero) { // checks given all the bits equal 0 in the bloomfilter, if return false
+TEST(BloomFilterLogicTest, bitsMatchBloomFilterAllBitsAreZero) { // checks given all the bits equal 0 in the bloomfilter, if return false
     int arrSize =20;
     BloomFilter bloomFilter;
     bloomFilter.createBloomFilter(arrSize); //create bloomfilter that all the bits equal 0
     std::vector<int> hashFunctions = {1, 2, 3};
     std::vector<int> bitsReturnFromHash = BloomFilterLogic::activateMultipleHash(hashFunctions, "www.example.com0", arrSize);
-    ASSERT_FALSE(BloomFilterLogic::ifBitsEqual(bloomFilter, bitsReturnFromHash)); //all the bits equal 0, so we expect the result will be false
+    ASSERT_FALSE(BloomFilterLogic::bitsMatchBloomFilter(bloomFilter, bitsReturnFromHash)); //all the bits equal 0, so we expect the result will be false
 }
 
-TEST(BloomFilterLogicTest, IfBitsEqualAllBitsAreOne) { // checks given all the bits equal 1 in the bloomfilter, if return true
+TEST(BloomFilterLogicTest, bitsMatchBloomFilterAllBitsAreOne) { // checks given all the bits equal 1 in the bloomfilter, if return true
     int arrSize =20;
     BloomFilter bloomFilter;
     bloomFilter.createBloomFilter(arrSize);
@@ -37,5 +37,5 @@ TEST(BloomFilterLogicTest, IfBitsEqualAllBitsAreOne) { // checks given all the b
     }
     std::vector<int> hashFunctions = {1, 2, 3};
     std::vector<int> bitsReturnFromHash = BloomFilterLogic::activateMultipleHash(hashFunctions, "www.example.com0", arrSize);
-    ASSERT_TRUE(BloomFilterLogic::ifBitsEqual(bloomFilter, bitsReturnFromHash)); //all the bits equal 1, so we expect the result will be true
+    ASSERT_TRUE(BloomFilterLogic::bitsMatchBloomFilter(bloomFilter, bitsReturnFromHash)); //all the bits equal 1, so we expect the result will be true
 }
