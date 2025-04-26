@@ -16,5 +16,11 @@ public:
     adding a URL to the blacklisted list 
     */
     void execute(std::string line);
+
+    // add a url to the blacklist array and update the file
+    void addUrlToBlacklist(std::string url);
+    /* check if adding us needed, and if it does, 
+    add a url to the bloomfilter array and update the file*/
+    void addUrlToBloomFilter(std::vector<int> hush);
 };
 #endif
