@@ -4,7 +4,7 @@
 using namespace std;
  
 // A function that reciving text from user
-string GetInput(){
+string StdInputReader::GetInput(){
     string line;
     // process the uneseceray \n from input.
     // read a full line- read input until the user press 'enter'

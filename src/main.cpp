@@ -3,6 +3,7 @@
 #include "IMenuCommand.h"
 #include "ProgramLoop.h"
 using namespace std;
+#if 0
 
 int main() {
     map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu();
@@ -14,3 +15,5 @@ int main() {
     CommandMenuInitializer::deleteCommandMenu(commands);
     return 0;
 }
+
+#endif

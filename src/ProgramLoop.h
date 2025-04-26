@@ -1,5 +1,9 @@
 #ifndef PROGRAM_LOOP_H
 #define PROGRAM_LOOP_H
+using namespace std;
+#include <map>
+#include "IMenuCommand.h"
+
 class ProgramLoop{
 private:
     map<int, IMenuCommand*> commands;

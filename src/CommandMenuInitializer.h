@@ -1,5 +1,9 @@
 #ifndef COMMAND_MENU_init_H
 #define COMMAND_MENU_init_H
+using namespace std;
+#include "IMenuCommand.h"
+#include <map>
+
 class CommandMenuInitializer {
 public:
     static map<int, IMenuCommand*> createCommandMenu();
