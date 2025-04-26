@@ -1,5 +1,5 @@
-#ifndef STDINPUTOUTPUT _H
-#define STDINPUTOUTPUT _H
+#ifndef STDINPUTOUTPUT_H
+#define STDINPUTOUTPUT_H
 
 #include <string>
 using namespace std;
