@@ -18,9 +18,13 @@ public:
 
     // add a new URL to the end on the "Blacklist" array.
     static void updateBlacklistBeckup(std::string url);
-// #include "Blacklist.h"
-// #include "BloomFilter.h"
+
+    /*  load the current state of the black list in the file, 
+        into an array of a Blacklist object*/
     static void loadBlacklist(Blacklist& bl, int arraySize);
+    
+    /*  load the current state of the bloom filter in the file, 
+        into an array of a BloomFilter object*/
     static void loadBloomFilter(BloomFilter& bf, int arraySize);
 };
 #endif

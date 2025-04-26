@@ -82,6 +82,10 @@ void BackupFile::updateBlacklistBeckup(string url){
     backupFile.close();
 }
 
+/*  
+    load the current state of the black list in the file, 
+    into an array of a Blacklist object
+*/
 void BackupFile::loadBlacklist(Blacklist& bl, int arraySize){
     ifstream backupFile("../data/BloomFilterBackup.txt");
     if (!backupFile) {
@@ -99,6 +103,10 @@ void BackupFile::loadBlacklist(Blacklist& bl, int arraySize){
     }
 }
 
+/*  
+    load the current state of the bloom filter in the file, 
+    into an array of a BloomFilter object
+*/
 void BackupFile::loadBloomFilter(BloomFilter& bf, int arraySize){
     ifstream backupFile("../data/BloomFilterBackup.txt");
     if (!backupFile) {
