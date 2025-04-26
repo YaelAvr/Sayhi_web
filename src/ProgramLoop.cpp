@@ -4,7 +4,7 @@
 #include "IMenuCommand.h"
 #include "InputClassify.h"
 #include "SplitString.h"
-#include "StdInputReader.h"
+#include "StdInputOutput.h"
 #include "InitHendler.h"
 #include "AddURLCommand.h"
 #include "CheckURLCommand.h"
@@ -20,7 +20,7 @@ void ProgramLoop::startLoop(){
     int classifyNum;
 
     while (true) {
-        input = StdInputReader::GetInput();
+        input = StdInputOutput::GetInput();
         classifyNum = InputClassify::classify(input);
 
         // if the input wasn't valid 
