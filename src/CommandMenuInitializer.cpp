@@ -26,7 +26,7 @@ map<int, IMenuCommand*> CommandMenuInitializer::createCommandMenu() {
 This function free the place that was allocated for the 
 IMenuCommand objects.
 */
-void deleteCommandMenu(map<int, IMenuCommand*>commands) {
+void CommandMenuInitializer::deleteCommandMenu(map<int, IMenuCommand*>commands) {
     for (auto& pair : commands) {
         delete pair.second;
     }
