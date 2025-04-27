@@ -39,8 +39,8 @@ Enter the initial Bloom filter size and hash function configuration.
 
 Then use:
 
-1 [URL] to add a URL to the blacklist.
+- 1 [URL] to add a URL to the blacklist.
 
-2 [URL] to check if a URL is blacklisted.
+- 2 [URL] to check if a URL is blacklisted.
 
 
