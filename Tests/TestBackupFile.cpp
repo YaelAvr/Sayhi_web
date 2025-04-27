@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
+#include <cstdio>  
 using namespace std;
 
 // this test will find if the file was created in the correct place 
@@ -132,5 +133,21 @@ TEST(BackupTest, loadToBl) {
     const std::vector<std::string>& blArray = obj.getBlacklistArr();
     EXPECT_EQ(blArray.at(0), "www.example.com0");
     EXPECT_EQ(blArray.size(), 1); //make sure that only include the url
+    std::remove("../data/BloomFilterBackup.txt");
+}
+
+// Test case to verify that when the backup file does not exist, the function returns 0.
+TEST(BackupTest, ReturnsFalseWhenBackupDoesNotExist) {
+    std::remove("../data/BloomFilterBackup.txt");
+    EXPECT_EQ(BackupFile::backupExists(), 0);
+}
+
+// Test case to verify that when the backup file exists, the function returns 1.
+TEST(BackupTest, ReturnsTrueWhenBackupExists) {
+    std::ofstream create("../data/BloomFilterBackup.txt");
+    create.close();
+
+    EXPECT_EQ(BackupFile::backupExists(), 1);
+
     std::remove("../data/BloomFilterBackup.txt");
 }

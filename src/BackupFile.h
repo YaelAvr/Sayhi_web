@@ -26,5 +26,8 @@ public:
     /*  load the current state of the bloom filter in the file, 
         into an array of a BloomFilter object*/
     static void loadBloomFilter(BloomFilter& bf, int arraySize);
+
+    // Static method that checks if the backup file exists and returns 1 if it does, 0 otherwise.
+    static int backupExists();
 };
 #endif
