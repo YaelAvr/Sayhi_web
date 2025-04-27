@@ -64,4 +64,3 @@ true false
 
 ### Project Management - JIRA Board
 ![JIRA Board](images/Jira_Board.PNG)
-![JIRA Board](images/Jira_Board.PNG)
