@@ -20,6 +20,7 @@ TEST(BackupTest, CreateFile) {
     //test for out of range acses
     EXPECT_THROW(BackupFile::updateBloomFilterBeckup(11), out_of_range);
     EXPECT_THROW(BackupFile::updateBloomFilterBeckup(8), out_of_range);
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // this test will find if the file was initialized correctly 
@@ -46,6 +47,7 @@ TEST(BackupTest, InitFile) {
     both cases are bad. */
     EXPECT_EQ(count, 8);
     file.close();
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 
@@ -71,6 +73,7 @@ TEST(BackupTest, updateBloomFilter) {
     //find if the line that represents BloomArray[4] now equal 1
     EXPECT_EQ(line, "1");
     file.close();
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // this test will find if the blacklist was uptaed correctly 
@@ -96,6 +99,7 @@ TEST(BackupTest, updateBlackList) {
     EXPECT_EQ(lastLine, "www.example.com0");
     EXPECT_EQ(lineCounter, 10);
     file.close();
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // test if after load the bloom filter have the same bit on
@@ -114,6 +118,7 @@ TEST(BackupTest, loadToBF) {
             EXPECT_EQ(obj.getBitSign(i), 0);
         }
     }
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // test if after load the blacklist have the string
@@ -126,4 +131,5 @@ TEST(BackupTest, loadToBl) {
     const std::vector<std::string>& blArray = obj.getBlacklistArr();
     EXPECT_EQ(blArray.at(0), "www.example.com0");
     EXPECT_EQ(blArray.size(), 1);
+    std::remove("../data/BloomFilterBackup.txt");
 }

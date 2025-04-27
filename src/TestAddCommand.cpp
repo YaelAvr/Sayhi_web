@@ -35,6 +35,7 @@ TEST(AddUrlTest, AddToBloomFilter) {
     delete init;
     delete addCommand;
     file.close();
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // this test will find if the bloom filter was aptated correctly
@@ -63,4 +64,5 @@ TEST(AddUrlTest, AddToBlackList) {
     delete init;
     delete addCommand;
     file.close();
+    std::remove("../data/BloomFilterBackup.txt");
 }
