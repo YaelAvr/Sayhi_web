@@ -32,6 +32,7 @@ To compile and run the application using Docker, use the following command:
 
 ```bash
 docker-compose run --rm --build gmail-project
+``` 
 After starting the application:
 
 Enter the initial Bloom filter size and hash function configuration.
