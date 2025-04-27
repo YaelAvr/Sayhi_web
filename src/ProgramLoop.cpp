@@ -24,7 +24,7 @@ void ProgramLoop::startLoop(){
         classifyNum = InputClassify::classify(input);
 
         // if the input wasn't valid 
-        if (classifyNum = -1) {continue;}
+        if (classifyNum == -1) {continue;}
         commands[classifyNum]->execute(input);
     }
 }

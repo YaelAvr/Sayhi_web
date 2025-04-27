@@ -1,6 +1,8 @@
 services:
-  bloom-filter-backup:
+  gmail-project:
     build: .
     volumes:
       - ./data:/usr/gmail-project/data
+    stdin_open: true   
+    tty: true  
     command: ./runTests
