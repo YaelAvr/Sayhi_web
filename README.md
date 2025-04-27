@@ -74,5 +74,3 @@ true false
 ### Application Run Example
 
 
-## Repository Link
-https://github.com/eden05221/gmail_project.git
