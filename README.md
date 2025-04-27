@@ -50,9 +50,10 @@ Input:
 8 1
 1 www.example.com0
 2 www.example.com0
-2 www.example.com1
+2 www.example.com4
 
 Output:
 true true
-false
+true false
+
 
