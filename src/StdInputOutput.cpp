@@ -9,7 +9,6 @@ string StdInputOutput::GetInput(){
     // process the uneseceray \n from input.
     // read a full line- read input until the user press 'enter'
     getline(cin, line); 
-    getline(cin, line); 
     return line;
 }
 

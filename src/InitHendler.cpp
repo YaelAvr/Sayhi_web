@@ -2,7 +2,6 @@
 #include "splitIntoAppropriateVariables.h"
 #include "BloomFilter.h"
 #include "InitHendler.h"
-#include "backupChecker.h"
 #include "BackupFile.h"
 #include <fstream>
 
@@ -13,7 +12,7 @@ void InitHendler::execute(std::string line) {
     arraySize = curPair.first; 
     hashFunctions = curPair.second; 
     bloomfilter.createBloomFilter(arraySize);
-    int is_file_exist = BackupChecker::backupExists();
+    int is_file_exist = BackupFile::backupExists();
     if (is_file_exist == 1) {
         //Checks if the file alredy exists, and if so load objects from file
         BackupFile::loadBloomFilter(bloomfilter, arraySize);
