@@ -1,2 +1,2 @@
 compilation line: 
-docker-compose up --build
+docker-compose run --rm --build gmail-project
