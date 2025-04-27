@@ -45,17 +45,17 @@ Then use:
 
 ## Example Run
 
-```bash
+
 Input:
+```bash
 8 1
 1 www.example.com0
 2 www.example.com0
 2 www.example.com4
 ```
 
-```bash
-
 Output:
+```bash
 true true
 true false
 ```
