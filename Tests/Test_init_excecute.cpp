@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
-#include "InitHendler.h"
+#include "../src/InitHendler.h"
+#include "../src/backupChecker.h"
 #include <fstream>
 #include <cstdio>
 

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "InputValidation.h"
+#include "../src/InputValidation.h"
 //invalid inputs test
 TEST (InputValidationTest, InvalidInputs) {
     std::vector<std::string> invalid_inputs = {

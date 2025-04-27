@@ -1,9 +1,9 @@
-#include "InitHendler.h"
-#include "AddURLCommand.h"
-#include "BackupFile.h"
-#include "Blacklist.h"
-#include "BloomFilter.h"
-#include "BloomFilterLogic.h"
+#include "../src/InitHendler.h"
+#include "../src/AddURLCommand.h"
+#include "../src/BackupFile.h"
+#include "../src/Blacklist.h"
+#include "../src/BloomFilter.h"
+#include "../src/BloomFilterLogic.h"
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>

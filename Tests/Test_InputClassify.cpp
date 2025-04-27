@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "InputClassify.h"
+#include "../src/InputClassify.h"
 
 // Test: First line with a non-numeric token should return -1
 TEST(InputClassifierTest, FirstLineWithNonNumericTokenReturnsMinusOne) {
