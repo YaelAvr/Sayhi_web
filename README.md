@@ -51,9 +51,13 @@ Input:
 1 www.example.com0
 2 www.example.com0
 2 www.example.com4
+```
+
+```bash
 
 Output:
 true true
 true false
+```
 
 
