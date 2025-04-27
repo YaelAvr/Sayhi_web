@@ -6,10 +6,11 @@
 class HashManager {
 public:
     // Generic function that activates hash function
-    template<typename T>
-    static size_t activateHash(const T value) {
-        return std::hash<T>{}(value);
-    }
+    // template<typename T>
+    // static size_t activateHash(const T value) {
+    //     return std::hash<T>{}(value);
+    // }
+    static size_t activateHash(std::string value);
 
     // Runs the hash function according to the number of iterations parameter
     static size_t runHash(int hashIterations, const std::string url);
