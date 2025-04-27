@@ -64,5 +64,6 @@ true false
 ### Project Management - JIRA Board
 ![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/%E2%80%8F%E2%80%8FJira_Board.PNG?raw=true)
 
+### Application Run Example
 
 
