@@ -60,5 +60,4 @@ true true
 true false
 ```
 
-<img src="Jira_Board.PNG" alt="JIRA Board" width="700"/>
 
