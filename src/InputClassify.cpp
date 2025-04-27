@@ -33,6 +33,7 @@ int InputClassify::classify(const std::string&input) {
             }
         }
         // Config line with more than two tokens: already validated, accept
+        call_count++;
         return 0;
     }
     if (tokens[0] == "1" && InputValidation::isValidURL(tokens[1])){
