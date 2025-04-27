@@ -19,6 +19,7 @@ void ProgramLoop::startLoop(){
     string input;
     int classifyNum;
 
+    //start the Program Loop
     while (true) {
         input = StdInputOutput::GetInput();
         classifyNum = InputClassify::classify(input);

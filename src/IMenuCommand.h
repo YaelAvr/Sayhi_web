@@ -1,6 +1,8 @@
 #ifndef MENU_COMMAND_H
 #define MENU_COMMAND_H
 #include <string>
+
+//Abstract class for the method execute, which is implemented by every element in the map
 class IMenuCommand {
 public:
     /*

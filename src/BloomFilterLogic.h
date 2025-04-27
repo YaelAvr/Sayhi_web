@@ -8,9 +8,11 @@
 class BloomFilterLogic{
 
 public:
-// checks which bit to mark on the bit array
-    static int bloomFilterUsingHash(int hashIterations, std::string url, int arraySize);
+    //Calculates the index in the Bloom Filter array based on the hash result of the URL
+    static int bloomFilterUsingHash(int hashIterations, std::string url, int arraySize); 
+    //Activates all the hash functions from the input, and saves all the results from hash to a result vector
     static std::vector<int> activateMultipleHash(std::vector<int> hashsVector, std::string url, int arraySize);
+    //Checks if the bits return from the hash functions is alredy marked in the bloom filter array
     static bool bitsMatchBloomFilter(BloomFilter& bloomFilter, std::vector<int> bitsReturnFromHash);
 };
 

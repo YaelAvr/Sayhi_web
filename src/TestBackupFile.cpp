@@ -112,6 +112,7 @@ TEST(BackupTest, loadToBF) {
     BackupFile::loadBloomFilter(obj, 8);
     for (int i = 0; i < 8; i++){
         if (i == 4) {
+            // make sure the bit was flipped
             EXPECT_EQ(obj.getBitSign(i), 1);
         } else{
             // make sure the rest = 0
@@ -130,6 +131,6 @@ TEST(BackupTest, loadToBl) {
     BackupFile::loadBlacklist(obj, 8);
     const std::vector<std::string>& blArray = obj.getBlacklistArr();
     EXPECT_EQ(blArray.at(0), "www.example.com0");
-    EXPECT_EQ(blArray.size(), 1);
+    EXPECT_EQ(blArray.size(), 1); //make sure that only include the url
     std::remove("../data/BloomFilterBackup.txt");
 }
