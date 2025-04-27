@@ -60,5 +60,7 @@ true true
 true false
 ```
 ![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/%E2%80%8F%E2%80%8FJira_Board.PNG?raw=true)
+![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/%E2%80%8F%E2%80%8FJira_Board.PNG?raw=true)
+
 
 
