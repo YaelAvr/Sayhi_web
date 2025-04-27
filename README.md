@@ -27,7 +27,7 @@ Project management tracking:
 - `README.md` — Project documentation
 
 
-## Usage
+## Usage 
 To compile and run the application using Docker, use the following command:
 
 ```bash
@@ -42,6 +42,13 @@ Then use:
 - 1 [URL] to add a URL to the blacklist.
 
 - 2 [URL] to check if a URL is blacklisted.
+  
+### tests usage
+To compile and run the tests using Docker, use the following command:
+```bash
+docker-compose run --rm --build tests
+``` 
+  
 
 ## Example Run
 
