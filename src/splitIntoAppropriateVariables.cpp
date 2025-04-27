@@ -21,7 +21,9 @@ std::pair<int, std::vector<int>> splitIntoAppropriateVariables::splitHashsLine(c
     return result;
 }
 
-
+// Splits a space-separated string into a pair:
+// - First number (int)
+// - Vector of remaining numbers
 std::string splitIntoAppropriateVariables::extractUrlFromLine(const std::string& line) {
     // Split the input line by spaces into tokens
     std::vector<std::string> tokens = SplitString::SplitBySpace(line);

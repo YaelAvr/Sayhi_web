@@ -2,6 +2,7 @@
 #define HASHMANAGER_H
 #include <string>
 
+// Class for representing hash and modulo operations, including repeated iterations of hash.
 class HashManager {
 public:
     // Generic function that activates hash function

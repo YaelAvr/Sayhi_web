@@ -19,22 +19,12 @@ public:
     load existing versions
     */
    void execute(std::string line);
-
-    // Getters
-    int getArraySize() const { 
-        return arraySize;
-     }
-    BloomFilter& getFilter() { 
-        return bloomfilter;
-     }
-    Blacklist& getBlacklist() { 
-        return blacklist;
-     }
-    const std::vector<int>& getHashFunctions() const { 
-        return hashFunctions;
-     }
-
-
+   //Getters
+   int getArraySize() const;
+   BloomFilter& getFilter();
+   Blacklist& getBlacklist();
+   const std::vector<int>& getHashFunctions() const;
 };
+
 #endif
 

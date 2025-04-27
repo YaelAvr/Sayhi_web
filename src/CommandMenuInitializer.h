@@ -6,7 +6,7 @@ using namespace std;
 
 class CommandMenuInitializer {
 public:
-    static map<int, IMenuCommand*> createCommandMenu();
-    static void deleteCommandMenu(map<int, IMenuCommand*>);
+    static map<int, IMenuCommand*> createCommandMenu(); //creates the map that executes the various actions
+    static void deleteCommandMenu(map<int, IMenuCommand*>); //delete the map
 };
 #endif

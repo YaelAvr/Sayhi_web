@@ -13,8 +13,8 @@ using namespace std;
 A function that will execute the functionality of
 adding a URL to the blacklisted list 
 */
-void AddURLCommand::execute(std::string line) {
-    string url = splitIntoAppropriateVariables::extractUrlFromLine(line);
+void AddURLCommand::execute(std::string line) { //add the url to the blacklist
+    string url = splitIntoAppropriateVariables::extractUrlFromLine(line); //get the url from the line
     vector<int> hush = BloomFilterLogic::activateMultipleHash(init->getHashFunctions(), url, init->getArraySize());
     addUrlToBlacklist(url);
     addUrlToBloomFilter(hush);

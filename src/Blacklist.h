@@ -3,9 +3,10 @@
 #include <vector>
 #include <string>
 
+//class for the blacklist structure
 class Blacklist{
     private:
-        std::vector<std::string> BlacklistArr; 
+        std::vector<std::string> BlacklistArr; //vector that represents the blacklist
         Blacklist(const Blacklist& other) = delete;
         Blacklist& operator=(const Blacklist&) = delete;
         Blacklist(Blacklist&& other) noexcept = delete;
@@ -14,8 +15,8 @@ class Blacklist{
     public:
         Blacklist();
         ~Blacklist();
-        void addUrl(std::string url);
-        bool isUrlBlacklisted(std::string url) const;
-        const std::vector<std::string>& getBlacklistArr() const;
+        void addUrl(std::string url); //add url to the blacklist
+        bool isUrlBlacklisted(std::string url) const; //check if url already in blacklist
+        const std::vector<std::string>& getBlacklistArr() const; //get the blacklist vector
 };
 #endif

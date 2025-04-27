@@ -15,6 +15,7 @@ bool InputValidation::isPositiveInteger(const std::string& s) {
     return true;
 }
 
+// Returns true if the string represents a positive integer
 bool InputValidation::isValidURL(const std::string& url) {
     const std::regex urlRegex(R"(^((https?://)?[a-z0-9.-]+\.[a-z]{2,10}[0-9]*(/.*)?)$)");
     return std::regex_match(url, urlRegex);

@@ -5,10 +5,8 @@
 
 class FalsePositiveCheck {
 public:
-
-    // Runs the hash function according to the number of iterations parameter
-    static bool falsePositive(std::string url, const Blacklist& blacklist);
-    static std::string getFalsePositiveStatus(std::string url, const Blacklist& blacklist);
+    static bool falsePositive(std::string url, const Blacklist& blacklist); //Checks if the url blacklisted
+    static std::string getFalsePositiveStatus(std::string url, const Blacklist& blacklist); //Gets the false positive status
 };
 
 #endif 

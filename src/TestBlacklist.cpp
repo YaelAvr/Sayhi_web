@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include "Blacklist.h"
 
-TEST(BlacklistArrayTest, AddUrl) {
+TEST(BlacklistArrayTest, AddUrl) { //add url to blacklist
     Blacklist obj;
     obj.addUrl("http://example.com");
     EXPECT_TRUE(obj.isUrlBlacklisted("http://example.com"));

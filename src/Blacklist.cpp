@@ -19,7 +19,7 @@ bool Blacklist::isUrlBlacklisted(std::string url) const{
 }
 
 //getter
-// Returns a constant reference to the blacklist array.
+// Returns a constant reference to the blacklist array
 const std::vector<std::string>& Blacklist::getBlacklistArr() const {
     return BlacklistArr;
 }
