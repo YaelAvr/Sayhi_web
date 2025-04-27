@@ -29,11 +29,17 @@ Project management tracking:
 
 ## Usage
 To compile and run the application using Docker, use the following command:
+
 ```bash
 docker-compose run --rm --build gmail-project
-
 After starting the application:
-- Enter the initial Bloom filter size and hash function configuration.
-- Then use:
-  - `1 [URL]` to add a URL to the blacklist.
-  - `2 [URL]` to check if a URL is blacklisted.
+
+Enter the initial Bloom filter size and hash function configuration.
+
+Then use:
+
+1 [URL] to add a URL to the blacklist.
+
+2 [URL] to check if a URL is blacklisted.
+
+
