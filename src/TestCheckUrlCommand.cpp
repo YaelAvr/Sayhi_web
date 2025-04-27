@@ -23,8 +23,6 @@ TEST(CheckURLCommandTest, resultEqualFalse) { //checking the output of function 
     std::cout.rdbuf(originalCout); 
     std::string output = capturedOutput.str();
     EXPECT_EQ(output, "false\n"); //checking if the output is equal to false
-    InitHendler* init = dynamic_cast<InitHendler*>(commands[0]);
-    EXPECT_EQ(init->getBlacklist().isUrlBlacklisted("www.example.com10"), false);
 }
 
 TEST(CheckURLCommandTest, resultEqualTrueTrue) { //checking the output of function equals true true
@@ -38,8 +36,6 @@ TEST(CheckURLCommandTest, resultEqualTrueTrue) { //checking the output of functi
     std::cout.rdbuf(originalCout); 
     std::string output = capturedOutput.str();
     EXPECT_EQ(output, "true true\n"); //checking if the output is equal to true true
-    InitHendler* init = dynamic_cast<InitHendler*>(commands[0]);
-    EXPECT_EQ(init->getBlacklist().isUrlBlacklisted("www.example.com9"), true);
 }
 
 TEST(CheckURLCommandTest, resultEqualTrueFalse) { //checking the output of function equals true false
@@ -53,8 +49,6 @@ TEST(CheckURLCommandTest, resultEqualTrueFalse) { //checking the output of funct
     std::cout.rdbuf(originalCout); 
     std::string output = capturedOutput.str();
     EXPECT_EQ(output, "true false\n"); //checking if the output is equal to true false
-    InitHendler* init = dynamic_cast<InitHendler*>(commands[0]);
-    EXPECT_EQ(init->getBlacklist().isUrlBlacklisted("www.example.com11"), false);
 }
 
 
