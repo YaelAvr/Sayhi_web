@@ -43,4 +43,16 @@ Then use:
 
 - 2 [URL] to check if a URL is blacklisted.
 
+## Example Run
+
+```bash
+Input:
+8 1
+1 www.example.com0
+2 www.example.com0
+2 www.example.com1
+
+Output:
+true true
+false
 
