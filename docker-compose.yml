@@ -2,7 +2,15 @@ services:
   gmail-project:
     build: .
     volumes:
+      - ./data:/usr/gmail-project/data 
+    stdin_open: true
+    tty: true
+    command: ./my_program 
+
+  tests:
+    build: .
+    volumes:
       - ./data:/usr/gmail-project/data
-    stdin_open: true   
-    tty: true  
-    command: ./runTests
+    stdin_open: true
+    tty: true
+    command: ./my_tests
