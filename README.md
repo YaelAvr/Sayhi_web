@@ -1,4 +1,4 @@
-# **Gmail Project**
+# Gmail Project — URL Blacklist System
 This project implements a URL blacklist system using a Bloom filter in C++.
 The application supports adding and checking URLs, is developed with Test-Driven Development (TDD) methodology, and follows SOLID principles for flexibility and maintainability.
 The Bloom filter is saved to a file to ensure persistence between runs.
