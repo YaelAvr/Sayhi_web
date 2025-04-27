@@ -63,5 +63,6 @@ true false
 ## Screenshots
 
 ### Project Management - JIRA Board
+![JIRA Board](images/Jira_Board.PNG)
 
 
