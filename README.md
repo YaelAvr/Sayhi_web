@@ -46,7 +46,7 @@ Then use:
 ## Example Run
 
 
-Input:
+**Input**:
 ```bash
 8 1
 1 www.example.com0
@@ -54,7 +54,7 @@ Input:
 2 www.example.com4
 ```
 
-Output:
+**Output**:
 ```bash
 true true
 true false
