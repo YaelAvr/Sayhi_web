@@ -12,9 +12,11 @@
 #include <iostream> 
 #include <sstream>
 
+#include "StdInputOutput.h"
+
 
 TEST(CheckURLCommandTest, resultEqualFalse) { //checking the output of function equals false
-    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu();
+    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(new StdInputOutput());
     commands[0]->execute("8 1 2"); //initialize
     std::stringstream capturedOutput; //catching the stream in order to check the std output
     std::streambuf* originalCout = std::cout.rdbuf(); 
@@ -26,7 +28,7 @@ TEST(CheckURLCommandTest, resultEqualFalse) { //checking the output of function 
 }
 
 TEST(CheckURLCommandTest, resultEqualTrueTrue) { //checking the output of function equals true true
-    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu();
+    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(new StdInputOutput());
     commands[0]->execute("8 1 2"); //initialize
     commands[1]->execute("1 www.example.com9"); //add this url 
     std::stringstream capturedOutput; //catching the stream in order to check the std output
@@ -39,7 +41,7 @@ TEST(CheckURLCommandTest, resultEqualTrueTrue) { //checking the output of functi
 }
 
 TEST(CheckURLCommandTest, resultEqualTrueFalse) { //checking the output of function equals true false
-    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu();
+    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(new StdInputOutput());
     commands[0]->execute("8 1 2"); //initialize
     commands[1]->execute("1 www.example.com0"); //add this url 
     std::stringstream capturedOutput; //catching the stream in order to check the std output

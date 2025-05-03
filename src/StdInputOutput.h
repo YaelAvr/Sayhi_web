@@ -1,15 +1,15 @@
 #ifndef STDINPUTOUTPUT_H
 #define STDINPUTOUTPUT_H
-
+#include "IInputOutput.h"
 #include <string>
 using namespace std;
 
-class StdInputOutput {
+class StdInputOutput : public IInputOutput {
     public:
         // A function that reciving text from user
-        static string GetInput();
+        string getInput();
         
-        static void printOutput(const string& output);       
+        void printOutput(const string& output);       
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include "CommandMenuInitializer.h"
 #include <map>
 #include "IMenuCommand.h"
+#include "IInputOutput.h"
 #include "InputClassify.h"
 #include "InitHendler.h"
 #include "AddURLCommand.h"
@@ -10,14 +11,14 @@ using namespace std;
 This function create a Map of MenuCommand objects, 
 so that we can execute a command while protecting polymorphism.
 */
-map<int, IMenuCommand*> CommandMenuInitializer::createCommandMenu() {
+map<int, IMenuCommand*> CommandMenuInitializer::createCommandMenu(IInputOutput* ioObj) {
     map<int, IMenuCommand*> commands;
 
     InitHendler* init = new InitHendler();
     
     commands[0] = init;
     commands[1] = new AddURLCommand(init);
-    commands[2] = new CheckURLCommand(init);
+    commands[2] = new CheckURLCommand(init, *ioObj);
 
     return commands;
 }
