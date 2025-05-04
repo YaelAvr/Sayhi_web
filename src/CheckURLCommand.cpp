@@ -11,13 +11,9 @@ void CheckURLCommand::execute(std::string line){
     std::vector<int> bitsReturnFromHash = BloomFilterLogic::activateMultipleHash(init->getHashFunctions(),url,init->getArraySize()); //activate the hash functions
     if (!BloomFilterLogic::bitsMatchBloomFilter(init->getFilter(), bitsReturnFromHash)) //if the bits are not match to the bloom filter, it prints false
     {
-        
         (init->getIO()).printOutput("false");
-        // StdInputOutput::printOutput("false");
         return;
     }
-    std::string faslePositiveStatus = FalsePositiveCheck::getFalsePositiveStatus(url, init->getBlacklist()); //false positive check
-    (init->getIO()).printOutput(faslePositiveStatus); //print the check result
+    std::string falsePositiveStatus = FalsePositiveCheck::getFalsePositiveStatus(url, init->getBlacklist()); //false positive check
+    (init->getIO()).printOutput(falsePositiveStatus); //print the check result
 }
-
-
