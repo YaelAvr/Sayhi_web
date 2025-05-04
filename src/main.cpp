@@ -14,5 +14,6 @@ int main() {
     programLoop.startLoop();
     // delete allocated objects
     CommandMenuInitializer::deleteCommandMenu(commands);
+    delete IO_obj;
     return 0;
 }

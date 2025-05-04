@@ -3,7 +3,8 @@
 #include <string>
 using namespace std;
 
-//Abstract class for the method execute, which is implemented by every element in the map
+//Abstract class for the method execute, 
+//which is implemented by every element in the map
 class IInputOutput {
 public:
     // A function that receives a massage

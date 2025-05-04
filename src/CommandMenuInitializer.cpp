@@ -14,11 +14,11 @@ so that we can execute a command while protecting polymorphism.
 map<int, IMenuCommand*> CommandMenuInitializer::createCommandMenu(IInputOutput* ioObj) {
     map<int, IMenuCommand*> commands;
 
-    InitHendler* init = new InitHendler();
+    InitHendler* init = new InitHendler(*ioObj);
     
     commands[0] = init;
     commands[1] = new AddURLCommand(init);
-    commands[2] = new CheckURLCommand(init, *ioObj);
+    commands[2] = new CheckURLCommand(init);
 
     return commands;
 }

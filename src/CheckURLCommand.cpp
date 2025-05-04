@@ -2,7 +2,6 @@
 #include "splitIntoAppropriateVariables.h"
 #include <string>
 #include "BloomFilterLogic.h"
-#include "StdInputOutput.h"
 #include "FalsePositiveCheck.h"
 
 // Executes the URL check by verifying if the hashed bits match the Bloom Filter, 
@@ -12,12 +11,13 @@ void CheckURLCommand::execute(std::string line){
     std::vector<int> bitsReturnFromHash = BloomFilterLogic::activateMultipleHash(init->getHashFunctions(),url,init->getArraySize()); //activate the hash functions
     if (!BloomFilterLogic::bitsMatchBloomFilter(init->getFilter(), bitsReturnFromHash)) //if the bits are not match to the bloom filter, it prints false
     {
-        io.printOutput("false");
+        
+        (init->getIO()).printOutput("false");
         // StdInputOutput::printOutput("false");
         return;
     }
     std::string faslePositiveStatus = FalsePositiveCheck::getFalsePositiveStatus(url, init->getBlacklist()); //false positive check
-    io.printOutput(faslePositiveStatus); //print the check result
+    (init->getIO()).printOutput(faslePositiveStatus); //print the check result
 }
 
 
