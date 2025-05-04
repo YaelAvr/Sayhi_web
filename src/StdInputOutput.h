@@ -6,9 +6,10 @@ using namespace std;
 
 class StdInputOutput : public IInputOutput {
     public:
-        // A function that reciving text from user
+        // A function that receiving text from user
         string getInput();
         
+        // A function that print a massage
         void printOutput(const string& output);       
 };
 
