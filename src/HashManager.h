@@ -5,11 +5,7 @@
 // Class for representing hash and modulo operations, including repeated iterations of hash.
 class HashManager {
 public:
-    // Generic function that activates hash function
-    // template<typename T>
-    // static size_t activateHash(const T value) {
-    //     return std::hash<T>{}(value);
-    // }
+    // A function that activates hash function
     static size_t activateHash(std::string value);
 
     // Runs the hash function according to the number of iterations parameter

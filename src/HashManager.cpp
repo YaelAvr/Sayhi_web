@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 
-
+// A function that activates hash function
 size_t HashManager::activateHash(std::string value){
     std::hash<std::string> hasher;   // יצירת אובייקט של std::hash עבור std::string
     return hasher(value); 
@@ -12,7 +12,6 @@ size_t HashManager::activateHash(std::string value){
 
 // Runs the hash function according to the number of iterations parameter
 size_t HashManager::runHash(int hashIterations, std::string url){
-    // size_t result = HashManager::activateHash(url); // first time run on the url
     size_t result=0;
     std::string str = url;
     for (int i = 0; i < hashIterations; ++i) {
@@ -25,7 +24,6 @@ size_t HashManager::runHash(int hashIterations, std::string url){
 // Applies modulo operation to int value
 int HashManager::modulo(size_t value, int mod) {
     return static_cast<int>(value % mod);
-    // return (value % mod);
 }
 
 

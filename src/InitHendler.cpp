@@ -3,6 +3,7 @@
 #include "BloomFilter.h"
 #include "InitHendler.h"
 #include "BackupFile.h"
+#include "IInputOutput.h"
 #include <fstream>
 
 // Initializes the main objects in the program
@@ -27,6 +28,9 @@ void InitHendler::execute(std::string line) {
  int InitHendler::getArraySize() const { 
     return arraySize;
  }
+IInputOutput& InitHendler::getIO() const {
+    return io;
+}
 BloomFilter& InitHendler::getFilter() { 
     return bloomfilter;
  }

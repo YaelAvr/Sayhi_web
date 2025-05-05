@@ -3,12 +3,15 @@
 using namespace std;
 #include <map>
 #include "IMenuCommand.h"
+#include "IInputOutput.h"
 
 class ProgramLoop{
 private:
     map<int, IMenuCommand*> commands;
+    IInputOutput* IO_Obj;
+
 public:
-    ProgramLoop(map<int, IMenuCommand*> commands) : commands(commands){};
+    ProgramLoop(map<int, IMenuCommand*> commands, IInputOutput* IO_Obj) : commands(commands), IO_Obj(IO_Obj) {};
     /*
     this function will be the main project loop that 
     execute the functionality of the project
