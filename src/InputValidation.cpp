@@ -29,7 +29,7 @@ bool InputValidation::isValidConfigLine(const std::string& line) {
         return false;
     }
     // Case: add/check command (type 1 or 2)
-    if ((tokens[0] == "1" || tokens[0] == "2") && tokens.size() == 2) {
+    if ((tokens[0] == "1" || tokens[0] == "2" || tokens[0] == "3") && tokens.size() == 2) {
         return isValidURL(tokens[1]);
     }
     // Case: configuration line (must contain only positive integers)
