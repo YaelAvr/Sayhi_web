@@ -26,4 +26,10 @@ const std::vector<std::string>& Blacklist::getBlacklistArr() const {
 // default destructor
 Blacklist::~Blacklist() {}
 
+//Delete URL from the blacklist
+void Blacklist::removeUrl(std::string url){
+    BlacklistArr.erase(std::remove(BlacklistArr.begin(), BlacklistArr.end(), url), BlacklistArr.end());
+}
+
+
 

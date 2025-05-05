@@ -5,6 +5,7 @@
 #include "InitHendler.h"
 #include "AddURLCommand.h"
 #include "CheckURLCommand.h"
+#include "DeleteURLCommand.h"
 using namespace std;
 /*
 This function create a Map of MenuCommand objects, 
@@ -18,6 +19,8 @@ map<int, IMenuCommand*> CommandMenuInitializer::createCommandMenu() {
     commands[0] = init;
     commands[1] = new AddURLCommand(init);
     commands[2] = new CheckURLCommand(init);
+    commands[3] = new DeleteURLCommand(init);
+
 
     return commands;
 }
