@@ -26,7 +26,7 @@ def handle_input():
     
     return server_ip, server_port
 
-def connect_server(server_ip, server_port):
+def connect_to_server(server_ip, server_port):
 
     """
     Establishes a TCP connection to the server.
