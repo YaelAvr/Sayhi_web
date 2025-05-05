@@ -43,57 +43,10 @@ def connect_server(server_ip, server_port):
     client_socket.connect((server_ip, server_port))
     return client_socket
 
-def send_command(client_socket, command):
-
-    """
-    Sends a command to the server.
-
-    Args:
-        client_socket (socket): The connected client socket.
-        command (str): The command string to send.
-    """
-
-    client_socket.send(bytes(command + '\n', 'utf-8'))
-
-def server_response(client_socket):
-
-    """
-    Receives and decodes the server's response.
-
-    Args:
-        client_socket (socket): The connected client socket.
-
-    Returns:
-        str: The response from the server, decoded and stripped of trailing newline.
-    """
-    
-    response =b''
-    while True:
-        cur = client_socket.recv(4096)
-        response += cur
-        if b'\n' in cur:
-            break
-    return response.decode().strip()    # Strip trailing newline before printing
-
-def start_runing_client():
-
-    """
-    Starts the client, connects to the server, and enters a loop to send and receive commands.
-    Gracefully handles user interruption (Ctrl+C).
-    """
-
+def main():
     server_ip, server_port = handle_input()
-    client_socket = connect_server(server_ip, server_port)
-    try:                                        
-        while True:
-            command = input("Enter command: ")
-            send_command(client_socket, command)
-            response = server_response(client_socket)
-            print(response)
-    except KeyboardInterrupt:
-        print("\nClient interrupted.")
-    finally:
-        client_socket.close()
+    client_socket = connect_to_server(server_ip, server_port)
+    # socket remains open for future communication
 
-if __name__ == "__main__":        # Run only if this file is executed directly (not imported as a module)
-    start_runing_client()
+if __name__ == "__main__":
+    main()
