@@ -29,5 +29,8 @@ public:
 
     // Static method that checks if the backup file exists and returns 1 if it does, 0 otherwise.
     static int backupExists();
+
+    // This function will delete a url from the backup file
+    static void deleteURL(std::string url);
 };
 #endif
