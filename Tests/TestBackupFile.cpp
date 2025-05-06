@@ -152,6 +152,7 @@ TEST(BackupTest, ReturnsTrueWhenBackupExists) {
     std::remove("../data/BloomFilterBackup.txt");
 }
 
+// write test to make sure that a url is delted
 TEST(BackupTest, DeleteBackupURL){
     BackupFile::createBackupFile(8);
     BackupFile::updateBlacklistBeckup("www.example.com0");
@@ -164,6 +165,7 @@ TEST(BackupTest, DeleteBackupURL){
 
     string line;
 
+    //go to url part 
     for (int i = 0; i < 8; i++){
         getline(file, line);
     }
