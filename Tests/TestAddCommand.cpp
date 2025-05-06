@@ -4,6 +4,7 @@
 #include "../src/Blacklist.h"
 #include "../src/BloomFilter.h"
 #include "../src/BloomFilterLogic.h"
+#include "../src/StdInputOutput.h"
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
@@ -13,7 +14,8 @@ using namespace std;
 // this test will find if the bloom filter was aptated correctly
 TEST(AddUrlTest, AddToBloomFilter) {
     //init the program and activate Add
-    InitHendler* init = new InitHendler(new StdInputOutput());
+    StdInputOutput io;
+    InitHendler* init = new InitHendler(io);
     AddURLCommand* addCommand = new AddURLCommand(init);
     init->execute("8 1");
     addCommand->execute("1 www.example.com0");
@@ -41,7 +43,8 @@ TEST(AddUrlTest, AddToBloomFilter) {
 // this test will find if the bloom filter was aptated correctly
 TEST(AddUrlTest, AddToBlackList) {
     //init the program and activate Add
-    InitHendler* init = new InitHendler(new StdInputOutput());
+    StdInputOutput io;
+    InitHendler* init = new InitHendler(io);
     AddURLCommand* addCommand = new AddURLCommand(init);
     init->execute("8 1");
     addCommand->execute("1 www.example.com0");

@@ -3,6 +3,7 @@
 #include "BloomFilter.h"
 #include <fstream>
 #include <string>
+#include <vector>
 using namespace std;
 
 streampos BackupFile::iterArrayInFile(int cell){
@@ -101,6 +102,7 @@ void BackupFile::loadBlacklist(Blacklist& bl, int arraySize){
     {
         bl.addUrl(line);
     }
+    backupFile.close();
 }
 
 /*  
@@ -124,6 +126,7 @@ void BackupFile::loadBloomFilter(BloomFilter& bf, int arraySize){
         if(stoi(line) == 0) {continue;}
         bf.markBit(i);
     }
+    backupFile.close();
 }
 
 // The backupExists method checks if the backup file "BloomFilterBackup.txt" exists in the "../data" directory.
@@ -136,4 +139,36 @@ int BackupFile::backupExists() {
         // If the file could not be opened, return 0 (file does not exist).       
         return 0;  
     }
+    file.close();
+}
+
+// This function will delete a url from the backup file
+void BackupFile::deleteURL(std::string url) {
+    ifstream backupFile("../data/BloomFilterBackup.txt");
+    if (!backupFile) {
+        throw runtime_error("not able to open file");
+    }
+
+    vector<string> backupLines;
+    string line;
+
+    //go make sure that "www.example.com1" isn't in the file 
+    while (getline(backupFile, line)) {
+        if (line != url){
+            backupLines.push_back(line);
+        }
+    }
+    backupFile.close();
+
+    // replace old text with new text
+    ofstream backuptoFile("../data/BloomFilterBackup.txt", ios::trunc);
+    if (!backuptoFile) {
+        throw runtime_error("not able to open file");
+    }
+
+    for (const auto& l : backupLines) {
+        backuptoFile << l << endl;
+    }
+
+    backuptoFile.close();
 }

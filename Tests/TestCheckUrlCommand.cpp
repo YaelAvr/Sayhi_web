@@ -16,6 +16,7 @@
 
 
 TEST(CheckURLCommandTest, resultEqualFalse) { //checking the output of function equals false
+    StdInputOutput io;
     std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(new StdInputOutput());
     commands[0]->execute("8 1 2"); //initialize
     std::stringstream capturedOutput; //catching the stream in order to check the std output

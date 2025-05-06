@@ -162,12 +162,10 @@ TEST(BackupTest, DeleteBackupURL){
 
     fstream file("../data/BloomFilterBackup.txt", ios::in | ios::out); 
 
-    int lineCounter = 0;
     string line;
-    string lastLine;
 
     for (int i = 0; i < 8; i++){
-        getline(file, line)
+        getline(file, line);
     }
     
     //go make sure that "www.example.com1" isn't in the file 
