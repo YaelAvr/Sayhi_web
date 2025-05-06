@@ -152,7 +152,7 @@ void BackupFile::deleteURL(std::string url) {
     vector<string> backupLines;
     string line;
 
-    //go make sure that "www.example.com1" isn't in the file 
+    //put every line of the file that we want to keep (not the URL) in vector
     while (getline(backupFile, line)) {
         if (line != url){
             backupLines.push_back(line);
