@@ -11,7 +11,7 @@
 //Checks if the delete done successfully 
 TEST(DeleteURL, deleteUrl) {
     //init the program and activate Add
-    InitHendler* init = new InitHendler();
+    InitHendler* init = new InitHendler(new StdInputOutput());
     AddURLCommand* addCommand = new AddURLCommand(init);
     DeleteURLCommand* deleteCommand = new DeleteURLCommand(init);
     init->execute("8 1"); //initialize

@@ -9,7 +9,7 @@ TEST(InitHendlerTest, CreatesBackupFileIfNotExists) {
     std::remove("../data/BloomFilterBackup.txt");
 
     // Create an instance of InitHendler to test the execute function.
-    InitHendler initHandler;
+    InitHendler initHandler(new StdInputOutput());
     std::string line = "100 10 20 30";  // Example input line
 
     // Call the execute function, which will check if the backup file exists, 

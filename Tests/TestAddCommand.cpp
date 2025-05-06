@@ -13,7 +13,7 @@ using namespace std;
 // this test will find if the bloom filter was aptated correctly
 TEST(AddUrlTest, AddToBloomFilter) {
     //init the program and activate Add
-    InitHendler* init = new InitHendler();
+    InitHendler* init = new InitHendler(new StdInputOutput());
     AddURLCommand* addCommand = new AddURLCommand(init);
     init->execute("8 1");
     addCommand->execute("1 www.example.com0");
@@ -41,7 +41,7 @@ TEST(AddUrlTest, AddToBloomFilter) {
 // this test will find if the bloom filter was aptated correctly
 TEST(AddUrlTest, AddToBlackList) {
     //init the program and activate Add
-    InitHendler* init = new InitHendler();
+    InitHendler* init = new InitHendler(new StdInputOutput());
     AddURLCommand* addCommand = new AddURLCommand(init);
     init->execute("8 1");
     addCommand->execute("1 www.example.com0");
