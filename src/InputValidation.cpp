@@ -22,7 +22,7 @@ bool InputValidation::isValidURL(const std::string& url) {
 }
 
 
-// Main validation function: checks if the input line is valid according to the expected formats
+// Main validation function: checks if the config line is valid according to the expected formats
 bool InputValidation::isValidConfigLine(const std::string& line) {
     std::vector<std::string> tokens = SplitString::SplitBySpace(line);
     if (tokens.size() < 2){
