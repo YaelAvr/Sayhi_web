@@ -2,53 +2,28 @@
 #include "SplitString.h"
 #include "InputValidation.h"
 
-// Static variable to track how many valid inputs were processed
-int InputClassify::call_count = 0;
-
 /*
  * Classifies a given input string.
  *
  * Returns:
  *   -1 → if the input is invalid 
- *    0 → if the input is the first valid configuration line
- *    1 → if the input is a command of type 1 with a valid URL
- *    2 → if the input is a command of type 2 with a valid URL
- */
-int InputClassify::classify(const std::string&input) {
-    std::vector<std::string> tokens = SplitString::SplitBySpace(input);
+ *    1 → if the input is a command of type POST with a valid URL
+ *    2 → if the input is a command of type GET with a valid URL
+ *    3 → if the input is a command of type DELETE with a valid URL
 
-    // Validate the entire input line
-    if (!InputValidation::isValidConfigLine(input)) {
+ */
+int InputClassify::classify(const std::string& input) {
+    std::vector<std::string> tokens = SplitString::SplitBySpace(input);
+    if (tokens.size()!=2 || !InputValidation::isValidURL(tokens[1])) {
         return -1;
     }
-    // Handle the first valid line: configuration
-    if (call_count == 0) {
-        // Config line with two tokens: check if the second is a positive integer
-        if (tokens.size() == 2) {
-            if (InputValidation::isPositiveInteger(tokens[1])) {
-                call_count++;
-                return 0;
-            } else {
-                return -1;  // invalid second token
-            }
-        }
-        // Config line with more than two tokens: already validated, accept
-        call_count++;
-        return 0;
-    }
-    if (tokens[0] == "1" && InputValidation::isValidURL(tokens[1])){
-        return 1;
-    }
-    if (tokens[0] == "2" && InputValidation::isValidURL(tokens[1])){
-        return 2;
-    }
-    // If it passed validation but isn't a known command
+
+    std::string& command = tokens[0];
+    if (command == "POST") return 1;
+    if (command == "GET") return 2;
+    if (command == "DELETE") return 3;
+
     return -1;
 
 }
 
-
-//for tests
-void InputClassify::reset() {
-    call_count = 0;
-}
