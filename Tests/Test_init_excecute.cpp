@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "../src/InitHendler.h"
+#include "../src/StdInputOutput.h"
 #include <fstream>
 #include <cstdio>
 
@@ -9,7 +10,8 @@ TEST(InitHendlerTest, CreatesBackupFileIfNotExists) {
     std::remove("../data/BloomFilterBackup.txt");
 
     // Create an instance of InitHendler to test the execute function.
-    InitHendler initHandler;
+    StdInputOutput io;
+    InitHendler initHandler(io);
     std::string line = "100 10 20 30";  // Example input line
 
     // Call the execute function, which will check if the backup file exists, 

@@ -151,3 +151,33 @@ TEST(BackupTest, ReturnsTrueWhenBackupExists) {
 
     std::remove("../data/BloomFilterBackup.txt");
 }
+
+// write test to make sure that a url is delted
+TEST(BackupTest, DeleteBackupURL){
+    BackupFile::createBackupFile(8);
+    BackupFile::updateBlacklistBeckup("www.example.com0");
+    BackupFile::updateBlacklistBeckup("www.example.com1");
+    BackupFile::updateBlacklistBeckup("www.example.com2");
+
+    BackupFile::deleteURL("www.example.com1");
+
+    fstream file("../data/BloomFilterBackup.txt", ios::in | ios::out); 
+
+    string line;
+
+    //go to url part 
+    for (int i = 0; i < 8; i++){
+        getline(file, line);
+    }
+    
+    //go make sure that "www.example.com1" isn't in the file 
+    while (getline(file, line)) {
+        if (line == ""){
+            break;
+        }
+        EXPECT_NE(line, "www.example.com1");
+    }
+
+    file.close();
+    std::remove("../data/BloomFilterBackup.txt");
+}
