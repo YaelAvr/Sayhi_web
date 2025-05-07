@@ -3,7 +3,11 @@
 #include "ServerInit.h"
 
 int ServerInit::returnPortIfValid(const std::string& port_str){
-    return -2;
+    if (!InputValidation::isPositiveInteger(port_str)) {
+        return -1;
+    }
+    int port = std::stoi(port_str);
+    return (port >= 1 && port <= 65535) ? port : -1;
 }
 
 
