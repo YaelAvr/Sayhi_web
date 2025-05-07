@@ -1,6 +1,8 @@
 #include "InputValidation.h"
 #include "SplitString.h"
 #include "ServerInit.h"
+#include <sstream>
+
 
 int ServerInit::returnPortIfValid(const std::string& port_str){
     if (!InputValidation::isPositiveInteger(port_str)) {
@@ -11,7 +13,13 @@ int ServerInit::returnPortIfValid(const std::string& port_str){
 }
 
 std::string ServerInit::extractConfigString(int argc, char* argv[]){
-    return "10 -1";
+    std::ostringstream oss;
+    for (int i = 2; i < argc; ++i) {
+        oss << argv[i];
+        if (i != argc - 1)
+            oss << " ";
+    }
+    return oss.str();
 }
 
 
