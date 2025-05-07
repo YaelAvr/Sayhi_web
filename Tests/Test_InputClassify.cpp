@@ -19,12 +19,12 @@
      EXPECT_EQ(InputClassify::classify("GET www.example.com0"), 2);  //  → 2
  }
 
-// Test: Invalid lines before the first valid line should be ignored.
-// The first valid line should still be treated as the config line and return 0.
- TEST(InputClassifierTest, InvalidLinesIgnoredBeforeFirstLine) {
+
+ TEST(InputClassifierTest, InvalidLinesIgnored) {
      EXPECT_EQ(InputClassify::classify("256 two"), -1);  // invalid
      EXPECT_EQ(InputClassify::classify("1 bla.com"), -1); // invalid
      InputClassify::classify("POST www.example.com0");  //  → 1
+     EXPECT_EQ(InputClassify::classify("POST www.example.com0"), 1); // -> 1
  }
 
  TEST(InputClassifierTest, DeleteCommandWithValidURLReturns3) {
