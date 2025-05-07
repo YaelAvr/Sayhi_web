@@ -28,7 +28,7 @@ bool InputValidation::isValidConfigLine(const std::string& line) {
     if (tokens.empty()){
         return false;
     }
-    // Case: add/check command (type 1 or 2)
+    // Case: add/check/delete command
     if ((tokens[0] == "1" || tokens[0] == "2" || tokens[0] == "3") && tokens.size() == 2) {
         return isValidURL(tokens[1]);
     }
