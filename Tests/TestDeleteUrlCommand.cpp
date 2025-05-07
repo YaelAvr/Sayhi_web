@@ -5,13 +5,15 @@
 #include "../src/Blacklist.h"
 #include "../src/BloomFilter.h"
 #include "../src/BloomFilterLogic.h"
+#include "../src/StdInputOutput.h"
 #include <gtest/gtest.h>
 
 
 //Checks if the delete done successfully 
 TEST(DeleteURL, deleteUrl) {
     //init the program and activate Add
-    InitHendler* init = new InitHendler();
+    StdInputOutput io;
+    InitHendler* init = new InitHendler(io);
     AddURLCommand* addCommand = new AddURLCommand(init);
     DeleteURLCommand* deleteCommand = new DeleteURLCommand(init);
     init->execute("8 1"); //initialize
