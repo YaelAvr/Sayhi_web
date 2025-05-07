@@ -22,27 +22,15 @@ bool InputValidation::isValidURL(const std::string& url) {
 }
 
 
-// Main validation function: checks if the input line is valid according to the expected formats
+// Main validation function: checks if the config line is valid according to the expected formats
 bool InputValidation::isValidConfigLine(const std::string& line) {
     std::vector<std::string> tokens = SplitString::SplitBySpace(line);
-    if (tokens.empty()){
-        return false;
-    }
-    // Case: add/check command (type 1 or 2)
-    if ((tokens[0] == "1" || tokens[0] == "2" || tokens[0] == "3") && tokens.size() == 2) {
-        return isValidURL(tokens[1]);
-    }
-    // Case: configuration line (must contain only positive integers)
     if (tokens.size() < 2){
         return false;
     }
-    for (int i = 0; i < tokens.size(); i++) {
-        std::string token = tokens[i];
-        if (!isPositiveInteger(token)) {
-            return false;
-        }
-        if (token == "0") {
-            return false; // 0 is not allowed
+    for (const std::string& token : tokens) {
+        if (!isPositiveInteger(token) || token == "0") {
+            return false; 
         }
     }
     return true;

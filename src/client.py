@@ -1,16 +1,34 @@
 import socket 
 import sys
+import ipaddress
+
+def is_valid_ip(ip):
+
+    """
+    Checks if the given string is a valid IP address.
+    """
+    try:
+        ipaddress.ip_address(ip)
+        return True
+    except ValueError:
+        return False
+
+def is_valid_port(port):
+
+    """
+    Checks if the given string is a valid PORT address.
+    """
+    if not port.isdigit():
+        return False
+    cur_port = int(port)
+    return 1 <= cur_port <= 65535
+
 
 def handle_input():
 
     """
-    Handles command-line input.
-    
-    Returns:
-        tuple: A tuple containing the server IP and server port.
-    
-    Exits:
-        If the number of arguments is incorrect or the port is not an integer.
+    Reads and validates IP and port from command-line arguments.
+    Exits if input is invalid.
     """
 
     if len(sys.argv) != 3:
@@ -18,10 +36,13 @@ def handle_input():
         sys.exit(1)
     
     server_ip = sys.argv[1]
-    try:
-        server_port = int(sys.argv[2])
-    except ValueError:
-        print("port needs to be an integer")
+    if not is_valid_ip(server_ip):
+        print("ip is not valid")
+        sys.exit(1)
+
+    server_port = sys.argv[2]
+    if not is_valid_port(server_port):
+        print("port is not valid")
         sys.exit(1)
     
     return server_ip, server_port
@@ -29,14 +50,7 @@ def handle_input():
 def connect_to_server(server_ip, server_port):
 
     """
-    Establishes a TCP connection to the server.
-
-    Args:
-        server_ip (str): The IP address of the server.
-        server_port (int): The port number of the server.
-
-    Returns:
-        socket: The connected client socket.
+    Connects to the server and returns the socket.
     """
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
