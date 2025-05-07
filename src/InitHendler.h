@@ -12,11 +12,8 @@ private:
     std::vector<int> hashFunctions;
     BloomFilter bloomfilter;
     Blacklist blacklist;
-    // IInputOutput& io;
 
 public:
-    // InitHendler(IInputOutput& io) : io(io) {}
-
     /*
     A function that will execute the functionality of
     initolaizing the program- creats new objects or 
