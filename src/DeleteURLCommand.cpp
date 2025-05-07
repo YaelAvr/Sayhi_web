@@ -8,11 +8,12 @@
 void DeleteURLCommand::execute(std::string line){
     std::string url = splitIntoAppropriateVariables::extractUrlFromLine(line);
     if(!checkLogicalError(url)){
-        //צריך לבצע הדפסת פלט
+        (init->getIO()).printOutput("404 Not Found");
         return;
     }
     Blacklist& blacklist = init->getBlacklist();
     blacklist.removeUrl(url);   
+    (init->getIO()).printOutput("204 No Content");
 }
 
 // This function checks the logical error. If the URL is blacklisted, it means it can be deleted.
