@@ -10,4 +10,9 @@ int ServerInit::returnPortIfValid(const std::string& port_str){
     return (port >= 1 && port <= 65535) ? port : -1;
 }
 
+std::string ServerInit::extractConfigString(int argc, char* argv[]){
+    return "10 -1";
+}
+
+
 

@@ -5,6 +5,7 @@
 class ServerInit {
     public:
         static int returnPortIfValid(const std::string& port_str);
+        static std::string extractConfigString(int argc, char* argv[]);
 
 
 };
