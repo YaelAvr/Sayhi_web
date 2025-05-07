@@ -9,12 +9,12 @@
 void CheckURLCommand::execute(std::string line){
     std::string url = splitIntoAppropriateVariables::extractUrlFromLine(line);
     std::vector<int> bitsReturnFromHash = BloomFilterLogic::activateMultipleHash(init->getHashFunctions(),url,init->getArraySize()); //activate the hash functions
-    (init->getIO()).printOutput("200 Ok\n"); //One line break is in the function itself, and another one is added here
+    io.printOutput("200 Ok\n"); //One line break is in the function itself, and another one is added here
     if (!BloomFilterLogic::bitsMatchBloomFilter(init->getFilter(), bitsReturnFromHash)) //if the bits are not match to the bloom filter, it prints false
     {
-        (init->getIO()).printOutput("false");
+        io.printOutput("false");
         return;
     }
     std::string falsePositiveStatus = FalsePositiveCheck::getFalsePositiveStatus(url, init->getBlacklist()); //false positive check
-    (init->getIO()).printOutput(falsePositiveStatus); //print the check result
+    io.printOutput(falsePositiveStatus); //print the check result
 }

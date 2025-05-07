@@ -25,11 +25,8 @@ void InitHendler::execute(std::string line) {
 }
 
  // Getters
- int InitHendler::getArraySize() const { 
+int InitHendler::getArraySize() const { 
     return arraySize;
- }
-IInputOutput& InitHendler::getIO() const {
-    return io;
 }
 BloomFilter& InitHendler::getFilter() { 
     return bloomfilter;

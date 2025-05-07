@@ -6,10 +6,12 @@
 
 class DeleteURLCommand : public IMenuCommand {
 private:
-    InitHendler* init;
+    InitHendler* init;    
+    IInputOutput& io;
+
 public:
     // This function deletes a URL from the blacklist if there is no logical error.
-    DeleteURLCommand(InitHendler* init) : init(init) {}
+    DeleteURLCommand(InitHendler* init, IInputOutput& io) : init(init),  io(io) {}
 
     /*
     A function that will execute the functionality of

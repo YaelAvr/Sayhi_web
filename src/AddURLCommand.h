@@ -7,9 +7,10 @@
 class AddURLCommand : public IMenuCommand {
 private:
     InitHendler* init;
+    IInputOutput& io;
 
 public:
-    AddURLCommand(InitHendler* init) : init(init) {}
+    AddURLCommand(InitHendler* init, IInputOutput& io) : init(init),  io(io) {}
 
     /*
     A function that will execute the functionality of

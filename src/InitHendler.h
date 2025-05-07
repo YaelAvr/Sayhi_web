@@ -12,10 +12,10 @@ private:
     std::vector<int> hashFunctions;
     BloomFilter bloomfilter;
     Blacklist blacklist;
-    IInputOutput& io;
+    // IInputOutput& io;
 
 public:
-    InitHendler(IInputOutput& io) : io(io) {}
+    // InitHendler(IInputOutput& io) : io(io) {}
 
     /*
     A function that will execute the functionality of
@@ -25,7 +25,7 @@ public:
    void execute(std::string line);
    //Getters
    int getArraySize() const;
-   IInputOutput& getIO() const;
+//    IInputOutput& getIO() const;
    BloomFilter& getFilter();
    Blacklist& getBlacklist();
    const std::vector<int>& getHashFunctions() const;

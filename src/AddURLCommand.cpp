@@ -18,7 +18,7 @@ void AddURLCommand::execute(std::string line) { //add the url to the blacklist
     vector<int> hush = BloomFilterLogic::activateMultipleHash(init->getHashFunctions(), url, init->getArraySize());
     addUrlToBlacklist(url);
     addUrlToBloomFilter(hush);
-    (init->getIO()).printOutput("201 Created");
+    io.printOutput("201 Created");
 }
 
 // add a url to the blacklist array and update the file
