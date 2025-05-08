@@ -7,7 +7,6 @@ services:
       - ./data:/usr/gmail-project/data 
     stdin_open: true
     tty: true
-    command: ./my_program 
     ports:
       - "8080:8080"
 
@@ -19,7 +18,7 @@ services:
       - ./data:/usr/gmail-project/data
     stdin_open: true
     tty: true
-    command: ./my_tests
+    command: [./my_tests]
   
   client: 
     build:

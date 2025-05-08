@@ -1,6 +1,6 @@
 FROM python:3
 
-WORKDIR /app
-COPY . /app
+WORKDIR /client-part
+COPY src/*.py /client-part/
 
 ENTRYPOINT [ "python", "client.py" ]
