@@ -1,5 +1,5 @@
 services:
-  gmail-project:
+  server:
     build:
       context: .
       dockerfile: Dockerfile.server
@@ -27,4 +27,4 @@ services:
     stdin_open: true
     tty: true
     depends_on:
-      - gmail-project
+      - server
