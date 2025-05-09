@@ -15,7 +15,7 @@ class SocketInputOutput : public IInputOutput {
 
         // a function that adds a '\n' to the end of output
         // before sending it to the client
-        std::string addLineBreak(std::string& output);        
+        std::string addLineBreak(const std::string& output);        
         
         // a function that removes the '\n' that was add by 
         // the client at the end of input

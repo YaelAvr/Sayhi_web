@@ -3,6 +3,7 @@
 using namespace std;
 #include "IMenuCommand.h"
 #include "IInputOutput.h"
+#include "InitHendler.h"
 #include <map>
 
 class CommandMenuInitializer {
