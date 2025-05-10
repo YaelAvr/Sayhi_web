@@ -12,8 +12,7 @@ COPY . .
 RUN mkdir -p build
 WORKDIR /usr/gmail-project/build
 
-# RUN cmake .. && make
 
 RUN cmake -DBUILD_TESTING=${BUILD_TESTING} .. && make
 
-ENTRYPOINT ["./my_program"]
+CMD ["./my_program", "0.0.0.0", "8080", "30", "2", "1"]
