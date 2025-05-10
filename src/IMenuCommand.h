@@ -5,6 +5,7 @@
 //Abstract class for the method execute, which is implemented by every element in the map
 class IMenuCommand {
 public:
+    virtual ~IMenuCommand() = 0;
     /*
     An abstract function that will send the program to 
     the correct acction.

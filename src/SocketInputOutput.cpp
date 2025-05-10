@@ -1,4 +1,3 @@
-// #include <iostream>
 #include "SocketInputOutput.h"
 #include <sys/socket.h>
 #include <stdio.h>
@@ -6,29 +5,36 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <utility> 
 
 using namespace std;
 
 // A function that  Wait for a message from a client (up to 4096 Bytes), and read it into buffer.
-string SocketInputOutput::getInput()
+pair<string, bool> SocketInputOutput::getInput()
 {
     char buffer[4096];
     int expected_data_len = sizeof(buffer);
     int read_bytes = recv(client_sock_id, buffer, expected_data_len, 0);
     if (!validateRecv(read_bytes))
     {
-        // error connection is closed
-        return "";
+        // error occurred
+        return {"", false};
     }
-    return removeLineBreak(string(buffer, read_bytes));
+    return {removeLineBreak(string(buffer, read_bytes)), true};
 }
 
 // A function that send a message to the client the
-void SocketInputOutput::printOutput(const string &output) {
+int SocketInputOutput::printOutput(const string &output) {
     string newOutput = addLineBreak(output);
 
     int sent_bytes = send(client_sock_id, newOutput.c_str(), newOutput.size(), 0);
-    validateSend(sent_bytes);
+    
+    if (!validateSend(sent_bytes))
+    {
+        // error occurred
+        return -1;
+    }
+    return 1;
 }
 
 // A function that make sure that the recv function was successful.

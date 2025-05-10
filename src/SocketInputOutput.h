@@ -1,7 +1,9 @@
 #ifndef SOCKET_INPUT_OUTPUT_H
 #define SOCKET_INPUT_OUTPUT_H
+
 #include "IInputOutput.h"
 #include <string>
+#include <utility>
 using namespace std;
 
 class SocketInputOutput : public IInputOutput {
@@ -24,13 +26,13 @@ class SocketInputOutput : public IInputOutput {
         
     public:
         SocketInputOutput(int client_sock_id) : client_sock_id(client_sock_id) {}
+        ~SocketInputOutput() {} 
 
         // A function that receiving text from user
-        std::string getInput();
+        std::pair<std::string, bool> getInput();
         
         // A function that send a message to the client the 
-        void printOutput(const string& output);      
+        int printOutput(const string& output);      
 
 };
-
 #endif
