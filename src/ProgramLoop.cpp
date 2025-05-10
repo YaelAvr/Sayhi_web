@@ -25,7 +25,10 @@ void ProgramLoop::startLoop(){
         classifyNum = InputClassify::classify(input);
 
         // if the input wasn't valid 
-        if (classifyNum == -1) {continue;}
+        if (classifyNum == -1) {
+            IO_Obj->printOutput("400 Bad Request");
+            continue;
+        }
         commands[classifyNum]->execute(input);
     }
 }
