@@ -21,14 +21,20 @@ def is_valid_port(port):
     if not port.isdigit():
         return False
     cur_port = int(port)
-    return 1 <= cur_port <= 65535
+    return 1024 <= cur_port <= 65535
 
 
 def handle_input(argv):
 
     """
     Reads and validates IP and port from command-line arguments.
-    Exits if input is invalid.
+    Exits the program if input is invalid.
+    
+    Args:
+        argv (list): Command-line arguments, expected format: [script_name, ip, port]
+    
+    Returns:
+        tuple: (server_ip as str, server_port as int)
     """
 
     if len(argv) != 3:
@@ -47,14 +53,29 @@ def handle_input(argv):
 def connect_to_server(server_ip, server_port):
 
     """
-    Connects to the server and returns the socket.
+    Establishes a TCP connection to the server at the given IP and port.
+    Exits the program if the connection fails.
     """
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((server_ip, server_port))
     return client_socket
 
+
 def main():
+
+    """
+    Main client logic:
+    - Parses IP and port from the command-line
+    - Connects to the server
+    - Enters an infinite loop:
+        - Reads a command from the user
+        - Sends it to the server with newline terminator
+        - Waits for a response that ends with newline
+        - Prints the response exactly as received (without extra newline)
+    - Closes the socket on exit
+    """
+
     server_ip, server_port = handle_input(sys.argv)
     client_socket = connect_to_server(server_ip, server_port)
     try:
@@ -65,9 +86,11 @@ def main():
             response = b""
             while b'\n' not in response:
                 response += client_socket.recv(4096)
-            print(response.decode('utf-8'))
+            print(response.decode('utf-8'), end="")
+    except KeyboardInterrupt:
+        pass  # exit silently on Ctrl+C
     finally:
         client_socket.close()
 
-#if __name__ == "__main__":
- #   main()
+if __name__ == "__main__":
+    main()
