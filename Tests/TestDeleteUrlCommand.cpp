@@ -13,8 +13,8 @@
 TEST(DeleteURL, deleteUrl) {
     //init the program and activate Add
     StdInputOutput io;
-    InitHendler* init = new InitHendler(io);
-    AddURLCommand* addCommand = new AddURLCommand(init);
+    InitHendler* init = new InitHendler();
+    AddURLCommand* addCommand = new AddURLCommand(io, init);
     DeleteURLCommand* deleteCommand = new DeleteURLCommand(init);
     init->execute("8 1"); //initialize
     addCommand->execute("1 www.example.com12"); //add URL

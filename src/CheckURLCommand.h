@@ -8,8 +8,10 @@
 class CheckURLCommand : public IMenuCommand {
 private:
     InitHendler* init;
+    IInputOutput& io;
+    
 public:
-    CheckURLCommand(InitHendler* init) : init(init) {}
+    CheckURLCommand(InitHendler* init, IInputOutput& io) : init(init),  io(io) {}
 
     /*
     A function that will execute the functionality of

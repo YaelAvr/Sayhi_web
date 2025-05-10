@@ -12,15 +12,12 @@ using namespace std;
 This function create a Map of MenuCommand objects, 
 so that we can execute a command while protecting polymorphism.
 */
-map<int, IMenuCommand*> CommandMenuInitializer::createCommandMenu(IInputOutput* ioObj) {
+map<int, IMenuCommand*> CommandMenuInitializer::createCommandMenu(IInputOutput* ioObj, InitHendler* init) {
     map<int, IMenuCommand*> commands;
 
-    InitHendler* init = new InitHendler(*ioObj);
-    
-    commands[0] = init;
-    commands[1] = new AddURLCommand(init);
-    commands[2] = new CheckURLCommand(init);
-    commands[3] = new DeleteURLCommand(init);
+    commands[1] = new AddURLCommand(init, *ioObj);
+    commands[2] = new CheckURLCommand(init, *ioObj);
+    commands[3] = new DeleteURLCommand(init, *ioObj);
 
 
     return commands;

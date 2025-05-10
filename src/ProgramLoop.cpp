@@ -21,11 +21,14 @@ void ProgramLoop::startLoop(){
 
     //start the Program Loop
     while (true) {
-        input = IO_Obj->getInput();
+        input = (IO_Obj->getInput()).first;
         classifyNum = InputClassify::classify(input);
 
         // if the input wasn't valid 
-        if (classifyNum == -1) {continue;}
+        if (classifyNum == -1) {
+            IO_Obj->printOutput("400 Bad Request");
+            continue;
+        }
         commands[classifyNum]->execute(input);
     }
 }
