@@ -9,7 +9,6 @@ using namespace std;
 //which is implemented by every element in the map
 class IInputOutput {
 public:
-    virtual ~IInputOutput() = 0;
     // A function that receives a massage
     virtual std::pair<std::string, bool> getInput() = 0;
 

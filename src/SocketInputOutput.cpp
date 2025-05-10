@@ -82,3 +82,5 @@ string SocketInputOutput::removeLineBreak(string input)
     }
     return input;
 }
+
+SocketInputOutput::~SocketInputOutput() {}

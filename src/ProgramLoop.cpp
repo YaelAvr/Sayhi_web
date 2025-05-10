@@ -21,7 +21,7 @@ void ProgramLoop::startLoop(){
 
     //start the Program Loop
     while (true) {
-        input = IO_Obj->getInput();
+        input = (IO_Obj->getInput()).first;
         classifyNum = InputClassify::classify(input);
 
         // if the input wasn't valid 

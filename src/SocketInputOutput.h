@@ -26,13 +26,13 @@ class SocketInputOutput : public IInputOutput {
         
     public:
         SocketInputOutput(int client_sock_id) : client_sock_id(client_sock_id) {}
-        ~SocketInputOutput() {} 
+        ~SocketInputOutput(); 
 
         // A function that receiving text from user
         std::pair<std::string, bool> getInput();
         
         // A function that send a message to the client the 
-        int printOutput(const string& output);      
+        int printOutput(const std::string& output);      
 
 };
 #endif
