@@ -14,17 +14,20 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.server
+      args:
+        - BUILD_TESTING=ON
     volumes:
       - ./data:/usr/gmail-project/data
     stdin_open: true
     tty: true
     command: [./my_tests]
-  
+
   client: 
     build:
-        context: .
-        dockerfile: Dockerfile.client
+      context: .
+      dockerfile: Dockerfile.client
     stdin_open: true
     tty: true
     depends_on:
       - server
+
