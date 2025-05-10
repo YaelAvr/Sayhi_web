@@ -1,0 +1,6 @@
+FROM python:3
+
+WORKDIR /client-part
+COPY src/*.py /client-part/
+
+CMD [ "python", "client.py", "server", "8080" ]

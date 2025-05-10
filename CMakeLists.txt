@@ -23,7 +23,12 @@ target_include_directories(my_library PUBLIC src)
 add_executable(my_program src/main.cpp)
 target_link_libraries(my_program PRIVATE my_library)
 
-file(GLOB TEST_FILES "Tests/*.cpp")
+# By default- don't build the g-test files
+option(BUILD_TESTING "Build tests" OFF) 
 
-add_executable(my_tests ${TEST_FILES})
-target_link_libraries(my_tests PRIVATE my_library gtest gtest_main)
+if(BUILD_TESTING)
+  file(GLOB TEST_FILES "Tests/*.cpp")
+
+  add_executable(my_tests ${TEST_FILES})
+  target_link_libraries(my_tests PRIVATE my_library gtest gtest_main)
+endif()

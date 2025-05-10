@@ -1,9 +1,10 @@
 FROM gcc:latest
 
+ARG BUILD_TESTING=OFF
+
 RUN apt-get update && apt-get install -y cmake
 
 WORKDIR /usr/gmail-project
-
 
 COPY . .
 
@@ -11,6 +12,7 @@ COPY . .
 RUN mkdir -p build
 WORKDIR /usr/gmail-project/build
 
-RUN cmake .. && make
 
-CMD ["./my_program"]
+RUN cmake -DBUILD_TESTING=${BUILD_TESTING} .. && make
+
+CMD ["./my_program", "0.0.0.0", "8080", "30", "2", "1"]

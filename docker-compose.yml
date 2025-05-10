@@ -1,16 +1,33 @@
 services:
-  gmail-project:
-    build: .
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
     volumes:
       - ./data:/usr/gmail-project/data 
-    stdin_open: true
-    tty: true
-    command: ./my_program 
+    ports:
+      - "8080:8080"
+    # stdin_open: true
+    # tty: true
 
   tests:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+      args:
+        - BUILD_TESTING=ON
     volumes:
       - ./data:/usr/gmail-project/data
     stdin_open: true
     tty: true
-    command: ./my_tests
+    command: [./my_tests]
+
+  client: 
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+    command:  [ "python", "client.py", "server", "8080" ]
