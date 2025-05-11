@@ -7,8 +7,6 @@ services:
       - ./data:/usr/gmail-project/data 
     ports:
       - "8080:8080"
-    # stdin_open: true
-    # tty: true
 
   tests:
     build:
@@ -30,4 +28,4 @@ services:
     tty: true
     depends_on:
       - server
-    command:  [ "python", "client.py", "server", "8080" ]
+    

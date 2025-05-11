@@ -9,6 +9,7 @@ def is_valid_ip(ip):
     """
     return ip == "server"
 
+
 def is_valid_port(port):
 
     """

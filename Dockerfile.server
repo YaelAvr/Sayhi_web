@@ -8,7 +8,6 @@ WORKDIR /usr/gmail-project
 
 COPY . .
 
-
 RUN mkdir -p build
 WORKDIR /usr/gmail-project/build
 

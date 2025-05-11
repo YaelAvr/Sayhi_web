@@ -1,11 +1,16 @@
 # Gmail Project — URL Blacklist System
-This project implements a URL blacklist system using a Bloom filter in C++.
-The application supports adding and checking URLs, is developed with Test-Driven Development (TDD) methodology, and follows SOLID principles for flexibility and maintainability.
-The Bloom filter is saved to a file to ensure persistence between runs.
+This project implements a URL blacklist system using a Bloom filter in C++. The application supports adding, checking, and deleting URLs via a TCP client-server architecture. The server is written in C++, and the client is written in Python. The system is designed according to SOLID principles and follows the TDD methodology.
+
 
 ## System Requirements  
 To run the application using Docker:
 - Docker and Docker Compose installed.
+- A **C++ TCP server**, built from `Dockerfile.server`.
+- A **Python TCP client**, built from `Dockerfile.client`.
+- The server listens on port `8080`, exposed for inter-container communication.
+
+> **Custom Configuration**  
+To change runtime parameters — such as the TCP port, the Bloom filter configuration line, or IP address —you should update the `CMD` instruction inside the relevant Dockerfile: 
 
 For local development (without Docker):
 - C++17 compatible compiler (e.g., g++)
@@ -20,10 +25,12 @@ Project management tracking:
 - `Tests/` — C++ tests files
 - `data/` — Bloom filter save files
 - `.vscode/` — VSCode project settings (optional for development)
-- `Dockerfile` — Docker build instructions
+- `Dockerfile.client` — Docker instructions for building Python client
+- `Dockerfile.server` — Docker instructions for building the C++ server
 - `docker-compose.yml` — Docker Compose configuration
 - `CMakeLists.txt` — CMake build script
 - `.gitignore` — Git ignored files
+- `images` — Screenshots used in the README documentation
 - `README.md` — Project documentation
 
 
