@@ -13,6 +13,7 @@ pair<string, bool> StdInputOutput::getInput(){
     return {line, true};
 }
 
+// A function that print a massage to the terminal
 int StdInputOutput::printOutput(const string& output) {
     cout << output << endl;
     return 1;
