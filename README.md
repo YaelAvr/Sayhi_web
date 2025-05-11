@@ -11,19 +11,22 @@ All required components — including the C++ server and Python client — are b
 ### CMD Format – Editing Parameters
 
 To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
-```
-#### `Dockerfile.client`
 
+#### `Dockerfile.client`
+```
 CMD ["python", "client.py", "server", "8080"]
 #                   │         │          └── server port
 #                   │         └──────────── server IP or hostname
 #                   └────────────────────── Python script name
+```
 
 #### `Dockerfile.server`
+```
 CMD ["./my_program", "8080", "30", "2", "1"]
 #                      │       │     └────── hash functions
 #                      |       └──────────── Bloom filter size
 #                      └──────────────────── server port
+```
 Edit these values directly to modify how the server and client are launched inside the containers.
 
 For local development (without Docker):
