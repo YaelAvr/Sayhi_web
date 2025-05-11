@@ -16,9 +16,11 @@
 
 
 TEST(CheckURLCommandTest, resultEqualFalse) { //checking the output of function equals false
-    StdInputOutput io;
-    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(new StdInputOutput());
-    commands[0]->execute("8 1 2"); //initialize
+    IInputOutput* io = new StdInputOutput();
+    InitHendler* init = new InitHendler();
+    init->execute("8 1 2"); //initialize
+
+    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(io, init);
     std::stringstream capturedOutput; //catching the stream in order to check the std output
     std::streambuf* originalCout = std::cout.rdbuf(); 
     std::cout.rdbuf(capturedOutput.rdbuf()); 
@@ -26,11 +28,18 @@ TEST(CheckURLCommandTest, resultEqualFalse) { //checking the output of function 
     std::cout.rdbuf(originalCout); 
     std::string output = capturedOutput.str();
     EXPECT_EQ(output, "false\n"); //checking if the output is equal to false
+    
+    CommandMenuInitializer::deleteCommandMenu(commands);
+    
+    delete io;
+    delete init;
 }
 
 TEST(CheckURLCommandTest, resultEqualTrueTrue) { //checking the output of function equals true true
-    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(new StdInputOutput());
-    commands[0]->execute("8 1 2"); //initialize
+    IInputOutput* io = new StdInputOutput();
+    InitHendler* init = new InitHendler();
+    init->execute("8 1 2"); //initialize
+    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(io, init);
     commands[1]->execute("1 www.example.com9"); //add this url 
     std::stringstream capturedOutput; //catching the stream in order to check the std output
     std::streambuf* originalCout = std::cout.rdbuf(); 
@@ -39,11 +48,18 @@ TEST(CheckURLCommandTest, resultEqualTrueTrue) { //checking the output of functi
     std::cout.rdbuf(originalCout); 
     std::string output = capturedOutput.str();
     EXPECT_EQ(output, "true true\n"); //checking if the output is equal to true true
+
+    CommandMenuInitializer::deleteCommandMenu(commands);
+    delete io;
+    delete init;
 }
 
 TEST(CheckURLCommandTest, resultEqualTrueFalse) { //checking the output of function equals true false
-    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(new StdInputOutput());
-    commands[0]->execute("8 1 2"); //initialize
+    IInputOutput* io = new StdInputOutput();
+    InitHendler* init = new InitHendler();
+    init->execute("8 1 2"); //initialize
+
+    std::map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(io, init);   
     commands[1]->execute("1 www.example.com0"); //add this url 
     std::stringstream capturedOutput; //catching the stream in order to check the std output
     std::streambuf* originalCout = std::cout.rdbuf(); 
@@ -52,7 +68,9 @@ TEST(CheckURLCommandTest, resultEqualTrueFalse) { //checking the output of funct
     std::cout.rdbuf(originalCout); 
     std::string output = capturedOutput.str();
     EXPECT_EQ(output, "true false\n"); //checking if the output is equal to true false
+
+    CommandMenuInitializer::deleteCommandMenu(commands);
+
+    delete io;
+    delete init;
 }
-
-
-

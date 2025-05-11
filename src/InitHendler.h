@@ -22,10 +22,11 @@ public:
    void execute(std::string line);
    //Getters
    int getArraySize() const;
-//    IInputOutput& getIO() const;
    BloomFilter& getFilter();
    Blacklist& getBlacklist();
    const std::vector<int>& getHashFunctions() const;
+   ~InitHendler();
+
 };
 
 #endif

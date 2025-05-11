@@ -37,3 +37,6 @@ Blacklist& InitHendler::getBlacklist() {
 const std::vector<int>& InitHendler::getHashFunctions() const { 
     return hashFunctions;
  }
+
+ // default destructor
+ InitHendler::~InitHendler(){};

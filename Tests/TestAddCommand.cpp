@@ -16,7 +16,7 @@ TEST(AddUrlTest, AddToBloomFilter) {
     //init the program and activate Add
     StdInputOutput io;
     InitHendler* init = new InitHendler();
-    AddURLCommand* addCommand = new AddURLCommand(io, init);
+    AddURLCommand* addCommand = new AddURLCommand(init, io);
     init->execute("8 1");
     addCommand->execute("1 www.example.com0");
     ifstream file("../data/BloomFilterBackup.txt");
@@ -45,7 +45,7 @@ TEST(AddUrlTest, AddToBlackList) {
     //init the program and activate Add
     StdInputOutput io;
     InitHendler* init = new InitHendler();
-    AddURLCommand* addCommand = new AddURLCommand(io, init);
+    AddURLCommand* addCommand = new AddURLCommand(init, io);
     init->execute("8 1");
     addCommand->execute("1 www.example.com0");
     ifstream file("../data/BloomFilterBackup.txt");
