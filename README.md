@@ -16,8 +16,8 @@ Project management tracking:
 
 
 ## Project Structure
-- `src/` — C++ source files
-- `Tests/` — C++ tests files
+- `src/` — source files
+- `Tests/` — tests files
 - `data/` — Bloom filter save files
 - `.vscode/` — VSCode project settings (optional for development)
 - `Dockerfile.client` — Docker instructions for building Python client
