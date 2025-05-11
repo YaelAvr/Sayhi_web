@@ -25,10 +25,12 @@ Project management tracking:
 - `Tests/` — C++ tests files
 - `data/` — Bloom filter save files
 - `.vscode/` — VSCode project settings (optional for development)
-- `Dockerfile` — Docker build instructions
+- `Dockerfile.client` — Docker instructions for building Python client
+- `Dockerfile.server` — Docker instructions for building the C++ server
 - `docker-compose.yml` — Docker Compose configuration
 - `CMakeLists.txt` — CMake build script
 - `.gitignore` — Git ignored files
+- `images` — Screenshots used in the README documentation
 - `README.md` — Project documentation
 
 
