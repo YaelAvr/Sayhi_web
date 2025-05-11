@@ -44,26 +44,26 @@ After starting the application use:
 
 - DELETE [URL] to delete a URL from the blacklist.
 
-  #### Changing CMD Parameters – Format & Instructions:
+#### Changing CMD Parameters – Format & Instructions:
+  
+To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
+  
+#### `Dockerfile.client`
+```
+CMD ["python", "client.py", "server", "8080"]
+#                   │         │          └── server port
+#                   │         └──────────── server IP or hostname
+#                   └────────────────────── Python script name
+```
     
-  To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
-    
-  #### `Dockerfile.client`
-  ```
-  CMD ["python", "client.py", "server", "8080"]
-  #                   │         │          └── server port
-  #                   │         └──────────── server IP or hostname
-  #                   └────────────────────── Python script name
-  ```
-      
-  #### `Dockerfile.server`
-  ```
-  CMD ["./my_program", "8080", "30", "2", "1"]
-  #                      │       │     └────── hash functions
-  #                      |       └──────────── Bloom filter size
-  #                      └──────────────────── server port
-  ```
-  Edit these values directly to modify how the server and client are launched inside the containers.
+#### `Dockerfile.server`
+```
+CMD ["./my_program", "8080", "30", "2", "1"]
+#                      │       │     └────── hash functions
+#                      |       └──────────── Bloom filter size
+#                      └──────────────────── server port
+```
+Edit these values directly to modify how the server and client are launched inside the containers.
   
 ### tests usage
 To compile and run the tests using Docker, use the following command:
