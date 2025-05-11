@@ -7,27 +7,26 @@ To run the application using Docker:
 - Docker and Docker Compose installed.
 All required components — including the C++ server and Python client — are built automatically using the provided `Dockerfile.server` and `Dockerfile.client`.
 
-
-#### Changing CMD Parameters – Format & Instructions:
-
-To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
-
-  #### `Dockerfile.client`
-  ```
-  CMD ["python", "client.py", "server", "8080"]
-  #                   │         │          └── server port
-  #                   │         └──────────── server IP or hostname
-  #                   └────────────────────── Python script name
-  ```
-  
-  #### `Dockerfile.server`
-  ```
-  CMD ["./my_program", "8080", "30", "2", "1"]
-  #                      │       │     └────── hash functions
-  #                      |       └──────────── Bloom filter size
-  #                      └──────────────────── server port
-  ```
-  Edit these values directly to modify how the server and client are launched inside the containers.
+    #### Changing CMD Parameters – Format & Instructions:
+    
+    To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
+    
+      #### `Dockerfile.client`
+      ```
+      CMD ["python", "client.py", "server", "8080"]
+      #                   │         │          └── server port
+      #                   │         └──────────── server IP or hostname
+      #                   └────────────────────── Python script name
+      ```
+      
+      #### `Dockerfile.server`
+      ```
+      CMD ["./my_program", "8080", "30", "2", "1"]
+      #                      │       │     └────── hash functions
+      #                      |       └──────────── Bloom filter size
+      #                      └──────────────────── server port
+      ```
+      Edit these values directly to modify how the server and client are launched inside the containers.
 
 For local development (without Docker):
 - C++17 compatible compiler (e.g., g++)
