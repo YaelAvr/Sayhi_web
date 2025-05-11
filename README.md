@@ -99,14 +99,8 @@ Below are four key aspects we were asked to assess:
 
 ###  1. Change in Command Names
 
-- **Did it require modifying code that should be closed to changes?**  
-  _[Yes / No]_
-
-- **If yes** – How did we refactor the code to prevent this in the future?  
-  _[Your explanation here]_
-
-- **If no** – What design in Exercise 1 made this change easy to extend?  
-  _[Your explanation here]_
+As a result of the change in the command names, we didn’t have any significant changes in the code, except for the function responsible for input classification. In this function, we wanted to check the input provided by the client, and since the input changed (in the previous assignment we had to check numbers, and now we are checking strings), we had to modify the comparisons themselves so that they now compare strings.
+  Aside from the change I mentioned , we didn’t change the rest of the code — we kept the operations represented by numbers in the code itself, and assigned each string a specific number. This way, we avoided modifying the rest of the code.
 
 ---
 
