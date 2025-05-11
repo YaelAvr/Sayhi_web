@@ -27,7 +27,7 @@ TEST(CheckURLCommandTest, resultEqualFalse) { //checking the output of function 
     commands[2]->execute("2 www.example.com10"); //check if this url is blacklisted
     std::cout.rdbuf(originalCout); 
     std::string output = capturedOutput.str();
-    EXPECT_EQ(output, "false\n"); //checking if the output is equal to false
+    EXPECT_EQ(output, "200 Ok\n\nfalse\n"); //checking if the output is equal to false
     
     CommandMenuInitializer::deleteCommandMenu(commands);
     
@@ -47,7 +47,7 @@ TEST(CheckURLCommandTest, resultEqualTrueTrue) { //checking the output of functi
     commands[2]->execute("2 www.example.com9"); //check if this url is blacklisted
     std::cout.rdbuf(originalCout); 
     std::string output = capturedOutput.str();
-    EXPECT_EQ(output, "true true\n"); //checking if the output is equal to true true
+    EXPECT_EQ(output, "200 Ok\n\ntrue true\n"); //checking if the output is equal to true true
 
     CommandMenuInitializer::deleteCommandMenu(commands);
     delete io;
@@ -67,7 +67,7 @@ TEST(CheckURLCommandTest, resultEqualTrueFalse) { //checking the output of funct
     commands[2]->execute("2 www.example.com11"); //check if this url is blacklisted
     std::cout.rdbuf(originalCout); 
     std::string output = capturedOutput.str();
-    EXPECT_EQ(output, "true false\n"); //checking if the output is equal to true false
+    EXPECT_EQ(output, "200 Ok\n\ntrue false\n"); //checking if the output is equal to true false
 
     CommandMenuInitializer::deleteCommandMenu(commands);
 
