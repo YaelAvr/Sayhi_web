@@ -3,30 +3,9 @@ This project implements a URL blacklist system using a Bloom filter in C++. The 
 
 
 ## System Requirements  
-**To run the application using Docker:**
+To run the application using Docker:
 - Docker and Docker Compose installed.
 All required components — including the C++ server and Python client — are built automatically using the provided `Dockerfile.server` and `Dockerfile.client`.
-
-    #### Changing CMD Parameters – Format & Instructions:
-    
-    To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
-    
-      #### `Dockerfile.client`
-      ```
-      CMD ["python", "client.py", "server", "8080"]
-      #                   │         │          └── server port
-      #                   │         └──────────── server IP or hostname
-      #                   └────────────────────── Python script name
-      ```
-      
-      #### `Dockerfile.server`
-      ```
-      CMD ["./my_program", "8080", "30", "2", "1"]
-      #                      │       │     └────── hash functions
-      #                      |       └──────────── Bloom filter size
-      #                      └──────────────────── server port
-      ```
-      Edit these values directly to modify how the server and client are launched inside the containers.
 
 For local development (without Docker):
 - C++17 compatible compiler (e.g., g++)
@@ -54,17 +33,37 @@ Project management tracking:
 To compile and run the application using Docker, use the following command:
 
 ```bash
-docker-compose run --rm --build gmail-project
+docker-compose run --rm --build server
+docker-compose run --rm --build client
 ``` 
-After starting the application:
+After starting the application use:
 
-Enter the initial Bloom filter size and hash function configuration.
+- POST [URL] to add a URL to the blacklist.
 
-Then use:
+- GET [URL] to check if a URL is blacklisted.
 
-- 1 [URL] to add a URL to the blacklist.
+- DELETE [URL] to delete a URL from the blacklist.
 
-- 2 [URL] to check if a URL is blacklisted.
+  #### Changing CMD Parameters – Format & Instructions:
+    
+  To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
+    
+  #### `Dockerfile.client`
+  ```
+  CMD ["python", "client.py", "server", "8080"]
+  #                   │         │          └── server port
+  #                   │         └──────────── server IP or hostname
+  #                   └────────────────────── Python script name
+  ```
+      
+  #### `Dockerfile.server`
+  ```
+  CMD ["./my_program", "8080", "30", "2", "1"]
+  #                      │       │     └────── hash functions
+  #                      |       └──────────── Bloom filter size
+  #                      └──────────────────── server port
+  ```
+  Edit these values directly to modify how the server and client are launched inside the containers.
   
 ### tests usage
 To compile and run the tests using Docker, use the following command:
