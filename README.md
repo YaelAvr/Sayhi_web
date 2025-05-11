@@ -5,12 +5,17 @@ This project implements a URL blacklist system using a Bloom filter in C++. The 
 ## System Requirements  
 To run the application using Docker:
 - Docker and Docker Compose installed.
-- A **C++ TCP server**, built from `Dockerfile.server`.
-- A **Python TCP client**, built from `Dockerfile.client`.
-- The server listens on port `8080`, exposed for inter-container communication.
+All required components — including the C++ server and Python client — are built automatically using the provided `Dockerfile.server` and `Dockerfile.client`.
+
 
 > **Custom Configuration**  
-To change runtime parameters — such as the TCP port, the Bloom filter configuration line, or IP address —you should update the `CMD` instruction inside the relevant Dockerfile: 
+To change the parameters passed to the server or client (such as port, IP address, or input commands), you must edit the `CMD` line inside the corresponding Dockerfile:
+
+- `Dockerfile.server` — for server-side parameters (port, array size, hash functions)
+- `Dockerfile.client` — for client-side parameters (server IP, port)
+
+These parameters are **baked into the image** during the Docker build process.  
+They **cannot be overridden at runtime** via `docker-compose` or command-line arguments.
 
 For local development (without Docker):
 - C++17 compatible compiler (e.g., g++)
