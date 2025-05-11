@@ -97,7 +97,7 @@ Below are four key aspects we were asked to assess:
 
 ---
 
-### 🔁 1. Change in Command Names (e.g., `1` → `POST`)
+### 🔁 1. Change in Command Names
 
 - **Did it require modifying code that should be closed to changes?**  
   _[Yes / No]_
@@ -110,7 +110,7 @@ Below are four key aspects we were asked to assess:
 
 ---
 
-### ➕ 2. Addition of New Commands (e.g., `DELETE`)
+### ➕ 2. Addition of New Commands 
 
 - **Did it require modifying code that should be closed to changes?**  
   _[Yes / No]_
@@ -123,7 +123,7 @@ Below are four key aspects we were asked to assess:
 
 ---
 
-### 🔁 3. Change in Output Format (e.g., HTTP-style responses)
+### 🔁 3. Change in Output Format 
 
 - **Did it require modifying code that should be closed to changes?**  
   _[Yes / No]_
