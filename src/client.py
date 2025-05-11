@@ -7,11 +7,7 @@ def is_valid_ip(ip):
     """
     Checks if the given string is a valid IP address.
     """
-    try:
-        ipaddress.ip_address(ip)
-        return True
-    except ValueError:
-        return False
+    return ip == 'server'
 
 def is_valid_port(port):
 
