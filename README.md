@@ -43,8 +43,9 @@ After starting the application use:
 - GET [URL] to check if a URL is blacklisted.
 
 - DELETE [URL] to delete a URL from the blacklist.
+  
 
-#### Changing CMD Parameters – Format & Instructions:
+### Changing CMD Parameters – Format & Instructions:
   
 To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
   
