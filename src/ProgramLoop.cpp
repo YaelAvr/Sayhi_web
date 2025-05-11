@@ -21,7 +21,13 @@ void ProgramLoop::startLoop(){
 
     //start the Program Loop
     while (true) {
-        input = (IO_Obj->getInput()).first;
+        // Get input from the client and check if the input is invalid in order to the bool in the pair
+        pair<string, bool> dataWithStatus = IO_Obj->getInput();
+        if(!dataWithStatus.second){
+            break;
+        }
+        input = dataWithStatus.first;
+        // Classify the input to determine which command it is
         classifyNum = InputClassify::classify(input);
 
         // if the input wasn't valid 
@@ -29,6 +35,7 @@ void ProgramLoop::startLoop(){
             IO_Obj->printOutput("400 Bad Request");
             continue;
         }
+        // Execute the command
         commands[classifyNum]->execute(input);
     }
 }

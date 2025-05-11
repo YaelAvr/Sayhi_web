@@ -15,4 +15,4 @@ WORKDIR /usr/gmail-project/build
 
 RUN cmake -DBUILD_TESTING=${BUILD_TESTING} .. && make
 
-CMD ["./my_program", "0.0.0.0", "8080", "30", "2", "1"]
+CMD ["./my_program", "8080", "30", "2", "1"]
