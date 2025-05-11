@@ -97,7 +97,7 @@ Below are four key aspects we were asked to assess:
 
 ---
 
-### 🔁 1. Change in Command Names
+###  1. Change in Command Names
 
 - **Did it require modifying code that should be closed to changes?**  
   _[Yes / No]_
@@ -110,7 +110,7 @@ Below are four key aspects we were asked to assess:
 
 ---
 
-### ➕ 2. Addition of New Commands 
+###  2. Addition of New Commands 
 
 - **Did it require modifying code that should be closed to changes?**  
   _[Yes / No]_
@@ -123,7 +123,7 @@ Below are four key aspects we were asked to assess:
 
 ---
 
-### 🔁 3. Change in Output Format 
+###  3. Change in Output Format 
 
 - **Did it require modifying code that should be closed to changes?**  
   _[Yes / No]_
@@ -136,7 +136,7 @@ Below are four key aspects we were asked to assess:
 
 ---
 
-### 🔁 4. Shift from Console I/O to Socket Communication
+###  4. Shift from Console I/O to Socket Communication
 
 - **Did it require modifying code that should be closed to changes?**  
   _[Yes / No]_
