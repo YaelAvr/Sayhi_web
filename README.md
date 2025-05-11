@@ -14,15 +14,12 @@ To change the default parameters passed to the server or client, edit the `CMD` 
 
 #### `Dockerfile.client`
 
-```dockerfile
 CMD ["python", "client.py", "server", "8080"]
 #                   │         │          └── server port
 #                   │         └──────────── server IP or hostname
 #                   └────────────────────── Python script name
-Dockerfile.server
-dockerfile
-Copy
-Edit
+
+#### `Dockerfile.server`
 CMD ["./my_program", "8080", "30", "2", "1"]
 #                      │       │     └────── hash functions
 #                      |       └──────────── Bloom filter size
