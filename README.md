@@ -106,27 +106,14 @@ As a result of the change in the command names, we didn’t have any significant
 
 ###  2. Addition of New Commands 
 
-- **Did it require modifying code that should be closed to changes?**  
-  _[Yes / No]_
-
-- **If yes** – How did we refactor the code to prevent this in the future?  
-  _[Your explanation here]_
-
-- **If no** – What modularity or abstraction helped us extend without modifying existing logic?  
-  _[Your explanation here]_
+ The new command that was added — delete,  did not change the existing code. The reason we were able to extend the functionality without making changes is that we had initially defined the command menu as a map, so we could simply add a new command to the map without affecting the existing commands or the overall functionality of the code.  
 
 ---
 
 ###  3. Change in Output Format 
 
-- **Did it require modifying code that should be closed to changes?**  
-  _[Yes / No]_
-
-- **If yes** – How did we redesign output generation to support multiple formats going forward?  
-  _[Your explanation here]_
-
-- **If no** – What previous separation of concerns allowed us to update output easily?  
-  _[Your explanation here]_
+ The change in the command output caused a specific change only in the print
+ output, and aside from the modified strings, there was no change in the functionality of the rest of the code.  
 
 ---
 
