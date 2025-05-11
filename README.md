@@ -89,6 +89,66 @@ docker-compose run --rm --build tests
 true true
 true false
 ```
+
+## Design Reflection – Open/Closed Principle
+
+As required, we examined whether recent changes in Exercise 2 violated the **Open/Closed Principle**:  
+Below are four key aspects we were asked to assess:
+
+---
+
+### 🔁 1. Change in Command Names (e.g., `1` → `POST`)
+
+- **Did it require modifying code that should be closed to changes?**  
+  _[Yes / No]_
+
+- **If yes** – How did we refactor the code to prevent this in the future?  
+  _[Your explanation here]_
+
+- **If no** – What design in Exercise 1 made this change easy to extend?  
+  _[Your explanation here]_
+
+---
+
+### ➕ 2. Addition of New Commands (e.g., `DELETE`)
+
+- **Did it require modifying code that should be closed to changes?**  
+  _[Yes / No]_
+
+- **If yes** – How did we refactor the code to prevent this in the future?  
+  _[Your explanation here]_
+
+- **If no** – What modularity or abstraction helped us extend without modifying existing logic?  
+  _[Your explanation here]_
+
+---
+
+### 🔁 3. Change in Output Format (e.g., HTTP-style responses)
+
+- **Did it require modifying code that should be closed to changes?**  
+  _[Yes / No]_
+
+- **If yes** – How did we redesign output generation to support multiple formats going forward?  
+  _[Your explanation here]_
+
+- **If no** – What previous separation of concerns allowed us to update output easily?  
+  _[Your explanation here]_
+
+---
+
+### 🔁 4. Shift from Console I/O to Socket Communication
+
+- **Did it require modifying code that should be closed to changes?**  
+  _[Yes / No]_
+
+- **If yes** – How did we isolate I/O layers to prevent tight coupling with business logic?  
+  _[Your explanation here]_
+
+- **If no** – What interface/design from Exercise 1 already supported switching I/O mechanisms?  
+  _[Your explanation here]_
+
+
+  
 ## Screenshots
 
 ### Project Management - JIRA Board
