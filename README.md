@@ -7,10 +7,6 @@ To run the application using Docker:
 - Docker and Docker Compose installed.
 - All required components — including the C++ server and Python client — are built automatically using the provided `Dockerfile.server` and `Dockerfile.client`.
 
-For local development (without Docker):
-- C++17 compatible compiler (e.g., g++)
-- Git (optional, for cloning the repository)
-
 Project management tracking:
 - Access to the JIRA board
 
