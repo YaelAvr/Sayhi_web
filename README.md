@@ -125,14 +125,10 @@ As a result of the change in the command names, we didn’t have any significant
 
 ###  4. Shift from Console I/O to Socket Communication
 
-- **Did it require modifying code that should be closed to changes?**  
-  _[Yes / No]_
+The fact that input/output comes from sockets instead of the console required us to make some adjustments to our code. Instead of having a single IO management class containing static functions, we created an abstract class with abstract input and output functions.
+This change allowed us to retain the printed output to the console, for example in tests where we printed to the console to compare outputs. Additionally, it enabled us to communicate through the socket, since in those parts of the code we defined the IO type as one that communicates via sockets (a class named SocketsInputOutput).
 
-- **If yes** – How did we isolate I/O layers to prevent tight coupling with business logic?  
-  _[Your explanation here]_
-
-- **If no** – What interface/design from Exercise 1 already supported switching I/O mechanisms?  
-  _[Your explanation here]_
+This way, we were able to implement IO through the socket without changing the general functionality of the code.
 
 
   
