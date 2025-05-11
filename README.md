@@ -11,7 +11,7 @@ All required components — including the C++ server and Python client — are b
 ### CMD Format – Editing Parameters
 
 To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
-
+```
 #### `Dockerfile.client`
 
 CMD ["python", "client.py", "server", "8080"]
