@@ -139,7 +139,6 @@ This way, we were able to implement IO through the socket without changing the g
 ![Test Run Output](https://github.com/eden05221/gmail_project/blob/main/images/part2/Test_Run_Input.png?raw=true)
 
 ### Application Run Example
-![Application Run](https://github.com/eden05221/gmail_project/blob/main/images/example.PNG.png?raw=true)
-
+![Application Run](https://github.com/eden05221/gmail_project/blob/main/images/part2/Example_run.png?raw=true)
 
 
