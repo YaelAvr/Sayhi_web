@@ -8,7 +8,7 @@ To run the application using Docker:
 All required components — including the C++ server and Python client — are built automatically using the provided `Dockerfile.server` and `Dockerfile.client`.
 
 
-### Changing CMD Parameters – Format & Instructions
+#### Changing CMD Parameters – Format & Instructions
 
 To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
 
