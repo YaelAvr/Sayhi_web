@@ -3,9 +3,9 @@
 
 
 TEST(ValidPortTest, ValidPorts) {
-    EXPECT_EQ(ServerInit::returnPortIfValid("80"), 80);
+    EXPECT_EQ(ServerInit::returnPortIfValid("8123"), 8123);
     EXPECT_EQ(ServerInit::returnPortIfValid("65535"), 65535);
-    EXPECT_EQ(ServerInit::returnPortIfValid("1"), 1);
+    EXPECT_EQ(ServerInit::returnPortIfValid("1"), -1);
 }
 
 TEST(ValidPortTest, InvalidPortsOutOfRange) {

@@ -9,7 +9,7 @@ class StdInputOutput : public IInputOutput {
         // A function that receiving text from user
         std::pair<std::string, bool> getInput();
         
-        // A function that print a massage
+        // A function that print a massage to the terminal
         int printOutput(const string& output);       
 };
 
