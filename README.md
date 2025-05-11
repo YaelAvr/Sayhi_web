@@ -8,14 +8,27 @@ To run the application using Docker:
 All required components — including the C++ server and Python client — are built automatically using the provided `Dockerfile.server` and `Dockerfile.client`.
 
 
-> **Custom Configuration**  
-To change the parameters passed to the server or client (such as port, IP address, or input commands), you must edit the `CMD` line inside the corresponding Dockerfile:
+### CMD Format – Editing Parameters
 
-- `Dockerfile.server` — for server-side parameters (port, array size, hash functions)
-- `Dockerfile.client` — for client-side parameters (server IP, port)
+To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
 
-These parameters are **baked into the image** during the Docker build process.  
-They **cannot be overridden at runtime** via `docker-compose` or command-line arguments.
+#### `Dockerfile.client`
+
+```dockerfile
+CMD ["python", "client.py", "server", "8080"]
+#           │         │          └── server port
+#           │         └──────────── server IP or hostname
+#           └────────────────────── Python script name
+Dockerfile.server
+dockerfile
+Copy
+Edit
+CMD ["./my_program", "8080", "30", "2", "1"]
+#                 │       │     │    └── save interval (sec)
+#                 │       │     └────── number of hash functions
+#                 │       └──────────── Bloom filter size
+#                 └──────────────────── server port
+Edit these values directly to modify how the server and client are launched inside the containers.
 
 For local development (without Docker):
 - C++17 compatible compiler (e.g., g++)
