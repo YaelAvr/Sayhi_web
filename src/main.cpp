@@ -1,6 +1,7 @@
 #include "CommandMenuInitializer.h"
 #include <map>
 #include "IMenuCommand.h"
+#include "SocketInputOutput.h"
 #include "IInputOutput.h"
 #include "StdInputOutput.h"
 #include "ProgramLoop.h"
@@ -12,23 +13,19 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    IInputOutput* IO_obj = new StdInputOutput();
+    InitHendler* init = new InitHendler();// Create a new instance of InitHendler class
+    init->execute(ServerInit::extractConfigString(argc, argv));// Execute the initialization
 
-    InitHendler* init = new InitHendler();
-    map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(IO_obj, init);
-  
-    std::string config = ServerInit::extractConfigString(argc, argv);
-    std::istringstream iss(config);
-    std::string port;
-    iss >> port; // זה יקבל את "8000"
     //initialize server
-    Server server(port);
+    int port = ServerInit::returnPortIfValid(argv[1]);
+    // If the port is invalid, close the program
+    if(port == -1){
+        return 1;
+    }
+    // Create a server instance and run it
+    Server server(port, init);
+    server.runServer();
 
-    // start loop
-    ProgramLoop programLoop(commands, IO_obj);
-    programLoop.startLoop();
-    // delete allocated objects
-    CommandMenuInitializer::deleteCommandMenu(commands);
-    delete IO_obj;
+    delete init;
     return 0;
 }

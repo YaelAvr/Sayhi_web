@@ -7,16 +7,19 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include "InitHendler.h"
 
 class Server {
 private:
     int sock;  // socket number
     struct sockaddr_in sin;  // server address structure
     int server_port;  // port the server will listen on
+    InitHendler* init;
+
 
 public:
-    // Constructor to initialize the server with a specific port
-    Server(int port);
+    // Constructor to initialize the server with port and init that initiallize all the objects required to the program
+    Server(int port, InitHendler* init);
 
     //Creates the socket
     bool createSocket();
@@ -30,16 +33,14 @@ public:
     //Accepts a client connection
     int acceptClient();
 
-    // Method to receive data from a client
-    bool receiveData(int client_sock, char* buffer, int buffer_size);
-
-    // Method to send data to a client
-    bool sendData(int client_sock, const char* data, int data_size);
-
     // Method to close the server
     void closeServer();
 
+    // Main server loop
     void runServer();
+
+    // Destructor
+    ~Server();
 };
 
 #endif
