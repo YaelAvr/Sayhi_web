@@ -60,7 +60,7 @@ CMD ["python", "client.py", "server", "8080"]
 #### `Dockerfile.server`
 ```
 CMD ["./my_program", "8080", "30", "2", "1"]
-#                      │       │     └────── hash functions
+#                      │       │     └────── start of hash functions
 #                      |       └──────────── Bloom filter size
 #                      └──────────────────── server port
 ```
