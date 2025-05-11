@@ -78,15 +78,21 @@ docker-compose run --rm --build tests
 
 **Input**:
 ```bash
-8 1
-1 www.example.com0
-2 www.example.com0
-2 www.example.com4
+POST www.example.com
+GET www.example.com
+DELETE www.example.com
+GET www.example.com
 ```
 
 **Output**:
 ```bash
+201 Created
+200 Ok
+
 true true
+204 No Content
+200 Ok
+
 true false
 ```
 
