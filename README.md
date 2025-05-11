@@ -66,7 +66,7 @@ CMD ["./my_program", "8080", "30", "2", "1"]
 ```
 Edit these values directly to modify how the server and client are launched inside the containers.
   
-### tests usage
+### Tests usage
 To compile and run the tests using Docker, use the following command:
 ```bash
 docker-compose run --rm --build tests
