@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/InitHendler.h"
+#include "../src/cpp/InitHendler.h"
 #include <fstream>
 #include <cstdio>
 

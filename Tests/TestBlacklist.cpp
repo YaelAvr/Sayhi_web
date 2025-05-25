@@ -1,7 +1,7 @@
 #include <vector>
 #include <stdexcept>
 #include <gtest/gtest.h>
-#include "../src/Blacklist.h"
+#include "../src/cpp/Blacklist.h"
 
 TEST(BlacklistArrayTest, AddUrl) { //add url to blacklist
     Blacklist obj;

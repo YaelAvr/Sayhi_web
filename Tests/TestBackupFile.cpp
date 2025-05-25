@@ -1,6 +1,6 @@
-#include "../src/BackupFile.h"
-#include "../src/Blacklist.h"
-#include "../src/BloomFilter.h"
+#include "../src/cpp/BackupFile.h"
+#include "../src/cpp/Blacklist.h"
+#include "../src/cpp/BloomFilter.h"
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>

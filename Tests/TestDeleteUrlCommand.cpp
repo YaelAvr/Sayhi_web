@@ -1,11 +1,11 @@
-#include "../src/DeleteURLCommand.h"
-#include "../src/InitHendler.h"
-#include "../src/AddURLCommand.h"
-#include "../src/BackupFile.h"
-#include "../src/Blacklist.h"
-#include "../src/BloomFilter.h"
-#include "../src/BloomFilterLogic.h"
-#include "../src/StdInputOutput.h"
+#include "../src/cpp/DeleteURLCommand.h"
+#include "../src/cpp/InitHendler.h"
+#include "../src/cpp/AddURLCommand.h"
+#include "../src/cpp/BackupFile.h"
+#include "../src/cpp/Blacklist.h"
+#include "../src/cpp/BloomFilter.h"
+#include "../src/cpp/BloomFilterLogic.h"
+#include "../src/cpp/StdInputOutput.h"
 #include <gtest/gtest.h>
 
 
