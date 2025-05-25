@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
 WORKDIR /client-part
-COPY src/*.py /client-part/
+COPY src/py/*.py /client-part/
 
 CMD [ "python", "client.py", "server", "8080" ]
