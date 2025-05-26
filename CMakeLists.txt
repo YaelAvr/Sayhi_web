@@ -14,13 +14,13 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-file(GLOB SOURCES_NO_MAIN "src/*.cpp")
-list(REMOVE_ITEM SOURCES_NO_MAIN "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+file(GLOB SOURCES_NO_MAIN "src/cpp/*.cpp")
+list(REMOVE_ITEM SOURCES_NO_MAIN "${CMAKE_CURRENT_SOURCE_DIR}/src/cpp/main.cpp")
 
 add_library(my_library ${SOURCES_NO_MAIN})
 target_include_directories(my_library PUBLIC src)
 
-add_executable(my_program src/main.cpp)
+add_executable(my_program src/cpp/main.cpp)
 target_link_libraries(my_program PRIVATE my_library)
 
 # By default- don't build the g-test files

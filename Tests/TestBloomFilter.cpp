@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/BloomFilter.h"
+#include "../src/cpp/BloomFilter.h"
 
 TEST(BloomFilterArrayTest, OutOfRange) {
     BloomFilter obj;

@@ -1,4 +1,4 @@
-#include "../src/Server.h"
+#include "../src/cpp/Server.h"
 #include <gtest/gtest.h>
 #include <chrono>
 #include <sys/socket.h>
