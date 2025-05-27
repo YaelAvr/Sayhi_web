@@ -10,51 +10,63 @@
 #include "CommandMenuInitializer.h"
 #include <map>
 #include "IInputOutput.h"
+#include <thread>
 using namespace std;
 
+#define MAX_CLIENTS 3
+
 // Constructor initializes server
-Server::Server(int port, InitHendler* init) : sock(-1), server_port(port), init(init) {
+Server::Server(int port, InitHendler *init) : sock(-1), server_port(port), init(init)
+{
     memset(&sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = INADDR_ANY;  // Listen on all available interfaces
-    sin.sin_port = htons(server_port);  // Server port
+    sin.sin_port = htons(server_port); // Server port
 }
 
 // Creates a socket for the server
-bool Server::createSocket() {
+bool Server::createSocket()
+{
     sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0) {
-        return false;  // Return false on error
+    if (sock < 0)
+    {
+        return false; // Return false on error
     }
     return true;
 }
 
 // Binds the socket to the server address and port
-bool Server::bindSocket() {
-    if (bind(sock, (struct sockaddr*)&sin, sizeof(sin)) < 0) {
-        return false;  // Return false if binding fails
+bool Server::bindSocket()
+{
+    if (bind(sock, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+    {
+        return false; // Return false if binding fails
     }
     return true;
 }
 
 // Sets the server listen for incoming client connections
-bool Server::listenToClients() {
-    if (listen(sock, 1) < 0) {
-        return false;  // Return false if listening fails
+bool Server::listenToClients()
+{
+    if (listen(sock, MAX_CLIENTS) < 0)
+    {
+        return false; // Return false if listening fails
     }
     return true;
 }
 
 // Accepts a client connection
-int Server::acceptClient() {
+int Server::acceptClient()
+{
     struct sockaddr_in client_sin;
     unsigned int addr_len = sizeof(client_sin);
-    int client_sock = accept(sock, (struct sockaddr*)&client_sin, &addr_len);
-    return client_sock;  // Return client socket on error
+    int client_sock = accept(sock, (struct sockaddr *)&client_sin, &addr_len);
+    return client_sock; // Return client socket on error
 }
 
 // Closes the server socket
-void Server::closeServer() {
+void Server::closeServer()
+{
     close(sock);
 }
 
@@ -62,43 +74,51 @@ void Server::closeServer() {
 Server::~Server() {}
 
 // Main server loop
-void Server::runServer() {
+void Server::runServer()
+{
     // Creating the socket
-    if (!createSocket()) {
-        return;  // Error in creating the socket
+    if (!createSocket())
+    {
+        return; // Error in creating the socket
     }
 
     // Binding the socket to a port
-    if (!bindSocket()) {
-        return;  // Error in binding the socket to the port
+    if (!bindSocket())
+    {
+        return; // Error in binding the socket to the port
     }
 
     // Start listening to incoming client connections
-    if (!listenToClients()) {
-        return;  // Error in while listening for clients
+    if (!listenToClients())
+    {
+        return; // Error in while listening for clients
     }
 
     // Loop to handle client connections
-    while (true) {
+    while (true)
+    {
         // Accept client connection
         int client_sock = Server::acceptClient();
-        if (client_sock < 0) {
-            continue;  // If failed to accept a connection
+        if (client_sock < 0)
+        {
+            continue; // If failed to accept a connection
         }
+        // create the new thread
+        std::thread clientThread([this, client_sock](){
+                // Creates the objects required to the programLoop function
+                IInputOutput *IO_obj = new SocketInputOutput(client_sock);
+                map<int, IMenuCommand *> commands = CommandMenuInitializer::createCommandMenu(IO_obj, init);
+                ProgramLoop programLoop(commands, IO_obj);
 
-        // Creates the objects required to the programLoop function
-        IInputOutput* IO_obj = new SocketInputOutput(client_sock);
-        map<int, IMenuCommand*> commands = CommandMenuInitializer::createCommandMenu(IO_obj, init);
-        ProgramLoop programLoop(commands, IO_obj);
+                programLoop.startLoop(); // run the process
 
-        programLoop.startLoop(); //run the process
-
-         // delete allocated objects
-        CommandMenuInitializer::deleteCommandMenu(commands);
-        delete IO_obj;
-        close(client_sock);// Close the client connection
+                // delete allocated objects
+                CommandMenuInitializer::deleteCommandMenu(commands);
+                delete IO_obj;
+                close(client_sock); // Close the client connection
+            });
+        clientThread.detach(); // Thread can run independently
     }
-   
 
-    closeServer();// Close the server
+    closeServer(); // Close the server
 }
