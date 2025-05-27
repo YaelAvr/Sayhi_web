@@ -33,4 +33,16 @@ const { isBlacklisted } = require('../blackList');
 }
 
 
+
+const get50LastMails = (user) => {
+    const sortedMails = [...user.mails].sort((a,b) => {
+        return new Date(b.time)- new Date(a.time)
+    })
+    return sortedMails.slice(0, 50)
+}
+
+
+
 module.exports = {createMail}
+module.exports = {get50LastMails}
+
