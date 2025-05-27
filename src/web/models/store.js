@@ -1,4 +1,13 @@
 // The list of User objects. 
-const usersArray = [];
+const usersArray = [{
+    id: "u1",
+    mails: [],
+    mailCounter: 1
+  },
+  {
+    id: "u2",
+    mails: [],
+    mailCounter: 1
+  }]
 
-export default usersArray;
+module.exports = usersArray
