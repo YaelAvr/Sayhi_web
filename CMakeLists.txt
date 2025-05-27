@@ -4,6 +4,8 @@ project(MyExample)
 
 set(CMAKE_CXX_STANDARD 11)
 
+find_package(Threads REQUIRED)
+
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -21,7 +23,7 @@ add_library(my_library ${SOURCES_NO_MAIN})
 target_include_directories(my_library PUBLIC src)
 
 add_executable(my_program src/cpp/main.cpp)
-target_link_libraries(my_program PRIVATE my_library)
+target_link_libraries(my_program PRIVATE my_library Threads::Threads)
 
 # By default- don't build the g-test files
 option(BUILD_TESTING "Build tests" OFF) 

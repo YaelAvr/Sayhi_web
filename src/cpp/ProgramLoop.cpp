@@ -8,6 +8,7 @@
 #include "InitHendler.h"
 #include "AddURLCommand.h"
 #include "CheckURLCommand.h"
+#include <mutex>
 using namespace std;
 
 /*
@@ -36,6 +37,10 @@ void ProgramLoop::startLoop(){
             continue;
         }
         // Execute the command
-        commands[classifyNum]->execute(input);
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            commands[classifyNum]->execute(input);
+        }
+        
     }
 }
