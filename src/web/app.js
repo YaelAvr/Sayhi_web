@@ -1,12 +1,12 @@
 const express = require('express')
 const app = express()
+
 const userRoutes = require('./routes/users')
+const mailRoutes = require('./routes/mails')
 
 app.use(express.json())
-app.use('/api/users', userRoutes)
 
+app.use('/api/mails', mailRoutes)
+app.use('/api/user', userRoutes)
 
-// הפעלת השרת על פורט 3000
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
-});
+app.listen(3000)
