@@ -13,8 +13,6 @@
 #include <thread>
 using namespace std;
 
-#define MAX_CLIENTS 3
-
 // Constructor initializes server
 Server::Server(int port, InitHendler *init) : sock(-1), server_port(port), init(init)
 {
@@ -48,7 +46,7 @@ bool Server::bindSocket()
 // Sets the server listen for incoming client connections
 bool Server::listenToClients()
 {
-    if (listen(sock, MAX_CLIENTS) < 0)
+    if (listen(sock, SOMAXCONN) < 0)
     {
         return false; // Return false if listening fails
     }
@@ -110,7 +108,7 @@ void Server::runServer()
                 map<int, IMenuCommand *> commands = CommandMenuInitializer::createCommandMenu(IO_obj, init);
                 ProgramLoop programLoop(commands, IO_obj);
 
-                programLoop.startLoop(); // run the process
+                programLoop.startLoop(mtx); // run the process
 
                 // delete allocated objects
                 CommandMenuInitializer::deleteCommandMenu(commands);
