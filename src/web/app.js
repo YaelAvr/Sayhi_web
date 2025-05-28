@@ -10,4 +10,3 @@ app.use('/api/mails', mailRoutes)
 app.use('/api/user', userRoutes)
 
 app.listen(3000)
-

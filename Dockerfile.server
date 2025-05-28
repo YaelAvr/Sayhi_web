@@ -4,12 +4,12 @@ ARG BUILD_TESTING=OFF
 
 RUN apt-get update && apt-get install -y cmake
 
-WORKDIR /usr/gmail-project
+WORKDIR /usr/gmail-project/web
 
 COPY . .
 
 RUN mkdir -p build
-WORKDIR /usr/gmail-project/build
+WORKDIR /usr/gmail-project/web/build
 
 
 RUN cmake -DBUILD_TESTING=${BUILD_TESTING} .. && make
