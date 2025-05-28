@@ -1,18 +1,29 @@
+const { isBlacklisted } = require('../blackList')
 
-const { isBlacklisted } = require('../blackList');
-
-    const createMail = async (sender, recipient, subject, body) => {
-    const preLinks = typeof body === 'string' ? body.match(/https?:\/\/[^\s]+/g) || [] : []
+// Extract all valid links from a given text (e.g., body or subject)
+const extractLink = (text) => {
+    const preLinks = typeof text === 'string' ? text.match(/https?:\/\/[^\s]+/g) || [] : []
     const validUrlRegex = /^((https?:\/\/)?[a-z0-9.-]+\.[a-z]{2,10}[0-9]*(\/.*)?)$/
-    const links = preLinks.filter(link => validUrlRegex.test(link))
+    return preLinks.filter(link => validUrlRegex.test(link))
+}
 
+// Check if any links in the body or subject are blacklisted
+const checkLinks = async (body, subject) => {
+    const bodyLinks = extractLink(body)
+    const subjectLinks = extractLink(subject)
+    const links = [...bodyLinks, ...subjectLinks]
     for (const link of links) {
         const blacklisted = await isBlacklisted(link);
         if (blacklisted) {
-            return res.status(400).json({ error: 'Bad Request' })
+            throw new Error('BLACKLISTED_LINK')
         }
     }
+    return links
+}
 
+// Create a new mail object and add it to both sender and recipient
+const createMail = async (sender, recipient, subject, body) => {
+    const links = await checkLinks(body, subject)
     const mailId = `m-${sender.id}-${sender.mailCounter++}`
     const time = new Date().toISOString()
     const mail = {
@@ -25,12 +36,21 @@ const { isBlacklisted } = require('../blackList');
         labelIds: [],
         time
   }
-
+  // Save the mail to both users' mailboxes
   sender.mails.push(mail)
   recipient.mails.push(mail)
 
-  return mail;
+  return mail
 }
 
+// Return the user's 50 most recent mails, sorted by time
+const get50LastMails = (user) => {
+    const sortedMails = [...user.mails].sort((a,b) => {
+        return new Date(b.time)- new Date(a.time)
+    })
+    return sortedMails.slice(0, 50)
+}
 
-module.exports = {createMail}
+module.exports = { createMail, get50LastMails }
+
+

@@ -15,6 +15,7 @@ private:
     struct sockaddr_in sin;  // server address structure
     int server_port;  // port the server will listen on
     InitHendler* init;
+    std::mutex mtx;
 
 
 public:
