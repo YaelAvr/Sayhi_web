@@ -1,29 +1,40 @@
 const Users = require("../models/users");
 
 exports.createUser = (req, res) => {
-    const { username, picture, gender, birthday } = req.body;
+    const { username, password , picture, gender, birthday } = req.body;
     const genderOptions = ["female", "male", "other"];
 
-    if (!username || !gender || !birthday) {
+    if (!username ||password || !gender || !birthday) {
     return res.status(400).json({ error: "Bad Request" });
     }
+   
+    const lowGender = gender.trim().toLowerCase();
+    // Check if the picture is a valid image file
+    const imagePattern = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i; 
+    // The password must be at least 8 characters long, 
+    // contain at least one uppercase letter and one lowercase letter
+    const pattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
     // Check if all the given parameters are valid
-    const lowGender = gender.trim().toLowerCase();
-    const imagePattern = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i; 
     if (!genderOptions.includes(lowGender) || (!(picture === undefined) && !imagePattern.test(picture)) 
-        || !isDateValid(birthday)) {
+        || !isDateValid(birthday) || pattern.test(password)) {
       return res.status(400).json({ error: "Bad Request" });
     }
 
-    const newUser = Users.createUser(username, picture, gender, birthday);
+    const newUser = Users.createUser(username, password, picture, gender, birthday);
     if (newUser === null) {
     return res.status(400).json({ error: "Bad Request" });
     }
     res.status(201).location(`/api/users/${newUser.id}`).end();
+
 };
 
-exports.getUserById = (req, res) => {};
+exports.getUserById = (req, res) => {
+    const user = Users.getUserById(req.params.id)
+    if (!user)
+        return res.status(404).json({ error: 'Article not found' })
+    res.json(article)
+};
 
 
 /*  This function checks if the date string is valid 

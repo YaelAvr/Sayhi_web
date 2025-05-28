@@ -10,6 +10,7 @@ const createUser = (username, picture, gender, birthday) => {
     const newUser = {
         id: `u-${++userCount}`,
         username,
+        password,
         picture,   
         gender, 
         birthday,
