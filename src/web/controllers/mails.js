@@ -36,21 +36,42 @@ exports.createMail = async (req, res) => {
 
 // Controller to Handle the request to get the user's last 50 mails
 
-exports.get50LastMails = (req, res ) => {
+exports.get50LastMails = (req, res) => {
     // Find the user in the users list
     const userId = req.headers['x-user-id']
+    // If the user ID was not provided at all
+    if (!userId) {
+    return res.status(400).json({ error: 'Bad Request' });
+    }
     const user = Store.find(u => u.id === userId)
     // If the user is not found, return an error
     if (!user) {
-         return res.status(400).json({ error: 'Bad Request' });
+         return res.status(404).json({ error: 'Not Found' });
     }
     // Get the last 50 mails of the user and return them
     const mails = get50LastMails(user)
     res.status(200).json(mails)
-
-
-    
 }
 
+
+exports.getSpecificMail = (req, res) => {
+    // Find the user in the users list
+    const userId = req.headers['x-user-id']
+    //Get the mails'id from the url
+    const mailId = req.params.id
+    // If the IDs were not provided at all
+    if (!userId || !mailId) {
+         return res.status(400).json({ error: 'Bad Request' });
+    }
+    const user = Store.find(u => u.id === userId)
+     if (!user) {
+        return res.status(404).json({ error: 'Not Found'})
+     }
+    const mail = user.mails.find(m => m.id === mailId)
+    if (!mail) {
+        return res.status(404).json({ error: 'Not Found'})
+    }
+    res.status(200).json(mail)
+}
 
 
