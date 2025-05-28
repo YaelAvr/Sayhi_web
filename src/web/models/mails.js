@@ -1,18 +1,27 @@
 
-const { isBlacklisted } = require('../blackList');
+const { isBlacklisted } = require('../blackList')
 
-    const createMail = async (sender, recipient, subject, body) => {
-    const preLinks = typeof body === 'string' ? body.match(/https?:\/\/[^\s]+/g) || [] : []
+const extractLink = (text) => {
+    const preLinks = typeof text === 'string' ? text.match(/https?:\/\/[^\s]+/g) || [] : []
     const validUrlRegex = /^((https?:\/\/)?[a-z0-9.-]+\.[a-z]{2,10}[0-9]*(\/.*)?)$/
-    const links = preLinks.filter(link => validUrlRegex.test(link))
+    return preLinks.filter(link => validUrlRegex.test(link))
+}
 
+const checkLinks = async (body, subject) => {
+    const bodyLinks = extractLink(body)
+    const subjectLinks = extractLink(subject)
+    const links = [...bodyLinks, ...subjectLinks]
     for (const link of links) {
         const blacklisted = await isBlacklisted(link);
         if (blacklisted) {
-            return res.status(400).json({ error: 'Bad Request' })
+            throw new Error('BLACKLISTED_LINK')
         }
     }
+    return links
+}
 
+const createMail = async (sender, recipient, subject, body) => {
+    const links = await checkLinks(body, subject)
     const mailId = `m-${sender.id}-${sender.mailCounter++}`
     const time = new Date().toISOString()
     const mail = {
@@ -29,7 +38,7 @@ const { isBlacklisted } = require('../blackList');
   sender.mails.push(mail)
   recipient.mails.push(mail)
 
-  return mail;
+  return mail
 }
 
 
@@ -43,6 +52,6 @@ const get50LastMails = (user) => {
 
 
 
-module.exports = {createMail}
-module.exports = {get50LastMails}
+module.exports = { createMail, get50LastMails }
+
 

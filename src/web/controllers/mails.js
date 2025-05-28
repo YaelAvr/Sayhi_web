@@ -14,9 +14,16 @@ exports.createMail = async (req, res) => {
     if (!sender || !recipient) {
          return res.status(404).json({ error: 'Not Found' });
     }
+    try{
     const mail = await createMail(sender, recipient, subject, body)
-
     res.status(201).location(`/api/mails/${mail.id}`).end()
+    } catch (err) {
+        if (err.message === 'BLACKLISTED_LINK') {
+            return res.status(400).json({ error: 'Bad Request' })
+        } else {
+            return res.status(500).json({ error: 'Server Error' })
+        }
+    }
 }
 
 
