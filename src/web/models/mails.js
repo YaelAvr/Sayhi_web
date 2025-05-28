@@ -45,9 +45,11 @@ const createMail = async (sender, recipient, subject, body) => {
 
 // Return the user's 50 most recent mails, sorted by time
 const get50LastMails = (user) => {
+    //Sort the mails array by time
     const sortedMails = [...user.mails].sort((a,b) => {
         return new Date(b.time)- new Date(a.time)
     })
+    //Return only up to 50 mails
     return sortedMails.slice(0, 50)
 }
 
