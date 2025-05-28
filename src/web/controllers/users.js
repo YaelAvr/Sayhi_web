@@ -1,11 +1,12 @@
 const Users = require("../models/users");
 
+// This function creates a new user with the given parameters
 exports.createUser = (req, res) => {
     const { username, password , picture, gender, birthday } = req.body;
     const genderOptions = ["female", "male", "other"];
 
-    if (!username ||password || !gender || !birthday) {
-    return res.status(400).json({ error: "Bad Request" });
+    if (!username || !password || !gender || !birthday) {
+     return res.status(400).json({ error: "Bad Request" });
     }
    
     const lowGender = gender.trim().toLowerCase();
@@ -17,23 +18,33 @@ exports.createUser = (req, res) => {
 
     // Check if all the given parameters are valid
     if (!genderOptions.includes(lowGender) || (!(picture === undefined) && !imagePattern.test(picture)) 
-        || !isDateValid(birthday) || pattern.test(password)) {
+        || !isDateValid(birthday) || !pattern.test(password)) {
       return res.status(400).json({ error: "Bad Request" });
     }
 
     const newUser = Users.createUser(username, password, picture, gender, birthday);
     if (newUser === null) {
-    return res.status(400).json({ error: "Bad Request" });
+        return res.status(400).json({ error: "Bad Request" });
     }
     res.status(201).location(`/api/users/${newUser.id}`).end();
-
 };
 
+// this function returns the information of a specific user with the given id
 exports.getUserById = (req, res) => {
+
+    // Check if the user id matches the id in the request header
+    const from = req.headers['x-user-id']
+    if (!from || from !== req.params.id ) {
+        return res.status(400).json({ error: 'Bad Request' })
+    }
+
     const user = Users.getUserById(req.params.id)
-    if (!user)
-        return res.status(404).json({ error: 'Article not found' })
-    res.json(article)
+    if (!user) return res.status(404).json({ error: 'Not Found' })
+        
+    res
+        .status(200)
+        .json({username: user.username, picture: user.picture,
+                gender: user.gender, birthday: user.birthday})
 };
 
 
