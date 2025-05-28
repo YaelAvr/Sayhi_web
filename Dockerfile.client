@@ -1,6 +1,25 @@
-FROM python:3.11-slim
+# FROM python:3.11-slim
 
+# WORKDIR /client-part
+# COPY src/py/*.py /client-part/
+
+# CMD [ "python", "client.py", "server", "8080" ]
+
+
+# משתמשים בתמונה רשמית של Node.js (גרסה רזה)
+FROM node:20-slim
+
+# יוצרים תקיית עבודה באפליקציה
 WORKDIR /client-part
-COPY src/py/*.py /client-part/
 
-CMD [ "python", "client.py", "server", "8080" ]
+# מעתיקים את כל קבצי הקוד והקונפיג מהתיקייה שלך
+COPY src/web/ /client-part/
+
+# מתקינים את התלויות לפי package.json
+RUN npm install
+
+# חושפים את פורט 3000 החוצה מהקונטיינר
+EXPOSE 3000
+
+# מריצים את הסקריפט "start" מתוך package.json
+CMD ["npm", "start"]
