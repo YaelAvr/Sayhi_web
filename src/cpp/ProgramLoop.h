@@ -2,6 +2,7 @@
 #define PROGRAM_LOOP_H
 using namespace std;
 #include <map>
+#include <mutex>
 #include "IMenuCommand.h"
 #include "IInputOutput.h"
 
@@ -17,7 +18,7 @@ public:
     execute the functionality of the project
     based on the user input.
     */ 
-    void startLoop();
+    void startLoop(std::mutex& mtx);
 };
 #endif
 

@@ -8,6 +8,7 @@
 #include "InitHendler.h"
 #include "AddURLCommand.h"
 #include "CheckURLCommand.h"
+#include <mutex>
 using namespace std;
 
 /*
@@ -15,7 +16,7 @@ this function will be the main project loop that
 execute the functionality of the project
 based on the user input.
 */ 
-void ProgramLoop::startLoop(){
+void ProgramLoop::startLoop(std::mutex& mtx){
     string input;
     int classifyNum;
 
@@ -36,6 +37,9 @@ void ProgramLoop::startLoop(){
             continue;
         }
         // Execute the command
+        std::unique_lock<std::mutex> lock(mtx); //lock this action to be threded safe
         commands[classifyNum]->execute(input);
+        lock.unlock();
+        
     }
 }

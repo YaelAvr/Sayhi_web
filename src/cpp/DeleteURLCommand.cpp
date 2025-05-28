@@ -2,6 +2,7 @@
 #include "splitIntoAppropriateVariables.h"
 #include <string>
 #include "Blacklist.h"
+#include "BackupFile.h"
 
 // Executes the URL check by verifying if the hashed bits match the Bloom Filter, 
 // and if so, ensures its existence in the Bloom Filter in order to check for false positives.
@@ -13,6 +14,7 @@ void DeleteURLCommand::execute(std::string line){
     }
     Blacklist& blacklist = init->getBlacklist();
     blacklist.removeUrl(url);   
+    BackupFile::deleteURL(url);
     io.printOutput("204 No Content");
 }
 
