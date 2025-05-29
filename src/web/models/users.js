@@ -15,7 +15,7 @@ const createUser = (username, password, picture, gender, birthday) => {
         gender, 
         birthday,
         mailCounter: 0,
-        mail: [],
+        mails: [],
         labelCounter: 0,
         label: []
     }
