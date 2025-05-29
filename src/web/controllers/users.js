@@ -34,6 +34,7 @@ exports.getUserById = (req, res) => {
     // Check if the user id matches the id in the request header
     const from = req.headers['x-user-id']
     const userId = req.params.id
+    
     if (!from || !userId || from !== userId ) {
         return res.status(400).json({ error: 'Bad Request' })
     }
