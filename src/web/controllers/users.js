@@ -31,10 +31,10 @@ exports.createUser = (req, res) => {
 
 // this function returns the information of a specific user with the given id
 exports.getUserById = (req, res) => {
-
     // Check if the user id matches the id in the request header
     const from = req.headers['x-user-id']
-    if (!from || from !== req.params.id ) {
+    const userId = req.params.id
+    if (!from || !userId || from !== userId ) {
         return res.status(400).json({ error: 'Bad Request' })
     }
 
