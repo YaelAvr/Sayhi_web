@@ -1,4 +1,4 @@
-const Lablels = require("../models/labels");
+const Labels = require("../models/labels");
 const Store = require('../models/store');
 const {getUserById} = require("../models/users");
 
@@ -18,9 +18,14 @@ exports.createLabel = (req, res) => {
         return res.status(404).json({ error: 'User not found' });
     }
 
-    const newLabel = Lablels.createLabel(user, name);
+    const newLabel = Labels.createLabel(user, name);
     if (newLabel === null) {
         return res.status(400).json({ error: "Bad Request" });
     }
     res.status(201).location(`/api/labels/${newLabel.id}`).end();
 }
+
+exports.getAllLabels = (req, res) => {}
+exports.getLabelById = (req, res) => {}
+exports.updateLabel = (req, res) => {}
+exports.deleteLabel = (req, res) => {}

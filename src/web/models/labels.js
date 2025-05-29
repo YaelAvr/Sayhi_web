@@ -1,16 +1,5 @@
 const Users = require('./store');
 
-/*// Route: /api/labels
-router.route('/')  
-    .post(labels.createLabel)         
-    .get(labels.getAllLabels)     
-
-router.route('/:id')  
-    .get(labels.getLabelById)
-    .patch(labels.updateLabel)
-    .delete(labels.deleteLabel)*/
-
-
 // Create a new mail object and add it to both sender and recipient
 const createLabel = (user, name) => {
     // Check if the user already has a label with the same name
@@ -29,7 +18,12 @@ const createLabel = (user, name) => {
 
 }
 
+const getAllLabels = (user) => {}
+const getLabelById = (user, id) => {}
+const updateLabel = (user, id) => {}
+const deleteLabel = (user, id) => {}
 
-module.exports = { createLabel }
+
+module.exports = { createLabel, getAllLabels, getLabelById, updateLabel, deleteLabel };
 
 
