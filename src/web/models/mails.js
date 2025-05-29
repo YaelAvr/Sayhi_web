@@ -1,4 +1,4 @@
-const { isBlacklisted } = require('../blackList')
+const { isBlacklisted } = require('./blacklist')
 
 // Extract all valid links from a given text (e.g., body or subject)
 const extractLink = (text) => {
