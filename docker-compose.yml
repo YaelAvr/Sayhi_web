@@ -20,14 +20,17 @@ services:
     tty: true
     command: [./my_tests]
 
-  client: 
+  webserver: 
     build:
       context: .
-      dockerfile: Dockerfile.client
+      dockerfile: Dockerfile.webserver
     ports:
       - "3000:3000"
     stdin_open: true
     tty: true
     depends_on:
       - server
+    environment:
+      SERVER_HOST: server
+      SERVER_PORT: 8080
     

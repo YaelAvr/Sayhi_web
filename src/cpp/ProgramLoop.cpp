@@ -34,12 +34,13 @@ void ProgramLoop::startLoop(std::mutex& mtx){
         // if the input wasn't valid 
         if (classifyNum == -1) {
             IO_Obj->printOutput("400 Bad Request");
-            continue;
+            // continue;
+            break;
         }
         // Execute the command
         std::unique_lock<std::mutex> lock(mtx); //lock this action to be threded safe
         commands[classifyNum]->execute(input);
         lock.unlock();
-        
+        break;
     }
 }
