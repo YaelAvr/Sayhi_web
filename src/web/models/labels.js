@@ -3,7 +3,7 @@ const Users = require('./store');
 // Create a new mail object and add it to both sender and recipient
 const createLabel = (user, name) => {
     // Check if the user already has a label with the same name
-    if (user.labels.some(label => label.name === name)) {
+    if (user.labels.find(label => label.name === name)) {
         return null; 
     }
 
@@ -18,12 +18,27 @@ const createLabel = (user, name) => {
 
 }
 
-const getAllLabels = (user) => {}
-const getLabelById = (user, id) => {}
-const updateLabel = (user, id) => {}
+const getAllLabels = (user) => {
+    return user.labels
+}
+const getLabelById = (user, id) => {
+    // Find the label by id in the user's labels object array
+    const label = user.labels.find(label => label.id === id);
+    if (!label) {
+        return null; // 404 Not Found
+    }
+    return label;
+}
+const updateLabel = (user, id, name) => {
+    const label = user.labels.find(label => label.id === id);
+    if (!label) {
+        return null; // 404 Not Found
+    }
+    label.name = name;
+    return label; 
+
+}
 const deleteLabel = (user, id) => {}
 
 
 module.exports = { createLabel, getAllLabels, getLabelById, updateLabel, deleteLabel };
-
-
