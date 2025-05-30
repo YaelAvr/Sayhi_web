@@ -30,7 +30,7 @@ const getLabelById = (user, id) => {
     return label;
 }
 const updateLabel = (user, id, name) => {
-    const label = user.labels.find(label => label.id === id);
+    const label = getLabelById(user, id);
     if (!label) {
         return null; // 404 Not Found
     }
@@ -38,7 +38,15 @@ const updateLabel = (user, id, name) => {
     return label; 
 
 }
-const deleteLabel = (user, id) => {}
+const deleteLabel = (user, id) => {
+    const label = getLabelById(user, id);
+    if (!label) {
+        return null; // 404 Not Found
+    }
+
+    user.labels = user.labels.filter(label => label.id !== id);
+    return true; 
+}
 
 
 module.exports = { createLabel, getAllLabels, getLabelById, updateLabel, deleteLabel };

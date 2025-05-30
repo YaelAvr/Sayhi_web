@@ -3,12 +3,12 @@ const Labels = require("../models/labels");
 const Store = require('../models/store');
 const {getUserById} = require("../models/users");
 
-// Controller to handle creation of a new mail
+// Create a new label for a specific user
 exports.createLabel = (req, res) => {
     const user_id = req.headers['x-user-id']
     const { name } = req.body
 
-    // Validate presence of 'from' and 'to' fields
+    // Validate required fields
     if (!user_id || !name) {
         return res.status(400).json({ error: 'Name is required' }) 
     }
@@ -66,7 +66,7 @@ exports.getLabelById = (req, res) => {
         .json(label)
 }
 exports.updateLabel = (req, res) => {
-     // Check if the user id matches the id in the request header
+    // Check if the user id matches the id in the request header
     const userId = req.headers['x-user-id']
     const labelId = req.params.id
     const { name } = req.body
@@ -83,4 +83,19 @@ exports.updateLabel = (req, res) => {
     res.status(204).end()
     
 }
-exports.deleteLabel = (req, res) => {}
+exports.deleteLabel = (req, res) => {
+    // Check if the user id matches the id in the request header
+    const userId = req.headers['x-user-id']
+    const labelId = req.params.id
+
+    if (!userId ) { return res.status(400).json({ error: 'User id is required' }) }
+
+    const user = getUserById(userId);
+    if (!user) return res.status(404).json({ error: 'User not found' })
+        
+    const success = Labels.deleteLabel(user, labelId);
+    if (!success) return res.status(404).json({ error: 'Label not found' })
+    
+    res.status(204).end()
+    
+}
