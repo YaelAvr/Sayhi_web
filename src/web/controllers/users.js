@@ -34,17 +34,17 @@ exports.getUserById = (req, res) => {
     // Check if the user id matches the id in the request header
     const from = req.headers['x-user-id']
     const userId = req.params.id
-    
+
     if (!from || !userId || from !== userId ) {
-        return res.status(400).json({ error: 'Bad Request' })
+        return res.status(400).json({ error: 'All fields are required' })
     }
 
     const user = Users.getUserById(req.params.id)
-    if (!user) return res.status(404).json({ error: 'Not Found' })
+    if (!user) return res.status(404).json({ error: 'No user was found' })
         
     res
         .status(200)
-        .json({username: user.username, picture: user.picture,
+        .json({id:user.id, username: user.username, picture: user.picture,
                 gender: user.gender, birthday: user.birthday})
 };
 
@@ -66,7 +66,7 @@ function isDateValid(dateString) {
 
   const parts = dateString.split(".");
   const day = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10); // Month is 1-based in input
+  const month = parseInt(parts[1], 10); 
   const year = parseInt(parts[2], 10);
 
   //  Basic range checks
