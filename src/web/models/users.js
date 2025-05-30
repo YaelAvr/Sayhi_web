@@ -23,7 +23,14 @@ const createUser = (username, password, picture, gender, birthday) => {
     return newUser;
 }
 
-const getUserById = (id) => Users.find(user => user.id === id)
+const getUserById = (id) => {
+    const user = Users.find(user => user.id === id)
+    if (!user) {
+        return null; //404
+    }
+    return {id: user.id, username: user.username, picture: user.picture,
+                gender: user.gender, birthday: user.birthday}
+}
 
 module.exports = {
     createUser,
