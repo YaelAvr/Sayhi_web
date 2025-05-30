@@ -44,7 +44,8 @@ exports.getUserById = (req, res) => {
         
     res
         .status(200)
-        .json(user)
+        .json({username: user.username, picture: user.picture,
+                gender: user.gender, birthday: user.birthday})
 };
 
 
