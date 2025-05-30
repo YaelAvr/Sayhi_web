@@ -1,6 +1,5 @@
 
 const Labels = require("../models/labels");
-const Store = require('../models/store');
 const {getUserById} = require("../models/users");
 
 // Create a new label for a specific user
@@ -19,6 +18,7 @@ exports.createLabel = (req, res) => {
         return res.status(404).json({ error: 'User not found' });
     }
 
+    // Try to create label. Fail if name already exists
     const newLabel = Labels.createLabel(user, name);
     if (newLabel === null) {
         return res.status(400).json({ error: "Bad Request" });
@@ -26,6 +26,7 @@ exports.createLabel = (req, res) => {
     res.status(201).location(`/api/labels/${newLabel.id}`).end();
 }
 
+// Get all labels for a specific user
 exports.getAllLabels = (req, res) => {
     // get the user id from the http header
     const user_id = req.headers['x-user-id']
@@ -40,15 +41,12 @@ exports.getAllLabels = (req, res) => {
     }
 
     const allLabels = Labels.getAllLabels(user);
-    if (allLabels === null) {
-        return res.status(400).json({ error: "Bad Request" });
-    }
-
     res
         .status(200)
         .json(allLabels)
 }
 
+// Get a specific label for a specific user
 exports.getLabelById = (req, res) => {
     // Check if the user id matches the id in the request header
     const userId = req.headers['x-user-id']
@@ -65,6 +63,8 @@ exports.getLabelById = (req, res) => {
         .status(200)
         .json(label)
 }
+
+// Update a specific label name of a specific user
 exports.updateLabel = (req, res) => {
     // Check if the user id matches the id in the request header
     const userId = req.headers['x-user-id']
@@ -83,6 +83,8 @@ exports.updateLabel = (req, res) => {
     res.status(204).end()
     
 }
+
+// Delete a specific label of a specific user
 exports.deleteLabel = (req, res) => {
     // Check if the user id matches the id in the request header
     const userId = req.headers['x-user-id']
