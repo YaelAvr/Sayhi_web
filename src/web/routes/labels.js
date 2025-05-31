@@ -12,8 +12,4 @@ router.route('/:id')
     .patch(labels.updateLabel)
     .delete(labels.deleteLabel)
 
-
-
-
-
-    module.exports = router
+module.exports = router

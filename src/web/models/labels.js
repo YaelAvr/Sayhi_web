@@ -1,13 +1,13 @@
 const Users = require('./store');
 
-// Create a new mail object and add it to both sender and recipient
+// This function creates a new label for a specific user.
 const createLabel = (user, name) => {
     // Check if the user already has a label with the same name
-    if (user.labels.some(label => label.name === name)) {
+    if (user.labels.find(label => label.name === name)) {
         return null; 
     }
 
-    // Create a new label object and add it to the user's labels
+    // Create a new label object and add it to the user's labels array
     const labelId = `l-${user.id}-${user.labelCounter++}`; 
     const label = {
          id: labelId,
@@ -18,12 +18,43 @@ const createLabel = (user, name) => {
 
 }
 
-const getAllLabels = (user) => {}
-const getLabelById = (user, id) => {}
-const updateLabel = (user, id) => {}
-const deleteLabel = (user, id) => {}
+// This function retrieves all labels for a specific user.
+const getAllLabels = (user) => {
+    return user.labels
+}
+
+// This function retrieves a specific label of a specific user.
+const getLabelById = (user, id) => {
+    // Find the label by id in the user's labels object array
+    const label = user.labels.find(label => label.id === id);
+    if (!label) {
+        return null; 
+    }
+    return label;
+}
+
+// This function updates the name of a specific label for a specific user.
+const updateLabel = (user, id, name) => {
+    const label = getLabelById(user, id);
+    if (!label) {
+        return null; 
+    }
+    label.name = name;
+    return label; 
+}
+
+// This function deletes a specific label of a specific user.
+const deleteLabel = (user, id) => {
+    // Check if the label exists in the user's labels array
+    const label = getLabelById(user, id);
+    if (!label) {
+        return null; 
+    }
+
+    // Remove the label from the user's labels array
+    user.labels = user.labels.filter(label => label.id !== id);
+    return true; 
+}
 
 
 module.exports = { createLabel, getAllLabels, getLabelById, updateLabel, deleteLabel };
-
-

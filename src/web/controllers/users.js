@@ -32,19 +32,19 @@ exports.createUser = (req, res) => {
 // this function returns the information of a specific user with the given id
 exports.getUserById = (req, res) => {
     // Check if the user id matches the id in the request header
-    const from = req.headers['x-user-id']
+    const userHeader = req.headers['x-user-id']
     const userId = req.params.id
 
-    if (!from || !userId || from !== userId ) {
+    if (!userHeader || !userId || userHeader !== userId ) {
         return res.status(400).json({ error: 'All fields are required' })
     }
 
-    const user = Users.getUserById(req.params.id)
+    const user = Users.getUserById(userId)
     if (!user) return res.status(404).json({ error: 'No user was found' })
         
     res
         .status(200)
-        .json({username: user.username, picture: user.picture,
+        .json({id: user.id, username: user.username, picture: user.picture,
                 gender: user.gender, birthday: user.birthday})
 };
 
