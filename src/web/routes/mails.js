@@ -13,6 +13,8 @@ router.route('/:id')
     .patch(mails.editMail)
     .delete(mails.deleteMail)
 
+router.route('/search/:query')
+    .get(mails.searchMailsByQuery)
 
 
 
