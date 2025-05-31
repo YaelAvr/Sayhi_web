@@ -1,5 +1,4 @@
 // The list of User objects. 
-const usersArray =[
-]
+const usersArray =[]
 
 module.exports = usersArray

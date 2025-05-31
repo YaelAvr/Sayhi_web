@@ -7,10 +7,12 @@ const { get50LastMails } = require('../models/mails')
 exports.createMail = async (req, res) => {
     const from = req.headers['x-user-id']
     const { to, subject, body} = req.body
+
     // Validate presence of 'from' and 'to' fields
     if (!from || !to) {
         return res.status(400).json({ error: 'Bad Request' })
     }
+
     // Find the sender and recipient users in the users list
     const sender = Store.find(u => u.id == from)
     const recipient = Store.find(u => u.id === to)
@@ -19,8 +21,18 @@ exports.createMail = async (req, res) => {
     if (!sender || !recipient) {
          return res.status(404).json({ error: 'Not Found' });
     }
-    try{
+
+    // Validate optional fields if provided
+    if (subject !== undefined && typeof subject !== 'string') {
+        return res.status(400).json({ error: 'Subject must be a string if provided' });
+    }
+
+    if (body !== undefined && typeof body !== 'string') {
+        return res.status(400).json({ error: 'Body must be a string if provided' });
+    }
+
     // Try to create the mail using the createMail function
+    try{
     const mail = await createMail(sender, recipient, subject, body)
     // Return a success response with the new mail's location
     res.status(201).location(`/api/mails/${mail.id}`).end()
@@ -53,25 +65,72 @@ exports.get50LastMails = (req, res) => {
     res.status(200).json(mails)
 }
 
-
-exports.getSpecificMail = (req, res) => {
-    // Find the user in the users list
-    const userId = req.headers['x-user-id']
-    //Get the mails'id from the url
-    const mailId = req.params.id
+checkIdValid = (userId, mailId, res) => {
     // If the IDs were not provided at all
     if (!userId || !mailId) {
-         return res.status(400).json({ error: 'Bad Request' });
+        res.status(400).json({ error: 'Bad Request' });
+        return null
     }
     const user = Store.find(u => u.id === userId)
      if (!user) {
-        return res.status(404).json({ error: 'Not Found'})
+        res.status(404).json({ error: 'Not Found'})
+        return null
      }
     const mail = user.mails.find(m => m.id === mailId)
     if (!mail) {
-        return res.status(404).json({ error: 'Not Found'})
+        res.status(404).json({ error: 'Not Found'})
+        return null
     }
+    return { mail, user }
+}
+
+exports.getSpecificMail = (req, res) => {
+    // Get the user Id
+    const userId = req.headers['x-user-id']
+    //Get the mails'id from the url
+    const mailId = req.params.id
+
+    // Use helper function to validate user and mail
+    const result = checkIdValid(userId, mailId, res)
+    if (!result) return
+
+    const { mail, user} = result
+
     res.status(200).json(mail)
 }
 
+exports.editMail = (req, res) => {
+    console.log('IN PATCH') //delete
+    // Get the user Id
+    const userId = req.headers['x-user-id']
+    //Get the mails'id from the url
+    const mailId = req.params.id
+
+    // Use helper function to validate user and mail
+    const result = checkIdValid(userId, mailId, res)
+    if (!result) return
+
+    const { mail } = result
+
+    // Prevent subject from being updated
+    if ('subject' in req.body) {
+        return res.status(400).json({ error: 'Bad Request' })
+    }
+
+    // Ensure body exists and is a string
+    if (!('body' in req.body) || typeof req.body.body !== 'string') {
+        return res.status(400).json({ error: 'Bad Request' })
+    }
+
+    // Update mail body for all users 
+    Store.forEach(user => {
+    const mail = user.mails.find(m => m.id === mailId)
+    if (mail) {
+        mail.body = req.body.body
+  }
+})
+
+    // Successful update - return updated mail
+    res.status(200).json(mail)
+}
 
