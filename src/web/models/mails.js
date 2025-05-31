@@ -1,10 +1,14 @@
 const { isBlacklisted } = require('./blacklist')
+const Store = require('../models/store')
 
 // Extract all valid links from a given text (e.g., body or subject)
 const extractLink = (text) => {
-    const preLinks = typeof text === 'string' ? text.match(/https?:\/\/[^\s]+/g) || [] : []
+    if (typeof text !== 'string') return []
+
+    const tokens = text.split(/\s+/)
     const validUrlRegex = /^((https?:\/\/)?[a-z0-9.-]+\.[a-z]{2,10}[0-9]*(\/.*)?)$/
-    return preLinks.filter(link => validUrlRegex.test(link))
+
+    return tokens.filter(token => validUrlRegex.test(token))
 }
 
 // Check if any links in the body or subject are blacklisted
@@ -12,8 +16,11 @@ const checkLinks = async (body, subject) => {
     const bodyLinks = extractLink(body)
     const subjectLinks = extractLink(subject)
     const links = [...bodyLinks, ...subjectLinks]
+
+    console.log(" All extracted links:", links);
+
     for (const link of links) {
-        const blacklisted = await isBlacklisted(link);
+        const blacklisted = await isBlacklisted(link)
         if (blacklisted) {
             throw new Error('BLACKLISTED_LINK')
         }
@@ -53,6 +60,28 @@ const get50LastMails = (user) => {
     return sortedMails.slice(0, 50)
 }
 
-module.exports = { createMail, get50LastMails }
+// Edit the body of an existing mail by ID, after checking for blacklisted links
+const editMail = async (mailId, newBody) => {
+  // Validate that the new body does not contain blacklisted URLs
+  const links = await checkLinks(newBody, "")
+
+  // Update the body and (and mail's links) for every user who holds a copy of the mail
+  Store.forEach(user => {
+    const mail = user.mails.find(m => m.id === mailId);
+    if (mail) {
+      mail.body = newBody;
+      mail.links = links
+    }
+  })
+}
+
+
+
+
+
+
+
+
+module.exports = { createMail, get50LastMails, editMail }
 
 
