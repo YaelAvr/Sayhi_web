@@ -67,6 +67,7 @@ exports.get50LastMails = (req, res) => {
     res.status(200).json(mails)
 }
 
+// function to check if inputs id's are valid
 checkIdValid = (userId, mailId, res) => {
     // If the IDs were not provided at all
     if (!userId || !mailId) {
@@ -86,20 +87,38 @@ checkIdValid = (userId, mailId, res) => {
     return { mail, user }
 }
 
+// Controller to Handle handle the option to delete a mail
+exports.deleteMail = (req, res) => {
+    // Get the user Id
+    const userId = req.headers['x-user-id']
+    //Get the mails'id from the url
+    const mailId = req.params.id
+    // Use helper function to validate user and mail
+    const result = checkIdValid(userId, mailId, res)
+    if (!result){
+        return
+    }
+    const { mail, user} = result
+    //Find the index of the specific mail in the mails array 
+    const index = user.mails.findIndex(m => m.id === mail.id);
+    if (index !== -1) {
+        //Delete the mail in this index from the array
+        user.mails.splice(index, 1);
+    }
+    res.status(204).end()// No content response
+  
+}
+
+// Controller to Handle the option to get a specific mail 
 exports.getSpecificMail = (req, res) => {
     // Get the user Id
     const userId = req.headers['x-user-id']
     //Get the mails'id from the url
     const mailId = req.params.id
 
-   console.log(" PATCH called for:", mailId, "by user", userId) 
-
     // Use helper function to validate user and mail
     const result = checkIdValid(userId, mailId, res)
     if (!result){
-
-        console.log("checkIdValid failed")
-
         return
     }    
 
@@ -108,6 +127,7 @@ exports.getSpecificMail = (req, res) => {
     res.status(200).json(mail)
 }
 
+// Controller to Handle the option to edit a mail
 exports.editMail = async (req, res) => {
     // Get the user Id
     const userId = req.headers['x-user-id']
@@ -136,14 +156,12 @@ exports.editMail = async (req, res) => {
     try {
         // Delegate the edit logic (including blacklist check) to the model
         await editMail(mailId, req.body.body);
-        res.status(204).end(); // No content response
+        res.status(204).end()// No content response
     } catch (err) {
-        console.error(" Edit mail failed:", err);
-
         if (err.message === 'BLACKLISTED_LINK') {
-        res.status(400).json({ error: 'Body contains blacklisted link' });
+        res.status(400).json({ error: 'Body contains blacklisted link' })
         } else {
-            res.status(500).json({ error: 'Server Error' });
+            res.status(500).json({ error: 'Server Error' })
     }
   }
 }

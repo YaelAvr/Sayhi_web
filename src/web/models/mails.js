@@ -17,8 +17,6 @@ const checkLinks = async (body, subject) => {
     const subjectLinks = extractLink(subject)
     const links = [...bodyLinks, ...subjectLinks]
 
-    console.log(" All extracted links:", links);
-
     for (const link of links) {
         const blacklisted = await isBlacklisted(link)
         if (blacklisted) {

@@ -11,6 +11,7 @@ router.route('/')
 router.route('/:id')  
     .get(mails.getSpecificMail)
     .patch(mails.editMail)
+    .delete(mails.deleteMail)
 
 
 
