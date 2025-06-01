@@ -49,16 +49,8 @@ Only the external port (`3001`, `3002`, etc.) should be changed when running mul
 
 ### Changing CMD Parameters – Format & Instructions:
   
-To change the default parameters passed to the server or client, edit the `CMD` line in the relevant Dockerfile:
-  
-#### `Dockerfile.client`
-```
-CMD ["python", "client.py", "server", "8080"]
-#                   │         │          └── server port
-#                   │         └──────────── server IP or hostname
-#                   └────────────────────── Python script name
-```
-    
+To change the default parameters passed to the server, edit the `CMD` line in the relevant Dockerfile:
+
 #### `Dockerfile.server`
 ```
 CMD ["./my_program", "8080", "30", "2", "1"]
@@ -66,7 +58,15 @@ CMD ["./my_program", "8080", "30", "2", "1"]
 #                      |       └──────────── Bloom filter size
 #                      └──────────────────── server port
 ```
-Edit these values directly to modify how the server and client are launched inside the containers.
+Edit these values directly to modify how the server is launched inside the containers.
+
+**Note**: If you changed the port, you should also change it in the environment variable in the "docker-compose.yml" file.
+```bash
+environment:
+ SERVER_HOST: server
+ SERVER_PORT: 8080
+```
+
   
 ### Tests usage
 To compile and run the tests using Docker, use the following command:
