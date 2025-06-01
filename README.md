@@ -30,14 +30,20 @@ Project management tracking:
 - `README.md` — Project documentation  
 
 ## Usage 
-To compile and run the application using Docker, use the following command:
-
+To compile and run the application using Docker, use the following commands:
+To run the cpp server, open a dedicated terminal, and run:
 ```bash
 docker-compose run --rm --build server
-docker-compose run --rm --build client
-``` 
-After starting the application use:
-  
+```
+To run one instance of the webserver, While the previous terminal is open, open another dedicated terminal, and run:
+```bash
+docker-compose run --rm --build -p 3001:3000 webserver
+```
+To launch additional instances, open new terminals and run the same command with different ports:
+```bash
+docker-compose run --rm --build -p 3002:3000 webserver
+docker-compose run --rm --build -p 3003:3000 webserver
+```
 
 ### Changing CMD Parameters – Format & Instructions:
   
