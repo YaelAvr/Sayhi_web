@@ -2,6 +2,7 @@ const Store = require('../models/store')
 const { createMail } = require('../models/mails')
 const { get50LastMails } = require('../models/mails')
 const { editMail } = require('../models/mails')
+const { searchMailsByQuery } = require('../models/mails')
 
 
 // Controller to handle creation of a new mail
@@ -21,16 +22,16 @@ exports.createMail = async (req, res) => {
 
     // If either user is not found, return an error
     if (!sender || !recipient) {
-         return res.status(404).json({ error: 'Not Found' });
+         return res.status(404).json({ error: 'Not Found' })
     }
 
     // Validate optional fields if provided
     if (subject !== undefined && typeof subject !== 'string') {
-        return res.status(400).json({ error: 'Subject must be a string if provided' });
+        return res.status(400).json({ error: 'Bad Request' })
     }
 
     if (body !== undefined && typeof body !== 'string') {
-        return res.status(400).json({ error: 'Body must be a string if provided' });
+        return res.status(400).json({ error: 'Bad Request' })
     }
 
     // Try to create the mail using the createMail function
@@ -53,15 +54,18 @@ exports.createMail = async (req, res) => {
 exports.get50LastMails = (req, res) => {
     // Find the user in the users list
     const userId = req.headers['x-user-id']
+
     // If the user ID was not provided at all
     if (!userId) {
-    return res.status(400).json({ error: 'Bad Request' });
+    return res.status(400).json({ error: 'Bad Request' })
     }
+
     const user = Store.find(u => u.id === userId)
     // If the user is not found, return an error
     if (!user) {
-         return res.status(404).json({ error: 'Not Found' });
+         return res.status(404).json({ error: 'Not Found' })
     }
+
     // Get the last 50 mails of the user and return them
     const mails = get50LastMails(user)
     res.status(200).json(mails)
@@ -74,11 +78,13 @@ checkIdValid = (userId, mailId, res) => {
         res.status(400).json({ error: 'Bad Request' });
         return null
     }
+
     const user = Store.find(u => u.id === userId)
      if (!user) {
         res.status(404).json({ error: 'Not Found'})
         return null
      }
+
     const mail = user.mails.find(m => m.id === mailId)
     if (!mail) {
         res.status(404).json({ error: 'Not Found'})
@@ -93,11 +99,13 @@ exports.deleteMail = (req, res) => {
     const userId = req.headers['x-user-id']
     //Get the mails'id from the url
     const mailId = req.params.id
+
     // Use helper function to validate user and mail
     const result = checkIdValid(userId, mailId, res)
     if (!result){
         return
     }
+
     const { mail, user} = result
     //Find the index of the specific mail in the mails array 
     const index = user.mails.findIndex(m => m.id === mail.id);
@@ -159,9 +167,39 @@ exports.editMail = async (req, res) => {
         res.status(204).end()// No content response
     } catch (err) {
         if (err.message === 'BLACKLISTED_LINK') {
-        res.status(400).json({ error: 'Body contains blacklisted link' })
+        res.status(400).json({ error: 'Bad Request' })
         } else {
             res.status(500).json({ error: 'Server Error' })
     }
   }
+}
+
+// Controller to handle searching mails by query
+exports.searchMailsByQuery = (req, res) => {
+    // Get the user Id
+    const userId = req.headers['x-user-id']
+    //Get query
+    const query = req.params.query
+
+    // Check for missing headers or params
+    if (!userId || query === undefined) {
+    return res.status(400).json({ error: 'Bad Request' })
+    }
+
+    // Find user in users array
+    const user = Store.find(u => u.id === userId);
+    if (!user) {
+        return res.status(404).json({ error: 'Not Found' })
+    }
+
+    //Remove spaces from start and end
+    const trimmedQuery = query.trim()
+    if (trimmedQuery === '') {
+    // No search query — return all mails
+        return res.status(200).json(user.mails)
+    }
+
+    // Call model logic to search mails
+    const results = searchMailsByQuery(user, trimmedQuery)
+    res.status(200).json(results)
 }

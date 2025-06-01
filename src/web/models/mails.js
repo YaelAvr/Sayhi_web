@@ -73,6 +73,22 @@ const editMail = async (mailId, newBody) => {
   })
 }
 
+// Search for query string in selected fields of user's mails
+const searchMailsByQuery = (user, query) => {
+  
+  // Convert query to lowercase for case-insensitive comparison
+    const lowerQuery = query.toLowerCase()
+
+  // Return only mails where the query appears in one of the relevant fields
+  return user.mails.filter(mail => {
+    return (
+            (mail.subject?.toLowerCase().includes(lowerQuery)) ||  // Check subject if exists
+            (mail.body?.toLowerCase().includes(lowerQuery)) ||     // Check body if exists
+            mail.from.toLowerCase().includes(lowerQuery) ||        // Check 'from' field (always exists)
+            mail.to.toLowerCase().includes(lowerQuery)             // Check 'to' field (always exists)
+        )
+  })
+}
 
 
 
@@ -80,6 +96,6 @@ const editMail = async (mailId, newBody) => {
 
 
 
-module.exports = { createMail, get50LastMails, editMail }
+module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery }
 
 
