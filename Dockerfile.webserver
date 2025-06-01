@@ -1,27 +1,14 @@
-# Dockerfile.webserver
-
-# (גרסה רזה) Node.js משתמשים בתמונה רשמית של
 FROM node:20-slim
 
-# קובעים את תיקיית העבודה בתוך הקונטיינר
 WORKDIR /client-part
 
-# 1. העתק את package.json ו- package-lock.json (אם קיים)
-#    הקבצים האלה נמצאים בתיקיית השורש של הפרויקט (שהיא הקונטקסט של הבנייה)
 COPY package.json ./
 COPY package-lock.json ./
 
-# 2. התקן את התלויות
-#    זה יתבצע בתוך /client-part, שם נמצאים כעת קבצי ה-package
 RUN npm install
 
-# 3. העתק את שאר קוד האפליקציה של ה-webserver
-#    הוא נמצא בתיקייה src/web/ בתוך הפרויקט
-#    התוכן של src/web/ יועתק לתוך /client-part/
 COPY src/web/ ./
 
-# 3000 חושפים את פורט
 EXPOSE 3000
 
-# "start" מריצים את הסקריפט מתוך package.json
 CMD ["npm", "start"]
