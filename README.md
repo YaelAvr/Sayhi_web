@@ -108,6 +108,28 @@ http://localhost:3000/api/
 * 
   * The JavaScript server connects to the C++ server and sends a POST request. As a result, the URL is added to the blacklist that stored on the C++ server. 
 
+#### 2. Delete URL from blacklist
+
+There is no need to include any text in the header or body
+
+* **Method**: `DELETE`
+* **Endpoint**: `/blacklist/:id`
+* **Description**: Deletes a URL from the blacklist.
+
+* **Notes**:
+
+  * The URL is passed in the request path. 
+  * The URL is verified for validity.
+
+* **Responses**:
+
+  * `201 Created` – The URL has been deleted from the blacklist
+  * `400 Bad Request` – Missing URL or invalid URL
+  * `404 Bad Request` – URL wasn't in the blacklist from the start
+
+* **Behavior**:
+  
+  * The JavaScript server connects to the C++ server and sends a DELETE request. As a result, the URL is deleted from the blacklist that stored on the C++ server. 
 
 
 
