@@ -5,7 +5,7 @@ This project implements a URL blacklist system using a Bloom filter in C++. The 
 ## System Requirements  
 To run the application using Docker:
 - Docker and Docker Compose installed.
-- All required components — including the C++ server and Python client — are built automatically using the provided `Dockerfile.server` and `Dockerfile.client`.
+- All required components — including the C++ server and node.js server — are built automatically using the provided `Dockerfile.server` and `Dockerfile.webserver`.
 
 Project management tracking:
 - Access to the JIRA board
