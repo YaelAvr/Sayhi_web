@@ -20,12 +20,11 @@ void ProgramLoop::startLoop(std::mutex& mtx){
     string input;
     int classifyNum;
 
-    //start the Program Loop
-    while (true) {
+    //start the Program process
         // Get input from the client and check if the input is invalid in order to the bool in the pair
         pair<string, bool> dataWithStatus = IO_Obj->getInput();
         if(!dataWithStatus.second){
-            break;
+            return;
         }
         input = dataWithStatus.first;
         // Classify the input to determine which command it is
@@ -34,13 +33,10 @@ void ProgramLoop::startLoop(std::mutex& mtx){
         // if the input wasn't valid 
         if (classifyNum == -1) {
             IO_Obj->printOutput("400 Bad Request");
-            // continue;
-            break;
+            return;
         }
         // Execute the command
         std::unique_lock<std::mutex> lock(mtx); //lock this action to be threded safe
         commands[classifyNum]->execute(input);
         lock.unlock();
-        break;
-    }
 }
