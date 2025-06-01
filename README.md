@@ -71,7 +71,22 @@ environment:
  SERVER_HOST: server
  SERVER_PORT: 8080
 ```
-  
+
+## API Documentation
+
+## Base URL
+
+```
+http://localhost:3000/api/
+```
+
+
+
+
+
+
+
+
 
 ## Example Run
 
