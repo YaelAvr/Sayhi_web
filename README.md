@@ -74,7 +74,7 @@ environment:
 
 ## API Documentation
 
-## Base URL
+### Base URL
 
 ```
 http://localhost:3000/api/
