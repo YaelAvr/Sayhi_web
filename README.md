@@ -44,6 +44,8 @@ To launch additional instances, open new terminals and run the same command with
 docker-compose run --rm --build -p 3002:3000 webserver
 docker-compose run --rm --build -p 3003:3000 webserver
 ```
+**Note**: The internal port (`3000`) should remain fixed for all instances.  
+Only the external port (`3001`, `3002`, etc.) should be changed when running multiple servers in parallel.
 
 ### Changing CMD Parameters – Format & Instructions:
   
