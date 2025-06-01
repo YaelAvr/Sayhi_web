@@ -6,7 +6,7 @@ exports.createUser = (req, res) => {
     const genderOptions = ["female", "male", "other"];
 
     if (!username || !password || !gender || !birthday) {
-     return res.status(400).json({ error: "Bad Request" });
+     return res.status(400).json({ error: "Username, password, gender and birthday are required" });
     }
    
     const lowGender = gender.trim().toLowerCase();
@@ -19,12 +19,12 @@ exports.createUser = (req, res) => {
     // Check if all the given parameters are valid
     if (!genderOptions.includes(lowGender) || (!(picture === undefined) && !imagePattern.test(picture)) 
         || !isDateValid(birthday) || !pattern.test(password)) {
-      return res.status(400).json({ error: "Bad Request" });
+      return res.status(400).json({ error: "One of the fildes are not valid" });
     }
 
-    const newUser = Users.createUser(username, password, picture, gender, birthday);
+    const newUser = Users.createUser(username, password, picture, lowGender, birthday);
     if (newUser === null) {
-        return res.status(400).json({ error: "Bad Request" });
+        return res.status(400).json({ error: "This username is taken" });
     }
     res.status(201).location(`/api/users/${newUser.id}`).end();
 };
