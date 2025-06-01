@@ -16,14 +16,14 @@ Project management tracking:
   - `cpp/` — C++ components 
   - `py/` — Python components  
   - `web/` — Node.js backend (Express server)  
-- `Tests/` — Project tests  
-- `data/` — Application data (e.g., storage files, mock DBs)  
+- `Tests/` — Project tests (cpp tests from last exercise)
+- `data/` — Application data (e.g., storage files)  
 - `images/` — Screenshots for documentation  
 - `.vscode/` — VSCode configuration (for development only)  
 - `.gitignore` — Files and folders ignored by Git  
 - `CMakeLists.txt` — Build configuration for C++ components  
-- `Dockerfile.server` — Dockerfile for the Node.js Express server  
-- `Dockerfile.webserver` — (Optional) Dockerfile for static web server (if used)  
+- `Dockerfile.server` — Dockerfile for the cpp server 
+- `Dockerfile.webserver` — Dockerfile for the Node.js server  
 - `Dockerfile.pyclient` — Dockerfile for Python client (if used)  
 - `docker-compose.yml` — Docker Compose configuration for multi-service setup  
 - `package.json`, `package-lock.json` — Node.js dependencies  
@@ -37,12 +37,6 @@ docker-compose run --rm --build server
 docker-compose run --rm --build client
 ``` 
 After starting the application use:
-
-- POST [URL] to add a URL to the blacklist.
-
-- GET [URL] to check if a URL is blacklisted.
-
-- DELETE [URL] to delete a URL from the blacklist.
   
 
 ### Changing CMD Parameters – Format & Instructions:
