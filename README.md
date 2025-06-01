@@ -74,7 +74,7 @@ environment:
 
 ## API Documentation
 
-### Base URL
+### Base URL:
 
 ```
 http://localhost:3000/api/
@@ -83,10 +83,10 @@ http://localhost:3000/api/
 
 #### 1. Add URL to blacklist
 
-- **Method**: `POST`
-- **Endpoint**: `/blacklist`
-- **Description**: Adds a URL to the blacklist.
-- **Body**:
+* **Method**: `POST`
+* **Endpoint**: `/blacklist`
+* **Description**: Adds a URL to the blacklist.
+* **Body**:
 
 ```json
 {
