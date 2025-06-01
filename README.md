@@ -4,7 +4,8 @@ This project simulates a simplified Gmail-like system that supports user managem
 The system includes:
 - A **Node.js (Express)** server that exposes a RESTful API.
 - A **C++** server that manages a URL blacklist using a Bloom filter (via TCP).
-Note: This project includes only backend logic. No frontend is implemented — all responses are returned in JSON format.
+
+**Note**: This project includes only backend logic. No frontend is implemented — all responses are returned in JSON format.
 
 ## System Requirements  
 To run the application using Docker:
