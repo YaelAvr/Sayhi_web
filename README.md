@@ -108,7 +108,6 @@ http://localhost:3000/api/
 * 
   * The JavaScript server connects to the C++ server and sends a POST request. As a result, the URL is added to the blacklist that stored on the C++ server.
 
- ---
 
 #### 2. Delete URL from blacklist
 
@@ -136,8 +135,9 @@ There is no need to include any text in the header or body.
 
 ### Mails
 
-### 1. Create a Mail
-🔐 Requires Authentication 
+#### 1. Create a Mail
+
+Requires Authentication 
 
 * **Method**: `POST`
 * **Endpoint**: `/mails`
@@ -147,7 +147,7 @@ There is no need to include any text in the header or body.
 
 ```json
 {
-  "to": "u2",
+  "to": "u-2",
   "subject": "Hello",
   "body": "This is a message with http://example.com"
 }
@@ -164,8 +164,23 @@ There is no need to include any text in the header or body.
   * `400 Bad Request` – Missing fields or blacklisted URL
   * `404 Not Found` – User not found
 
----
 
+#### 2. Get last Mails
+
+Requires Authentication 
+
+* **Method**: `GET`
+* **Endpoint**: `/mails`
+* **Description**: Retrieves the latest 50 mails of the current user.
+* **Headers**: `x-user-id`
+* **Note**:
+
+  * Mails are sorted from newest to oldest, regardless of whether they were sent or received.
+
+* **Responses**:
+
+  * `200 OK` – Array of mail objects
+  * `404 Not Found` – User not found
 
 
 
