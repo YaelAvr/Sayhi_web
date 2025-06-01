@@ -1,6 +1,10 @@
-# Gmail Project — URL Blacklist System
-This project implements a URL blacklist system using a Bloom filter in C++. The application supports adding, checking, and deleting URLs via a TCP client-server architecture. The server is written in C++, and the client is written in Python. The system is designed according to SOLID principles and follows the TDD methodology.
+# Gmail Project — Multi-Component Mail System
+This project simulates a simplified Gmail-like system that supports user management, sending and receiving mails, labels, search functionality, and blacklist enforcement.
 
+The system includes:
+- A **Node.js (Express)** server that exposes a RESTful API.
+- A **C++** server that manages a URL blacklist using a Bloom filter (via TCP).
+Note: This project includes only backend logic. No frontend is implemented — all responses are returned in JSON format.
 
 ## System Requirements  
 To run the application using Docker:
