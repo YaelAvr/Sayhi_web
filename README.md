@@ -79,6 +79,36 @@ environment:
 ```
 http://localhost:3000/api/
 ```
+### Blacklist
+
+#### 1. Add URL to blacklist
+
+* **Method**: `POST`
+* **Endpoint**: `/blacklist`
+* **Description**: Adds a URL to the blacklist.
+* **Body**:
+
+```json
+{
+  "link": "www.example.com"
+}
+```
+
+* **Notes**:
+
+  * `link` is required
+  * The URL in `body` is verified for validity.
+
+* **Responses**:
+
+  * `201 Created` – The URL has been added to the blacklist
+  * `400 Bad Request` – Missing URL or invalid URL
+
+* **Behavior**:
+* 
+  * The JavaScript server connects to the C++ server and sends a POST request. As a result, the URL is added to the blacklist that stored on the C++ server. 
+
+
 
 
 
