@@ -142,7 +142,7 @@ Requires Authentication
 * **Method**: `POST`
 * **Endpoint**: `/mails`
 * **Description**: Sends a mail from the current user to another user.
-* **Headers**: `x-user-id` – Required for authentication
+* **Headers**: `x-user-id`
 * **Body**:
 
 ```json
@@ -158,6 +158,7 @@ Requires Authentication
   * `to` is required
   * `subject` and `body` are optional
   * URLs in `subject` or `body` are checked against a blacklist
+    
 * **Responses**:
 
   * `201 Created` – Mail was sent
@@ -181,6 +182,105 @@ Requires Authentication
 
   * `200 OK` – Array of mail objects
   * `404 Not Found` – User not found
+  * `400 Bad Request` –Missing user ID 
+
+
+#### 3. Get Mail by ID
+
+Requires Authentication 
+
+* **Method**: `GET`
+* **Endpoint**: `/mails/:id`
+* **Description**: Retrieves a specific mail by ID.
+* **Headers**: `x-user-id`
+* **Responses**:
+
+  * `200 OK` – Mail object
+  * `404 Not Found` – Mail or user not found
+  * `400 Bad Request` - Missing user ID or mail ID
+
+
+#### 4. Edit Mail 
+
+Requires Authentication 
+
+* **Method**: `PATCH`
+* **Endpoint**: `/mails/:id`
+* **Description**: Allows only the **sender** of the mail to update its body.
+* **Headers**: `x-user-id`
+* **Body**:
+
+```json
+{
+  "body": "Updated content"
+}
+```
+
+* **Validation**:
+
+  * Only the sender can edit
+  * Subject cannot be changed
+  * New body is checked for blacklisted URLs
+
+* **Notes**:
+
+  * If an edit has been made, it is also updated for the user to whom the email was sent.
+    
+* **Responses**:
+
+  * `200 OK` – Mail updated
+  * `400 Bad Request` – Not the sender
+  * `400 / 404` – Validation or lookup failure
+
+
+#### 5. Delete Mail
+
+Requires Authentication 
+
+* **Method**: `DELETE`
+* **Endpoint**: `/mails/:id`
+* **Description**: Deletes a mail for the requesting user only.
+* **Headers**: `x-user-id`
+* **Responses**:
+
+  * `204 No Content` – Mail deleted from user’s inbox
+  * `404 Not Found` – Mail or user not found
+  * `400 Bad Request` – Missing user ID or mail ID
+
+    
+### 6. Search Mails
+
+Requires Authentication 
+
+* **Method**: `GET`
+* **Endpoint**: `/mails/search/:query`
+* **Description**: Searches for mails matching the query string in `subject`, `body`, `from`, or `to`.
+* **Headers**: `x-user-id`
+* **Behavior**:
+
+  * Trims the query string
+  * Case-insensitive
+  * Empty query (`""`) returns all mails
+    
+* **Responses**:
+
+  * `200 OK` – Array of matching mails
+  * `404 Not Found` – User not found
+  * `400 Bad Request` – Missing user ID or query parameter
+
+###  Mail Object Structure
+
+```json
+{
+  "id": "m-u1-0",
+  "from": "u1",
+  "to": "u2",
+  "subject": "...",
+  "body": "...",
+  "links": ["http://example.com"],
+  "labelIds": [],
+  "time": "2024-05-31T12:00:00.000Z"
+}
 
 
 
