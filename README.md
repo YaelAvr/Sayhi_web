@@ -96,13 +96,13 @@ http://localhost:3000/api/
 
 * **Notes**:
 
-  * `link` is required
+  * `link` is required.
   * The URL in `body` is verified for validity.
 
 * **Responses**:
 
-  * `201 Created` – The URL has been added to the blacklist
-  * `400 Bad Request` – Missing URL or invalid URL
+  * `201 Created` – The URL has been added to the blacklist.
+  * `400 Bad Request` – Missing URL or invalid URL.
 
 * **Behavior**:
 * 
@@ -110,7 +110,7 @@ http://localhost:3000/api/
 
 #### 2. Delete URL from blacklist
 
-There is no need to include any text in the header or body
+There is no need to include any text in the header or body.
 
 * **Method**: `DELETE`
 * **Endpoint**: `/blacklist/:id`
@@ -123,9 +123,9 @@ There is no need to include any text in the header or body
 
 * **Responses**:
 
-  * `201 Created` – The URL has been deleted from the blacklist
-  * `400 Bad Request` – Missing URL or invalid URL
-  * `404 Bad Request` – URL wasn't in the blacklist from the start
+  * `201 Created` – The URL has been deleted from the blacklist.
+  * `400 Bad Request` – Missing URL or invalid URL.
+  * `404 Bad Request` – URL wasn't in the blacklist from the start.
 
 * **Behavior**:
   
