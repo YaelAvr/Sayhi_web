@@ -66,13 +66,6 @@ environment:
  SERVER_HOST: server
  SERVER_PORT: 8080
 ```
-
-  
-### Tests usage
-To compile and run the tests using Docker, use the following command:
-```bash
-docker-compose run --rm --build tests
-``` 
   
 
 ## Example Run
