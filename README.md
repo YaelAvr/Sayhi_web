@@ -283,6 +283,158 @@ Requires Authentication
 }
 ```
 
+###  Users
+
+### 1. Create a User
+
+* **Method**: `POST`
+* **Endpoint**: `/users`
+* **Description**: Create a new gmail user.
+* **Body**:
+
+```json
+{
+    "username": "Dana",
+    "password": "Bb12c3d4",
+    "picture": "https://example.com/profile.jpg",
+    "gender": "female",
+    "birthday": "20.11.2022"
+}
+```
+
+* **Notes**:
+
+  * `username`, `password`, `gender` and `birthday` are required
+  * `picture` is optional
+  * The password must be at least 8 letters and contain at least 1 english letter in appercase form, and at least 1 english letter in lowwercase form
+  * `birthday` must be in the form DD.MM.YYYY and be a date before today.
+  * `gender` can be: male\ female\ other
+  * `isDateValid` make sure the given string is a date by using the JS Date object, and compare it to regex.
+  * `imagePattern` and `pattern` are regexes of an image url and a password format accordingly. if the given variable don’t match them, we stop the creation of a     user. 
+
+* **Responses**:
+
+  * `201 Created` – User was created
+  * `400 Bad Request` – Missing fields or invalid fildes or a user with that username already exist.
+  
+* **Behavior**:
+
+  * If there are uppercase letters in `gender`- make them lower case
+
+
+#### 2. Get User by ID
+
+ Requires Authentication
+
+* **Method**: `GET`
+* **Endpoint**: `/users/:id`
+* **Description**: Returns information about a specific user.
+* **Headers**: `x-user-id`
+* **Notes**:
+  
+  * `x-user-id` and `id` are required
+  * The value of `x-user-id` must match the`id` that is in the route.
+  * if the user didn’t have the field `picture` then so does the return value.
+
+
+* **Validation**:
+  * only the user can access their information.
+
+* **Responses**:
+  
+  * `200 Ok` – User was sent
+  * `400 Bad Request` – Missing header.
+  * `404 Not Found` – User not found
+
+
+* **Behavior**:
+  * only returns the non-private fildes
+
+
+### User Object Structure
+
+```json
+{
+  "id": "u-0",
+  “username”: “name”,
+  “password”: "Bb12c3d4",
+  “picture”: "http://example.com//pic.jpg",  
+  “gender”: "male",
+  “birthday”: “20.3.1992”,
+        “mailCounter”: 0,
+        “mails”: [],
+        “labelCounter”: 0,
+        “labels”: []
+}
+```
+
+
+##  Tokens
+
+### 1. Is User Registerd
+* **Method**: `POST`
+* **Endpoint**: `/tokens`
+* **Description**:  Checks if a user is registered.
+* **Body**:
+  
+```json
+{
+    "username": "Dana",
+    "password": "Bb12c3d4",
+ }
+```
+
+* **Notes**:
+  
+  * `username` and  `password` are required
+
+* **Responses**:
+  
+  * `200 Ok` – User was found
+  * `400 Bad Request` – Missing fields.
+  * `404 Not Found` – User with that username and password was not found
+
+* **Behavior**:
+  
+  * If a user with that username and password was found- return it’s id.
+  * Otherwise returns 404 error.
+
+
+###  Labels
+
+#### 1. Create a Label
+
+ Requires Authentication
+
+* **Method**: `POST`
+* **Endpoint**: `/labels`
+* **Description**: Create a new label for a specific gmail user.
+* **Headers**:  `x-user-id`
+* **Body**:
+  
+```json
+{
+    "name": "Label-Name",
+ }
+```
+
+* **Notes**:
+  
+  * `name` and `x-user-id` are required
+  * `name` can’t be empty
+
+* **Validation**:
+  
+  * Users can create labels only for themselves.
+
+* **Responses**:
+  
+  * `201 Created` – Label was created for that user.
+  * `400 Bad Request` – Missing fields or invalid name filde.
+  * `404 Not Found` – User was not found
+
+
+
 
 
 
