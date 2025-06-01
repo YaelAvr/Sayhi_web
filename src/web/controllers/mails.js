@@ -13,7 +13,7 @@ exports.createMail = async (req, res) => {
 
     // Validate presence of 'from' and 'to' fields
     if (!from || !to) {
-        return res.status(400).json({ error: 'Bad Request' })
+        return res.status(400).json({ error: 'Missing sender or recipient ID' })
     }
 
     // Find the sender and recipient users in the users list
@@ -22,16 +22,16 @@ exports.createMail = async (req, res) => {
 
     // If either user is not found, return an error
     if (!sender || !recipient) {
-         return res.status(404).json({ error: 'Not Found' })
+         return res.status(404).json({ error: 'Sender or recipient not found' })
     }
 
     // Validate optional fields if provided
     if (subject !== undefined && typeof subject !== 'string') {
-        return res.status(400).json({ error: 'Bad Request' })
+        return res.status(400).json({ error: 'Subject must be a string' })
     }
 
     if (body !== undefined && typeof body !== 'string') {
-        return res.status(400).json({ error: 'Bad Request' })
+        return res.status(400).json({ error: 'Body must be a string' })
     }
 
     // Try to create the mail using the createMail function
@@ -42,7 +42,7 @@ exports.createMail = async (req, res) => {
     } catch (err) {
         // If the mail contains a blacklisted link, return a 400 error
         if (err.message === 'BLACKLISTED_LINK') {
-            return res.status(400).json({ error: 'Bad Request' })
+            return res.status(400).json({ error: 'Mail contains blacklisted link' })
         } else {
             return res.status(500).json({ error: 'Server Error' })
         }
@@ -57,13 +57,13 @@ exports.get50LastMails = (req, res) => {
 
     // If the user ID was not provided at all
     if (!userId) {
-    return res.status(400).json({ error: 'Bad Request' })
+    return res.status(400).json({ error: 'Missing x-user-id header' })
     }
 
     const user = Store.find(u => u.id === userId)
     // If the user is not found, return an error
     if (!user) {
-         return res.status(404).json({ error: 'Not Found' })
+         return res.status(404).json({ error: 'User not found' })
     }
 
     // Get the last 50 mails of the user and return them
@@ -75,19 +75,19 @@ exports.get50LastMails = (req, res) => {
 checkIdValid = (userId, mailId, res) => {
     // If the IDs were not provided at all
     if (!userId || !mailId) {
-        res.status(400).json({ error: 'Bad Request' });
+        res.status(400).json({ error: 'Missing user ID or mail ID' });
         return null
     }
 
     const user = Store.find(u => u.id === userId)
      if (!user) {
-        res.status(404).json({ error: 'Not Found'})
+        res.status(404).json({ error: 'User not found' })
         return null
      }
 
     const mail = user.mails.find(m => m.id === mailId)
     if (!mail) {
-        res.status(404).json({ error: 'Not Found'})
+        res.status(404).json({ error: 'Mail not found for this user' })
         return null
     }
     return { mail, user }
@@ -108,10 +108,10 @@ exports.deleteMail = (req, res) => {
 
     const { mail, user} = result
     //Find the index of the specific mail in the mails array 
-    const index = user.mails.findIndex(m => m.id === mail.id);
+    const index = user.mails.findIndex(m => m.id === mail.id)
     if (index !== -1) {
         //Delete the mail in this index from the array
-        user.mails.splice(index, 1);
+        user.mails.splice(index, 1)
     }
     res.status(204).end()// No content response
   
@@ -148,17 +148,17 @@ exports.editMail = async (req, res) => {
 
     const { mail } = result
     if (mail.from !== userId) {
-        return res.status(400).json({ error: 'Bad Request' })
+        return res.status(400).json({ error: 'Only the sender can edit the mail' })
     }
 
     // Prevent subject from being updated
     if ('subject' in req.body) {
-        return res.status(400).json({ error: 'Bad Request' })
+        return res.status(400).json({ error: 'Subject cannot be edited' })
     }
 
     // Ensure body exists and is a string
     if (!('body' in req.body) || typeof req.body.body !== 'string') {
-        return res.status(400).json({ error: 'Bad Request' })
+        return res.status(400).json({ error: 'Missing or invalid body field' })
     }
 
     try {
@@ -167,7 +167,7 @@ exports.editMail = async (req, res) => {
         res.status(204).end()// No content response
     } catch (err) {
         if (err.message === 'BLACKLISTED_LINK') {
-        res.status(400).json({ error: 'Bad Request' })
+        res.status(400).json({ error: 'Updated body contains blacklisted link' })
         } else {
             res.status(500).json({ error: 'Server Error' })
     }
@@ -183,13 +183,13 @@ exports.searchMailsByQuery = (req, res) => {
 
     // Check for missing headers or params
     if (!userId || query === undefined) {
-    return res.status(400).json({ error: 'Bad Request' })
+    return res.status(400).json({ error: 'Missing x-user-id or query parameter' })
     }
 
     // Find user in users array
     const user = Store.find(u => u.id === userId);
     if (!user) {
-        return res.status(404).json({ error: 'Not Found' })
+        return res.status(404).json({ error: 'User not found' })
     }
 
     //Remove spaces from start and end
