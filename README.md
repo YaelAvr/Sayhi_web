@@ -272,9 +272,9 @@ Requires Authentication
 
 ```json
 {
-  "id": "m-u1-0",
-  "from": "u1",
-  "to": "u2",
+  "id": "m-u-1-1",
+  "from": "u-1",
+  "to": "u-2",
   "subject": "...",
   "body": "...",
   "links": ["http://example.com"],
