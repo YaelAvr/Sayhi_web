@@ -35,6 +35,11 @@ const getLabelById = (user, id) => {
 
 // This function updates the name of a specific label for a specific user.
 const updateLabel = (user, id, name) => {
+    // If a label with the same name already exists, return null
+    if (user.labels.find(label => label.name === name && label.id !== id)) {
+        return null; // 400 Bad Request if the name already exists
+    }
+
     const label = getLabelById(user, id);
     if (!label) {
         return null; 
