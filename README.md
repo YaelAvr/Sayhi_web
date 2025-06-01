@@ -12,18 +12,22 @@ Project management tracking:
 
 
 ## Project Structure
-- `src/` — source files
-- `Tests/` — tests files
-- `data/` — Bloom filter save files
-- `.vscode/` — VSCode project settings (optional for development)
-- `Dockerfile.client` — Docker instructions for building Python client
-- `Dockerfile.server` — Docker instructions for building the C++ server
-- `docker-compose.yml` — Docker Compose configuration
-- `CMakeLists.txt` — CMake build script
-- `.gitignore` — Git ignored files
-- `images` — Screenshots used in the README documentation
-- `README.md` — Project documentation
-
+- `src/` — Source code  
+  - `cpp/` — C++ components 
+  - `py/` — Python components  
+  - `web/` — Node.js backend (Express server)  
+- `Tests/` — Project tests  
+- `data/` — Application data (e.g., storage files, mock DBs)  
+- `images/` — Screenshots for documentation  
+- `.vscode/` — VSCode configuration (for development only)  
+- `.gitignore` — Files and folders ignored by Git  
+- `CMakeLists.txt` — Build configuration for C++ components  
+- `Dockerfile.server` — Dockerfile for the Node.js Express server  
+- `Dockerfile.webserver` — (Optional) Dockerfile for static web server (if used)  
+- `Dockerfile.pyclient` — Dockerfile for Python client (if used)  
+- `docker-compose.yml` — Docker Compose configuration for multi-service setup  
+- `package.json`, `package-lock.json` — Node.js dependencies  
+- `README.md` — Project documentation  
 
 ## Usage 
 To compile and run the application using Docker, use the following command:
