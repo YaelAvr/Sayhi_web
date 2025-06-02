@@ -120,13 +120,18 @@ There is no need to include any text in the header or body.
 * **Notes**:
 
   * The URL is passed in the path through the id parameter.
+  * If the id contains special characters (like \ or :), make sure to encode it before sending the request. For
+    example:
+    https://example.com
+    becomes:
+    https%3A%2F%2Fexample.com
   * The URL is verified for validity.
 
 * **Responses**:
 
   * `201 Created` – The URL has been deleted from the blacklist.
   * `400 Bad Request` – Missing URL or invalid URL.
-  * `404 Bad Request` – URL wasn't in the blacklist from the start.
+  * `404  Not Found` – URL wasn't in the blacklist from the start.
 
 * **Behavior**:
   
