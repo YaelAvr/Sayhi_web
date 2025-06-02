@@ -439,6 +439,82 @@ Requires Authentication
   * `404 Not Found` – User was not found
 
 
+#### 2. Get Label by ID
+
+Requires Authentication
+
+* **Method**: `GET`
+* **Endpoint**: `/labels/:id`
+* **Description**: Returns information about a specific label of a specific user.
+* **Headers**: `x-user-id` – Required for authentication
+
+* **Notes**:
+  * `x-user-id` and `id` are required
+
+* **Validation**:
+  * only the user can access their labels information.
+  * The value of `x-user-id` must have a label with the id:`id` that is in the route.
+
+* **Responses**:
+  * `200 Ok` – Label was sent
+  * `400 Bad Request` – Missing header.
+  * `404 Not Found` – User not found or label not found
+
+* **Behavior**:
+  * Returns all the Label fildes
+
+
+#### 3. Get All Labels
+
+Requires Authentication
+
+* **Method**: `GET`
+* **Endpoint**: `/labels/`
+* **Description**: Returns all the labels of a specific user.
+* **Headers**: `x-user-id`
+
+* **Notes**:
+  * If the user doesn’t have labels yet, return an empty array.
+
+* **Validation**:
+  * only the user can access their labels information.
+
+* **Responses**:
+  * `200 Ok` – Label was sent
+  * `400 Bad Request` – Missing header.
+  * `404 Not Found` – User not found or label not found
+
+* **Behavior**:
+  * Returns all the Labels and their fields.
+
+#### 4. Update Label 
+
+Requires Authentication
+
+* **Method**: `PATCH`
+* **Endpoint**: `/labels/:id`
+* **Description**: Update the name of a specific label of a specific user.
+* **Headers**: `x-user-id`
+* **Body**:
+  
+```json
+{
+    "name": "new-Label-Name",
+ }
+```
+
+* **Notes**:
+  * `x-user-id`, `name` and `id` are required.
+
+* **Validation**:
+  * only the user can access their labels information.
+  * The value of `x-user-id` must have a label with the id:`id` that is in the route.
+  * The new `name` can’t be found in a different label (of the same user).
+	
+* **Responses**:
+  * `204 No Content` – Label name was changed
+  * `400 Bad Request` – Missing header or name in Body, or an invalid new name was given.
+  * `404 Not Found` – User was not found or label not found
 
 
 
