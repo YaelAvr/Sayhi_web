@@ -119,7 +119,7 @@ There is no need to include any text in the header or body.
 
 * **Notes**:
 
-  * The URL is passed in the request path. 
+  * The URL is passed in the path through the id parameter.
   * The URL is verified for validity.
 
 * **Responses**:
