@@ -550,7 +550,7 @@ Requires Authentication
 ```json
 {
   "id": "l-u-0-0",
-  “name”: “name”,
+  "name": "name",
 }
 ```
 
@@ -559,22 +559,12 @@ Requires Authentication
 
 **Input**:
 ```bash
-POST www.example.com
-GET www.example.com
-DELETE www.example.com
-GET www.example.com
+
 ```
 
 **Output**:
 ```bash
-201 Created
-200 Ok
 
-true true
-204 No Content
-200 Ok
-
-true false
 ```
 
 
