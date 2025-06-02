@@ -547,7 +547,7 @@ true false
 ## Screenshots
 
 ### Project Management - JIRA Board
-![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/part2/%E2%80%8F%E2%80%8FJira_Board.PNG.png?raw=true)
+![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/jira.png)
 
 ### Test Run Output
 ![Test Run Output](https://github.com/eden05221/gmail_project/blob/main/images/part2/Test_Run_Input.png?raw=true)
