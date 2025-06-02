@@ -599,7 +599,7 @@ Keep-Alive: timeout=5
 {"id":"u-0"}
 ```
 
-### 3.Create Label for first user:
+### 3. Create Label for first user:
 
 **Request:**
 ```bash
@@ -620,7 +620,7 @@ Keep-Alive: timeout=5
 Content-Length: 0
 ```
 
-### 4.Add URL to the blacklist:
+### 4. Add URL to the blacklist:
 
 **Request:**
 ```bash
@@ -643,7 +643,7 @@ Keep-Alive: timeout=5
 {"message":"Link added to blacklist","result":"201 Created"}
 ```
 
-### 5.Create second user:
+### 5. Create second user:
 
 **Request:**
 ```bash
@@ -663,7 +663,7 @@ Keep-Alive: timeout=5
 Content-Length: 0
 ```
 
-### 6.Send a mail from first user to the second user with URLs:
+### 6. Send a mail from first user to the second user with URLs:
 
 **Request:**
 ```bash
@@ -684,7 +684,7 @@ Keep-Alive: timeout=5
 Content-Length: 0
 ```
 
-### 7.Try to send a mail from first user to the second user with bad URLs:
+### 7. Try to send a mail from first user to the second user with bad URLs:
 
 **Request:**
 ```bash
@@ -705,7 +705,7 @@ Date: Mon, 02 Jun 2025 16:25:10 GMT
 Connection: keep-alive
 Keep-Alive: timeout=5
 
-{"error":"Mail contains blacklisted link"}r
+{"error":"Mail contains blacklisted link"}
 ```
 
 ## Screenshots
