@@ -356,15 +356,15 @@ Requires Authentication
 ```json
 {
   "id": "u-0",
-  “username”: “name”,
-  “password”: "Bb12c3d4",
-  “picture”: "http://example.com//pic.jpg",  
-  “gender”: "male",
-  “birthday”: “20.3.1992”,
-        “mailCounter”: 0,
-        “mails”: [],
-        “labelCounter”: 0,
-        “labels”: []
+  "username": "name",
+  "password": "Bb12c3d4",
+  "picture": "http://example.com//pic.jpg",  
+  "gender": "male",
+  "birthday": "20.3.1992",
+  "mailCounter": 0,
+  "mails": [],
+  "labelCounter": 0,
+  "labels": []
 }
 ```
 
