@@ -120,7 +120,7 @@ There is no need to include any text in the header or body.
 * **Notes**:
 
   * The URL is passed in the path through the id parameter.
-  * If the id contains special characters (like \ or :), make sure to encode it before sending the request. For
+  * If the id contains special characters (like \ or :) make sure to encode it before sending the request. For
     example:
     https://example.com
     becomes:
