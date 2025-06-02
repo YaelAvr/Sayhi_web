@@ -556,15 +556,24 @@ Requires Authentication
 
 ## Example Run
 
+### 1. Create First User
 
-**Input**:
+**Request:**
 ```bash
-
+curl -i -X POST http://localhost:3001/api/users \
+-H "Content-Type: application/json" \
+-d '{ "username": "Dana", "password": "Bb12c3d4", "picture": "https://example.com/profile.jpg", "gender": "female", "birthday": "12.3.2001"}'
 ```
 
-**Output**:
-```bash
-
+**Response:**
+```http
+HTTP/1.1 201 Created
+X-Powered-By: Express
+Location: /api/users/u-0
+Date: Mon, 02 Jun 2025 16:03:38 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 0
 ```
 
 
