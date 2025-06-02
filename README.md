@@ -521,8 +521,38 @@ Requires Authentication
     * Doesn’t return the new object, only “204 No Content” message.
 
 
+#### 5. Delete label
 
+Requires Authentication
 
+* **Method**: `DELETE`
+* **Endpoint**: `/labels/:id`
+* **Description**: Delete a specific label of a specific user.
+* **Headers**: `x-user-id`
+  
+* **Notes**:
+   * `x-user-id`, `name` and `id` are required.
+
+* **Validation**:
+ * only the user can access their labels information.
+  * The value of `x-user-id` must have a label with the id:`id` that is in the route.
+
+* **Responses**:
+  * `204 No Content` – The label was successfully deleted.
+  * `400 Bad Request` – Missing header value for user id.
+  * `404 Not Found` – User was not found or label not found
+
+* **Behavior**:
+   * Doesn’t return the new object, only “204 No Content” message.
+
+#### Label Object Structure
+
+```json
+{
+  "id": "l-u-0-0",
+  “name”: “name”,
+}
+```
 
 ## Example Run
 
