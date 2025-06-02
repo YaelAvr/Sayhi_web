@@ -1,4 +1,4 @@
-# Gmail Project — Multi-Component Mail System
+# Gmail Project: Multi-Component Mail System
 This project simulates a simplified Gmail-like system that supports user management, sending and receiving mails, labels, search functionality, and blacklist enforcement.
 
 The system includes:
