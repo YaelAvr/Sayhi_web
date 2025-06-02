@@ -268,7 +268,7 @@ Requires Authentication
   * `404 Not Found` – User not found
   * `400 Bad Request` – Missing user ID or query parameter
 
-###  Mail Object Structure
+####  Mail Object Structure
 
 ```json
 {
@@ -351,7 +351,7 @@ Requires Authentication
   * only returns the non-private fildes
 
 
-### User Object Structure
+#### User Object Structure
 
 ```json
 {
