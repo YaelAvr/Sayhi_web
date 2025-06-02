@@ -576,6 +576,137 @@ Keep-Alive: timeout=5
 Content-Length: 0
 ```
 
+### 2. Make sure this user is registerd:
+
+**Request:**
+```bash
+curl -i -X POST http://localhost:3001/api/tokens \
+-H "Content-Type: application/json" \
+-d '{ "username": "Dana", "password": "Bb12c3d4"}'
+```
+
+**Response:**
+```http
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 12
+ETag: W/"c-w7Ch3MGAQHunbLoJSkHbJTM/At0"
+Date: Mon, 02 Jun 2025 16:05:00 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"id":"u-0"}
+```
+
+### 3.Create Label for first user:
+
+**Request:**
+```bash
+curl -i -X POST http://localhost:3001/api/labels \
+  -H "Content-Type: application/json" \
+  -H "x-user-id: u-0" \
+  -d '{"name": "Work"}'
+```
+
+**Response:**
+```http
+HTTP/1.1 201 Created
+X-Powered-By: Express
+Location: /api/labels/l-u-0-0
+Date: Mon, 02 Jun 2025 16:08:13 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 0
+```
+
+### 4.Add URL to the blacklist:
+
+**Request:**
+```bash
+curl -i -X POST http://localhost:3001/api/blacklist \
+  -H "Content-Type: application/json" \
+  -d '{"link": "www.example.com"}'
+```
+
+**Response:**
+```http
+HTTP/1.1 201 Created
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 60
+ETag: W/"3c-jWhbF+yK3LQ81lqRYGyogWNSqr8"
+Date: Mon, 02 Jun 2025 16:17:02 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"message":"Link added to blacklist","result":"201 Created"}
+```
+
+### 5.Create second user:
+
+**Request:**
+```bash
+curl -i -X POST http://localhost:3001/api/users \
+-H "Content-Type: application/json" \
+-d '{ "username": "Bob", "password": "D99kc3d4", "gender": "Male", "birthday": "9.3.1998"}'
+```
+
+**Response:**
+```http
+HTTP/1.1 201 Created
+X-Powered-By: Express
+Location: /api/users/u-1
+Date: Mon, 02 Jun 2025 16:18:20 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 0
+```
+
+### 6.Send a mail from first user to the second user with URLs:
+
+**Request:**
+```bash
+curl -i -X POST http://localhost:3001/api/mails \
+  -H "Content-Type: application/json" \
+  -H "x-user-id: u-0" \
+  -d '{"to": "u-1", "subject": "Hello", "body": "This is a message with http://example.com"}'
+```
+
+**Response:**
+```http
+HTTP/1.1 201 Created
+X-Powered-By: Express
+Location: /api/mails/m-u-0-1
+Date: Mon, 02 Jun 2025 16:23:08 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 0
+```
+
+### 7.Try to send a mail from first user to the second user with bad URLs:
+
+**Request:**
+```bash
+curl -i -X POST http://localhost:3001/api/mails \
+  -H "Content-Type: application/json" \
+  -H "x-user-id: u-0" \
+  -d '{"to": "u-1", "subject": "Hello", "body": "This is a message with www.example.com"}'
+```
+
+**Response:**
+```http
+HTTP/1.1 400 Bad Request
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 42
+ETag: W/"2a-VzCa1T3Viyt71puh66X1E4iSGZQ"
+Date: Mon, 02 Jun 2025 16:25:10 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"error":"Mail contains blacklisted link"}r
+```
 
 ## Screenshots
 
