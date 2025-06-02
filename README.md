@@ -715,6 +715,7 @@ Keep-Alive: timeout=5
 
 
 ### Application Run Example
+The following screenshot demonstrates user creation and retrieval using curl:
 ![Application Run](https://github.com/eden05221/gmail_project/blob/main/images/part2/Example_run.png?raw=true)
 
 
