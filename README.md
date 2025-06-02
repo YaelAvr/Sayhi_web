@@ -487,6 +487,7 @@ Requires Authentication
 * **Behavior**:
   * Returns all the Labels and their fields.
 
+
 #### 4. Update Label 
 
 Requires Authentication
@@ -515,6 +516,9 @@ Requires Authentication
   * `204 No Content` – Label name was changed
   * `400 Bad Request` – Missing header or name in Body, or an invalid new name was given.
   * `404 Not Found` – User was not found or label not found
+
+* **Behavior**:
+    * Doesn’t return the new object, only “204 No Content” message.
 
 
 
@@ -549,8 +553,6 @@ true false
 ### Project Management - JIRA Board
 ![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/jira.png)
 
-### Test Run Output
-![Test Run Output](https://github.com/eden05221/gmail_project/blob/main/images/part2/Test_Run_Input.png?raw=true)
 
 ### Application Run Example
 ![Application Run](https://github.com/eden05221/gmail_project/blob/main/images/part2/Example_run.png?raw=true)
