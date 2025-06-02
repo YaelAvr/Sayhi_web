@@ -369,9 +369,9 @@ Requires Authentication
 ```
 
 
-##  Tokens
+###  Tokens
 
-### 1. Is User Registerd
+#### 1. Is User Registerd
 * **Method**: `POST`
 * **Endpoint**: `/tokens`
 * **Description**:  Checks if a user is registered.
