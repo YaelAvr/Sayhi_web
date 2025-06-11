@@ -1,4 +1,5 @@
 const Users = require('./store');
+const { createLabel } = require('./labels')
 let userCount = 0;
 
 const createUser = (username, password, picture, gender, birthday) => {
@@ -19,11 +20,21 @@ const createUser = (username, password, picture, gender, birthday) => {
         labelCounter: 0,
         labels: []
     }
+    createDefaultLabels(newUser);
     Users.push(newUser);
     return newUser;
 }
 
 const getUserById = (id) => Users.find(user => user.id === id)
+
+//Create default labels for each new user
+const createDefaultLabels = (user) => {
+    createLabel(user, 'Inbox' ,{ isDefault: true, allowAdd: false })
+    createLabel(user, 'starred',{ isDefault: true })
+    createLabel(user, 'Sent', { isDefault: true, allowAdd: false })
+    createLabel(user, 'Drafts', { isDefault: true, allowAdd: false })
+    createLabel(user, 'Spam', { isDefault: true })
+}
 
 module.exports = {
     createUser,
