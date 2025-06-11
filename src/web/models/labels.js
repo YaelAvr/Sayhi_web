@@ -1,7 +1,7 @@
 const Users = require('./store');
 
 // This function creates a new label for a specific user.
-const createLabel = (user, name) => {
+const createLabel = (user, name, options = {}) => {
     // Check if the user already has a label with the same name
     if (user.labels.find(label => label.name === name)) {
         return null; 
@@ -11,7 +11,10 @@ const createLabel = (user, name) => {
     const labelId = `l-${user.id}-${user.labelCounter++}`; 
     const label = {
          id: labelId,
-         name
+         name,
+         mails: [], //saved the mails id
+         isDefault: options.isDefault ?? false,
+         allowAdd: options.allowAdd ?? true
     };
     user.labels.push(label);
     return label;
@@ -62,4 +65,30 @@ const deleteLabel = (user, id) => {
 }
 
 
-module.exports = { createLabel, getAllLabels, getLabelById, updateLabel, deleteLabel };
+// Adds a mail to a specific label
+const addMailToLabel = (user, mail, labelName) => {
+    // Find the label by name
+    const label = user.labels.find(label => label.name === labelName);
+    if (!label) {
+        throw new Error('LABEL_NOT_FOUND');
+    }
+
+    // Check if adding to this label is allowed
+    if (!label.allowAdd) {
+        throw new Error('CANNOT_ADD_TO_LABEL');
+    }
+
+    // Avoid add a mail to a label when the mail already there
+    if (label.mails.includes(mail.id)) {
+        throw new Error('MAIL_ALREADY_IN_LABEL');
+    }
+
+    //Add the mail to the label
+    label.mails.push(mail.id); //add the mail ID to the label
+    mail.labels.push(label.id); //add the label ID to the mail's labelID list
+   
+    return true;
+};
+
+
+module.exports = { createLabel, getAllLabels, getLabelById, updateLabel, deleteLabel, addMailToLabel };
