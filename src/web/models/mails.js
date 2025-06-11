@@ -1,5 +1,7 @@
 const { isBlacklisted } = require('./blacklist')
 const Store = require('../models/store')
+const { addMailToLabel } = require('../models/labels');
+
 
 // Extract all valid links from a given text (e.g., body or subject)
 const extractLink = (text) => {
@@ -18,34 +20,58 @@ const checkLinks = async (body, subject) => {
     const links = [...bodyLinks, ...subjectLinks]
 
     for (const link of links) {
-        const blacklisted = await isBlacklisted(link)
+      const isContain = False
+      const blacklisted = await isBlacklisted(link)
         if (blacklisted) {
-            throw new Error('BLACKLISTED_LINK')
+            isContain = True
         }
     }
-    return links
+    return { links, isContain }
 }
 
 // Create a new mail object and add it to both sender and recipient
-const createMail = async (sender, recipient, subject, body) => {
-    const links = await checkLinks(body, subject)
+const createMail = async (sender, recipient, subject, body, originalDraftId = null) => {
+    const  { links, isContain } = await checkLinks(body, subject)
     const mailId = `m-${sender.id}-${sender.mailCounter++}`
     const time = new Date().toISOString()
-    const mail = {
+    const senderMail  = {
         id: mailId,
         from: sender.id,
         to: recipient.id,
         subject: subject || '',
         body: body || '',
         links,
-        labelIds: [],
+        labels: ['Sent'],
         time
+    }
+    const recipientMail = {
+      id: `${mailId}-copy`,
+      from: sender.id,
+      to: recipient.id,
+      subject: subject || '',
+      body: body || '',
+      links,
+      labels: [isContain ? 'Spam' : 'Inbox']
   }
-  // Save the mail to both users' mailboxes
-  sender.mails.push(mail)
-  recipient.mails.push(mail)
 
-  return mail
+  // Save the mail to both users' mailboxes
+  sender.mails.push(senderMail)
+  recipient.mails.push(recipientMail)
+
+  //save the mail into the mails array in the specific lable
+  addMailToLabel(sender, senderMail, 'Sent');
+  const recipientLabel = isContain ? 'Spam' : 'Inbox'
+  addMailToLabel(recipient, recipientMail, recipientLabel)
+
+  //if it was a draft- delete it from the mails array
+  if (originalDraftId) {
+    sender.mails = sender.mails.filter(m => m.id !== originalDraftId)
+    for (const label in sender.labels) {
+      sender.labels[label].mails = sender.labels[label].mails.filter(id => id !== originalDraftId)
+    }
+  }
+
+  return senderMail;
 }
 
 // Return the user's 50 most recent mails, sorted by time
