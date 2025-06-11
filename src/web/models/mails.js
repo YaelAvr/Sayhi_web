@@ -41,7 +41,7 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
         subject: subject || '',
         body: body || '',
         links,
-        labels: ['Sent'],
+        labels: [],
         time
     }
     const recipientMail = {
@@ -51,19 +51,22 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
       subject: subject || '',
       body: body || '',
       links,
-      labels: [isContain ? 'Spam' : 'Inbox']
+      labels: []
   }
 
-  // Save the mail to both users' mailboxes
+  // Find label objects by name
+  const senderLabel = sender.labels.find(l => l.name === 'Sent')
+  const recipientLabel = recipient.labels.find(l => l.name === (isContain ? 'Spam' : 'Inbox'));
+
+  // Add mail to labels using external helper
+  addMailToLabel(senderLabel, senderMail)
+  addMailToLabel(recipientLabel, recipientMail)
+
+  // Save the mails to the users' mailboxes
   sender.mails.push(senderMail)
   recipient.mails.push(recipientMail)
 
-  //save the mail into the mails array in the specific lable
-  addMailToLabel(sender, senderMail, 'Sent');
-  const recipientLabel = isContain ? 'Spam' : 'Inbox'
-  addMailToLabel(recipient, recipientMail, recipientLabel)
-
-  //if it was a draft- delete it from the mails array
+  // If it was a draft - delete it from mails and label references
   if (originalDraftId) {
     sender.mails = sender.mails.filter(m => m.id !== originalDraftId)
     for (const label in sender.labels) {
