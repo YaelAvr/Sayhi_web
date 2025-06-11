@@ -9,7 +9,7 @@ const { searchMailsByQuery } = require('../models/mails')
 
 exports.createMail = async (req, res) => {
     const from = req.headers['x-user-id']
-    const { to, subject, body} = req.body
+    const { to, subject, body, originalDraftId} = req.body
 
     // Validate presence of 'from' and 'to' fields
     if (!from || !to) {
@@ -34,18 +34,23 @@ exports.createMail = async (req, res) => {
         return res.status(400).json({ error: 'Body must be a string' })
     }
 
+    //if draftid was send, check if it exist
+    if (originalDraftId) {
+        const draft = sender.mails.find(m => m.id === originalDraftId)
+        if (!draft || !draft.labels.includes('Draft')) {
+            return res.status(400).json({ error: 'Invalid or non-draft mail ID' });
+    }
+    }
+
     // Try to create the mail using the createMail function
     try{
-    const mail = await createMail(sender, recipient, subject, body)
+    const mail = await createMail(sender, recipient, subject, body, originalDraftId)
     // Return a success response with the new mail's location
     res.status(201).location(`/api/mails/${mail.id}`).end()
     } catch (err) {
         // If the mail contains a blacklisted link, return a 400 error
-        if (err.message === 'BLACKLISTED_LINK') {
-            return res.status(400).json({ error: 'Mail contains blacklisted link' })
-        } else {
-            return res.status(500).json({ error: 'Server Error' })
-        }
+    console.error(err);
+    res.status(500).json({ error: 'Server Error' })
     }
 }
 
