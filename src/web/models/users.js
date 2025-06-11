@@ -2,7 +2,7 @@ const Users = require('./store');
 const { createLabel } = require('./labels')
 let userCount = 0;
 
-const createUser = (username, password, picture, gender, birthday) => {
+const createUser = (username, displayName, password, picture, gender, birthday) => {
     // Check if there is already a user with this username
     if(Users.find(user => user.username === username)) {
         return null //400
@@ -11,6 +11,7 @@ const createUser = (username, password, picture, gender, birthday) => {
     const newUser = {
         id: `u-${userCount++}`,
         username,
+        displayName,
         password,
         picture,   
         gender, 
