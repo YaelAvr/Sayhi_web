@@ -48,7 +48,7 @@ exports.createMail = async (req, res) => {
     // Return a success response with the new mail's location
     res.status(201).location(`/api/mails/${mail.id}`).end()
     } catch (err) {
-        // If the mail contains a blacklisted link, return a 400 error
+
     console.error(err);
     res.status(500).json({ error: 'Server Error' })
     }

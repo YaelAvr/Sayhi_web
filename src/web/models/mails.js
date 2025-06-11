@@ -20,10 +20,10 @@ const checkLinks = async (body, subject) => {
     const links = [...bodyLinks, ...subjectLinks]
 
     for (const link of links) {
-      const isContain = False
+      isContain = false
       const blacklisted = await isBlacklisted(link)
         if (blacklisted) {
-            isContain = True
+            isContain = true
         }
     }
     return { links, isContain }
