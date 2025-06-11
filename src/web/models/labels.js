@@ -59,6 +59,13 @@ const deleteLabel = (user, id) => {
         return null; 
     }
 
+     // Remove the label ID from all mails that have it
+    for (const mail of user.mails) {
+        if (mail.labelIds) {
+            mail.labelIds = mail.labelIds.filter(labelId => labelId !== id);
+        }
+    }
+
     // Remove the label from the user's labels array
     user.labels = user.labels.filter(label => label.id !== id);
     return true; 
@@ -90,5 +97,26 @@ const addMailToLabel = (user, mail, labelName) => {
     return true;
 };
 
+// Removes a mail from a specific label
+const removeMailFromLabel = (user, mail, labelName) => {
+    // Find the label by name
+    const label = user.labels.find(label => label.name === labelName);
+    if (!label) {
+        throw new Error('LABEL_NOT_FOUND');
+    }
 
-module.exports = { createLabel, getAllLabels, getLabelById, updateLabel, deleteLabel, addMailToLabel };
+    // Check if the mail is actually in the label
+    if (!label.mails.includes(mail.id)) {
+        throw new Error('MAIL_NOT_IN_LABEL');
+    }
+
+    // Remove the mail ID from the label
+    label.mails = label.mails.filter(id => id !== mail.id);
+
+    // Remove the label ID from the mail
+    mail.labelIds = mail.labelIds.filter(id => id !== label.id);
+
+    return true;
+};
+
+module.exports = { createLabel, getAllLabels, getLabelById, updateLabel, deleteLabel, addMailToLabel, removeMailFromLabel };
