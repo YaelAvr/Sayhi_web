@@ -59,6 +59,11 @@ const deleteLabel = (user, id) => {
         return null; 
     }
 
+    // Check if this label is default
+    if (label.isDefault) {
+        throw new Error('CANNOT_DELETE_THIS_LABEL');
+    }
+
      // Remove the label ID from all mails that have it
     for (const mail of user.mails) {
         if (mail.labelIds) {
@@ -72,8 +77,8 @@ const deleteLabel = (user, id) => {
 }
 
 
-// Adds a mail to a specific label
-const addMailToLabel = (user, mail, labelName) => {
+// Adds a mail to a user label
+const addMailToUserLabel = (user, mail, labelName) => {
     // Find the label by name
     const label = user.labels.find(label => label.name === labelName);
     if (!label) {
@@ -90,9 +95,8 @@ const addMailToLabel = (user, mail, labelName) => {
         throw new Error('MAIL_ALREADY_IN_LABEL');
     }
 
-    //Add the mail to the label
-    label.mails.push(mail.id); //add the mail ID to the label
-    mail.labels.push(label.id); //add the label ID to the mail's labelID list
+    // Add the mail to the label
+    addMailToLabel(label, mail)
    
     return true;
 };
@@ -119,4 +123,10 @@ const removeMailFromLabel = (user, mail, labelName) => {
     return true;
 };
 
-module.exports = { createLabel, getAllLabels, getLabelById, updateLabel, deleteLabel, addMailToLabel, removeMailFromLabel };
+// Adds a mail to a specific label. Also used for add to default labels
+const addMailToLabel = (label, mail) => {
+    label.mails.push(mail.id); //add the mail ID to the label
+    mail.labels.push(label.id); //add the label ID to the mail's labelID list
+}
+
+module.exports = { createLabel, getAllLabels, getLabelById, updateLabel, deleteLabel, addMailToLabel, removeMailFromLabel, addMailToUserLabel };
