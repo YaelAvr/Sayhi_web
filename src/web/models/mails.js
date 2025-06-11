@@ -121,10 +121,37 @@ const searchMailsByQuery = (user, query) => {
 
 
 
+const createDraft = (sender, to, subject, body) => {
+  // Validate at least one field is non-empty
+  if (!to && !subject && !body) {
+    throw new Error('DRAFT_EMPTY')
+  }
+
+  const mailId = `m-${sender.id}-${sender.mailCounter++}`
+  const time = new Date().toISOString();
+
+  //create mail
+  const draftMail = {
+    id: mailId,
+    from: sender.id,
+    to: to || '',
+    subject: subject || '',
+    body: body || '',
+    links: [],
+    labels: [],
+    time
+  }
+
+  const draftLabel = sender.labels.find(l => l.name === 'Drafts')
+  if (!draftLabel) throw new Error('NO_DRAFT_LABEL')
+  
+  // Add mail to labels using external helper
+  addMailToLabel(draftLabel, draftMail)
+  // Save the mails to the users' mailboxes
+  sender.mails.push(draftMail)
+
+  return draftMail
+}
 
 
-
-
-module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery }
-
-
+module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery, createDraft }

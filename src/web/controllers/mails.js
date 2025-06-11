@@ -3,7 +3,7 @@ const { createMail } = require('../models/mails')
 const { get50LastMails } = require('../models/mails')
 const { editMail } = require('../models/mails')
 const { searchMailsByQuery } = require('../models/mails')
-
+const { createDraft } = require('../models/mails')
 
 // Controller to handle creation of a new mail
 
@@ -208,3 +208,31 @@ exports.searchMailsByQuery = (req, res) => {
     const results = searchMailsByQuery(user, trimmedQuery)
     res.status(200).json(results)
 }
+
+
+exports.createDraft = (req, res) => {
+    // Get the user Id
+    const userId = req.headers['x-user-id'];
+    const { to, subject, body } = req.body;
+
+    if (!userId) {
+            return res.status(400).json({ error: 'Missing sender ID' })
+    }
+    const sender = Store.find(u => u.id === userId);
+    if (!sender) {
+        return res.status(404).json({ error: 'Sender not found' });
+    }
+
+    try {
+        const draft = createDraft(sender, to, subject, body);
+        res.status(201).json(draft);
+    } catch (err) {
+        if (err.message === 'DRAFT_EMPTY') {
+        return res.status(400).json({ error: 'Draft must contain at least one field' });
+        } else if (err.message === 'NO_DRAFT_LABEL') {
+        return res.status(500).json({ error: 'Draft label not found for user' });
+        }
+        console.error(err);
+        res.status(500).json({ error: 'Server Error' });
+    }
+    };
