@@ -1,0 +1,17 @@
+{
+  "name": "gmail-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "servers",
+    "react-app"
+  ],
+  "scripts": {
+    "start": "concurrently \"npm:start:server\" \"npm:start:client\"",
+    "start:server": "npm start --workspace=servers",
+    "start:client": "npm start --workspace=react-app"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
