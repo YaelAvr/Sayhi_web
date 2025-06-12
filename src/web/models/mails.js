@@ -1,6 +1,6 @@
-const { isBlacklisted } = require('./blacklist')
+const { isBlacklisted, addUrlToBlacklist } = require('./blacklist')
 const Store = require('../models/store')
-const { addMailToLabel } = require('../models/labels');
+const { addMailToLabel, addMailToUserLabel } = require('../models/labels')
 
 
 // Extract all valid links from a given text (e.g., body or subject)
@@ -120,7 +120,7 @@ const searchMailsByQuery = (user, query) => {
 }
 
 
-
+// Creates a draft mail
 const createDraft = (sender, to, subject, body) => {
   // Validate at least one field is non-empty
   if (!to && !subject && !body) {
@@ -153,5 +153,23 @@ const createDraft = (sender, to, subject, body) => {
   return draftMail
 }
 
+// Adds an existing mail to a user's label by label name.
+// If the label is "Spam", the mail's links are added to the global blacklist.
+const addLabelToMail = async (user, mailId, labelName) => {
+  const mail = user.mails.find(m => m.id === mailId);
+  if (!mail) {
+    throw new Error('MAIL_NOT_FOUND');
+  }
 
-module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery, createDraft }
+  // If adding to Spam, attempt to blacklist all links
+  if (labelName === 'Spam') {
+    for (const link of mail.links) {
+      await addUrlToBlacklist(link)
+    }
+  }
+
+  addMailToUserLabel(user, mail, labelName)
+}
+
+
+module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery, createDraft, addLabelToMail }

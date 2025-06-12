@@ -19,5 +19,8 @@ router.route('/:id')
 router.route('/search/:query')
     .get(mails.searchMailsByQuery)
 
+router.route('/:id/add-label')
+  .post(mails.addLabelToMail)
+
 module.exports = router
 
