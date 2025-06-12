@@ -8,6 +8,9 @@ router.route('/')
     .post(mails.createMail)          // POST /api/mails -> create a new mail
     .get(mails.get50LastMails)       // GET /api/mails -> return up to 50 recent mails for a user
 
+router.route('/drafts')
+    .post(mails.createDraft)
+
 router.route('/:id')  
     .get(mails.getSpecificMail)
     .patch(mails.editMail)
@@ -16,6 +19,8 @@ router.route('/:id')
 router.route('/search/:query')
     .get(mails.searchMailsByQuery)
 
+router.route('/:id/add-label')
+  .post(mails.addLabelToMail)
 
+module.exports = router
 
-    module.exports = router

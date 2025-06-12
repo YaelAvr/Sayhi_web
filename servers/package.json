@@ -10,7 +10,10 @@
   "start": "concurrently \"npm run start:server\" \"npm run start:client\""
 },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.1"
+  
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

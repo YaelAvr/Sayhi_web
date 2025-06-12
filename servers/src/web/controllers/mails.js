@@ -3,13 +3,15 @@ const { createMail } = require('../models/mails')
 const { get50LastMails } = require('../models/mails')
 const { editMail } = require('../models/mails')
 const { searchMailsByQuery } = require('../models/mails')
+const { createDraft } = require('../models/mails')
+const { addLabelToMail } = require('../models/mails')
 
 
 // Controller to handle creation of a new mail
 
 exports.createMail = async (req, res) => {
     const from = req.headers['x-user-id']
-    const { to, subject, body} = req.body
+    const { to, subject, body, originalDraftId} = req.body
 
     // Validate presence of 'from' and 'to' fields
     if (!from || !to) {
@@ -34,18 +36,23 @@ exports.createMail = async (req, res) => {
         return res.status(400).json({ error: 'Body must be a string' })
     }
 
+    //if draftid was send, check if it exist
+    if (originalDraftId) {
+        const draft = sender.mails.find(m => m.id === originalDraftId)
+        if (!draft || !draft.labels.includes('Draft')) {
+            return res.status(400).json({ error: 'Invalid or non-draft mail ID' });
+    }
+    }
+
     // Try to create the mail using the createMail function
     try{
-    const mail = await createMail(sender, recipient, subject, body)
+    const mail = await createMail(sender, recipient, subject, body, originalDraftId)
     // Return a success response with the new mail's location
     res.status(201).location(`/api/mails/${mail.id}`).end()
     } catch (err) {
-        // If the mail contains a blacklisted link, return a 400 error
-        if (err.message === 'BLACKLISTED_LINK') {
-            return res.status(400).json({ error: 'Mail contains blacklisted link' })
-        } else {
-            return res.status(500).json({ error: 'Server Error' })
-        }
+
+    console.error(err);
+    res.status(500).json({ error: 'Server Error' })
     }
 }
 
@@ -203,3 +210,71 @@ exports.searchMailsByQuery = (req, res) => {
     const results = searchMailsByQuery(user, trimmedQuery)
     res.status(200).json(results)
 }
+
+
+// Controller to handle creating draft
+exports.createDraft = (req, res) => {
+    // Get the user Id
+    const userId = req.headers['x-user-id']
+    const { to, subject, body } = req.body
+
+    if (!userId) {
+            return res.status(400).json({ error: 'Missing sender ID' })
+    }
+    const sender = Store.find(u => u.id === userId)
+    if (!sender) {
+        return res.status(404).json({ error: 'Sender not found' })
+    }
+
+    try {
+        const draft = createDraft(sender, to, subject, body)
+        res.status(201).json(draft)
+    } catch (err) {
+        if (err.message === 'DRAFT_EMPTY') {
+        return res.status(400).json({ error: 'Draft must contain at least one field' })
+        } else if (err.message === 'NO_DRAFT_LABEL') {
+        return res.status(500).json({ error: 'Draft label not found for user' })
+        }
+        console.error(err)
+        res.status(500).json({ error: 'Server Error' })
+    }
+    }
+
+
+// Controller to handle adding mail to lable
+exports.addLabelToMail = async (req, res) => {
+    // Get the user Id
+    const userId = req.headers['x-user-id']
+    const mailId = req.params.id
+    const { labelName } = req.body
+
+    if (!userId || !labelName) {
+        return res.status(400).json({ error: 'Missing user ID or label name' })
+    }
+
+    const user = Store.find(u => u.id === userId)
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' })
+    }
+
+    try {
+        // Add the label (with blacklist logic for "Spam")
+        await addLabelToMail(user, mailId, labelName);
+        return res.status(200).json({ message: `Mail ${mailId} labeled as ${labelName}` })
+    } catch (err) {
+        // Handle expected error cases
+        if (err.message === 'MAIL_NOT_FOUND') {
+        return res.status(404).json({ error: 'Mail not found' })
+        } else if (err.message === 'LABEL_NOT_FOUND') {
+        return res.status(404).json({ error: 'Label not found' })
+        } else if (err.message === 'CANNOT_ADD_TO_LABEL') {
+        return res.status(400).json({ error: 'Cannot add to this label' })
+        } else if (err.message === 'MAIL_ALREADY_IN_LABEL') {
+        return res.status(400).json({ error: 'Mail already in label' })
+        } else if (err.message === 'BAD_REQUEST_CPP_SERVER') {
+        return res.status(400).json({ error: 'Invalid URL in mail links (rejected by C++ server)' })
+        } else {
+        return res.status(500).json({ error: 'Internal server error' })
+        }
+    }
+    }

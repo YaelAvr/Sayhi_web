@@ -1,12 +1,29 @@
+const path = require('path');
+const multer = require("multer");
 const Users = require("../models/users");
 
 // This function creates a new user with the given parameters
 exports.createUser = (req, res) => {
-    const { username, password , picture, gender, birthday } = req.body;
+    const { username, displayName, password , picture, gender, birthday } = req.body;
     const genderOptions = ["female", "male", "other"];
 
-    if (!username || !password || !gender || !birthday) {
-     return res.status(400).json({ error: "Username, password, gender and birthday are required" });
+    if (!username) {
+     return res.status(400).json({ error: "Username is required" });
+    }
+    if (!displayName) {
+     return res.status(400).json({ error: "Display Name is required" });
+    }
+    if (!password) {
+     return res.status(400).json({ error: "Password is required" });
+    }
+    if (!gender) {
+     return res.status(400).json({ error: "Gender is required" });
+    }
+    if (!birthday) {
+     return res.status(400).json({ error: "Birthday is required" });
+    }
+    if (!picture) {
+     return res.status(400).json({ error: "Picture is required" });
     }
    
     const lowGender = gender.trim().toLowerCase();
@@ -14,15 +31,15 @@ exports.createUser = (req, res) => {
     const imagePattern = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i; 
     // The password must be at least 8 characters long, 
     // contain at least one uppercase letter and one lowercase letter
-    const pattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
     // Check if all the given parameters are valid
-    if (!genderOptions.includes(lowGender) || (!(picture === undefined) && !imagePattern.test(picture)) 
-        || !isDateValid(birthday) || !pattern.test(password)) {
+    if (!genderOptions.includes(lowGender) || (!imagePattern.test(picture)) 
+        || !isDateValid(birthday) || !passwordPattern.test(password)) {
       return res.status(400).json({ error: "One of the fildes are not valid" });
     }
 
-    const newUser = Users.createUser(username, password, picture, lowGender, birthday);
+    const newUser = Users.createUser(username, displayName, password, picture, lowGender, birthday);
     if (newUser === null) {
         return res.status(400).json({ error: "This username is taken" });
     }
@@ -44,7 +61,7 @@ exports.getUserById = (req, res) => {
         
     res
         .status(200)
-        .json({id: user.id, username: user.username, picture: user.picture,
+        .json({id: user.id, username: user.username, displayName:user.displayName, picture: user.picture,
                 gender: user.gender, birthday: user.birthday})
 };
 
@@ -95,3 +112,21 @@ function isDateValid(dateString) {
 }
 
 
+function isPicValid(picture) {
+    const imagePattern = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i; 
+
+  return (
+    picture.toLowerCase().endsWith('.png') ||
+    picture.toLowerCase().endsWith('.jpg') ||
+    picture.toLowerCase().endsWith('.jpeg') ||
+    picture.toLowerCase().endsWith('.gif') ||
+    picture.toLowerCase().endsWith('.bmp') ||
+    picture.toLowerCase().endsWith('.webp')
+  );
+  
+}
+
+// function isImage(picture) {
+//     const ext = path.extname(picture).toLowerCase();
+//     return ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'].includes(ext);
+// }

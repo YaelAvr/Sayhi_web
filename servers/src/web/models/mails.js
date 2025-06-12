@@ -1,5 +1,7 @@
-const { isBlacklisted } = require('./blacklist')
-const Store = require('./store')
+const { isBlacklisted, addUrlToBlacklist } = require('./blacklist')
+const Store = require('../models/store')
+const { addMailToLabel, addMailToUserLabel } = require('../models/labels')
+
 
 // Extract all valid links from a given text (e.g., body or subject)
 const extractLink = (text) => {
@@ -18,34 +20,61 @@ const checkLinks = async (body, subject) => {
     const links = [...bodyLinks, ...subjectLinks]
 
     for (const link of links) {
-        const blacklisted = await isBlacklisted(link)
+      isContain = false
+      const blacklisted = await isBlacklisted(link)
         if (blacklisted) {
-            throw new Error('BLACKLISTED_LINK')
+            isContain = true
         }
     }
-    return links
+    return { links, isContain }
 }
 
 // Create a new mail object and add it to both sender and recipient
-const createMail = async (sender, recipient, subject, body) => {
-    const links = await checkLinks(body, subject)
+const createMail = async (sender, recipient, subject, body, originalDraftId = null) => {
+    const  { links, isContain } = await checkLinks(body, subject)
     const mailId = `m-${sender.id}-${sender.mailCounter++}`
     const time = new Date().toISOString()
-    const mail = {
+    const senderMail  = {
         id: mailId,
         from: sender.id,
         to: recipient.id,
         subject: subject || '',
         body: body || '',
         links,
-        labelIds: [],
+        labels: [],
         time
+    }
+    const recipientMail = {
+      id: `${mailId}-copy`,
+      from: sender.id,
+      to: recipient.id,
+      subject: subject || '',
+      body: body || '',
+      links,
+      labels: []
   }
-  // Save the mail to both users' mailboxes
-  sender.mails.push(mail)
-  recipient.mails.push(mail)
 
-  return mail
+  // Find label objects by name
+  const senderLabel = sender.labels.find(l => l.name === 'Sent')
+  const recipientLabel = recipient.labels.find(l => l.name === (isContain ? 'Spam' : 'Inbox'));
+
+  // Add mail to labels using external helper
+  addMailToLabel(senderLabel, senderMail)
+  addMailToLabel(recipientLabel, recipientMail)
+
+  // Save the mails to the users' mailboxes
+  sender.mails.push(senderMail)
+  recipient.mails.push(recipientMail)
+
+  // If it was a draft - delete it from mails and label references
+  if (originalDraftId) {
+    sender.mails = sender.mails.filter(m => m.id !== originalDraftId)
+    for (const label in sender.labels) {
+      sender.labels[label].mails = sender.labels[label].mails.filter(id => id !== originalDraftId)
+    }
+  }
+
+  return senderMail;
 }
 
 // Return the user's 50 most recent mails, sorted by time
@@ -91,11 +120,56 @@ const searchMailsByQuery = (user, query) => {
 }
 
 
+// Creates a draft mail
+const createDraft = (sender, to, subject, body) => {
+  // Validate at least one field is non-empty
+  if (!to && !subject && !body) {
+    throw new Error('DRAFT_EMPTY')
+  }
+
+  const mailId = `m-${sender.id}-${sender.mailCounter++}`
+  const time = new Date().toISOString();
+
+  //create mail
+  const draftMail = {
+    id: mailId,
+    from: sender.id,
+    to: to || '',
+    subject: subject || '',
+    body: body || '',
+    links: [],
+    labels: [],
+    time
+  }
+
+  const draftLabel = sender.labels.find(l => l.name === 'Drafts')
+  if (!draftLabel) throw new Error('NO_DRAFT_LABEL')
+  
+  // Add mail to labels using external helper
+  addMailToLabel(draftLabel, draftMail)
+  // Save the mails to the users' mailboxes
+  sender.mails.push(draftMail)
+
+  return draftMail
+}
+
+// Adds an existing mail to a user's label by label name.
+// If the label is "Spam", the mail's links are added to the global blacklist.
+const addLabelToMail = async (user, mailId, labelName) => {
+  const mail = user.mails.find(m => m.id === mailId);
+  if (!mail) {
+    throw new Error('MAIL_NOT_FOUND');
+  }
+
+  // If adding to Spam, attempt to blacklist all links
+  if (labelName === 'Spam') {
+    for (const link of mail.links) {
+      await addUrlToBlacklist(link)
+    }
+  }
+
+  addMailToUserLabel(user, mail, labelName)
+}
 
 
-
-
-
-module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery }
-
-
+module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery, createDraft, addLabelToMail }
