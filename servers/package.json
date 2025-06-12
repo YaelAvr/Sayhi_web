@@ -1,18 +1,24 @@
 {
   "name": "gmail_project",
   "version": "1.0.0",
+  "private": true,
   "description": "This project implements a URL blacklist system using a Bloom filter in C++. The application supports adding, checking, and deleting URLs via a TCP client-server architecture. The server is written in C++, and the client is written in JavaScript (Express). The system is designed according to SOLID principles and follows the TDD methodology.",
-  "main": "app.js",
+  "main": "servers/src/web/app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "start:server": "node src/web/app.js",
+  "start:client": "npm start --prefix ../react-app",
+  "start": "concurrently \"npm run start:server\" \"npm run start:client\""
+},
   "dependencies": {
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.1"
-  }
+  
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "react-app"
+  ]
 }
