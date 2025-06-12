@@ -1,4 +1,5 @@
 const { sendToCppServer } = require('../connectToServerCpp')
+
 //Add URL to blacklist 
 const addUrlToBlacklist = async (link) => {
   const res = await sendToCppServer(`POST ${link}`) //sends the post command to the cpp server
