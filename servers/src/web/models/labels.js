@@ -56,7 +56,7 @@ const deleteLabel = (user, id) => {
     // Check if the label exists in the user's labels array
     const label = getLabelById(user, id);
     if (!label) {
-        return null; 
+        throw new Error('LABEL_NOT_FOUND'); 
     }
 
     // Check if this label is default
