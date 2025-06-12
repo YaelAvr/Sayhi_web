@@ -15,4 +15,4 @@ app.use('/api/tokens', tokenRoutes)
 app.use('/api/labels', labelRoutes)
 app.use('/api/blacklist', blacklistRoutes)
 
-app.listen(3000)
+app.listen(5000)
