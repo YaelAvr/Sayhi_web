@@ -1,0 +1,18 @@
+.CreateMailButton {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  width: 100%;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.CreateMailButton:hover {
+  background-color: #357ae8;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
