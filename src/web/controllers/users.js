@@ -39,7 +39,7 @@ exports.createUser = (req, res) => {
       return res.status(400).json({ error: "One of the fildes are not valid" });
     }
 
-    const newUser = Users.createUser(username, password, picture, lowGender, birthday);
+    const newUser = Users.createUser(username, displayName, password, picture, lowGender, birthday);
     if (newUser === null) {
         return res.status(400).json({ error: "This username is taken" });
     }
@@ -61,7 +61,7 @@ exports.getUserById = (req, res) => {
         
     res
         .status(200)
-        .json({id: user.id, username: user.username, picture: user.picture,
+        .json({id: user.id, username: user.username, displayName:user.displayName, picture: user.picture,
                 gender: user.gender, birthday: user.birthday})
 };
 
