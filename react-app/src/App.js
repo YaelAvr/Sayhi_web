@@ -2,7 +2,7 @@ import React from 'react';
 import InboxPage from './inboxPage/InboxPage';
 import LoginPage from './loginPage/LoginPage';
 import { useEffect, useState } from "react";
-import './App.css';
+import "./App.css"
 function App() {
   //   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // const [protectedData, setProtectedData] = useState(null);
@@ -31,8 +31,11 @@ function App() {
   //   setProtectedData(null);
   // };
   return (
-    // <InboxPage />
-    <LoginPage />
+    <div className='App'>
+         {/* <InboxPage /> */}
+      <LoginPage />
+    </div>
+
   );
 }
 

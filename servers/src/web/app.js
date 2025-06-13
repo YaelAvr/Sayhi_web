@@ -29,12 +29,12 @@ app.use('/api/tokens', tokenRoutes)
 app.use('/api/labels', labelRoutes)
 app.use('/api/blacklist', blacklistRoutes)
 
-// // עבור כל Route שלא זוהה כ-API, שלח את index.html של React
+// React fallback
 app.get('/', (req, res) => {
   res.sendFile(path.join(reactBuildPath, 'index.html'));
 });
 
-/*// React fallback
+/*
 app.get('/*', (req, res) => {
   res.sendFile(path.join(reactBuildPath, 'index.html'));
 });*/
