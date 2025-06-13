@@ -29,7 +29,6 @@ app.use('/api/tokens', tokenRoutes)
 app.use('/api/labels', labelRoutes)
 app.use('/api/blacklist', blacklistRoutes)
 
-
 // // עבור כל Route שלא זוהה כ-API, שלח את index.html של React
 // app.get('*', (req, res) => {
 //   res.sendFile(path.join(reactBuildPath, 'index.html'));
@@ -42,3 +41,4 @@ app.use('/api/blacklist', blacklistRoutes)
 app.listen(5000, () => {
   console.log("Server running");
 });
+
