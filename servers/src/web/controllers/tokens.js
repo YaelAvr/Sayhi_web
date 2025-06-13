@@ -19,7 +19,7 @@ exports.isUserRegistered = (req, res) => {
     // The token contains the user id and username, and expires in 1 hour.
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: "1h" }  );
     res
-        .status(200)
+        .status(201)
         .json({token})
 }
 
