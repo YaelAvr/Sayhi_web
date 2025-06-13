@@ -33,7 +33,7 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch("/api/tokens", {
+    const res = await fetch("/api/tokens/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),

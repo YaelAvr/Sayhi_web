@@ -10,9 +10,9 @@ const reactBuildPath = path.join(__dirname, '..', '..', '..', 'react-app', 'buil
 app.use(express.static(reactBuildPath));
 // app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// app.get('/', function (req, res) {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
 
 
 const userRoutes = require('./routes/users')
@@ -31,9 +31,14 @@ app.use('/api/blacklist', blacklistRoutes)
 
 
 // // עבור כל Route שלא זוהה כ-API, שלח את index.html של React
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(reactBuildPath, 'index.html'));
-// });
+app.get('/', (req, res) => {
+  res.sendFile(path.join(reactBuildPath, 'index.html'));
+});
+
+/*// React fallback
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(reactBuildPath, 'index.html'));
+});*/
 
 // // --- Start server ---
 // const PORT = 5000;
