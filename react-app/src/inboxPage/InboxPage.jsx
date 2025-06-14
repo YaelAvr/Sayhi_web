@@ -2,22 +2,29 @@ import React from "react";
 import TopBar from "./TopBar";
 import SideBar from "./SideBar";
 
+import { useState } from "react";
+
 const InboxPage = () => {
+  const [labelName, setLabelName] = useState("");
 
   const createLabel = async () => {
     const token = localStorage.getItem("token"); //יבוא של התוקן של המשתמש הזה
 
     const res = await fetch("/api/labels/", {
+      method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`, // ⬅️ שליחה ב־header
       },
+      body: JSON.stringify({ name: labelName }),
     });
 
-    if (res.ok) {
-      const data = await res.json();
-      console.log("Label:", data); // לא בטוחה שזה מראה מה שרוצים
+    if (res.status === 201) {
+      const data = await res.json?.(); // אם מחזיר גוף
+      console.log("Label created:", data);
     } else {
-      console.error("Unauthorized");
+      const error = await res.json();
+      console.error("Error:", error.error);
     }
   };
 
