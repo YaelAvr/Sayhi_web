@@ -1,10 +1,29 @@
 .login-page {
-  width: fit-content;
-  height: fit-content;
-  position:relative ;
-  /* display: flex;
-  flex-direction: column;
+  width: 75%;
+  height: 70%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border-radius: 5%;
   align-items: center;
-  justify-content: center; */
-  /* top */
+  justify-content: space-around;
+}
+
+input {
+    border: 1.4px solid #9a9a9a;
+    border-radius: 5px;
+    padding: 10px;
+    outline: none;
+}
+
+.bad-input {
+    border: 1.4px solid red;
+}
+
+.no-input {
+    border: 1.4px solid #9a9a9a;
 }
