@@ -5,7 +5,7 @@ const { editMail } = require('../models/mails')
 const { searchMailsByQuery } = require('../models/mails')
 const { createDraft } = require('../models/mails')
 const { addLabelToMail } = require('../models/mails')
-
+const { deleteMail } = require('../models/mails')
 
 // Controller to handle creation of a new mail
 
@@ -102,27 +102,26 @@ checkIdValid = (userId, mailId, res) => {
 
 // Controller to Handle handle the option to delete a mail
 exports.deleteMail = (req, res) => {
-    // Get the user Id
-    const userId = req.headers['x-user-id']
-    //Get the mails'id from the url
-    const mailId = req.params.id
+  const userId = req.headers['x-user-id']
+  const mailId = req.params.id
 
-    // Use helper function to validate user and mail
-    const result = checkIdValid(userId, mailId, res)
-    if (!result){
-        return
-    }
+  // Use the helper function to validate and retrieve user and mail
+  const result = checkIdValid(userId, mailId, res)
+  if (!result) return
 
-    const { mail, user} = result
-    //Find the index of the specific mail in the mails array 
-    const index = user.mails.findIndex(m => m.id === mail.id)
-    if (index !== -1) {
-        //Delete the mail in this index from the array
-        user.mails.splice(index, 1)
-    }
-    res.status(204).end()// No content response
-  
-}
+  const { user, mail } = result
+
+  try {
+    deleteMail(user, mailId)
+    res.status(204).end()
+  } catch (err) {
+    res.status(400).json({ error: err.message })
+  }
+};
+
+
+
+
 
 // Controller to Handle the option to get a specific mail 
 exports.getSpecificMail = (req, res) => {

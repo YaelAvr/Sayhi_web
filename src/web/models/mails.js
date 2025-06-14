@@ -1,6 +1,6 @@
-const { isBlacklisted, addUrlToBlacklist } = require('./blacklist')
+const { isBlacklisted, addUrlToBlacklist, deleteUrlFromBlacklist } = require('./blacklist')
 const Store = require('../models/store')
-const { addMailToLabel, addMailToUserLabel } = require('../models/labels')
+const { addMailToLabel, addMailToUserLabel, removeMailFromLabel } = require('../models/labels')
 
 
 // Extract all valid links from a given text (e.g., body or subject)
@@ -172,4 +172,42 @@ const addLabelToMail = async (user, mailId, labelName) => {
 }
 
 
-module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery, createDraft, addLabelToMail }
+// Deletes a mail completely from user.mails and all labels.
+// If deleted from "Spam", also removes its links from the blacklist.
+const deleteMail = async (user, mailId) => {
+  const mail = user.mails.find(m => m.id === mailId)
+  if (!mail) {
+    throw new Error('MAIL_NOT_FOUND')
+  }
+
+  // If mail is in Spam, remove its links from the blacklist
+  const wasInSpam = user.labels.find(label =>
+    label.name === 'Spam' && label.mails.includes(mailId)
+  )
+  if (wasInSpam) {
+  for (const link of mail.links) {
+    try {
+      await deleteUrlFromBlacklist(link)
+    } catch (err) {
+      console.warn(`Failed to delete link ${link}: ${err.message}`)
+    }
+  }
+}
+
+  // Remove the mail from all labels
+  for (const label of user.labels) {
+    if (label.mails.includes(mail.id)) {
+      removeMailFromLabel(user, mail, label.name);
+    }
+  }
+
+  // Remove the mail from user.mails
+  user.mails = user.mails.filter(m => m.id !== mailId);
+}
+
+
+
+
+
+
+module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery, createDraft, addLabelToMail, deleteMail }
