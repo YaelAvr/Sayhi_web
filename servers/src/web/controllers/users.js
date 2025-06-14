@@ -74,8 +74,11 @@ exports.isUserNameRegisterd = (req, res) => {
   if (!username) return res.status(400).json({ error: "Bad Request" });
 
   const user = Users.isUserNameRegisterd(username)
-  if (!user) return res.status(404).json({ error: 'No user was found' });
-  res.status(200)
+
+  if (!user) {return res.status(404).json({ exists: false, error: 'No user was found' });}
+  else {
+    return res.status(200).json({ exists: true });
+  }
 }
 
 

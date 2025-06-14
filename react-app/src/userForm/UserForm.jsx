@@ -1,12 +1,8 @@
 import React from "react";
 // import UserForm from "../userForm/UserForm";
 import { useState, useRef, memo } from "react";
-// import { memo } from "react";
 
 function UserForm({ SubmitFunc, clickFunc, btnText, inputValue, inputId, placeHolder, setVal, inputClass }) {
-    const [unputVal, setinputVal] = useState("");
-  
-
   return (
     <form onSubmit={SubmitFunc}>
       <div id="login-username">

@@ -28,7 +28,8 @@ const LoginPage = () => {
       generateToken(); // Call the function to log the token
       alert("Login successful"); // לשנות למעבר עמוד לאינבוקס
     } else if (res.status === 404) {
-      alert("Invalid username and/or password");
+      setInputClass("bad-input");
+      alert("Invalid password");
     } else {
       alert("An error occurred, please try again later");
     }
@@ -44,15 +45,14 @@ const LoginPage = () => {
   };
 
   const handleUsernameSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
+  try {
     const res = await fetch(`/api/users/${username}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // body: JSON.stringify({ username }),
     });
 
-    console.log("res.status = ", res.status);
     if (res.status === 200) {
       setLoginPart(1);
       setInputClass("no-input");
@@ -64,58 +64,16 @@ const LoginPage = () => {
       alert("An error occurred, please try again later");
       setInputClass("bad-input");
     }
-  };
+  } catch (err) {
+    console.error("Fetch failed:", err);
+    alert("Network error: Could not reach server");
+  }
+};
+
 
   const handleBack = () => {
     setLoginPart(0);
     setInputClass("no-input");
-  };
-
-  const showPart = () => {
-    if (loginPart === 0) {
-      return (
-        <UserForm
-          SubmitFunc={handleUsernameSubmit}
-          clickFunc={() => alert("create a new account")}
-          btnText="Create a new account"
-          inputValue={username}
-          inputId="username"
-          placeHolder="Email"
-          setVal={setUsername}
-          inputClass={inputClass}
-        />
-      );
-    } else if (loginPart === 1) {
-      return (
-        <UserForm
-          SubmitFunc={handleLogin}
-          clickFunc={handleBack}
-          btnText="Back"
-          inputValue={password}
-          inputId="password"
-          placeHolder="Password"
-          setVal={setPassword}
-          inputClass={inputClass}
-        />
-        // <form onSubmit={handleLogin}>
-        //   <div>
-        //     <label htmlFor="password">Password:</label>
-        //     <input
-        //       className={inputClass.current}
-        //       id="password"
-        //       value={password}
-        //       onChange={(e) => setPassword(e.target.value)}
-        //       type="password"
-        //       placeholder="Password"
-        //     />
-        //     {/* <input type="password" className="input" id="password" name="password" required /> */}
-        //   </div>
-        //   {/*  <Link to="../registerPage/RegisterPage">Create a new account</Link> */}
-        //   <button type="button">Create a new account</button>
-        //   <button type="submit">Login</button>
-        // </form>
-      );
-    }
   };
 
   return (
@@ -147,7 +105,6 @@ const LoginPage = () => {
           inputClass={inputClass}
         />
       )}
-      {/* {showPart()} */}
     </div>
   );
 };
