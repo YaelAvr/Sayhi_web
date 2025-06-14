@@ -1,0 +1,99 @@
+.topbar-container {
+  height: 60px;
+  background-color: #f1f3f4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* הקבוצה של הלוגו ושורת החיפוש */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 80%;
+}
+
+/* לוגו - טקסט ואייקון */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gmail-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.gmail-text {
+  font-size: 22px;
+  font-weight: 500;
+  color: #5f6368;
+}
+
+/* שורת החיפוש */
+.search-container {
+  flex: 1;
+  display: flex;
+  position: relative;  /* חשוב למיקום האבסולוטי של הכפתור */
+  align-items: center;
+}
+
+/* מצב פוקוס - רקע לבן וצל קל */
+.search-container.focused .search-input {
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* שדה הקלט */
+.search-input {
+  flex: 1;
+  padding: 10px 20px 10px 55px; /* משאירים מקום לכפתור מצד שמאל */
+  border: none;
+  border-radius: 24px;
+  background-color: #eaf1fb;
+  font-size: 16px;
+  outline: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* כפתור החיפוש */
+.search-button {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  
+  width: 40px;
+  height: 40px;
+
+  background: transparent; /* ללא רקע */
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 50%; /* עיגול */
+
+  /* הצל סביב הכפתור בלבד */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: box-shadow 0.2s ease;
+}
+
+/* כשהעכבר מעל הכפתור - הצל מתחזק */
+.search-button:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* האייקון בתוך הכפתור */
+.search-icon {
+  width: 23px;
+  height: 23px;
+  pointer-events: none; /* כדי שלא ימנע קליקים מהכפתור */
+  opacity: 0.7;
+}

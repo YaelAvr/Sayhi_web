@@ -1,4 +1,7 @@
 import React from 'react';
+import './TopBar.css';
+import Logo from './gmailLogo/Logo';
+import SearchBar from './searchBar/SearchBar';
 
 const TopBar = () => {
   const handleLogout = () => {
@@ -8,16 +11,11 @@ const TopBar = () => {
     // window.location.href = '/login'; // Redirect to login page
   }
   return (
-    <div style={{
-      height: '60px',
-      backgroundColor: '#f1f3f4',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 16px',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-    }}>
-      <h1>My Gmail</h1>
+       <div className="topbar-container">
+      <div className="topbar">
+        <Logo />
+        <SearchBar />
+      </div>
       {/* כאן יהיו כפתורי theme, תמונה, התנתקות וכו' */}
 
       {/* צריך לבדוק שאכן מתנתק אחרי שיש ניטוב טוב */}
