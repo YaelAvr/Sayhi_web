@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import LabelButton from './LabelButton';
-import CreateMailButton from './CreateMailButton';
-import LabelsTitle from './LabelsTitle';
+import LabelButton from './labelButton/LabelButton';
+import CreateMailButton from './createMailButton/CreateMailButton';
+import LabelsTitle from './labelTitle/LabelsTitle';
 
 const defaultLabels = [
   'Inbox',
