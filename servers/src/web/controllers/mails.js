@@ -6,21 +6,25 @@ const { searchMailsByQuery } = require('../models/mails')
 const { createDraft } = require('../models/mails')
 const { addLabelToMail } = require('../models/mails')
 
+const { getUserById } = require("../models/users");
+
+
 
 // Controller to handle creation of a new mail
 
 exports.createMail = async (req, res) => {
-    const from = req.headers['x-user-id']
     const { to, subject, body, originalDraftId} = req.body
 
     // Validate presence of 'from' and 'to' fields
-    if (!from || !to) {
-        return res.status(400).json({ error: 'Missing sender or recipient ID' })
+    if (!to) {
+        return res.status(400).json({ error: 'Missing recipient ID' })
     }
 
+    // get the auterized sender from the request user
+    const sender = getUserById(req.user.id);
+
     // Find the sender and recipient users in the users list
-    const sender = Store.find(u => u.id == from)
-    const recipient = Store.find(u => u.id === to)
+    const recipient = getUserById(to)
 
     // If either user is not found, return an error
     if (!sender || !recipient) {
@@ -59,15 +63,8 @@ exports.createMail = async (req, res) => {
 // Controller to Handle the request to get the user's last 50 mails
 
 exports.get50LastMails = (req, res) => {
-    // Find the user in the users list
-    const userId = req.headers['x-user-id']
-
-    // If the user ID was not provided at all
-    if (!userId) {
-    return res.status(400).json({ error: 'Missing x-user-id header' })
-    }
-
-    const user = Store.find(u => u.id === userId)
+    // Get the user Id from the request
+    const user = getUserById(req.user.id);
     // If the user is not found, return an error
     if (!user) {
          return res.status(404).json({ error: 'User not found' })
@@ -86,7 +83,7 @@ checkIdValid = (userId, mailId, res) => {
         return null
     }
 
-    const user = Store.find(u => u.id === userId)
+    const user = getUserById(userId)
      if (!user) {
         res.status(404).json({ error: 'User not found' })
         return null
@@ -103,7 +100,7 @@ checkIdValid = (userId, mailId, res) => {
 // Controller to Handle handle the option to delete a mail
 exports.deleteMail = (req, res) => {
     // Get the user Id
-    const userId = req.headers['x-user-id']
+    const userId = req.user.id
     //Get the mails'id from the url
     const mailId = req.params.id
 
@@ -127,7 +124,7 @@ exports.deleteMail = (req, res) => {
 // Controller to Handle the option to get a specific mail 
 exports.getSpecificMail = (req, res) => {
     // Get the user Id
-    const userId = req.headers['x-user-id']
+    const userId = req.user.id
     //Get the mails'id from the url
     const mailId = req.params.id
 
@@ -145,7 +142,7 @@ exports.getSpecificMail = (req, res) => {
 // Controller to Handle the option to edit a mail
 exports.editMail = async (req, res) => {
     // Get the user Id
-    const userId = req.headers['x-user-id']
+    const userId = req.user.id
     //Get the mails'id from the url
     const mailId = req.params.id
 
@@ -184,7 +181,7 @@ exports.editMail = async (req, res) => {
 // Controller to handle searching mails by query
 exports.searchMailsByQuery = (req, res) => {
     // Get the user Id
-    const userId = req.headers['x-user-id']
+    const userId = req.user.id
     //Get query
     const query = req.params.query
 
@@ -194,7 +191,7 @@ exports.searchMailsByQuery = (req, res) => {
     }
 
     // Find user in users array
-    const user = Store.find(u => u.id === userId);
+    const user = getUserById(userId);
     if (!user) {
         return res.status(404).json({ error: 'User not found' })
     }
@@ -215,13 +212,13 @@ exports.searchMailsByQuery = (req, res) => {
 // Controller to handle creating draft
 exports.createDraft = (req, res) => {
     // Get the user Id
-    const userId = req.headers['x-user-id']
+    const userId = req.user.id
     const { to, subject, body } = req.body
 
     if (!userId) {
             return res.status(400).json({ error: 'Missing sender ID' })
     }
-    const sender = Store.find(u => u.id === userId)
+    const sender = getUserById(userId)
     if (!sender) {
         return res.status(404).json({ error: 'Sender not found' })
     }
@@ -244,7 +241,7 @@ exports.createDraft = (req, res) => {
 // Controller to handle adding mail to lable
 exports.addLabelToMail = async (req, res) => {
     // Get the user Id
-    const userId = req.headers['x-user-id']
+    const userId = req.user.id
     const mailId = req.params.id
     const { labelName } = req.body
 
@@ -252,7 +249,7 @@ exports.addLabelToMail = async (req, res) => {
         return res.status(400).json({ error: 'Missing user ID or label name' })
     }
 
-    const user = Store.find(u => u.id === userId)
+    const user = getUserById(userId)
     if (!user) {
         return res.status(404).json({ error: 'User not found' })
     }

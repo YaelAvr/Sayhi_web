@@ -6,13 +6,12 @@
     "servers",
     "react-app"
   ],
-
   "scripts": {
-  "start": "npm run start:server",
-  "start:server": "npm start --workspace=servers",
-  "build": "npm run build --workspace=react-app",
-  "deploy": "npm run build && npm start"
-},
+    "start": "npm run start:server",
+    "start:server": "npm start --workspace=servers",
+    "build": "npm run build --workspace=react-app",
+    "deploy": "npm run build && npm start"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
