@@ -1,8 +1,8 @@
-#include "../src/cpp/BloomFilterLogic.h"
-#include "../src/cpp/HashManager.h"
+#include "../servers/src/cpp/BloomFilterLogic.h"
+#include "../servers/src/cpp/HashManager.h"
 #include <string>
 #include <vector>
-#include "../src/cpp/BloomFilter.h"
+#include "../servers/src/cpp/BloomFilter.h"
 #include <gtest/gtest.h>
 
 //Checks if the result in range

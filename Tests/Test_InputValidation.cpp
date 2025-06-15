@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/cpp/InputValidation.h"
+#include "../servers/src/cpp/InputValidation.h"
 
 // Test: empty line should be invalid
 TEST(InputValidationTest, EmptyLineIsInvalid) {
