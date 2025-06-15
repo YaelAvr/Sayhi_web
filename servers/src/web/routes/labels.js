@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router()
 const labels = require('../controllers/labels')
 
+const authenticateToken = require('../middlewares/authenticateToken');
+router.use(authenticateToken)
+
 // Route: /api/labels
 router.route('/')  
     .post(labels.createLabel)         

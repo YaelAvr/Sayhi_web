@@ -37,7 +37,12 @@ const createDefaultLabels = (user) => {
     createLabel(user, 'Spam', { isDefault: true })
 }
 
+const isUserNameRegisterd =(username) => {
+    return Users.some(user => user.username === username);
+}
+
 module.exports = {
     createUser,
-    getUserById
+    getUserById,
+    isUserNameRegisterd
 }

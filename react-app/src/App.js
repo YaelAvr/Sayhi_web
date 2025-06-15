@@ -5,6 +5,7 @@ import RegisterPage from './registerPage/RegisterPage';
 import ProtectedRoute from './ProtectedRoute';
 import InboxOrHomePage from './InboxOrHomePage';
 
+
 function App() {
   return (
     <div className="App">
