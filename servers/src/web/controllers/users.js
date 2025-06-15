@@ -77,7 +77,7 @@ exports.isUserNameRegisterd = (req, res) => {
 
   if (!user) {return res.status(404).json({ exists: false, error: 'No user was found' });}
   else {
-    return res.status(200).json({ exists: true });
+    return res.status(200).json({ displayName: user.displayName });
   }
 }
 

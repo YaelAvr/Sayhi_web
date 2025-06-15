@@ -38,7 +38,7 @@ const createDefaultLabels = (user) => {
 }
 
 const isUserNameRegisterd =(username) => {
-    return Users.some(user => user.username === username);
+    return Users.find(user => user.username === username);
 }
 
 module.exports = {
