@@ -1,0 +1,25 @@
+<svg width="251" height="75" viewBox="0 0 251 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="LogoGroup">
+        <g id="IconGroup" transform="translate(3, 3)">
+            <path id="Envelope" 
+                  d="M 2.5 17.5 L 72.5 17.5 L 72.5 52.5 L 22.5 52.5 L 12.5 62.5 L 12.5 52.5 L 2.5 52.5 Z" 
+                  stroke="#D93025" 
+                  stroke-width="5" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"/>
+            <path id="Flap" 
+                  d="M 2.5 17.5 L 37.5 37.5 L 72.5 17.5" 
+                  stroke="#D93025" 
+                  stroke-width="5" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"/>
+        </g>
+        <text id="Text" 
+              x="85" 
+              y="58" 
+              fill="#D93025" 
+              style="font-family: Arial, Helvetica, sans-serif; font-size: 50px; font-weight: 700;">
+            SayHi
+        </text>
+    </g>
+</svg>
