@@ -1,30 +1,35 @@
-import React, { useState } from 'react'; // 1. ייבאנו את useState
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // 1. מייבאים את useNavigate
 import TopBar from './TopBar';
 import SideBar from './SideBar';
-import ComposeWindow from './composeWindow/ComposeWindow'; // 2. ייבאנו את החלונית החדשה
+import ComposeWindow from './composeWindow/ComposeWindow';
 
 const InboxPage = () => {
-  // 3. הוספנו state כדי לנהל את מצב החלונית
   const [isComposing, setIsComposing] = useState(false);
+  const navigate = useNavigate(); // 2. מפעילים את ה-hook כדי לקבל את פונקציית הניווט
+
+  // 3. יוצרים את פונקציית ההתנתקות כאן
+  const handleLogout = () => {
+    // מנקים את הטוקן מהאחסון המקומי
+    localStorage.removeItem('token');
+    // משתמשים ב-navigate כדי לעבור לעמוד ההתחברות בלי לרענן את הדף
+    navigate('/login');
+  };
 
   return (
-    <>
-      <div className="inbox-page" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-        <TopBar />
-        <div style={{ display: 'flex', flex: 1 }}>
-          {/* 4. העברנו את הפונקציה ל-SideBar */}
-          <SideBar onComposeClick={() => setIsComposing(true)} />
-          <main style={{ flex: 1, padding: '16px' }}>
-            {/* כאן תבוא רשימת המיילים וכו' */}
-            <h2>Welcome to your inbox!</h2>
-          </main>
-        </div>
+    <div className="inbox-page" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      {/* 4. מעבירים את הפונקציה handleLogout כ-prop ל-TopBar */}
+      <TopBar onLogout={handleLogout} />
+
+      <div style={{ display: 'flex', flex: 1 }}>
+        <SideBar onComposeClick={() => setIsComposing(true)} />
+        <main style={{ flex: 1, padding: '16px' }}>
+          <h2>Welcome to your inbox!</h2>
+        </main>
       </div>
 
-      {/* 5. הצגה מותנית של החלונית מחוץ ל-div הראשי */}
-      {/* זה יבטיח שהיא 'צפה' מעל הכל */}
       {isComposing && <ComposeWindow onClose={() => setIsComposing(false)} />}
-    </>
+    </div>
   );
 };
 
