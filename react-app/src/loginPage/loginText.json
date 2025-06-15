@@ -1,0 +1,22 @@
+{
+  "0": {
+    "title": "Sign in",
+    "text": "to continue to Gmail",
+    "inputs": {
+      "id": "username",
+      "placeHolder": "Email",
+      "errorText": "Username not found,\n please try again or register",
+      "btnText": "Create a new account"
+    }
+  },
+  "1": {
+    "title": "Hi",
+    "text": "",
+    "inputs": {
+      "id": "username",
+      "placeHolder": "Enter your Password",
+      "errorText": "Wrong password. Please try again.",
+      "btnText": "Beack"
+    }
+  }
+}

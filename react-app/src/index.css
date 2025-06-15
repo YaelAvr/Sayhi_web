@@ -3,17 +3,18 @@ body,html {
   padding: 0;
     /* width: 100%; */
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    sans-serif; */
+    font-family: mail-font, Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */
 #root{
   width: 100%;
   height: 100%;
@@ -24,3 +25,12 @@ code {
   gap: 1rem; 
 } */
 
+/* כלל נוסף עבור המשקל העבה */
+@font-face {
+  font-family: 'mail-font';
+
+  src: url('../public/Fonts/Roboto-Regular.ttf') format('woff2');
+
+  font-weight: 300; 
+  font-style: normal;
+}

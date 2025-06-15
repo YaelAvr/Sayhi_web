@@ -1,25 +1,41 @@
 import React from "react";
-// import UserForm from "../userForm/UserForm";
+import "./UserForm.css";
 import { useState, useRef, memo } from "react";
 
-function UserForm({ SubmitFunc, clickFunc, btnText, inputValue, inputId, placeHolder, setVal, inputClass }) {
-  return (
-    <form onSubmit={SubmitFunc}>
-      <div id="login-username">
-        {/* <label htmlFor={inputId}>{type}:</label> */}
-        <input
-          className={inputClass}
-          id= {inputId}
-          value={inputValue}
-          onChange={(e) => setVal(e.target.value)}
-          placeholder= {placeHolder}
+function UserForm({
+  SubmitFunc,
+  ClickFunc,
+  inputValue,
+  setVal,
+  inputClass,
+  inputs
+}) {
 
-        />
-        {/* <input className="input" type="text" id="username" name="username" required /> */}
+  const handleKeyUp = (e) => {
+    if (e.key === "Enter") {
+      SubmitFunc();
+    }
+  };
+  return (
+    <form className="user-form" onSubmit={SubmitFunc}>
+      <input
+        className={inputClass}
+        id={inputs.id}
+        autoComplete="off"
+        value={inputValue}
+        onChange={(e) => setVal(e.target.value)}
+        onKeyUp={handleKeyUp}
+        placeholder={inputs.placeHolder}
+      />
+      {(inputClass === "bad-input") ? <div className="invalid-txt"><p>{inputs.errorText}</p></div>:null}
+      <div className="form-btns-div">
+        <button type="button" onClick={ClickFunc} className="form-btn" id="changing-btn">
+          {inputs.btnText}
+        </button>
+        <button type="submit" className="form-btn" id="next-btn">
+          next
+        </button>
       </div>
-      {/*  <Link to="../registerPage/RegisterPage">Create a new account</Link> */}
-      <button type="button" onClick={clickFunc}>{btnText}</button>
-      <button type="submit">next</button>
     </form>
   );
 }
