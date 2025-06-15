@@ -78,8 +78,8 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
   return senderMail;
 }
 
-// Return up to 50 mails from a given label, starting at the given offset (default is 0)
-const getMailsByLableWithOffset = (user, labelName, offset = 0) => {
+// Return up to 50 mails from a given label, starting at the given offset
+const getMailsByLableWithOffset = (user, labelName, offset) => {
   const label = user.labels.find(l => l.name === labelName)
   if (!label) {
     throw new Error('LABEL_NOT_FOUND')
@@ -129,14 +129,14 @@ const searchMailsByQuery = (user, query) => {
 
 
 // Creates a draft mail
-const createDraft = (sender, to, subject, body) => {
+const createDraft = (sender, to, subject, body, originalDraftId = null) => {
   // Validate at least one field is non-empty
   if (!to && !subject && !body) {
     throw new Error('DRAFT_EMPTY')
   }
 
   const mailId = `m-${sender.id}-${sender.mailCounter++}`
-  const time = new Date().toISOString();
+  const time = new Date().toISOString()
 
   //create mail
   const draftMail = {
@@ -158,6 +158,10 @@ const createDraft = (sender, to, subject, body) => {
   // Save the mails to the users' mailboxes
   sender.mails.push(draftMail)
 
+  //it there was a draft before, delete it
+  if (originalDraftId) {
+  deleteMail(sender, originalDraftId)
+}
   return draftMail
 }
 

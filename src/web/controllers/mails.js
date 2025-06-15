@@ -110,7 +110,7 @@ checkIdValid = (userId, mailId, res) => {
 }
 
 // Controller to Handle handle the option to delete a mail
-exports.deleteMail = (req, res) => {
+exports.deleteMail = async (req, res) => {
   const userId = req.headers['x-user-id']
   const mailId = req.params.id
 
@@ -121,7 +121,7 @@ exports.deleteMail = (req, res) => {
   const { user, mail } = result
 
   try {
-    deleteMail(user, mailId)
+    await deleteMail(user, mailId)
     res.status(204).end()
   } catch (err) {
     res.status(400).json({ error: err.message })
