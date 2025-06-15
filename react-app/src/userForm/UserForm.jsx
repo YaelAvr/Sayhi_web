@@ -1,18 +1,14 @@
 import React from "react";
-// import UserForm from "../userForm/UserForm";
+import "./UserForm.css";
 import { useState, useRef, memo } from "react";
 
 function UserForm({
   SubmitFunc,
   ClickFunc,
-  // btnText,
   inputValue,
-  // inputId,
-  // placeHolder,
   setVal,
   inputClass,
   inputs
-  // errorText
 }) {
 
   const handleKeyUp = (e) => {
@@ -28,16 +24,15 @@ function UserForm({
         autoComplete="off"
         value={inputValue}
         onChange={(e) => setVal(e.target.value)}
-        // ref={inputValue}
         onKeyUp={handleKeyUp}
         placeholder={inputs.placeHolder}
       />
-      {(inputClass === "bad-input") ? <div className="invalid-txt"><p>{inputs.errorText}</p><br/></div>:null}
-      <div className="form-btns">
-        <button type="button" onClick={ClickFunc}>
+      {(inputClass === "bad-input") ? <div className="invalid-txt"><p>{inputs.errorText}</p></div>:null}
+      <div className="form-btns-div">
+        <button type="button" onClick={ClickFunc} className="form-btn" id="changing-btn">
           {inputs.btnText}
         </button>
-        <button type="submit">
+        <button type="submit" className="form-btn" id="next-btn">
           next
         </button>
       </div>

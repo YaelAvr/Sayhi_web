@@ -70,7 +70,6 @@ exports.getUserById = (req, res) => {
 exports.isUserNameRegisterd = (req, res) => {
   const username = req.params.username
 
-  console.log("isuser "+username)
   if (!username) return res.status(400).json({ error: "Bad Request" });
 
   const user = Users.isUserNameRegisterd(username)

@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState} from "react";
 import "./LoginPage.css";
 import UserForm from "../userForm/UserForm";
-import { useState, useRef, memo } from "react";
 import loginText from "./loginText.json";
 
 const LoginPage = () => {
@@ -9,7 +8,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [inputClass, setInputClass] = useState("no-input");
   const [displayName, setDisplayName] = useState("");
-  // const options = { username, password };
   const [loginPart, setLoginPart] = useState(0);
   //   const navigate = useNavigate();
 
@@ -25,23 +23,12 @@ const LoginPage = () => {
     if (res.status === 201) {
       const data = await res.json();
       localStorage.setItem("token", data.token);
-      // generateToken(); // Call the function to log the token
       alert("Login successful"); // לשנות למעבר עמוד לאינבוקס
     } else if (res.status === 404) {
       setInputClass("bad-input");
       alert("Invalid password");
     } else {
       alert("An error occurred, please try again later");
-    }
-  };
-
-  //פונקציית דיבוג
-  const generateToken = () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log("Token:", token);
-    } else {
-      console.error("No token found in localStorage.");
     }
   };
 
@@ -59,7 +46,6 @@ const LoginPage = () => {
         setDisplayName(data.displayName);
         setLoginPart(1);
         setInputClass("no-input");
-        console.log("Login part " + loginPart);
       } else if (res.status === 404) {
         // alert("Username not found,\n please try again or register");
         setInputClass("bad-input");
