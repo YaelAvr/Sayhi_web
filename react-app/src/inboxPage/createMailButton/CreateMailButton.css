@@ -1,6 +1,6 @@
 .CreateMailButton {
-  background-color: #4285f4;
-  color: white;
+  background-color: #C2E7FF;
+  color: black;
   border: none;
   padding: 12px 20px;
   font-weight: bold;
@@ -10,9 +10,18 @@
   margin-bottom: 10px;
   width: 100%;
   transition: background-color 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
 }
 
 .CreateMailButton:hover {
-  background-color: #357ae8;
+  background-color: #C2E7FF;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.compose-icon {
+  width: 20px;
+  height: 20px;
 }

@@ -1,41 +1,37 @@
-import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import InboxPage from './inboxPage/InboxPage';
 import LoginPage from './loginPage/LoginPage';
-import { useEffect, useState } from "react";
-import "./App.css"
+import RegisterPage from './registerPage/RegisterPage';
+import ProtectedRoute from './ProtectedRoute';
+import InboxOrHomePage from './InboxOrHomePage';
+
+
 function App() {
-  //   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const [protectedData, setProtectedData] = useState(null);
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) return;
-
-  //   fetch("http://localhost:4000/protected", {
-  //     headers: { Authorization: `Bearer ${token}` },
-  //   })
-  //     .then(res => {
-  //       if (res.ok) return res.json();
-  //       else throw new Error("Unauthorized");
-  //     })
-  //     .then(data => {
-  //       setProtectedData(data);
-  //       setIsLoggedIn(true);
-  //     })
-  //     .catch(() => setIsLoggedIn(false));
-  // }, []);
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem("token");
-  //   setIsLoggedIn(false);
-  //   setProtectedData(null);
-  // };
   return (
-    <div className='App'>
-         {/* <InboxPage /> */}
-      <LoginPage />
+    <div className="App">
+      <Routes>
+        {/* --- זה הנתיב החשוב --- */}
+        {/* הנתיב הראשי '/' יטען את ה-InboxOrHomePage, שיחליט לאן להמשיך */}
+        <Route path="/" element={<InboxOrHomePage />} /> 
+        
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        
+        {/* הנתיב ל-inbox עדיין מוגן, כדי למנוע גישה ישירה דרך ה-URL */}
+        <Route 
+          path="/inbox" 
+          element={
+            <ProtectedRoute>
+              <InboxPage />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route path="*" element={<h1>404: Page Not Found</h1>} />
+      </Routes>
     </div>
-
+    // <InboxPage />
+    // <LoginPage />
   );
 }
 
