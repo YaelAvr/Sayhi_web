@@ -19,8 +19,8 @@ const checkLinks = async (body, subject) => {
     const subjectLinks = extractLink(subject)
     const links = [...bodyLinks, ...subjectLinks]
 
+    let isContain = false
     for (const link of links) {
-      isContain = false
       const blacklisted = await isBlacklisted(link)
         if (blacklisted) {
             isContain = true
@@ -51,7 +51,8 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
       subject: subject || '',
       body: body || '',
       links,
-      labels: []
+      labels: [],
+      time
   }
 
   // Find label objects by name
@@ -77,14 +78,21 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
   return senderMail;
 }
 
-// Return the user's 50 most recent mails, sorted by time
-const get50LastMails = (user) => {
-    //Sort the mails array by time
-    const sortedMails = [...user.mails].sort((a,b) => {
-        return new Date(b.time)- new Date(a.time)
-    })
-    //Return only up to 50 mails
-    return sortedMails.slice(0, 50)
+// Return up to 50 mails from a given label, starting at the given offset (default is 0)
+const getMailsByLableWithOffset = (user, labelName, offset = 0) => {
+  const label = user.labels.find(l => l.name === labelName)
+  if (!label) {
+    throw new Error('LABEL_NOT_FOUND')
+  }
+
+  //Sort the mails array by time
+  const labelMails = label.mails
+    .map(mailId => user.mails.find(m => m.id === mailId))
+    .filter(mail => mail !== undefined)
+    .sort((a, b) => new Date(b.time) - new Date(a.time))
+
+    //Return only up to 50 mails, depends on
+    return labelMails.slice(offset, offset + 50)
 }
 
 // Edit the body of an existing mail by ID, after checking for blacklisted links
@@ -197,12 +205,12 @@ const deleteMail = async (user, mailId) => {
   // Remove the mail from all labels
   for (const label of user.labels) {
     if (label.mails.includes(mail.id)) {
-      removeMailFromLabel(user, mail, label.name);
+      removeMailFromLabel(user, mail, label.name)
     }
   }
 
   // Remove the mail from user.mails
-  user.mails = user.mails.filter(m => m.id !== mailId);
+  user.mails = user.mails.filter(m => m.id !== mailId)
 }
 
 
@@ -210,4 +218,7 @@ const deleteMail = async (user, mailId) => {
 
 
 
-module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery, createDraft, addLabelToMail, deleteMail }
+
+
+
+module.exports = { createMail, getMailsByLableWithOffset, editMail, searchMailsByQuery, createDraft, addLabelToMail, deleteMail }

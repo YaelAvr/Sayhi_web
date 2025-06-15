@@ -1,6 +1,6 @@
 const Store = require('../models/store')
 const { createMail } = require('../models/mails')
-const { get50LastMails } = require('../models/mails')
+const { getMailsByLableWithOffset } = require('../models/mails')
 const { editMail } = require('../models/mails')
 const { searchMailsByQuery } = require('../models/mails')
 const { createDraft } = require('../models/mails')
@@ -56,15 +56,21 @@ exports.createMail = async (req, res) => {
     }
 }
 
-// Controller to Handle the request to get the user's last 50 mails
+// Controller to Handle the request to get the user's last 50 mails by lable and offset
 
-exports.get50LastMails = (req, res) => {
+exports.getMailsByLableWithOffset = (req, res) => {
     // Find the user in the users list
     const userId = req.headers['x-user-id']
+    const labelName = req.query.label
+    const rawOffset = req.query.offset
+    const offset = parseInt(rawOffset)
 
+    if (isNaN(offset) || offset < 0) {
+        return res.status(400).json({ error: 'Offset must be a non-negative integer' })
+    }
     // If the user ID was not provided at all
-    if (!userId) {
-    return res.status(400).json({ error: 'Missing x-user-id header' })
+    if (!userId || !labelName) {
+        return res.status(400).json({ error: 'Missing user ID or label name' })
     }
 
     const user = Store.find(u => u.id === userId)
@@ -73,10 +79,13 @@ exports.get50LastMails = (req, res) => {
          return res.status(404).json({ error: 'User not found' })
     }
 
-    // Get the last 50 mails of the user and return them
-    const mails = get50LastMails(user)
-    res.status(200).json(mails)
-}
+    try {
+        const mails = getMailsByLableWithOffset(user, labelName, offset)
+        res.status(200).json(mails)
+    } catch (err) {
+        res.status(400).json({ error: err.message })
+    }
+    }
 
 // function to check if inputs id's are valid
 checkIdValid = (userId, mailId, res) => {
