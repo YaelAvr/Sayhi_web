@@ -15,7 +15,6 @@ router.route('/label-mails')
 
 router.route('/:id')  
     .get(mails.getSpecificMail)
-    .patch(mails.editMail)
     .delete(mails.deleteMail)
 
 router.route('/search/:query')

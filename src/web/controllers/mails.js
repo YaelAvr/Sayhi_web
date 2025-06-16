@@ -1,7 +1,6 @@
 const Store = require('../models/store')
 const { createMail } = require('../models/mails')
 const { getMailsByLableWithOffset } = require('../models/mails')
-const { editMail } = require('../models/mails')
 const { searchMailsByQuery } = require('../models/mails')
 const { createDraft } = require('../models/mails')
 const { addLabelToMail } = require('../models/mails')
@@ -150,44 +149,6 @@ exports.getSpecificMail = (req, res) => {
     res.status(200).json(mail)
 }
 
-// Controller to Handle the option to edit a mail
-exports.editMail = async (req, res) => {
-    // Get the user Id
-    const userId = req.headers['x-user-id']
-    //Get the mails'id from the url
-    const mailId = req.params.id
-
-    // Use helper function to validate user and mail
-    const result = checkIdValid(userId, mailId, res)
-    if (!result) return
-
-    const { mail } = result
-    if (mail.from !== userId) {
-        return res.status(400).json({ error: 'Only the sender can edit the mail' })
-    }
-
-    // Prevent subject from being updated
-    if ('subject' in req.body) {
-        return res.status(400).json({ error: 'Subject cannot be edited' })
-    }
-
-    // Ensure body exists and is a string
-    if (!('body' in req.body) || typeof req.body.body !== 'string') {
-        return res.status(400).json({ error: 'Missing or invalid body field' })
-    }
-
-    try {
-        // Delegate the edit logic (including blacklist check) to the model
-        await editMail(mailId, req.body.body);
-        res.status(204).end()// No content response
-    } catch (err) {
-        if (err.message === 'BLACKLISTED_LINK') {
-        res.status(400).json({ error: 'Updated body contains blacklisted link' })
-        } else {
-            res.status(500).json({ error: 'Server Error' })
-    }
-  }
-}
 
 // Controller to handle searching mails by query
 exports.searchMailsByQuery = (req, res) => {
@@ -220,14 +181,14 @@ exports.searchMailsByQuery = (req, res) => {
 }
 
 
-// Controller to handle creating draft
-exports.createDraft = (req, res) => {
+// Controller to handle creating draft (even from an exicted draft)
+exports.createDraft = async (req, res) => {
     // Get the user Id
     const userId = req.headers['x-user-id']
-    const { to, subject, body } = req.body
+    const { to, subject, body, originalDraftId } = req.body
 
     if (!userId) {
-            return res.status(400).json({ error: 'Missing sender ID' })
+        return res.status(400).json({ error: 'Missing sender ID' })
     }
     const sender = Store.find(u => u.id === userId)
     if (!sender) {
@@ -235,7 +196,7 @@ exports.createDraft = (req, res) => {
     }
 
     try {
-        const draft = createDraft(sender, to, subject, body)
+        const draft = await createDraft(sender, to, subject, body, originalDraftId)
         res.status(201).json(draft)
     } catch (err) {
         if (err.message === 'DRAFT_EMPTY') {

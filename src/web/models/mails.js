@@ -95,20 +95,6 @@ const getMailsByLableWithOffset = (user, labelName, offset) => {
     return labelMails.slice(offset, offset + 50)
 }
 
-// Edit the body of an existing mail by ID, after checking for blacklisted links
-const editMail = async (mailId, newBody) => {
-  // Validate that the new body does not contain blacklisted URLs
-  const links = await checkLinks(newBody, "")
-
-  // Update the body and (and mail's links) for every user who holds a copy of the mail
-  Store.forEach(user => {
-    const mail = user.mails.find(m => m.id === mailId);
-    if (mail) {
-      mail.body = newBody;
-      mail.links = links
-    }
-  })
-}
 
 // Search for query string in selected fields of user's mails
 const searchMailsByQuery = (user, query) => {
@@ -128,21 +114,35 @@ const searchMailsByQuery = (user, query) => {
 }
 
 
-// Creates a draft mail
-const createDraft = (sender, to, subject, body, originalDraftId = null) => {
+// Creates a draft mail(even from an exicted draft)
+const createDraft = async (sender, to, subject, body, originalDraftId = null) => {
   // Validate at least one field is non-empty
   if (!to && !subject && !body) {
     throw new Error('DRAFT_EMPTY')
   }
 
+  // delete source draft if existed
+  if (originalDraftId) {
+    try {
+      await deleteMail(sender, originalDraftId);
+    } catch (err) {
+      console.warn(`Failed to delete original draft ${originalDraftId}: ${err.message}`);
+      // We don’t throw — we continue anyway
+    }
+  }
+
+
   const mailId = `m-${sender.id}-${sender.mailCounter++}`
   const time = new Date().toISOString()
+
+  // Check if 'to' is a valid user, otherwise set it to empty string
+  const recipient = to && Store.find(u => u.id === to) ? to : ''
 
   //create mail
   const draftMail = {
     id: mailId,
     from: sender.id,
-    to: to || '',
+    to: recipient,
     subject: subject || '',
     body: body || '',
     links: [],
@@ -158,10 +158,6 @@ const createDraft = (sender, to, subject, body, originalDraftId = null) => {
   // Save the mails to the users' mailboxes
   sender.mails.push(draftMail)
 
-  //it there was a draft before, delete it
-  if (originalDraftId) {
-  deleteMail(sender, originalDraftId)
-}
   return draftMail
 }
 
@@ -225,4 +221,4 @@ const deleteMail = async (user, mailId) => {
 
 
 
-module.exports = { createMail, getMailsByLableWithOffset, editMail, searchMailsByQuery, createDraft, addLabelToMail, deleteMail }
+module.exports = { createMail, getMailsByLableWithOffset, searchMailsByQuery, createDraft, addLabelToMail, deleteMail }
