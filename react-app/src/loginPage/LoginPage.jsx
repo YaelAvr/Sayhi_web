@@ -46,7 +46,7 @@ const LoginPage = () => {
         setDisplayName(data.displayName);
         setLoginPart(1);
         setInputClass("no-input");
-      } else if (res.status === 404) {
+      } else if (res.status === 404 || res.status === 400) {
         // alert("Username not found,\n please try again or register");
         setInputClass("bad-input");
       } else {
