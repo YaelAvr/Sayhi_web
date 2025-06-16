@@ -1,4 +1,5 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // import "./LoginPage.css";
 import UserForm from "../userForm/UserForm";
 import loginText from "./loginText.json";
@@ -9,7 +10,7 @@ const LoginPage = () => {
   const [inputClass, setInputClass] = useState("no-input");
   const [displayName, setDisplayName] = useState("");
   const [loginPart, setLoginPart] = useState(0);
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,7 +24,7 @@ const LoginPage = () => {
     if (res.status === 201) {
       const data = await res.json();
       localStorage.setItem("token", data.token);
-      alert("Login successful"); // לשנות למעבר עמוד לאינבוקס
+      navigate("/about");
     } else if (res.status === 404) {
       setInputClass("bad-input");
       alert("Invalid password");
@@ -47,7 +48,6 @@ const LoginPage = () => {
         setLoginPart(1);
         setInputClass("no-input");
       } else if (res.status === 404 || res.status === 400) {
-        // alert("Username not found,\n please try again or register");
         setInputClass("bad-input");
       } else {
         alert("An error occurred, please try again later");
@@ -82,52 +82,53 @@ const LoginPage = () => {
   };
   const partText = getPartText();
 
-  const displayPage = ()=> {
-    if(loginPart === 0) {
-      return <UserForm
+  const displayPage = () => {
+    if (loginPart === 0) {
+      return (
+        <UserForm
           SubmitFunc={handleUsernameSubmit}
           ClickFunc={() => alert("create a new account")}
           // inputId="username"
           inputValue={username}
           setVal={setUsername}
           inputClass={inputClass}
-          data = {partText}
+          data={partText}
           // inputs={partText.input}
         />
+      );
     } else if (loginPart === 1) {
-      return  <UserForm
+      return (
+        <UserForm
           SubmitFunc={handleLogin}
           ClickFunc={handleBack}
           inputValue={password}
           setVal={setPassword}
           inputClass={inputClass}
-          data = {partText}
+          data={partText}
           displayName={displayName}
           username={username}
           // inputs={partText.input}
         />
+      );
     }
-  }
+  };
 
+  return displayPage();
+  // <div className="login-page">
+  //   <div className="login-text">
+  //     <h1 id="login-h1">
+  //       {partText.title} {displayName}
+  //     </h1>
+  //     <p>
+  //       {!(partText.text)?username:partText.text}
+  //     </p>
+  //   </div>
 
-  return (
-    displayPage()
-    // <div className="login-page">
-    //   <div className="login-text">
-    //     <h1 id="login-h1">
-    //       {partText.title} {displayName}
-    //     </h1>
-    //     <p>
-    //       {!(partText.text)?username:partText.text}
-    //     </p>
-    //   </div>
+  //   {loginPart === 0 ? (
 
-    //   {loginPart === 0 ? (
-        
-    //   ) : (
-        
-    //   )}
-    // </div>
-  );
+  //   ) : (
+
+  //   )}
+  // </div>
 };
 export default LoginPage;
