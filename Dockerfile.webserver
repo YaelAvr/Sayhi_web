@@ -1,14 +1,33 @@
 FROM node:20-slim
 
-WORKDIR /client-part
+WORKDIR /usr/src/gmail-project
 
-COPY package.json ./
-COPY package-lock.json ./
+COPY package*.json ./
+COPY react-app/package*.json ./react-app/
+COPY servers/package*.json ./servers/
 
 RUN npm install
 
-COPY src/web/ ./
+COPY servers/src/web/ ./
+COPY servers/data ./
+COPY react-app ./
 
 EXPOSE 5000
 
-CMD ["npm", "start"]
+# build react + run react & express
+CMD ["npm", "run", "deploy"]
+
+# FROM node:20-slim
+
+# WORKDIR /client-part
+
+# COPY package.json ./
+# COPY package-lock.json ./
+
+# RUN npm install
+
+# COPY src/web/ ./
+
+# EXPOSE 5000
+
+# CMD ["npm", "start"]

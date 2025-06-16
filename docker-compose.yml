@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile.server
     volumes:
-      - ./data:/usr/gmail-project/data 
+      - ./servers/data:/usr/gmail-project/servers/data 
     ports:
       - "8080:8080"
 
@@ -15,10 +15,10 @@ services:
       args:
         - BUILD_TESTING=ON
     volumes:
-      - ./data:/usr/gmail-project/data
+      - ./servers/data:/usr/gmail-project/servers/data
     stdin_open: true
     tty: true
-    command: [./my_tests]
+    command: [./build/my_tests]
 
   webserver: 
     build:
