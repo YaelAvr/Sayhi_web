@@ -43,7 +43,7 @@ app.get('/*', (req, res) => {
 // const PORT = 5000;
 // app.listen(PORT, 
 
-app.listen(5000, () => {
+app.listen(3000, () => {
   console.log("Server running");
 });
 

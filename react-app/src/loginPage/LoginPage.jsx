@@ -1,5 +1,5 @@
 import React, { useState} from "react";
-import "./LoginPage.css";
+// import "./LoginPage.css";
 import UserForm from "../userForm/UserForm";
 import loginText from "./loginText.json";
 
@@ -82,37 +82,52 @@ const LoginPage = () => {
   };
   const partText = getPartText();
 
-  return (
-    <div className="login-page">
-      <div className="login-text">
-        <h1 id="login-h1">
-          {partText.title} {displayName}
-        </h1>
-        <p>
-          {!(partText.text)?username:partText.text}
-        </p>
-      </div>
-
-      {loginPart === 0 ? (
-        <UserForm
+  const displayPage = ()=> {
+    if(loginPart === 0) {
+      return <UserForm
           SubmitFunc={handleUsernameSubmit}
           ClickFunc={() => alert("create a new account")}
-          inputId="username"
+          // inputId="username"
+          inputValue={username}
           setVal={setUsername}
           inputClass={inputClass}
-          inputs={partText.input}
+          data = {partText}
+          // inputs={partText.input}
         />
-      ) : (
-        <UserForm
+    } else if (loginPart === 1) {
+      return  <UserForm
           SubmitFunc={handleLogin}
           ClickFunc={handleBack}
           inputValue={password}
           setVal={setPassword}
           inputClass={inputClass}
-          inputs={partText.input}
+          data = {partText}
+          displayName={displayName}
+          username={username}
+          // inputs={partText.input}
         />
-      )}
-    </div>
+    }
+  }
+
+
+  return (
+    displayPage()
+    // <div className="login-page">
+    //   <div className="login-text">
+    //     <h1 id="login-h1">
+    //       {partText.title} {displayName}
+    //     </h1>
+    //     <p>
+    //       {!(partText.text)?username:partText.text}
+    //     </p>
+    //   </div>
+
+    //   {loginPart === 0 ? (
+        
+    //   ) : (
+        
+    //   )}
+    // </div>
   );
 };
 export default LoginPage;
