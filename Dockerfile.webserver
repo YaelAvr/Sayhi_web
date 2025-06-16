@@ -6,13 +6,23 @@ COPY package*.json ./
 COPY react-app/package*.json ./react-app/
 COPY servers/package*.json ./servers/
 
+COPY react-app/ react-app/
+COPY servers/src/web/ servers/src/web/
+COPY servers/data/ servers/data/
+
+
+# COPY servers/src/web/ ./
+# COPY servers/data ./
+# COPY react-app ./
+
+# COPY . .
+
 RUN npm install
 
-COPY servers/src/web/ ./
-COPY servers/data ./
-COPY react-app ./
 
-EXPOSE 5000
+EXPOSE 3000
+
+# WORKDIR /usr/src/gmail-project
 
 # build react + run react & express
 CMD ["npm", "run", "deploy"]

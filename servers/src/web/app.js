@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(reactBuildPath, 'index.html'));
 });
 
-app.listen(5000, () => {
+app.listen(3000, () => {
   console.log("Server running");
 });
 
