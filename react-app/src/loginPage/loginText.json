@@ -16,7 +16,7 @@
       "id": "username",
       "placeHolder": "Enter your Password",
       "errorText": "Wrong password. Please try again.",
-      "btnText": "Beack"
+      "btnText": "Back"
     }
   }
 }

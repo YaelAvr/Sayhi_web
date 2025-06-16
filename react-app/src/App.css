@@ -6,6 +6,10 @@
   background-color: #f0f4f9;
 }
 
+button {
+  cursor: pointer;
+}
+
 /* .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -17,8 +21,6 @@
   }
 } */
 
-
 .App-link {
   color: #61dafb;
 }
-
