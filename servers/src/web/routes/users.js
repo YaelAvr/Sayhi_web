@@ -5,7 +5,7 @@ const controller = require('../controllers/users')
 router.route('/')
         .post(controller.createUser)
 
-router.route('/:username').post(controller.isUserNameRegisterd)
+router.route('/validation/:username').post(controller.isUserNameRegisterd)
 
 router.route('/:id')
         .get(controller.getUserById)

@@ -36,7 +36,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`/api/users/${username}`, {
+      const res = await fetch(`/api/users/validation/${username}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
