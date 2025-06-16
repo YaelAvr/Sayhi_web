@@ -1,6 +1,7 @@
 import React from "react";
 import "./UserForm.css";
 import { useState, useRef, memo } from "react";
+import Logo from "../gmailLogo/Logo"
 
 function UserForm({
   SubmitFunc,
@@ -25,6 +26,7 @@ function UserForm({
   return (
     <div id="user-form-page">
        <div className="form-text">
+        <Logo containerClass="logo-container"/>
         <h1>
           {!(displayName)?data.title:displayName}
         </h1>

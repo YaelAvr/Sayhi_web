@@ -16,18 +16,6 @@
   width: 80%;
 }
 
-/* לוגו - טקסט ואייקון */
-.logo-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.gmail-icon {
-  width: 120px;
-  height: 120px;
-}
-
 /* שורת החיפוש */
 .search-container {
   flex: 1;

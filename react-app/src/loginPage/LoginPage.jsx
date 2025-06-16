@@ -24,7 +24,7 @@ const LoginPage = () => {
     if (res.status === 201) {
       const data = await res.json();
       localStorage.setItem("token", data.token);
-      navigate("/about");
+      navigate("/inbox");
     } else if (res.status === 404) {
       setInputClass("bad-input");
       alert("Invalid password");
@@ -51,7 +51,6 @@ const LoginPage = () => {
         setInputClass("bad-input");
       } else {
         alert("An error occurred, please try again later");
-        // setInputClass("bad-input");
       }
     } catch (err) {
       console.error("Fetch failed:", err);
@@ -87,13 +86,11 @@ const LoginPage = () => {
       return (
         <UserForm
           SubmitFunc={handleUsernameSubmit}
-          ClickFunc={() => alert("create a new account")}
-          // inputId="username"
+          ClickFunc={() => navigate("/RegisterPage")}
           inputValue={username}
           setVal={setUsername}
           inputClass={inputClass}
           data={partText}
-          // inputs={partText.input}
         />
       );
     } else if (loginPart === 1) {
@@ -113,22 +110,6 @@ const LoginPage = () => {
     }
   };
 
-  return displayPage();
-  // <div className="login-page">
-  //   <div className="login-text">
-  //     <h1 id="login-h1">
-  //       {partText.title} {displayName}
-  //     </h1>
-  //     <p>
-  //       {!(partText.text)?username:partText.text}
-  //     </p>
-  //   </div>
-
-  //   {loginPart === 0 ? (
-
-  //   ) : (
-
-  //   )}
-  // </div>
+  return( displayPage())
 };
 export default LoginPage;
