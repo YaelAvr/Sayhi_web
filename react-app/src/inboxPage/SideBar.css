@@ -1,0 +1,16 @@
+.sidebar-container {
+  width: 250px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.labels-section {
+  margin-top: 16px;
+}
+
+.sidebar-divider {
+  margin: 16px 0;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+}
