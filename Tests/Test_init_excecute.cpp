@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include "../src/cpp/InitHendler.h"
+#include "../servers/src/cpp/InitHendler.h"
 #include <fstream>
 #include <cstdio>
 
 // Test to ensure that the backup file is created if it does not exist.
 TEST(InitHendlerTest, CreatesBackupFileIfNotExists) {
     // First, we make sure that the backup file does not exist by removing it if it exists.
-    std::remove("../data/BloomFilterBackup.txt");
+    std::remove("../servers/data/BloomFilterBackup.txt");
 
     // Create an instance of InitHendler to test the execute function.
     InitHendler initHandler;
@@ -17,8 +17,8 @@ TEST(InitHendlerTest, CreatesBackupFileIfNotExists) {
     initHandler.execute(line);
 
     // After calling execute, we expect the backup file to have been created.
-    EXPECT_TRUE(std::ifstream("../data/BloomFilterBackup.txt"));
+    EXPECT_TRUE(std::ifstream("../servers/data/BloomFilterBackup.txt"));
 
     // Clean up by removing the created backup file after the test.
-    std::remove("../data/BloomFilterBackup.txt");
+    std::remove("../servers/data/BloomFilterBackup.txt");
 }

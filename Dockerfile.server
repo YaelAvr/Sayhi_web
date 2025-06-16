@@ -1,17 +1,62 @@
 FROM gcc:latest
 
 ARG BUILD_TESTING=OFF
-
 RUN apt-get update && apt-get install -y cmake
 
-WORKDIR /usr/gmail-project/web
+# WORKDIR /usr/gmail-project/servers/cpp
+# COPY . .
 
-COPY . .
-
-RUN mkdir -p build
-WORKDIR /usr/gmail-project/web/build
+WORKDIR /usr/gmail-project
 
 
-RUN cmake -DBUILD_TESTING=${BUILD_TESTING} .. && make
+# Copy only the files essential for the C++ build. 
+COPY CMakeLists.txt .
 
-CMD ["./my_program", "8080", "30", "2", "1"]
+# Copy the source code directories.
+# By copying only these specific folders, we avoid invalidating the cache when
+# unrelated files change.
+COPY servers/src/cpp/ ./servers/src/cpp/
+COPY Tests/ ./Tests/
+
+RUN mkdir -p /usr/gmail-project && ln -s /usr/gmail-project/servers/data /data
+
+RUN mkdir build && \
+    cd build && \
+    cmake -DBUILD_TESTING=${BUILD_TESTING} .. && make -j$(nproc)
+
+# RUN mkdir -p build && ln -s /app/servers/data /data
+# WORKDIR /usr/gmail-project/build
+
+CMD ["./build/my_program", "8080", "30", "2", "1"]
+
+
+# # Run cmake and make. 
+# # The -DBUILD_TESTING=${BUILD_TESTING} command passes the argument into your CMake configuration. 
+# # This is the "switch" that turns testing on or off.
+# # The 'make -j' command tries to build in parallel, speeding up compilation.
+# RUN cmake -DBUILD_TESTING=${BUILD_TESTING} .. && make -j$(nproc)
+
+# # The "Final" Runtime Image
+# # This is the final image that will actually run.
+# FROM debian:slim
+
+# # Set a clean working directory for the running application.
+# WORKDIR /app
+
+# # 1. Copy ONLY the compiled executables from the "builder" stage.
+# # We copy the main program always.
+# COPY --from=builder /usr/src/gmail-project/build/my_program .
+
+# # 2. Conditionally copy the test executable.
+# # This command will only succeed if 'my_tests' was actually built (i.e., if BUILD_TESTING was ON).
+# # The '|| true' ensures the build doesn't fail if the file doesn't exist (when BUILD_TESTING is OFF).
+# COPY --from=builder /usr/src/gmail-project/build/my_tests . || true
+
+# # 3. Set the default command to run the main server program.
+# # The arguments (port, etc.) will be provided by your docker-compose.yml.
+# CMD ["./my_program"]
+
+
+
+
+

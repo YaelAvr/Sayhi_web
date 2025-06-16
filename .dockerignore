@@ -1,0 +1,20 @@
+# אל תכניס את תיקיות node_modules
+node_modules
+servers/node_modules
+react-app/node_modules
+
+# גם build אם לא צריך
+react-app/build
+
+# קבצים זמניים
+npm-debug.log
+.DS_Store
+.env
+
+# קבצים של IDE
+.vscode
+.idea
+*.iml
+*.swp
+
+/images
