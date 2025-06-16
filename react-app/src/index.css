@@ -1,0 +1,36 @@
+body,html {
+  margin: 0;
+  padding: 0;
+    /* width: 100%; */
+  height: 100%;
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif; */
+    font-family: mail-font, Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+} */
+#root{
+  width: 100%;
+  height: 100%;
+}
+/* form{
+   display: flex;
+  flex-direction: column;
+  gap: 1rem; 
+} */
+
+/* כלל נוסף עבור המשקל העבה */
+@font-face {
+  font-family: 'mail-font';
+
+  src: url('../public/Fonts/Roboto-Regular.ttf') format('woff2');
+
+  font-weight: 300; 
+  font-style: normal;
+}

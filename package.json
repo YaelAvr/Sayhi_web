@@ -1,18 +1,18 @@
 {
-  "name": "gmail_project",
+  "name": "gmail-monorepo",
   "version": "1.0.0",
-  "description": "This project implements a URL blacklist system using a Bloom filter in C++. The application supports adding, checking, and deleting URLs via a TCP client-server architecture. The server is written in C++, and the client is written in JavaScript (Express). The system is designed according to SOLID principles and follows the TDD methodology.",
-  "main": "app.js",
+  "private": true,
+  "workspaces": [
+    "servers",
+    "react-app"
+  ],
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run start:server",
+    "start:server": "npm start --workspace=servers",
+    "build": "npm run build --workspace=react-app",
+    "deploy": "npm run build && npm start"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^2.0.1"
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
