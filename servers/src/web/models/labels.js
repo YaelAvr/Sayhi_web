@@ -65,9 +65,10 @@ const deleteLabel = (user, id) => {
     }
 
     // Remove the label ID from all mails that have it
-    for (const mailId in label.mails){
-        const mail = user.mails.find(m => m.id === mailId);
-        mail.labelIds = mail.labelIds.filter(idOfLabel => idOfLabel !== id);
+    for (const mail of user.mails) {
+        if (mail.labels) {
+            mail.labels = mail.labels.filter(labelId => labelId !== id);
+        }
     }
 
     // Remove the label from the user's labels array
@@ -117,7 +118,7 @@ const removeMailFromLabel = (user, mail, labelName) => {
     label.mails = label.mails.filter(id => id !== mail.id);
 
     // Remove the label ID from the mail
-    mail.labelIds = mail.labelIds.filter(id => id !== label.id);
+    mail.labels = mail.labels.filter(id => id !== label.id);
 
     return true;
 };
