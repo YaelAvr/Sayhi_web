@@ -1,27 +1,24 @@
+// src/components/TopBar.jsx
+
 import React from 'react';
+import Logo from './gmailLogo/Logo';
+import SearchBar from './searchBar/SearchBar';
 
-const TopBar = () => {
-  const handleLogout = () => {
-    // delete the token from localStorage
-    localStorage.removeItem('token');
-    alert("Logged out."); // ניתוב לעמוד כניסה
-    // window.location.href = '/login'; // Redirect to login page
-  }
+// 1. הקומפוננטה מקבלת את onLogout כ-prop
+const TopBar = ({ onLogout }) => {
+
+  // 2. אין צורך בפונקציה handleLogout כאן יותר, מחקנו אותה.
+  // הלוגיקה עברה לקומפוננטת האב (InboxPage).
+
   return (
-    <div style={{
-      height: '60px',
-      backgroundColor: '#f1f3f4',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 16px',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-    }}>
-      <h1>My Gmail</h1>
-      {/* כאן יהיו כפתורי theme, תמונה, התנתקות וכו' */}
+    <div className="topbar-container">
+      <div className="topbar">
+        <Logo />
+        <SearchBar />
 
-      {/* צריך לבדוק שאכן מתנתק אחרי שיש ניטוב טוב */}
-      <button onClick={handleLogout}/>
+        {/* 3. הכפתור עכשיו קורא לפונקציית ה-onLogout שקיבלנו */}
+        <button onClick={onLogout}>התנתקות</button>
+      </div>
     </div>
   );
 };

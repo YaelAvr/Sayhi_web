@@ -3,16 +3,15 @@ const { getUserById } = require("../models/users");
 
 // Create a new label for a specific user
 exports.createLabel = (req, res) => {
-  const user_id = req.headers["x-user-id"];
   const { name } = req.body;
 
   // Validate required fields
-  if (!user_id || !name) {
+  if (!name) {
     return res.status(400).json({ error: "Name is required" });
   }
 
-  // find the user we want to add the label to
-  const user = getUserById(user_id);
+  // get the auterized user user we want to add the label to
+  const user = getUserById(req.user.id);
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
@@ -27,14 +26,8 @@ exports.createLabel = (req, res) => {
 
 // Get all labels for a specific user
 exports.getAllLabels = (req, res) => {
-  // get the user id from the http header
-  const user_id = req.headers["x-user-id"];
-  if (!user_id) {
-    return res.status(400).json({ error: "User ID is required" });
-  }
-
   // find the user we want to add the label to
-  const user = getUserById(user_id);
+  const user = getUserById(req.user.id);
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
@@ -46,14 +39,9 @@ exports.getAllLabels = (req, res) => {
 // Get a specific label for a specific user
 exports.getLabelById = (req, res) => {
   // Check if the user id matches the id in the request header
-  const userId = req.headers["x-user-id"];
   const labelId = req.params.id;
 
-  if (!userId) {
-    return res.status(400).json({ error: "User id is required" });
-  }
-
-  const user = getUserById(userId);
+  const user = getUserById(req.user.id);
   if (!user) return res.status(404).json({ error: "User not found" });
 
   const label = Labels.getLabelById(user, labelId);
@@ -64,18 +52,14 @@ exports.getLabelById = (req, res) => {
 // Update a specific label name of a specific user
 exports.updateLabel = (req, res) => {
   // Check if the user id matches the id in the request header
-  const userId = req.headers["x-user-id"];
   const labelId = req.params.id;
   const { name } = req.body;
 
   if (!name) {
     return res.status(400).json({ error: "Name is required" });
   }
-  if (!userId) {
-    return res.status(400).json({ error: "User id is required" });
-  }
 
-  const user = getUserById(userId);
+  const user = getUserById(req.user.id);
   if (!user) return res.status(404).json({ error: "User not found" });
   
   try {
@@ -92,20 +76,97 @@ exports.updateLabel = (req, res) => {
 };
 
 // Delete a specific label of a specific user
-exports.deleteLabel = (req, res) => {
+exports.deleteLabel = async (req, res) => {
   // Check if the user id matches the id in the request header
-  const userId = req.headers["x-user-id"];
   const labelId = req.params.id;
 
-  if (!userId) {
-    return res.status(400).json({ error: "User id is required" });
-  }
-
-  const user = getUserById(userId);
+  const user = await getUserById(req.user.id);
   if (!user) return res.status(404).json({ error: "User not found" });
 
-  const success = Labels.deleteLabel(user, labelId);
-  if (!success) return res.status(404).json({ error: "Label not found" });
+ try {
+    const result = await Labels.deleteLabel(user, labelId);
+    res.status(204).json({ message: 'Label deleted', result })
+  } catch (err) {
+    // If the label is not found, return a 404 error
+    if (err.message === 'LABEL_NOT_FOUND') {
+    return res.status(404).json({ error: 'Not Found' })
+  }
+  // If the user can't delete the label, return a 400 error
+  if (err.message === 'CANNOT_DELETE_THIS_LABEL') {
+    return res.status(400).json({ error: 'Bad Request' })
+  }
+  }
+}
 
-  res.status(204).end();
+  exports.addMailToLabel = async (req, res) => {
+  const userId = req.user.id;
+  const { labelName, mailId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ error: "User ID is required" });
+  }
+
+  if (!labelName || !mailId) {
+    return res.status(400).json({ error: "Label name and mail ID are required" });
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  const mail = user.mails.find(m => m.id === mailId);
+  if (!mail) {
+    return res.status(404).json({ error: "Mail not found" });
+  }
+
+  try {
+    const result = await addMailToUserLabel(user, mail, labelName);
+    res.status(201).json({ message: "Mail added to label", result });
+  } catch (err) {
+    if (err.message === 'LABEL_NOT_FOUND') {
+      return res.status(404).json({ error: "Label not found" });
+    }
+    if (err.message === 'CANNOT_ADD_TO_LABEL') {
+      return res.status(400).json({ error: "Cannot add to this label" });
+    }
+    if (err.message === 'MAIL_ALREADY_IN_LABEL') {
+      return res.status(400).json({ error: "Mail already in label" });
+    }
+  }
+};
+
+exports.removeMailFromLabel = async (req, res) => {
+  const userId = req.user.id;
+  const { mailId, labelName } = req.body;
+
+   if (!userId) {
+    return res.status(400).json({ error: "User ID is required" });
+  }
+
+  if (!labelName || !mailId) {
+    return res.status(400).json({ error: "Label name and mail ID are required" });
+  }
+
+  const user = await getUserById(userId);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  const mail = user.mails.find(m => m.id === mailId);
+  if (!mail) {
+    return res.status(404).json({ error: "Mail not found" });
+  }
+
+  try {
+    const result = await Labels.removeMailFromLabel(user, mail, labelName);
+    return res.status(200).json({ message: "Mail removed from label", result });
+  } catch (err) {
+    if (err.message === 'LABEL_NOT_FOUND') {
+      return res.status(404).json({ error: "Label not found" });
+    }
+    if (err.message === 'MAIL_NOT_IN_LABEL') {
+      return res.status(400).json({ error: "Mail not in label" });
+    }
+  }
 };

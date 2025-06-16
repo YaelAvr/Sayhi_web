@@ -56,7 +56,7 @@ const deleteLabel = (user, id) => {
     // Check if the label exists in the user's labels array
     const label = getLabelById(user, id);
     if (!label) {
-        return null; 
+        throw new Error('LABEL_NOT_FOUND'); 
     }
 
     // Check if this label is default
@@ -64,11 +64,10 @@ const deleteLabel = (user, id) => {
         throw new Error('CANNOT_DELETE_THIS_LABEL');
     }
 
-     // Remove the label ID from all mails that have it
-    for (const mail of user.mails) {
-        if (mail.labelIds) {
-            mail.labelIds = mail.labelIds.filter(labelId => labelId !== id);
-        }
+    // Remove the label ID from all mails that have it
+    for (const mailId in label.mails){
+        const mail = user.mails.find(m => m.id === mailId);
+        mail.labelIds = mail.labelIds.filter(idOfLabel => idOfLabel !== id);
     }
 
     // Remove the label from the user's labels array

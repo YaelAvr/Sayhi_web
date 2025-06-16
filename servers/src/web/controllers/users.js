@@ -49,7 +49,7 @@ exports.createUser = (req, res) => {
 // this function returns the information of a specific user with the given id
 exports.getUserById = (req, res) => {
   // Check if the user id matches the id in the request header
-  const userHeader = req.headers['x-user-id']
+  const userHeader = req.user.id
   const userId = req.params.id
 
   if (!userHeader || !userId || userHeader !== userId) {

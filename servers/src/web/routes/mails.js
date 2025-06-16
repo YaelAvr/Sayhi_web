@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router()
 const mails = require('../controllers/mails')
 
+const authenticateToken = require('../middlewares/authenticateToken');
+router.use(authenticateToken)
+
 // Route: /api/mails
 // Handles both sending a new mail and retrieving the last 50 mails for a user
 router.route('/')  

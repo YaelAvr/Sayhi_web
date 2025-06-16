@@ -1,10 +1,10 @@
-#include "../src/cpp/InitHendler.h"
-#include "../src/cpp/AddURLCommand.h"
-#include "../src/cpp/BackupFile.h"
-#include "../src/cpp/Blacklist.h"
-#include "../src/cpp/BloomFilter.h"
-#include "../src/cpp/BloomFilterLogic.h"
-#include "../src/cpp/StdInputOutput.h"
+#include "../servers/src/cpp/InitHendler.h"
+#include "../servers/src/cpp/AddURLCommand.h"
+#include "../servers/src/cpp/BackupFile.h"
+#include "../servers/src/cpp/Blacklist.h"
+#include "../servers/src/cpp/BloomFilter.h"
+#include "../servers/src/cpp/BloomFilterLogic.h"
+#include "../servers/src/cpp/StdInputOutput.h"
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
@@ -19,7 +19,7 @@ TEST(AddUrlTest, AddToBloomFilter) {
     AddURLCommand* addCommand = new AddURLCommand(init, io);
     init->execute("8 1");
     addCommand->execute("1 www.example.com0");
-    ifstream file("../data/BloomFilterBackup.txt");
+    ifstream file("../servers/data/BloomFilterBackup.txt");
     string line;
     int bitVal;
 
@@ -37,7 +37,7 @@ TEST(AddUrlTest, AddToBloomFilter) {
     delete init;
     delete addCommand;
     file.close();
-    std::remove("../data/BloomFilterBackup.txt");
+    std::remove("../servers/data/BloomFilterBackup.txt");
 }
 
 // this test will find if the bloom filter was aptated correctly
@@ -48,7 +48,7 @@ TEST(AddUrlTest, AddToBlackList) {
     AddURLCommand* addCommand = new AddURLCommand(init, io);
     init->execute("8 1");
     addCommand->execute("1 www.example.com0");
-    ifstream file("../data/BloomFilterBackup.txt");
+    ifstream file("../servers/data/BloomFilterBackup.txt");
     const vector<string>& blArray = (init->getBlacklist()).getBlacklistArr();
     string line;
     string lastLine;
@@ -67,5 +67,5 @@ TEST(AddUrlTest, AddToBlackList) {
     delete init;
     delete addCommand;
     file.close();
-    std::remove("../data/BloomFilterBackup.txt");
+    std::remove("../servers/data/BloomFilterBackup.txt");
 }
