@@ -1,59 +1,50 @@
 import React from "react";
 import "./UserForm.css";
 import { useState, useRef, memo } from "react";
-import Logo from "../gmailLogo/Logo"
+import Logo from "../gmailLogo/Logo";
 import FormInputs from "./formInputs/FormInputs";
 
 function UserForm({
-  // SubmitFunc,
-  // ClickFunc,
-  // inputValue,
-  // setVal,
-  // inputClass,
   inputsConf,
   buttonsConf,
   data,
   displayName = null,
-  username = null
+  username = null,
 }) {
-
-  const inputs = data.inputs
-  const errorText = data.errorText
-  const buttonsText = data.button
+  const inputs = data.inputs;
+  const errorText = data.errorText;
+  const buttonsText = data.button;
 
   const handleKeyUp = (e) => {
     if (e.key === "Enter") {
-      buttonsConf.SubmitFunc();
+      buttonsConf[1].SubmitFunc();
     }
   };
   return (
     <div id="user-form-page">
-       <div className="form-text">
-        <Logo containerClass="logo-container"/>
-        <h1>
-          {!(displayName)?data.title:displayName}
-        </h1>
-        <p>
-          {!(username)?data.text:username}
-        </p>
+      <div className="form-text">
+        <Logo containerClass="form-logo-container" />
+        <h1>{data.title} {displayName && displayName}</h1>
+        <p>{!username ? data.text : `${username}@sayhi.com`}</p>
       </div>
 
-      <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
-        {inputs.map((input)=>(<FormInputs key={input.key} {...inputsConf[input.key]} {...input} handleKeyUp={handleKeyUp}/>))}
-        {/* <input 
-          className={inputClass}
-          id={inputs.id}
-          autoComplete="off"
-          value={inputValue}
-          onChange={(e) => setVal(e.target.value)}
-          onKeyUp={handleKeyUp}
-          placeholder={inputs.placeHolder}
-        /> */}
+      <form id="user-form" onSubmit={buttonsConf[1].SubmitFunc}>
+        <div id="input-div">
+          {inputs.map((input, index) => (
+            <FormInputs
+              name={input.id}
+              key={index}
+              {...inputsConf[index]}
+              inputs={input}
+              handleKeyUp={handleKeyUp}
+            />
+          ))}
+        </div>
         {inputsConf.inputClass === "bad-input" ? (
           // <div className="invalid-txt">
-            <p className="invalid-txt">{errorText.errorText[0]}</p>
-          // </div>
-        ) : null}
+          <p className="invalid-txt">{errorText.errorText[0]}</p>
+        ) : // </div>
+        null}
         <div className="form-btns-div">
           <button
             type="button"
@@ -64,7 +55,7 @@ function UserForm({
             {buttonsText[0].btnText}
           </button>
           <button type="submit" className="form-btn" id="next-btn">
-            next
+            {buttonsText[1].btnText}
           </button>
         </div>
       </form>

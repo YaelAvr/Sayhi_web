@@ -64,7 +64,6 @@ const LoginPage = () => {
     setInputClass("no-input");
   };
 
-  
   const getPartText = () => {
     const data = loginText[loginPart];
     if (!data) return null;
@@ -75,61 +74,30 @@ const LoginPage = () => {
     0: {
       buttonsConf: [
         {
-          SubmitFunc: handleUsernameSubmit,
           ClickFunc: () => navigate("/RegisterPage"),
         },
+        { SubmitFunc: handleUsernameSubmit}
       ],
-     
-      inputsConf: [{  inputClass: inputClass, inputValue: username, setVal: setUsername }],
+
+      inputsConf: [
+        { inputClass: inputClass, inputValue: username, setVal: setUsername },
+      ],
     },
     1: {
-      buttonsConf: [{ SubmitFunc: handleLogin, ClickFunc: handleBack }],
-      inputsConf: [{  inputClass: inputClass, inputValue: password, setVal: setPassword }],
+      buttonsConf: [{ ClickFunc: handleBack },{ SubmitFunc: handleLogin,}],
+      inputsConf: [
+        { inputClass: inputClass, inputValue: password, setVal: setPassword },
+      ],
       displayName: displayName,
       username: username,
     },
   };
 
-
   const displayPage = () => {
     const partText = getPartText();
     const config = formConfigs[loginPart];
     if (!config) return null;
-    return(<UserForm
-      // SubmitFunc={handleUsernameSubmit}
-      // ClickFunc={() => navigate("/RegisterPage")}
-      // inputValue={username}
-      // setVal={setUsername}
-      {...config}
-      data={partText}
-    />
-)
-    // if (loginPart === 0) {
-    //   return (
-    //     <UserForm
-    //       SubmitFunc={handleUsernameSubmit}
-    //       ClickFunc={() => navigate("/RegisterPage")}
-    //       inputValue={username}
-    //       setVal={setUsername}
-    //       inputClass={inputClass}
-    //       data={partText}
-    //     />
-    //   );
-    // } else if (loginPart === 1) {
-    //   return (
-    //     <UserForm
-    //       SubmitFunc={handleLogin}
-    //       ClickFunc={handleBack}
-    //       inputValue={password}
-    //       setVal={setPassword}
-    //       inputClass={inputClass}
-    //       data={partText}
-    //       displayName={displayName}
-    //       username={username}
-    //       // inputs={partText.input}
-    //     />
-    //   );
-    // }
+    return <UserForm {...config} data={partText} />;
   };
 
   return displayPage();

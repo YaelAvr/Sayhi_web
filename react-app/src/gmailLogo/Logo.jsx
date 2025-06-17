@@ -2,7 +2,7 @@ import React from "react";
 import "./Logo.css";
 // import gmailIcon from './sayHiLogo.svg';
 
-const Logo = ({ containerClass }) => {
+const Logo = ({ containerClass, LogoClass }) => {
   return (
     <div className={`logo-container ${containerClass}`}>
       {/* //   <img src={gmailIcon} alt="Gmail logo" className="gmail-icon" /> */}
@@ -13,6 +13,7 @@ const Logo = ({ containerClass }) => {
         fill="none"
         alt="Gmail logo"
         id="gmail-icon"
+        // className={`logo-container ${containerClass}`}
       >
         <g id="LogoGroup">
           <g id="IconGroup" transform="translate(3, 3)">

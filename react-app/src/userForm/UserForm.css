@@ -14,7 +14,7 @@
 }
 
 .form-text {
-  width: 20%;
+  width: 40%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -46,10 +46,10 @@
   justify-content: center;
 }
 
-#user-form input,
+#input-div,
 .form-btns-div,
 .invalid-txt {
-  width: 50%;
+  width: 70%;
 }
 
 .invalid-txt {
@@ -66,20 +66,25 @@
   margin-top: 2%;
 }
 
+
+#input-div {
+  /* width: 70%; */
+  display: flex;
+  height: fit-content;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  /* height: 100%; */
+}
+
 #user-form-page input {
   border: 1.4px solid #9a9a9a;
   border-radius: 5px;
   padding: 10px;
   outline: none;
   font-size: 1em;
-}
-
-.bad-input {
-  border: 1.6px solid #b3261e;
-}
-
-.no-input {
-  border: 1.4px solid #9a9a9a;
+    margin: 0.3em;
+    width: 100%;/*להוציר החוצה*/
 }
 
 /* 
@@ -94,7 +99,7 @@ form {
   margin-top: 1em;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .form-btn {

@@ -1,5 +1,11 @@
 import "../UserForm.css";
-const FormInputs = (props) => {
+const FormInputs = ({
+  inputValue,
+  setVal,
+  inputClass,
+  inputs,
+  handleKeyUp,
+}) => {
   //   inputsConf: [{  inputClass: inputClass, inputValue: username, setVal: setUsername }],
   //"inputs": [
   //   {
@@ -10,14 +16,14 @@ const FormInputs = (props) => {
   //   }
   return (
     <input
-      className={props.inputClass}
-      id={props.id}
-      type={props.type}
+      className={inputClass}
+      id={inputs.id}
+      type={inputs.type}
       autoComplete="off"
-      value={props.inputValue}
-      onChange={(e) => props.setVal(e.target.value)}
-      onKeyUp={props.handleKeyUp}
-      placeholder={props.placeHolder}
+      value={inputValue}
+      onChange={(e) => setVal(e.target.value)}
+      onKeyUp={handleKeyUp}
+      placeholder={inputs.placeHolder}
     />
   );
 };
