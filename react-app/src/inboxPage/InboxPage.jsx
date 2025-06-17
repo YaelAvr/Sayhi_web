@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './InboxPage.css';
 import TopBar from './TopBar'; 
 import SideBar from './SideBar';
 import ComposeWindow from './composeWindow/ComposeWindow';
