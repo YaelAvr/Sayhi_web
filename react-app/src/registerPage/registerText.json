@@ -16,18 +16,9 @@
         "placeHolder": "Last name (optional)"
       }
     ],
-    "errorText": [
-      { "400":"Enter first name" }
-    ],
-    "button": [
-      {
-        
-      },
-      {
-        "index": "1",
-        "btnText": "next"
-      }
-    ]
+    "button": {
+      "nextBtn":"next"
+    }
   },
   "1": {
     "title": "Basic information",

@@ -16,21 +16,22 @@ function App() {
   return (
     <div className="App">
       {/* <HomePage/> */}
-         <LoginPage />
-                {/* <InboxPage /> */} 
+         {/* <LoginPage /> */}
+                {/* <InboxPage />  */}
         {/* {<RegisterPage />} */}
       
 
-        {/* <Routes>  */}
+        <Routes> 
           {/* --- זה הנתיב החשוב --- */}
           {/* הנתיב הראשי '/' יטען את ה-InboxOrHomePage, שיחליט לאן להמשיך */}
-          {/* <Route path="/" element={<InboxOrHomePage />} />
+          {/* <Route path="/" element={<InboxOrHomePage />} /> */}
+          <Route path="/" element={<LoginPage />} />
 
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} /> */}
+          <Route path="/register" element={<RegisterPage />} />
 
           {/* הנתיב ל-inbox עדיין מוגן, כדי למנוע גישה ישירה דרך ה-URL */}
-          {/* {/* <Route
+           <Route
             path="/inbox"
             element={
               <ProtectedRoute>
@@ -40,7 +41,7 @@ function App() {
           /> 
 
           <Route path="*" element={<h1>404: Page Not Found</h1>} />
-        </Routes> */}
+        </Routes> 
 
     </div>
     // <InboxPage />

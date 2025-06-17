@@ -3,6 +3,7 @@
 import React from 'react';
 import Logo from '../gmailLogo/Logo';
 import SearchBar from './searchBar/SearchBar';
+import "./TopBar.css"
 
 // 1. הקומפוננטה מקבלת את onLogout כ-prop
 const TopBar = ({ onLogout }) => {

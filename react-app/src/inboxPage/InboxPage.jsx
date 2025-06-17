@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import "./InboxPage.css"
 import TopBar from './TopBar'; 
 import SideBar from './SideBar';
 import ComposeWindow from './composeWindow/ComposeWindow';
-import AddLabelWindow from './labelTitle/AddLabelWindow';
+import AddLabelwindow from './addLabelWindow/AddLabelWindow';
 
 const InboxPage = () => {
   // States קיימים
@@ -66,7 +67,7 @@ const InboxPage = () => {
 
   return (
     <>
-      <div className="inbox-page" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <div className="inbox-page">
         <TopBar onLogout={handleLogout} />
         <div style={{ display: 'flex', flex: 1 }}>
           <SideBar 
@@ -86,7 +87,7 @@ const InboxPage = () => {
       
       {/* הצגה מותנית של חלונית יצירת התווית */}
       {isAddLabelOpen && (
-        <AddLabelWindow 
+        <AddLabelwindow 
           onClose={() => setIsAddLabelOpen(false)}
           onLabelAdded={fetchAndFilterLabels} // מעבירים את הפונקציה לרענון
         />
