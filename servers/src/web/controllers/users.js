@@ -48,6 +48,9 @@ exports.createUser = (req, res) => {
 
 
 
+
+
+
 // this function returns the information of a specific user with the given id
 exports.getUserById = (req, res) => {
   // Check if the user id matches the id in the request header
@@ -72,11 +75,11 @@ exports.getUserById = (req, res) => {
 exports.isUserNameRegisterd = (req, res) => {
   const username = req.params.username
 
-  if (!username) return res.status(400).json({ error: "Bad Request" });
+  if (!username) return res.status(400).json({ error: "Enter an email" });
 
   const user = Users.isUserNameRegisterd(username)
 
-  if (!user) {return res.status(404).json({ exists: false, error: 'No user was found' });}
+  if (!user) {return res.status(404).json({ exists: false, error: 'Could not find your SayHi Account' });}
   else {
     return res.status(200).json({ displayName: user.displayName });
   }

@@ -78,7 +78,7 @@
 }
 
 #user-form-page input {
-  border: 1.4px solid #9a9a9a;
+  /* border: 1.4px solid #9a9a9a; */
   border-radius: 5px;
   padding: 10px;
   outline: none;
@@ -86,6 +86,15 @@
     margin: 0.3em;
     width: 100%;/*להוציר החוצה*/
 }
+
+.bad-input {
+  border: 1.6px solid #b3261e;
+}
+
+.no-input {
+  border: 1.4px solid #9a9a9a;
+}
+
 
 /* 
 form {

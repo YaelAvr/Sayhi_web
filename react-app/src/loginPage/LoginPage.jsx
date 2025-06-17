@@ -9,6 +9,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [inputClass, setInputClass] = useState("no-input");
   const [displayName, setDisplayName] = useState("");
+  const [errorText, setError] = useState(null);
   const [loginPart, setLoginPart] = useState(0);
   const navigate = useNavigate();
 
@@ -25,9 +26,10 @@ const LoginPage = () => {
       const data = await res.json();
       localStorage.setItem("token", data.token);
       navigate("/inbox");
-    } else if (res.status === 404) {
+    } else if (res.status === 400 || res.status === 404) {
       setInputClass("bad-input");
-      alert("Invalid password");
+      const errorData = await res.json();
+      setError(errorData.error);
     } else {
       alert("An error occurred, please try again later");
     }
@@ -45,10 +47,14 @@ const LoginPage = () => {
       if (res.status === 200) {
         const data = await res.json();
         setDisplayName(data.displayName);
+      setError(null);
+
         setLoginPart(1);
         setInputClass("no-input");
       } else if (res.status === 404 || res.status === 400) {
         setInputClass("bad-input");
+        const errorData = await res.json();
+        setError(errorData.error);
       } else {
         alert("An error occurred, please try again later");
       }
@@ -62,6 +68,7 @@ const LoginPage = () => {
     setLoginPart(0);
     setDisplayName("");
     setInputClass("no-input");
+    setError(null);
   };
 
   const getPartText = () => {
@@ -72,24 +79,23 @@ const LoginPage = () => {
 
   const formConfigs = {
     0: {
-      buttonsConf: [
-        {
-          ClickFunc: () => navigate("/RegisterPage"),
-        },
-        { SubmitFunc: handleUsernameSubmit}
-      ],
-
+      buttonsConf: {
+        ClickFunc: () => navigate("/RegisterPage"),
+        SubmitFunc: handleUsernameSubmit,
+      },
       inputsConf: [
         { inputClass: inputClass, inputValue: username, setVal: setUsername },
       ],
+      errorText: errorText,
     },
     1: {
-      buttonsConf: [{ ClickFunc: handleBack },{ SubmitFunc: handleLogin,}],
+      buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleLogin },
       inputsConf: [
         { inputClass: inputClass, inputValue: password, setVal: setPassword },
       ],
       displayName: displayName,
       username: username,
+      errorText: errorText,
     },
   };
 

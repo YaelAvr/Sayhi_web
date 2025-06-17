@@ -1,23 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createName } from "./createDisplayName/createDisplayName";
 // import "./LoginPage.css";
 import UserForm from "../userForm/UserForm";
-import registerText from "./registerText.json"
+import registerText from "./registerText.json";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
-
-
+  const [errorText, setError] = useState(null);
 
   const [inputClass, setInputClass] = useState("no-input");
   const [part, setPart] = useState(0);
   const navigate = useNavigate();
-
-    const createName = (firstName, lastname=null)=>{
-        // if(!firstName) return
-    }
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -64,6 +60,17 @@ const RegisterPage = () => {
       alert("Network error: Could not reach server");
     }
   };
+  const createName = ({ firstName, lastname = null }) => {
+    if (!firstName) {
+      setInputClass("bad-input");
+      setError("Enter first name");
+    }
+    else{
+        setDisplayName(`${firstName} ${lastname&&lastname}`);
+        setPart(part++);
+        setInputClass("no-input");
+    }
+  };
 
   const handleBack = () => {
     setPart(0);
@@ -76,21 +83,18 @@ const RegisterPage = () => {
     return data;
   };
 
- const formConfigs = {
+  const formConfigs = {
     0: {
-      buttonsConf: [
-        {
-          ClickFunc: () => navigate("/RegisterPage"),
-        },
-        { SubmitFunc: handleUsernameSubmit}
-      ],
-
+      buttonsConf: {
+        // ClickFunc: () => navigate("/RegisterPage"),
+        SubmitFunc: createName,
+      },
       inputsConf: [
         { inputClass: inputClass, inputValue: username, setVal: setUsername },
       ],
     },
     1: {
-      buttonsConf: [{ ClickFunc: handleBack },{ SubmitFunc: handleLogin,}],
+      buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleLogin },
       inputsConf: [
         { inputClass: inputClass, inputValue: password, setVal: setPassword },
       ],
