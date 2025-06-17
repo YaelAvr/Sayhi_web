@@ -1,14 +1,11 @@
 const Store = require('../models/store')
 const { createMail } = require('../models/mails')
-const { get50LastMails } = require('../models/mails')
-const { editMail } = require('../models/mails')
+const { getMailsByLableWithOffset } = require('../models/mails')
 const { searchMailsByQuery } = require('../models/mails')
 const { createDraft } = require('../models/mails')
 const { addLabelToMail } = require('../models/mails')
-
+const { deleteMail } = require('../models/mails')
 const { getUserById } = require("../models/users");
-
-
 
 // Controller to handle creation of a new mail
 
@@ -60,20 +57,35 @@ exports.createMail = async (req, res) => {
     }
 }
 
-// Controller to Handle the request to get the user's last 50 mails
+// Controller to Handle the request to get the user's last 50 mails by lable and offset
 
-exports.get50LastMails = (req, res) => {
-    // Get the user Id from the request
-    const user = getUserById(req.user.id);
+exports.getMailsByLableWithOffset = (req, res) => {
+    // Find the user in the users list
+    const user = getUserById(req.user.id)
+    const labelName = req.query.label
+    const rawOffset = req.query.offset
+    const offset = parseInt(rawOffset)
+
+    if (isNaN(offset) || offset < 0) {
+        return res.status(400).json({ error: 'Offset must be a non-negative integer' })
+    }
+    // If the lable name not provided at all
+    if (!labelName) {
+        return res.status(400).json({ error: 'Missing label name' })
+    }
+
     // If the user is not found, return an error
     if (!user) {
          return res.status(404).json({ error: 'User not found' })
     }
 
-    // Get the last 50 mails of the user and return them
-    const mails = get50LastMails(user)
-    res.status(200).json(mails)
-}
+    try {
+        const mails = getMailsByLableWithOffset(user, labelName, offset)
+        res.status(200).json(mails)
+    } catch (err) {
+        res.status(400).json({ error: err.message })
+    }
+    }
 
 // function to check if inputs id's are valid
 checkIdValid = (userId, mailId, res) => {
@@ -98,28 +110,26 @@ checkIdValid = (userId, mailId, res) => {
 }
 
 // Controller to Handle handle the option to delete a mail
-exports.deleteMail = (req, res) => {
-    // Get the user Id
-    const userId = req.user.id
-    //Get the mails'id from the url
-    const mailId = req.params.id
+exports.deleteMail = async (req, res) => {
+  // Get the user Id
+  const userId = req.user.id
+  const mailId = req.params.id
 
-    // Use helper function to validate user and mail
-    const result = checkIdValid(userId, mailId, res)
-    if (!result){
-        return
-    }
+  // Use the helper function to validate and retrieve user and mail
+  const result = checkIdValid(userId, mailId, res)
+  if (!result) return
 
-    const { mail, user} = result
-    //Find the index of the specific mail in the mails array 
-    const index = user.mails.findIndex(m => m.id === mail.id)
-    if (index !== -1) {
-        //Delete the mail in this index from the array
-        user.mails.splice(index, 1)
-    }
-    res.status(204).end()// No content response
-  
+  const { user, mail } = result
+
+  try {
+    await deleteMail(user, mailId)
+    res.status(204).end()
+  } catch (err) {
+    res.status(400).json({ error: err.message })
+  }
 }
+
+
 
 // Controller to Handle the option to get a specific mail 
 exports.getSpecificMail = (req, res) => {
@@ -137,45 +147,6 @@ exports.getSpecificMail = (req, res) => {
     const { mail, user} = result
 
     res.status(200).json(mail)
-}
-
-// Controller to Handle the option to edit a mail
-exports.editMail = async (req, res) => {
-    // Get the user Id
-    const userId = req.user.id
-    //Get the mails'id from the url
-    const mailId = req.params.id
-
-    // Use helper function to validate user and mail
-    const result = checkIdValid(userId, mailId, res)
-    if (!result) return
-
-    const { mail } = result
-    if (mail.from !== userId) {
-        return res.status(400).json({ error: 'Only the sender can edit the mail' })
-    }
-
-    // Prevent subject from being updated
-    if ('subject' in req.body) {
-        return res.status(400).json({ error: 'Subject cannot be edited' })
-    }
-
-    // Ensure body exists and is a string
-    if (!('body' in req.body) || typeof req.body.body !== 'string') {
-        return res.status(400).json({ error: 'Missing or invalid body field' })
-    }
-
-    try {
-        // Delegate the edit logic (including blacklist check) to the model
-        await editMail(mailId, req.body.body);
-        res.status(204).end()// No content response
-    } catch (err) {
-        if (err.message === 'BLACKLISTED_LINK') {
-        res.status(400).json({ error: 'Updated body contains blacklisted link' })
-        } else {
-            res.status(500).json({ error: 'Server Error' })
-    }
-  }
 }
 
 // Controller to handle searching mails by query
@@ -209,14 +180,14 @@ exports.searchMailsByQuery = (req, res) => {
 }
 
 
-// Controller to handle creating draft
-exports.createDraft = (req, res) => {
+// Controller to handle creating draft (even from an exicted draft)
+exports.createDraft = async (req, res) => {
     // Get the user Id
     const userId = req.user.id
-    const { to, subject, body } = req.body
+    const { to, subject, body, originalDraftId } = req.body
 
     if (!userId) {
-            return res.status(400).json({ error: 'Missing sender ID' })
+        return res.status(400).json({ error: 'Missing sender ID' })
     }
     const sender = getUserById(userId)
     if (!sender) {
@@ -224,7 +195,7 @@ exports.createDraft = (req, res) => {
     }
 
     try {
-        const draft = createDraft(sender, to, subject, body)
+        const draft = await createDraft(sender, to, subject, body, originalDraftId)
         res.status(201).json(draft)
     } catch (err) {
         if (err.message === 'DRAFT_EMPTY') {

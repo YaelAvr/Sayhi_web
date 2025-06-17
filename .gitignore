@@ -32,4 +32,4 @@
 *.app
 
 /node_modules
-data/BloomFilterBackup.txt
+servers/data/BloomFilterBackup.txt

@@ -1,6 +1,6 @@
-const { isBlacklisted, addUrlToBlacklist } = require('./blacklist')
+const { isBlacklisted, addUrlToBlacklist, deleteUrlFromBlacklist } = require('./blacklist')
 const Store = require('../models/store')
-const { addMailToLabel, addMailToUserLabel } = require('../models/labels')
+const { addMailToLabel, addMailToUserLabel, removeMailFromLabel } = require('../models/labels')
 
 
 // Extract all valid links from a given text (e.g., body or subject)
@@ -19,8 +19,8 @@ const checkLinks = async (body, subject) => {
     const subjectLinks = extractLink(subject)
     const links = [...bodyLinks, ...subjectLinks]
 
+    let isContain = false
     for (const link of links) {
-      isContain = false
       const blacklisted = await isBlacklisted(link)
         if (blacklisted) {
             isContain = true
@@ -51,7 +51,8 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
       subject: subject || '',
       body: body || '',
       links,
-      labels: []
+      labels: [],
+      time
   }
 
   // Find label objects by name
@@ -77,30 +78,23 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
   return senderMail;
 }
 
-// Return the user's 50 most recent mails, sorted by time
-const get50LastMails = (user) => {
-    //Sort the mails array by time
-    const sortedMails = [...user.mails].sort((a,b) => {
-        return new Date(b.time)- new Date(a.time)
-    })
-    //Return only up to 50 mails
-    return sortedMails.slice(0, 50)
+// Return up to 50 mails from a given label, starting at the given offset
+const getMailsByLableWithOffset = (user, labelName, offset) => {
+  const label = user.labels.find(l => l.name === labelName)
+  if (!label) {
+    throw new Error('LABEL_NOT_FOUND')
+  }
+
+  //Sort the mails array by time
+  const labelMails = label.mails
+    .map(mailId => user.mails.find(m => m.id === mailId))
+    .filter(mail => mail !== undefined)
+    .sort((a, b) => new Date(b.time) - new Date(a.time))
+
+    //Return only up to 50 mails, depends on
+    return labelMails.slice(offset, offset + 50)
 }
 
-// Edit the body of an existing mail by ID, after checking for blacklisted links
-const editMail = async (mailId, newBody) => {
-  // Validate that the new body does not contain blacklisted URLs
-  const links = await checkLinks(newBody, "")
-
-  // Update the body and (and mail's links) for every user who holds a copy of the mail
-  Store.forEach(user => {
-    const mail = user.mails.find(m => m.id === mailId);
-    if (mail) {
-      mail.body = newBody;
-      mail.links = links
-    }
-  })
-}
 
 // Search for query string in selected fields of user's mails
 const searchMailsByQuery = (user, query) => {
@@ -120,21 +114,35 @@ const searchMailsByQuery = (user, query) => {
 }
 
 
-// Creates a draft mail
-const createDraft = (sender, to, subject, body) => {
+// Creates a draft mail(even from an exicted draft)
+const createDraft = async (sender, to, subject, body, originalDraftId = null) => {
   // Validate at least one field is non-empty
   if (!to && !subject && !body) {
     throw new Error('DRAFT_EMPTY')
   }
 
+  // delete source draft if existed
+  if (originalDraftId) {
+    try {
+      await deleteMail(sender, originalDraftId);
+    } catch (err) {
+      console.warn(`Failed to delete original draft ${originalDraftId}: ${err.message}`);
+      // We don’t throw — we continue anyway
+    }
+  }
+
+
   const mailId = `m-${sender.id}-${sender.mailCounter++}`
-  const time = new Date().toISOString();
+  const time = new Date().toISOString()
+
+  // Check if 'to' is a valid user, otherwise set it to empty string
+  const recipient = to && Store.find(u => u.id === to) ? to : ''
 
   //create mail
   const draftMail = {
     id: mailId,
     from: sender.id,
-    to: to || '',
+    to: recipient,
     subject: subject || '',
     body: body || '',
     links: [],
@@ -172,4 +180,45 @@ const addLabelToMail = async (user, mailId, labelName) => {
 }
 
 
-module.exports = { createMail, get50LastMails, editMail, searchMailsByQuery, createDraft, addLabelToMail }
+// Deletes a mail completely from user.mails and all labels.
+// If deleted from "Spam", also removes its links from the blacklist.
+const deleteMail = async (user, mailId) => {
+  const mail = user.mails.find(m => m.id === mailId)
+  if (!mail) {
+    throw new Error('MAIL_NOT_FOUND')
+  }
+
+  // If mail is in Spam, remove its links from the blacklist
+  const wasInSpam = user.labels.find(label =>
+    label.name === 'Spam' && label.mails.includes(mailId)
+  )
+  if (wasInSpam) {
+  for (const link of mail.links) {
+    try {
+      await deleteUrlFromBlacklist(link)
+    } catch (err) {
+      console.warn(`Failed to delete link ${link}: ${err.message}`)
+    }
+  }
+}
+
+  // Remove the mail from all labels
+  for (const label of user.labels) {
+    if (label.mails.includes(mail.id)) {
+      removeMailFromLabel(user, mail, label.name)
+    }
+  }
+
+  // Remove the mail from user.mails
+  user.mails = user.mails.filter(m => m.id !== mailId)
+}
+
+
+
+
+
+
+
+
+
+module.exports = { createMail, getMailsByLableWithOffset, searchMailsByQuery, createDraft, addLabelToMail, deleteMail }
