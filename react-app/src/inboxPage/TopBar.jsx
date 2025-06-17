@@ -1,7 +1,7 @@
 // src/components/TopBar.jsx
 
 import React from 'react';
-import Logo from './gmailLogo/Logo';
+import Logo from '../gmailLogo/Logo';
 import SearchBar from './searchBar/SearchBar';
 
 // 1. הקומפוננטה מקבלת את onLogout כ-prop
@@ -13,7 +13,7 @@ const TopBar = ({ onLogout }) => {
   return (
     <div className="topbar-container">
       <div className="topbar">
-        <Logo />
+        <Logo containerClass="topbar-logo-container"/>
         <SearchBar />
 
         {/* 3. הכפתור עכשיו קורא לפונקציית ה-onLogout שקיבלנו */}

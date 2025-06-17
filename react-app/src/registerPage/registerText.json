@@ -1,0 +1,125 @@
+{
+  "0": {
+    "title": "Create a SayHi Account",
+    "text": "Enter your name",
+    "inputs": [
+      {
+        "index": "0",
+        "id": "register-name1",
+        "type": "text",
+        "placeHolder": "First name"
+      },
+      {
+        "index": "1",
+        "id": "register-name2",
+        "type": "text",
+        "placeHolder": "Last name (optional)"
+      }
+    ],
+    "errorText": [
+      { "400":"Enter first name" }
+    ],
+    "button": [
+      {
+        
+      },
+      {
+        "index": "1",
+        "btnText": "next"
+      }
+    ]
+  },
+  "1": {
+    "title": "Basic information",
+    "text": "Enter your birthday and gender",
+    "birthDay":[{ "placeHolder":"Day", "type":"text"},{ "placeHolder":"Mounth", "type":"select"},{"placeHolder":"Year", "type":"text"}],
+    "select":{ "placeHolder":"gender", "type":"select"},
+    "errorText": [
+      { "404":"Please enter a valid date", "400": ["Please fill in a complete birthday","Please select your gender"]}
+    ],
+    "button": [
+      {
+        "index": "0",
+        "btnText": "Back"
+      }
+    ]
+  },
+  "2": {
+    "title": "How you will sign in",
+    "text": "Create a SayHi address for signing in to your SayHi Account",
+    "inputs": [
+      {
+        "index": "0",
+        "id": "reg-password",
+        "type": "password",
+        "placeHolder": "Password",
+        "text": "@sayhi"
+      },
+      {
+        "index": "1",
+        "id": "reg-confirm",
+        "type": "password",
+        "placeHolder": "Confirm"
+      },
+      {
+        "index": "1",
+        "id": "reg-confirm",
+        "type": "checkbox",
+        "placeHolder": "Confirm",
+        "lable":"<p>Show password</p>"
+      }
+    ],
+    "explainText":"You can use letters, numbers & periods",
+    "errorText": [
+      { "404": ["Use 8 characters or more for your password", "Those passwords did not match. Try again." ]}
+    ],
+    "button": [
+      {
+        "index": "0",
+        "btnText": "Create a new account"
+      }
+    ]
+  },
+  "3": {
+    "title": "Create a strong password",
+    "text": "Create a strong password with a mix of letters, numbers and symbols",
+    "inputs": [
+      {
+        "index": "0",
+        "id": "username",
+        "type": "password",
+        "placeHolder": "Enter your Password"
+      }
+    ],
+    "errorText": [
+      { "404": "Wrong password. Please try again.", "400": "Enter a password" }
+    ],
+    "button": [
+      {
+        "index": "0",
+        "btnText": "Back"
+      }
+    ]
+  },
+  "4": {
+    "title": "Personalize your account!",
+    "text": "Choose your profile picture",
+    "inputs": [
+      {
+        "index": "0",
+        "id": "username",
+        "type": "password",
+        "placeHolder": "Enter your Password"
+      }
+    ],
+    "errorText": [
+      { "404": "Wrong password. Please try again.", "400": "Enter a password" }
+    ],
+    "button": [
+      {
+        "index": "0",
+        "btnText": "Back"
+      }
+    ]
+  }
+}

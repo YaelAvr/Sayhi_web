@@ -46,6 +46,8 @@ exports.createUser = (req, res) => {
   res.status(201).location(`/api/users/${newUser.id}`).end();
 };
 
+
+
 // this function returns the information of a specific user with the given id
 exports.getUserById = (req, res) => {
   // Check if the user id matches the id in the request header

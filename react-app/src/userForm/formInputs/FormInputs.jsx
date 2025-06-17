@@ -1,0 +1,31 @@
+import "../UserForm.css";
+const FormInputs = ({
+  inputValue,
+  setVal,
+  inputClass,
+  inputs,
+  handleKeyUp,
+}) => {
+  //   inputsConf: [{  inputClass: inputClass, inputValue: username, setVal: setUsername }],
+  //"inputs": [
+  //   {
+  //     "key": "0",
+  //     "id": "login-username",
+  //     "type": "text",
+  //     "placeHolder": "Email"
+  //   }
+  return (
+    <input
+      className={inputClass}
+      id={inputs.id}
+      type={inputs.type}
+      autoComplete="off"
+      value={inputValue}
+      onChange={(e) => setVal(e.target.value)}
+      onKeyUp={handleKeyUp}
+      placeholder={inputs.placeHolder}
+    />
+  );
+};
+
+export default FormInputs;
