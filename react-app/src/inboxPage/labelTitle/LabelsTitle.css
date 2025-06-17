@@ -26,3 +26,10 @@
   background-color: #f0f0f0; 
 }
 
+
+.error-message {
+  color: #d93025; /* אדום כמו של גוגל */
+  font-size: 0.8rem;
+  margin-top: 8px;
+  text-align: left;
+}

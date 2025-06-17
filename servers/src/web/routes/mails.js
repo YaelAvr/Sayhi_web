@@ -7,11 +7,17 @@ router.use(authenticateToken)
 
 // Route: /api/mails
 // Handles both sending a new mail and retrieving the last 50 mails for a user
-router.route('/')  
-    .post(mails.createMail)          // POST /api/mails -> create a new mail
+
+
+router.route('/search/:query')
+    .get(mails.searchMailsByQuery)
+
 
 router.route('/drafts')
     .post(mails.createDraft)
+
+router.route('/:id/add-label')
+  .post(mails.addLabelToMail)
 
 router.route('/label-mails')
     .get(mails.getMailsByLableWithOffset)
@@ -20,11 +26,10 @@ router.route('/:id')
     .get(mails.getSpecificMail)
     .delete(mails.deleteMail)
 
-router.route('/search/:query')
-    .get(mails.searchMailsByQuery)
 
-router.route('/:id/add-label')
-  .post(mails.addLabelToMail)
+router.route('/')  
+    .post(mails.createMail)          // POST /api/mails -> create a new mail
+
 
 module.exports = router
 

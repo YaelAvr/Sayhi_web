@@ -3,10 +3,12 @@ const router = express.Router()
 const blacklist = require('../controllers/blacklist')
 
 
-router.route('/')
-    .post(blacklist.addUrlToBlacklist)
+
 
 router.route('/:id')
     .delete(blacklist.deleteUrlFromBlacklist)
+
+router.route('/')
+    .post(blacklist.addUrlToBlacklist)
 
 module.exports = router;
