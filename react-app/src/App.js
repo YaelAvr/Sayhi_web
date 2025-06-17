@@ -16,9 +16,9 @@ function App() {
   return (
     <div className="App">
       {/* <HomePage/> */}
-         {/* <LoginPage /> */}
+         <LoginPage />
                 {/* <InboxPage /> */} 
-        {<RegisterPage />}
+        {/* {<RegisterPage />} */}
       
 
         {/* <Routes>  */}

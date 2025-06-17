@@ -1,5 +1,5 @@
 import React from "react";
-// import "./UserForm.css";
+import "./HomePage.css";
 import { useState, useRef, memo } from "react";
 import Logo from "../gmailLogo/Logo"
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ const HomePage =()=>{
   const navigate = useNavigate();
 
     return(
-        <button type="button" onClick={()=> navigate(<LoginPage/>)}>Log in</button>
+        <button className="Home-page-btn" type="button" onClick={()=> navigate(<LoginPage/>)}>Log in</button>
     )
 }
 

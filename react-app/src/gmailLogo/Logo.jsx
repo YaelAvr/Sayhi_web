@@ -1,11 +1,9 @@
 import React from "react";
 import "./Logo.css";
-// import gmailIcon from './sayHiLogo.svg';
 
 const Logo = ({ containerClass, LogoClass }) => {
   return (
     <div className={`logo-container ${containerClass}`}>
-      {/* //   <img src={gmailIcon} alt="Gmail logo" className="gmail-icon" /> */}
       <svg
         width="251"
         height="75"
