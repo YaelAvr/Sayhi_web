@@ -15,8 +15,8 @@ function App() {
   // console.log(token);
   return (
     <div className="App">
-      <HomePage/>
-        {/* <LoginPage /> */}
+      {/* <HomePage/> */}
+        <LoginPage />
                 {/* <InboxPage /> */}
 
       

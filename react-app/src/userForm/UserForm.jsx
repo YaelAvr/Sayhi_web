@@ -2,25 +2,28 @@ import React from "react";
 import "./UserForm.css";
 import { useState, useRef, memo } from "react";
 import Logo from "../gmailLogo/Logo"
+import FormInputs from "./formInputs/FormInputs";
 
 function UserForm({
-  SubmitFunc,
-  ClickFunc,
-  inputValue,
-  setVal,
-  inputClass,
+  // SubmitFunc,
+  // ClickFunc,
+  // inputValue,
+  // setVal,
+  // inputClass,
+  inputsConf,
+  buttonsConf,
   data,
-  // inputs,
-  // texts,
   displayName = null,
   username = null
 }) {
 
-  const inputs = data.input
+  const inputs = data.inputs
+  const errorText = data.errorText
+  const buttonsText = data.button
 
   const handleKeyUp = (e) => {
     if (e.key === "Enter") {
-      SubmitFunc();
+      buttonsConf.SubmitFunc();
     }
   };
   return (
@@ -35,8 +38,9 @@ function UserForm({
         </p>
       </div>
 
-      <form id="user-form" onSubmit={SubmitFunc}>
-        <input
+      <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
+        {inputs.map((input)=>(<FormInputs key={input.key} {...inputsConf[input.key]} {...input} handleKeyUp={handleKeyUp}/>))}
+        {/* <input 
           className={inputClass}
           id={inputs.id}
           autoComplete="off"
@@ -44,20 +48,20 @@ function UserForm({
           onChange={(e) => setVal(e.target.value)}
           onKeyUp={handleKeyUp}
           placeholder={inputs.placeHolder}
-        />
-        {inputClass === "bad-input" ? (
-          <div className="invalid-txt">
-            <p>{inputs.errorText}</p>
-          </div>
+        /> */}
+        {inputsConf.inputClass === "bad-input" ? (
+          // <div className="invalid-txt">
+            <p className="invalid-txt">{errorText.errorText[0]}</p>
+          // </div>
         ) : null}
         <div className="form-btns-div">
           <button
             type="button"
-            onClick={ClickFunc}
+            onClick={buttonsConf[0].ClickFunc}
             className="form-btn"
             id="changing-btn"
           >
-            {inputs.btnText}
+            {buttonsText[0].btnText}
           </button>
           <button type="submit" className="form-btn" id="next-btn">
             next

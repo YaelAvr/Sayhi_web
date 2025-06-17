@@ -1,0 +1,92 @@
+{
+  "0": {
+    "title": "Create a SayHi Account",
+    "text": "Enter your name",
+    "inputs": [
+      {
+        "key": "0",
+        "id": "register-name1",
+        "type": "text",
+        "placeHolder": "First name"
+      },
+      {
+        "key": "1",
+        "id": "register-name2",
+        "type": "text",
+        "placeHolder": "Last name (optional)"
+      }
+    ],
+    "errorText": [
+      { "404": "Username not found,\n please try again or register" }
+    ],
+    "button": [
+      {
+        "key": "0",
+        "btnText": "Create a new account"
+      }
+    ]
+  },
+  "1": {
+    "title": "Basic information",
+    "text": "",
+    "inputs": [
+      {
+        "key": "0",
+        "id": "username",
+        "type": "password",
+        "placeHolder": "Enter your Password"
+      }
+    ],
+    "errorText": [
+      { "404": "Wrong password. Please try again.", "400": "Enter a password" }
+    ],
+    "button": [
+      {
+        "key": "0",
+        "btnText": "Back"
+      }
+    ]
+  },
+  "2": {
+    "title": "Choose your SayHi address",
+    "text": "Pick-----",
+    "inputs": [
+      {
+        "key": "0",
+        "id": "username",
+        "type": "text",
+        "placeHolder": "Email"
+      }
+    ],
+    "errorText": [
+      { "404": "Username not found,\n please try again or register" }
+    ],
+    "button": [
+      {
+        "key": "0",
+        "btnText": "Create a new account"
+      }
+    ]
+  },
+  "3": {
+    "title": "Create a strong password",
+    "text": "Create a strong password with a mix of letters, numbers and symbols",
+    "inputs": [
+      {
+        "key": "0",
+        "id": "username",
+        "type": "password",
+        "placeHolder": "Enter your Password"
+      }
+    ],
+    "errorText": [
+      { "404": "Wrong password. Please try again.", "400": "Enter a password" }
+    ],
+    "button": [
+      {
+        "key": "0",
+        "btnText": "Back"
+      }
+    ]
+  }
+}

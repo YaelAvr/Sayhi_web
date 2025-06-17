@@ -2,21 +2,39 @@
   "0": {
     "title": "Sign in",
     "text": "to continue to Gmail",
-    "inputs": {
-      "id": "username",
-      "placeHolder": "Email",
-      "errorText": "Username not found,\n please try again or register",
-      "btnText": "Create a new account"
-    }
+    "inputs": [
+      {
+        "key": "0",
+        "id": "login-username",
+        "type": "text",
+        "placeHolder": "Email"
+      }
+    ],
+    "errorText": [{"404":"Username not found,\n please try again or register"}],
+    "button": [
+      {
+        "key": "0",
+        "btnText": "Create a new account"
+      }
+    ]
   },
   "1": {
     "title": "Hi",
     "text": "",
-    "inputs": {
-      "id": "username",
-      "placeHolder": "Enter your Password",
-      "errorText": "Wrong or invalid password. Please try again.",
-      "btnText": "Back"
-    }
+    "inputs": [
+      {
+        "key": "0",
+        "id": "login-password",
+        "type": "password",
+        "placeHolder": "Enter your Password"
+      }
+    ],
+    "errorText": [{"404":"Wrong password. Please try again.","400":"Enter a password"}],
+    "button": [
+      {
+        "key": "0",
+        "btnText": "Back"
+      }
+    ]
   }
 }

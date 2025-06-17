@@ -64,52 +64,74 @@ const LoginPage = () => {
     setInputClass("no-input");
   };
 
+  
   const getPartText = () => {
     const data = loginText[loginPart];
     if (!data) return null;
-
-    return {
-      title: data.title,
-      text: data.text,
-      input: {
-        id: data.inputs.id,
-        placeHolder: data.inputs.placeHolder,
-        errorText: data.inputs.errorText,
-        btnText: data.inputs.btnText,
-      },
-    };
+    return data;
   };
-  const partText = getPartText();
+
+  const formConfigs = {
+    0: {
+      buttonsConf: [
+        {
+          SubmitFunc: handleUsernameSubmit,
+          ClickFunc: () => navigate("/RegisterPage"),
+        },
+      ],
+     
+      inputsConf: [{  inputClass: inputClass, inputValue: username, setVal: setUsername }],
+    },
+    1: {
+      buttonsConf: [{ SubmitFunc: handleLogin, ClickFunc: handleBack }],
+      inputsConf: [{  inputClass: inputClass, inputValue: password, setVal: setPassword }],
+      displayName: displayName,
+      username: username,
+    },
+  };
+
 
   const displayPage = () => {
-    if (loginPart === 0) {
-      return (
-        <UserForm
-          SubmitFunc={handleUsernameSubmit}
-          ClickFunc={() => navigate("/RegisterPage")}
-          inputValue={username}
-          setVal={setUsername}
-          inputClass={inputClass}
-          data={partText}
-        />
-      );
-    } else if (loginPart === 1) {
-      return (
-        <UserForm
-          SubmitFunc={handleLogin}
-          ClickFunc={handleBack}
-          inputValue={password}
-          setVal={setPassword}
-          inputClass={inputClass}
-          data={partText}
-          displayName={displayName}
-          username={username}
-          // inputs={partText.input}
-        />
-      );
-    }
+    const partText = getPartText();
+    const config = formConfigs[loginPart];
+    if (!config) return null;
+    return(<UserForm
+      // SubmitFunc={handleUsernameSubmit}
+      // ClickFunc={() => navigate("/RegisterPage")}
+      // inputValue={username}
+      // setVal={setUsername}
+      {...config}
+      data={partText}
+    />
+)
+    // if (loginPart === 0) {
+    //   return (
+    //     <UserForm
+    //       SubmitFunc={handleUsernameSubmit}
+    //       ClickFunc={() => navigate("/RegisterPage")}
+    //       inputValue={username}
+    //       setVal={setUsername}
+    //       inputClass={inputClass}
+    //       data={partText}
+    //     />
+    //   );
+    // } else if (loginPart === 1) {
+    //   return (
+    //     <UserForm
+    //       SubmitFunc={handleLogin}
+    //       ClickFunc={handleBack}
+    //       inputValue={password}
+    //       setVal={setPassword}
+    //       inputClass={inputClass}
+    //       data={partText}
+    //       displayName={displayName}
+    //       username={username}
+    //       // inputs={partText.input}
+    //     />
+    //   );
+    // }
   };
 
-  return( displayPage())
+  return displayPage();
 };
 export default LoginPage;
