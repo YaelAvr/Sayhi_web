@@ -18,7 +18,14 @@ const iconMap = {
   'Spam': spamIcon,
 };
 
-function SideBar({ onComposeClick, defaultLabels, customLabels, onAddLabelClick  }) { 
+function SideBar({ 
+  onComposeClick, 
+  defaultLabels, 
+  customLabels, 
+  onAddLabelClick,
+  onDeleteLabel,
+  onUpdateLabel
+}) { 
     const [selected, setSelected] = useState('Inbox');
     
   return (
@@ -51,6 +58,8 @@ function SideBar({ onComposeClick, defaultLabels, customLabels, onAddLabelClick 
             selected={selected === label.name}
             iconSrc={customLabelIcon} 
             onClick={() => setSelected(label.name)}
+            onDelete={onDeleteLabel}
+            onUpdate={onUpdateLabel}
           />
         ))}
       </div>

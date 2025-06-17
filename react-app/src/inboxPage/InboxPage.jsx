@@ -55,6 +55,46 @@ const InboxPage = () => {
     fetchAndFilterLabels();
   }, []); // המערך הריק מבטיח ריצה חד-פעמית
 
+   const handleDeleteLabel = async (labelId) => {
+    if (!window.confirm("Are you sure you want to delete this label?")) return;
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`/api/labels/${labelId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (response.ok) {
+        fetchAndFilterLabels(); // רענון הרשימה לאחר מחיקה
+      } else {
+        alert('Failed to delete label.');
+      }
+    } catch (error) {
+      console.error("Error deleting label:", error);
+    }
+  };
+
+
+const handleUpdateLabel = async (labelId, newName) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`/api/labels/${labelId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ name: newName }),
+      });
+      if (response.ok) {
+        fetchAndFilterLabels(); // רענון הרשימה לאחר עדכון
+      } else {
+        alert('Failed to update label.');
+      }
+    } catch (error) {
+      console.error("Error updating label:", error);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
@@ -66,16 +106,18 @@ const InboxPage = () => {
 
   return (
     <>
-      <div className="inbox-page" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <div className="inbox-page-layout">
         <TopBar onLogout={handleLogout} />
-        <div style={{ display: 'flex', flex: 1 }}>
+        <div className="inbox-main-content">
           <SideBar 
             onComposeClick={() => setIsComposing(true)} 
             defaultLabels={defaultLabels}
             customLabels={customLabels}
             onAddLabelClick={() => setIsAddLabelOpen(true)} // פונקציה לפתיחת החלונית
+            onDeleteLabel={handleDeleteLabel}
+            onUpdateLabel={handleUpdateLabel}
           />
-          <main style={{ flex: 1, padding: '16px' }}>
+          <main className="inbox-content-area">
             <h2>Welcome to your inbox!</h2>
             {/* כאן תבוא רשימת המיילים בעתיד */}
           </main>
