@@ -18,7 +18,7 @@ const iconMap = {
   'Spam': spamIcon,
 };
 
-function SideBar({ onComposeClick, defaultLabels, customLabels }) { 
+function SideBar({ onComposeClick, defaultLabels, customLabels, onAddLabelClick  }) { 
     const [selected, setSelected] = useState('Inbox');
     
   return (
@@ -40,7 +40,7 @@ function SideBar({ onComposeClick, defaultLabels, customLabels }) {
 
       {/* labels title and the dividing line*/}
       <hr className="sidebar-divider" /> 
-      <LabelsTitle />
+      <LabelsTitle onAddClick={onAddLabelClick} />
 
       {/* custom labels part*/} 
       <div className="labels-section">

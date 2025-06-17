@@ -19,7 +19,7 @@ exports.createLabel = (req, res) => {
   // Try to create label. Fail if name already exists
   const newLabel = Labels.createLabel(user, name);
   if (newLabel === null) {
-    return res.status(400).json({ error: "Bad Request" });
+    return res.status(400).json({ error: "The label name you have chosen already exists. Please try another name:" });
   }
   res.status(201).location(`/api/labels/${newLabel.id}`).end();
 };
