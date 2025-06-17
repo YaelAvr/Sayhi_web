@@ -4,7 +4,7 @@
     "text": "to continue to Gmail",
     "inputs": [
       {
-        "key": "0",
+        "index": "0",
         "id": "login-username",
         "type": "text",
         "placeHolder": "Email"
@@ -13,8 +13,12 @@
     "errorText": [{"404":"Username not found,\n please try again or register"}],
     "button": [
       {
-        "key": "0",
+        "index": "0",
         "btnText": "Create a new account"
+      },
+      {
+        "index": "1",
+        "btnText": "Next"
       }
     ]
   },
@@ -23,7 +27,7 @@
     "text": "",
     "inputs": [
       {
-        "key": "0",
+        "index": "0",
         "id": "login-password",
         "type": "password",
         "placeHolder": "Enter your Password"
@@ -32,8 +36,12 @@
     "errorText": [{"404":"Wrong password. Please try again.","400":"Enter a password"}],
     "button": [
       {
-        "key": "0",
+        "index": "0",
         "btnText": "Back"
+      },
+      {
+        "index": "1",
+        "btnText": "Next"
       }
     ]
   }
