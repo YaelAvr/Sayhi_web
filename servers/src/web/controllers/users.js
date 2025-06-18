@@ -39,7 +39,8 @@ exports.createUser = (req, res) => {
     return res.status(400).json({ error: "One of the fildes are not valid" });
   }
 
-  const newUser = Users.createUser(username, displayName, password, picture, lowGender, birthday);
+  const lowUsername = username.trim().toLowerCase();
+  const newUser = Users.createUser(lowUsername, displayName, password, picture, lowGender, birthday);
   if (newUser === null) {
     return res.status(400).json({ error: "This username is taken" });
   }
@@ -53,7 +54,7 @@ exports.createName = (req, res) => {
   if (!displayName) {
     return res.status(400).json({ error: "Enter first name" });
   }
-  res.status(201).json({displayName});
+  res.status(201).json({ displayName: displayName });
 };
 
 // This function creates a new user with the given parameters
@@ -67,24 +68,24 @@ exports.createPassword = (req, res) => {
 
   const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
-    // Check if all the given parameters are valid
-  if ( !passwordPattern.test(password)) {
+  // Check if all the given parameters are valid
+  if (!passwordPattern.test(password)) {
     return res.status(400).json({ error: "Use 8 characters or more for your password" });
   }
-  
+
   if (!confirm) {
     return res.status(400).json({ error: "Enter password confirmation" });
   }
 
-  if(confirm !== password){
+  if (confirm !== password) {
     return res.status(400).json({ error: "Those passwords did not match. Try again." });
   }
 
-  res.status(201).json({password});
+  res.status(201).json({ password:password });
 };
 
 exports.createGender = (req, res) => {
-  const {  gender } = req.body;
+  const { gender } = req.body;
   const genderOptions = ["female", "male", "other"];
 
   if (!gender) {
@@ -92,18 +93,51 @@ exports.createGender = (req, res) => {
   }
 
   const lowGender = gender.trim().toLowerCase();
-  
-  // // Check if all the given parameters are valid
-  // if (!genderOptions.includes(lowGender)) {
-  //   return res.status(400).json({ error: "Please select your gender" });
-  // }
 
-  // const newUser = Users.createUser(username, displayName, password, picture, lowGender, birthday);
-  // if (newUser === null) {
-  //   return res.status(400).json({ error: "This username is taken" });
-  // }
-  res.status(201).json({gender:lowGender});
+  // // Check if all the given parameters are valid
+  if (!genderOptions.includes(lowGender)) {
+    return res.status(400).json({ error: "Please select your gender" });
+  }
+
+  res.status(201).json({ gender: lowGender });
 };
+
+exports.createUserName = (req, res) => {
+  const { username } = req.body;
+
+  if (!username) {
+    return res.status(400).json({ error: "Username is required" });
+  }
+  const lowUsername = username.trim().toLowerCase();
+
+  if (lowUsername.length < 6 || lowUsername.length > 30) return res.status(400).json({ error: "Sorry, your username must be between 6 and 30 characters long." });
+
+
+  const user = Users.isUserNameRegistered(lowUsername)
+  if (!user) {
+    return res.status(200).json({ username: lowUsername });
+  }
+  res.status(404).json({ error: "That username is taken. Try another." });
+
+};
+
+exports.createBirthday = (req, res) => {
+  const { day, month, year } = req.body;
+
+  if (!day || !month || !year) {
+    return res.status(400).json({ error: "Please fill in a complete birthday" });
+  }
+
+  // Check if all the given parameters are valid
+  if ( !isDateValid(day, month, year) ) {
+    return res.status(400).json({ error: "Please enter a valid date" });
+  }
+
+  const birthday = new Date(year, month - 1, day);
+
+  res.status(200).json({birthday:birthday});
+};
+
 
 // this function returns the information of a specific user with the given id
 exports.getUserById = (req, res) => {
@@ -133,16 +167,43 @@ exports.isUserNameRegistered = (req, res) => {
 
   const user = Users.isUserNameRegistered(username)
 
-  if (!user) {return res.status(404).json({ exists: false, error: 'Could not find your SayHi Account' });}
+  if (!user) { return res.status(404).json({ exists: false, error: 'Could not find your SayHi Account' }); }
   else {
     return res.status(200).json({ displayName: user.displayName });
   }
 }
 
+function isDateValid(day, month, year){
+    const intDay = parseInt(day);
+  const intMonth = parseInt(month);
+  const intYear = parseInt(year);
+
+  //  Basic range checks
+  if (intYear < 1000 || intYear > 3000 ||
+    intMonth <= 0 || intMonth > 12 ||
+    intDay <= 0 || intDay > 31) {
+    return false;
+  }
+
+  const dateObj = new Date(intYear, intMonth - 1, intDay);
+  // Check if the object construction was successful
+  if (!(!isNaN(dateObj.getTime()) && dateObj.getFullYear() === year &&
+    dateObj.getMonth() === month - 1 && dateObj.getDate() === day)) {
+    return false;
+  }
+
+  // Get today's date and check if the "birthday" is a past date
+  const today = new Date();
+  if (dateObj >= today) {
+    return false;
+  }
+
+  return true;
+}
 
 /*  This function checks if the date string is valid 
     and if it is in the format "DD.MM.YYYY".*/
-function isDateValid(dateString) {
+function OLDisDateValid(dateString) {
   // Check if the string is an optional date
   const date = new Date(dateString);
   if (isNaN(date.getTime())) {
