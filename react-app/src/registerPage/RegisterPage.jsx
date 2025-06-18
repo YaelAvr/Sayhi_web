@@ -19,16 +19,39 @@ const RegisterPage = () => {
   const [part, setPart] = useState(0);
   const navigate = useNavigate();
 
-  const createName = () => {
-    if (!firstWord) {
-      setInputClass("bad-input");
-      setError("Enter first name");
-    } else {
-      setDisplayName(`${firstWord} ${secondWord}`);
+  const createName =  async (e) => {
+    e.preventDefault();
+    // displayName
+    // if (!firstWord) {
+    //   setInputClass("bad-input");
+    //   setError("Enter first name");
+    // } else {
+    //   setDisplayName(`${firstWord} ${secondWord}`);
+    //   setPart((prev) => prev + 1);
+    //   setInputClass("no-input");
+    //   setError(null);
+    // }
+    const res = await fetch("/api/users/displayName", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify( `${firstWord} ${secondWord}`),
+    });
+
+    if (res.status === 200) {
+      const data= res.json();
+    setDisplayName(data.displayName);
+
       setPart((prev) => prev + 1);
       setInputClass("no-input");
       setError(null);
+    } else if (res.status === 400 || res.status === 404) {
+      setInputClass("bad-input");
+      const errorData = await res.json();
+      setError(errorData.error);
+    } else {
+      alert("An error occurred, please try again later");
     }
+
   };
 
   const handleBack = () => {

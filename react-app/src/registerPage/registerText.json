@@ -73,9 +73,7 @@
         "className":"date-param",
         "id": "year-form",
         "name": "year",
-        "type":"text",
-        "min": 1,
-        "max": 12
+        "type":"text"
       }
     ],
     "select": {
@@ -83,7 +81,7 @@
       "id":"gender-select",
       "className":"form-select",
       "type": "select",
-      "options": ["Male", "Female", "Rather not say", "Custom"]
+      "options": ["Male", "Female", "Other"]
     },
 
     "button": {
