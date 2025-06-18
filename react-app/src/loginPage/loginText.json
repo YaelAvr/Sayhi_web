@@ -29,9 +29,6 @@
         "placeHolder": "Enter your Password"
       }
     ],
-    "errorText": [
-      { "404": "Wrong password. Please try again.", "400": "Enter a password" }
-    ],
     "button": {
       "changeBtnText": "Back",
       "nextBtn":"next"
