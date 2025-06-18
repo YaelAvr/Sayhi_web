@@ -5,6 +5,8 @@ const FormInputs = ({
   inputClass,
   inputs,
   handleKeyUp,
+  // min=null,
+  // max=null
 }) => {
   //   inputsConf: [{  inputClass: inputClass, inputValue: username, setVal: setUsername }],
   //"inputs": [
@@ -24,6 +26,8 @@ const FormInputs = ({
       onChange={(e) => setVal(e.target.value)}
       onKeyUp={handleKeyUp}
       placeholder={inputs.placeHolder}
+      min={inputs.min && inputs.min}
+      max={inputs.max&&inputs.max}
     />
   );
 };

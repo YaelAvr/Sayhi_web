@@ -41,6 +41,7 @@ const createDefaultLabels = (user) => {
 }
 
 const isUserNameRegistered =(username) => {
+    username = username.toLowerCase();
     return Users.find(user => user.username === username);
 }
 

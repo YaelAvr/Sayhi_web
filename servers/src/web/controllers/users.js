@@ -35,7 +35,7 @@ exports.createUser = (req, res) => {
 
   // Check if all the given parameters are valid
   if (!genderOptions.includes(lowGender) || (!imagePattern.test(picture))
-    || !isDateValid(birthday) || !passwordPattern.test(password)) {
+    || !OLDisDateValid(birthday) || !passwordPattern.test(password)) {
     return res.status(400).json({ error: "One of the fildes are not valid" });
   }
 
@@ -81,7 +81,7 @@ exports.createPassword = (req, res) => {
     return res.status(400).json({ error: "Those passwords did not match. Try again." });
   }
 
-  res.status(201).json({ password:password });
+  res.status(201).json({ password: password });
 };
 
 exports.createGender = (req, res) => {
@@ -129,13 +129,13 @@ exports.createBirthday = (req, res) => {
   }
 
   // Check if all the given parameters are valid
-  if ( !isDateValid(day, month, year) ) {
+  if (!isDateValid(day, month, year)) {
     return res.status(400).json({ error: "Please enter a valid date" });
   }
 
   const birthday = new Date(year, month - 1, day);
 
-  res.status(200).json({birthday:birthday});
+  res.status(200).json({ birthday: birthday });
 };
 
 
@@ -144,6 +144,10 @@ exports.getUserById = (req, res) => {
   // Check if the user id matches the id in the request header
   const userHeader = req.user.id
   const userId = req.params.id
+
+  if (req.params.id !== req.user.id) {
+    return res.status(403).json({ error: "Unauthorized access" });
+  }
 
   if (!userHeader || !userId || userHeader !== userId) {
     return res.status(400).json({ error: 'All fields are required' })
@@ -173,8 +177,8 @@ exports.isUserNameRegistered = (req, res) => {
   }
 }
 
-function isDateValid(day, month, year){
-    const intDay = parseInt(day);
+function isDateValid(day, month, year) {
+  const intDay = parseInt(day);
   const intMonth = parseInt(month);
   const intYear = parseInt(year);
 

@@ -5,10 +5,14 @@ import RegisterPage from './registerPage/RegisterPage';
 import ProtectedRoute from './ProtectedRoute';
 import InboxOrHomePage from './InboxOrHomePage';
 
+
+
 import "./App.css"
 import HomePage from './homePage/HomePage';
 
 function App() {
+
+
     // בודקים אם קיים טוקן ב-localStorage
   // const token = localStorage.getItem('token'); 
 
