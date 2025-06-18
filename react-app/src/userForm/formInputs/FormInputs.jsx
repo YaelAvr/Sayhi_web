@@ -4,9 +4,7 @@ const FormInputs = ({
   setVal,
   inputClass,
   inputs,
-  handleKeyUp,
-  // min=null,
-  // max=null
+  handleKeyUp
 }) => {
   //   inputsConf: [{  inputClass: inputClass, inputValue: username, setVal: setUsername }],
   //"inputs": [
