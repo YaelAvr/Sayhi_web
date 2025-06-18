@@ -46,10 +46,64 @@ exports.createUser = (req, res) => {
   res.status(201).location(`/api/users/${newUser.id}`).end();
 };
 
+// Create a Valid display name
+exports.createName = (req, res) => {
+  const { displayName } = req.body;
 
+  if (!displayName) {
+    return res.status(400).json({ error: "Enter first name" });
+  }
+  res.status(201).json({displayName});
+};
 
+// This function creates a new user with the given parameters
+exports.createPassword = (req, res) => {
+  const { password, confirm } = req.body;
+  // const genderOptions = ["female", "male", "other"];
 
+  if (!password) {
+    return res.status(400).json({ error: "Enter password" });
+  }
 
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+    // Check if all the given parameters are valid
+  if ( !passwordPattern.test(password)) {
+    return res.status(400).json({ error: "Use 8 characters or more for your password" });
+  }
+  
+  if (!confirm) {
+    return res.status(400).json({ error: "Enter password confirmation" });
+  }
+
+  if(confirm !== password){
+    return res.status(400).json({ error: "Those passwords did not match. Try again." });
+  }
+
+  res.status(201).json({password});
+};
+
+exports.createGender = (req, res) => {
+  const {  gender } = req.body;
+  const genderOptions = ["female", "male", "other"];
+
+  if (!gender) {
+    return res.status(400).json({ error: "Please select your gender" });
+  }
+
+  const lowGender = gender.trim().toLowerCase();
+  
+  // // Check if all the given parameters are valid
+  // if (!genderOptions.includes(lowGender)) {
+  //   return res.status(400).json({ error: "Please select your gender" });
+  // }
+
+  // const newUser = Users.createUser(username, displayName, password, picture, lowGender, birthday);
+  // if (newUser === null) {
+  //   return res.status(400).json({ error: "This username is taken" });
+  // }
+  res.status(201).json({gender:lowGender});
+};
 
 // this function returns the information of a specific user with the given id
 exports.getUserById = (req, res) => {
@@ -72,12 +126,12 @@ exports.getUserById = (req, res) => {
     })
 };
 
-exports.isUserNameRegisterd = (req, res) => {
+exports.isUserNameRegistered = (req, res) => {
   const username = req.params.username
 
   if (!username) return res.status(400).json({ error: "Enter an email" });
 
-  const user = Users.isUserNameRegisterd(username)
+  const user = Users.isUserNameRegistered(username)
 
   if (!user) {return res.status(404).json({ exists: false, error: 'Could not find your SayHi Account' });}
   else {
