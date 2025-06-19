@@ -31,7 +31,6 @@ const InboxPage = () => {
       const data = await res.json();
       console.log(data.displayName)
     } else if (res.status === 400 || res.status === 404 || res.status === 403) {
-      // setInputClass("bad-input");
       const errorData = await res.json();
       alert(errorData.error);
     } else {
