@@ -5,48 +5,36 @@ import RegisterPage from './registerPage/RegisterPage';
 import ProtectedRoute from './ProtectedRoute';
 import InboxOrHomePage from './InboxOrHomePage';
 
-
-
 import "./App.css"
-import HomePage from './homePage/HomePage';
+
 
 function App() {
-
-
     // בודקים אם קיים טוקן ב-localStorage
   // const token = localStorage.getItem('token'); 
 
   // console.log(token);
   return (
     <div className="App">
-      {/* <HomePage/> */}
-         {/* <LoginPage /> */}
-                {/* <InboxPage />  */}
-        {/* {<RegisterPage />} */}
-      
-
-        <Routes> 
-          {/* --- זה הנתיב החשוב --- */}
-          {/* הנתיב הראשי '/' יטען את ה-InboxOrHomePage, שיחליט לאן להמשיך */}
-          {/* <Route path="/" element={<InboxOrHomePage />} /> */}
-          <Route path="/" element={<LoginPage />} />
-
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-
-          {/* הנתיב ל-inbox עדיין מוגן, כדי למנוע גישה ישירה דרך ה-URL */}
-           <Route
-            path="/inbox"
-            element={
-              <ProtectedRoute>
-                <InboxPage />
-              </ProtectedRoute>
-            }
-          /> 
-
-          <Route path="*" element={<h1>404: Page Not Found</h1>} />
-        </Routes> 
-
+      <Routes>
+        {/* --- זה הנתיב החשוב --- */}
+        {/* הנתיב הראשי '/' יטען את ה-InboxOrHomePage, שיחליט לאן להמשיך */}
+        <Route path="/" element={<InboxOrHomePage />} /> 
+        
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        
+        {/* הנתיב ל-inbox עדיין מוגן, כדי למנוע גישה ישירה דרך ה-URL */}
+        <Route 
+          path="/inbox" 
+          element={
+            <ProtectedRoute>
+              <InboxPage />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route path="*" element={<h1>404: Page Not Found</h1>} />
+      </Routes>
     </div>
     // <InboxPage />
     // <LoginPage />

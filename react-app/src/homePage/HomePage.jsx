@@ -1,16 +1,20 @@
 import React from "react";
 import "./HomePage.css";
-import { useState, useRef, memo } from "react";
-import Logo from "../gmailLogo/Logo"
-import { useNavigate } from 'react-router-dom';
-import LoginPage from "../loginPage/LoginPage";
+import Logo from "../gmailLogo/Logo";
+import { Link } from 'react-router-dom'; // 1. מייבאים את Link
 
-const HomePage =()=>{
-  const navigate = useNavigate();
+const HomePage = () => {
+  // 2. אין צורך ב-useNavigate או בפונקציה נוספת כאן
 
-    return(
-        <button className="Home-page-btn" type="button" onClick={()=> navigate(<LoginPage/>)}>Log in</button>
-    )
-}
+  return (
+    <div className="home-page-container">
+      <Logo />
+      {/* 3. משתמשים ב-Link עם אותו className של הכפתור */}
+      <Link to="/login" className="Home-page-btn">
+        Log in
+      </Link>
+    </div>
+  );
+};
 
-export default HomePage
+export default HomePage;

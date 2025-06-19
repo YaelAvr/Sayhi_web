@@ -16,6 +16,9 @@ function UserForm({
   displayName = null,
   username = null,
 }) {
+  const inputs = data.inputs;
+  const errorText = data.errorText;
+  const buttonsText = data.button;
 
   const handleKeyUp = (e) => {
     if (e.key === "Enter") {
@@ -61,10 +64,10 @@ function UserForm({
             className="form-btn"
             id="changing-btn"
           >
-            {data.button.changeBtnText}
+            {buttonsText[0].btnText}
           </button>
           <button type="submit" className="form-btn" id="next-btn">
-            {data.button.nextBtn}
+            {buttonsText[1].btnText}
           </button>
         </div>
       </form>

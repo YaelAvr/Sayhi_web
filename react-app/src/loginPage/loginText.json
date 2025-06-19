@@ -18,6 +18,13 @@
       "changeBtnText": "Create account",
       "nextBtn":"next"
     }
+    "errorText": [
+      { "404": "Username not found,\n please try again or register" }
+    ],
+    "button": {
+      "changeBtnText": "Create account",
+      "nextBtn":"next"
+    }
   },
   "1": {
     "title": "Hi",
@@ -31,9 +38,16 @@
         "placeHolder": "Enter your Password"
       }
     ],
-    "button": {
-      "changeBtnText": "Back",
-      "nextBtn":"next"
-    }
+    "errorText": [{"404":"Wrong password. Please try again.","400":"Enter a password"}],
+    "button": [
+      {
+        "index": "0",
+        "btnText": "Back"
+      },
+      {
+        "index": "1",
+        "btnText": "Next"
+      }
+    ]
   }
 }

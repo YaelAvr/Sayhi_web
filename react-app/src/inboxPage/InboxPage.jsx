@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "./InboxPage.css";
-import TopBar from "./TopBar";
-import SideBar from "./SideBar";
-import ComposeWindow from "./composeWindow/ComposeWindow";
-import AddLabelwindow from "./addLabelWindow/AddLabelWindow";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './InboxPage.css';
+import TopBar from './TopBar'; 
+import SideBar from './SideBar';
+import ComposeWindow from './composeWindow/ComposeWindow';
+import AddLabelWindow from './labelTitle/AddLabelWindow';
+import GenericWindow from './genericWindow/GenericWindow';
 
 import { getUserIdFromToken } from "../utils/utils";
 const InboxPage = () => {
@@ -15,28 +16,6 @@ const InboxPage = () => {
   const [customLabels, setCustomLabels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddLabelOpen, setIsAddLabelOpen] = useState(false);
-
-  const getUserDetailes = async () => {
-    const userId = getUserIdFromToken();
-    console.log("User ID:", userId);
-
-    const token = localStorage.getItem("token");
-
-     const res = await fetch(`/api/users/${userId}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-     if (res.status === 200) {
-      const data = await res.json();
-      console.log(data.displayName)
-    } else if (res.status === 400 || res.status === 404 || res.status === 403) {
-      const errorData = await res.json();
-      alert(errorData.error);
-    } else {
-      alert("An error occurred, please try again later");
-    }
-  };
 
   // פונקציה לטעינת וסינון התוויות, נוכל לקרוא לה שוב לרענון
   const fetchAndFilterLabels = async () => {
@@ -78,6 +57,39 @@ const InboxPage = () => {
     fetchAndFilterLabels();
   }, []); // המערך הריק מבטיח ריצה חד-פעמית
 
+   const handleDeleteLabel = async () => {
+    if (!deletingLabel) return;
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`/api/labels/${deletingLabel.id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (response.ok) {
+        fetchAndFilterLabels();
+      } else { alert('Failed to delete label.'); }
+    } catch (error) { console.error("Error deleting label:", error); }
+    setDeletingLabel(null); // סוגרים את מודאל המחיקה בכל מקרה
+  };
+
+
+const handleUpdateLabel = async () => {
+    if (!editingLabel || !newLabelName.trim()) return;
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`/api/labels/${editingLabel.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`},
+        body: JSON.stringify({ name: newLabelName }),
+      });
+      if (response.ok) {
+        fetchAndFilterLabels();
+      } else { alert('Failed to update label.'); }
+    } catch (error) { console.error("Error updating label:", error); }
+    setEditingLabel(null); // סוגרים את מודאל העריכה
+    setNewLabelName("");   // מאפסים את השם
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
@@ -89,30 +101,68 @@ const InboxPage = () => {
 
   return (
     <>
-      <div className="inbox-page">
+      <div className="inbox-page" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <TopBar onLogout={handleLogout} />
-        <div style={{ display: "flex", flex: 1 }}>
-          <SideBar
-            onComposeClick={() => setIsComposing(true)}
+        <div style={{ display: 'flex', flex: 1 }}>
+          <SideBar 
+            onComposeClick={() => setIsComposing(true)} 
             defaultLabels={defaultLabels}
             customLabels={customLabels}
-            onAddLabelClick={() => setIsAddLabelOpen(true)} // פונקציה לפתיחת החלונית
+            onAddLabelClick={() => setIsAddLabelOpen(true)}
+             onOpenEditLabel={(label) => { 
+              setEditingLabel(label); 
+              setNewLabelName(label.name); 
+                }}
+              onOpenDeleteLabel={(label) => setDeletingLabel(label)}
           />
-          <main style={{ flex: 1, padding: "16px" }}>
+          <main style={{ flex: 1, padding: '16px' }}>
             <h2>Welcome to your inbox!</h2>
             {/* כאן תבוא רשימת המיילים בעתיד */}
           </main>
         </div>
       </div>
 
+      {/* מודאל לכתיבת מייל חדש */}
       {isComposing && <ComposeWindow onClose={() => setIsComposing(false)} />}
-
+      
       {/* הצגה מותנית של חלונית יצירת התווית */}
       {isAddLabelOpen && (
         <AddLabelwindow
           onClose={() => setIsAddLabelOpen(false)}
-          onLabelAdded={fetchAndFilterLabels} // מעבירים את הפונקציה לרענון
+          onLabelAdded={fetchAndFilterLabels}
         />
+      )}
+
+      {/* מודאל לעריכת תווית */}
+      {editingLabel && (
+        <GenericWindow
+          title="Edit label"
+          onClose={() => setEditingLabel(null)}
+          onConfirm={handleUpdateLabel}
+          confirmText="Save"
+        >
+          <label htmlFor="edit-label-name">New label name:</label>
+          <input
+            id="edit-label-name"
+            type="text"
+            value={newLabelName}
+            onChange={(e) => setNewLabelName(e.target.value)}
+            autoFocus
+          />
+        </GenericWindow>
+      )}
+
+      {/* מודאל לאישור מחיקה */}
+      {deletingLabel && (
+        <GenericWindow
+          title="Delete label"
+          onClose={() => setDeletingLabel(null)}
+          onConfirm={handleDeleteLabel}
+          confirmText="Delete"
+        >
+          <p>Are you sure you want to delete the label "<strong>{deletingLabel.name}</strong>"?</p>
+          <p>This will not delete any messages.</p>
+        </GenericWindow>
       )}
     </>
   );
