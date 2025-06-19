@@ -1,0 +1,109 @@
+.modal-backdrop {
+  position: fixed; /* מכסה את כל המסך */
+  top: 0;
+  left: 0;
+  width: 100vw; /* 100% מרוחב המסך */
+  height: 100vh; /* 100% מגובה המסך */
+  background-color: rgba(0, 0, 0, 0.5); /* רקע שחור עם 50% שקיפות */
+  
+  /* טריק ה-Flexbox למרכוז מושלם */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* מוודא שהוא מעל כל שאר התוכן */
+}
+
+/* 
+  החלונית הלבנה עצמה. 
+  השם שנתתי לה ב-JSX הוא modal-content.
+*/
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  width: auto; /* הרוחב יקבע על ידי התוכן, עד למקסימום */
+  min-width: 450px; /* רוחב מינימלי כדי שלא יראה צר מדי */
+  max-width: 90vw; /* לא יהיה רחב יותר מ-90% מהמסך */
+}
+
+/* --- שאר העיצובים נשארים דומים מאוד --- */
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #3c4043;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #5f6368;
+}
+
+.modal-body {
+  font-size: 0.9rem;
+}
+
+.modal-body label {
+  display: block;
+  margin-bottom: 8px;
+  color: #5f6368;
+}
+
+.modal-body input[type="text"] {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  box-sizing: border-box; /* חשוב כדי שה-padding לא "ינפח" את התיבה */
+}
+
+.modal-body input[type="text"]:focus {
+  border-color: #1a73e8;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e8eaed;
+}
+
+.modal-footer button {
+  padding: 8px 24px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background-color: transparent;
+  color: #1a73e8;
+}
+.btn-cancel:hover {
+  background-color: rgba(26, 115, 232, 0.08);
+}
+
+.btn-confirm {
+  background-color: #1a73e8;
+  color: white;
+}
+.btn-confirm:hover {
+  background-color: #185abc;
+}

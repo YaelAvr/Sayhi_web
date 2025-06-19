@@ -10,7 +10,7 @@
 .inbox-main-content {
   display: flex;
   flex: 1; /* גורם לחלק הזה למלא את כל הגובה הפנוי */
-   text-align: center;
+  /* text-align: center; */
 }
 
 /* האזור המרכזי שבו יוצגו המיילים */

@@ -23,8 +23,8 @@ function SideBar({
   defaultLabels, 
   customLabels, 
   onAddLabelClick,
-  onDeleteLabel,
-  onUpdateLabel
+  onOpenEditLabel,
+  onOpenDeleteLabel
 }) { 
     const [selected, setSelected] = useState('Inbox');
     
@@ -32,12 +32,12 @@ function SideBar({
     <div className="sidebar-container">
       <CreateMailButton onClick={onComposeClick} /> 
       
-      {/* default labels part*/}
-      <div className="labels-section">
+      {/* default labels part (ללא שינוי) */}
+      <div className="default-labels-section" style={{ marginTop: '16px' }}>
         {defaultLabels.map(label => (
           <LabelButton
             key={label.id}
-            label={label.name}
+            label={label}
             selected={selected === label.name}
             iconSrc={iconMap[label.name]} 
             onClick={() => setSelected(label.name)}
@@ -45,21 +45,22 @@ function SideBar({
         ))}
       </div>
 
-      {/* labels title and the dividing line*/}
       <hr className="sidebar-divider" /> 
       <LabelsTitle onAddClick={onAddLabelClick} />
 
-      {/* custom labels part*/} 
-      <div className="labels-section">
+      {/* custom labels part (עם התיקון) */}
+      <div className="custom-labels-section">
         {customLabels && customLabels.map(label => (
           <LabelButton
             key={label.id}
-            label={label.name}
+            label={label}
             selected={selected === label.name}
             iconSrc={customLabelIcon} 
             onClick={() => setSelected(label.name)}
-            onDelete={onDeleteLabel}
-            onUpdate={onUpdateLabel}
+            // 2. עכשיו מעבירים את הפונקציות הנכונות ל-LabelButton
+            // השמות onEditClick ו-onDeleteClick הם השמות ש-LabelButton מצפה לקבל
+            onEditClick={() => onOpenEditLabel(label)} 
+            onDeleteClick={() => onOpenDeleteLabel(label)}
           />
         ))}
       </div>
