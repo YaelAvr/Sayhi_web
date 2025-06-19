@@ -21,13 +21,13 @@ const FormDate = ({ bDayConf, data, handleKeyUp }) => {
         inputs={data[0]}
         handleKeyUp={handleKeyUp}
         // setVal={handleChange}
-        inputClass={`${bDayConf.inputClass} ${data.className}`}
+        inputClass={`${bDayConf.inputClass}, ${data.className}`}
       />
       <FormSelect
         {...bDayConf[1]}
         data={data[1]}
         // setVal={handleChange}
-        inputClass={`${bDayConf.inputClass} ${data.className}`}
+        inputClass={`${bDayConf.inputClass}, ${data.className}`}
       />
       <FormInputs
         {...bDayConf[2]}
