@@ -2,32 +2,85 @@
 .LabelButton {
   display: flex;
   align-items: center;
+  justify-content: space-between; /* דוחף את הנקודות לקצה */
   width: 100%;
-  padding: 12px 16px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 0 50px 50px 0;
-  transition: background 0.2s;
+  border-radius: 999px; /* פינות עגולות מאוד */
+  margin-bottom: 2px;
+  transition: background-color 0.15s ease-in-out;
 }
 
+/* אפקט במעבר עכבר או כשהתווית נבחרה */
 .LabelButton:hover {
-  background-color: #f0f0f0;
+  background-color: #f1f3f4;
 }
 
 .LabelButton.selected {
-  background-color: #e8f0fe;
+  background-color: #d3e3fd;
+  font-weight: 500;
 }
 
-.label {
-  flex: 1;
+.label-main-btn {
+  flex-grow: 1; /* יתפוס את כל המקום הפנוי */
+  display: flex;
+  align-items: center;
+  gap: 16px; /* רווח בין האייקון לטקסט */
+  padding: 6px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
   text-align: left;
 }
 
 .label-icon {
   width: 20px;
   height: 20px;
-  margin-right: 8px;
-  vertical-align: middle;
+  opacity: 0.7;
+}
+
+.label-name {
+  font-size: 0.9rem;
+  color: #3c4043; /* צבע טקסט כהה */
+}
+
+/* --- עיצוב תפריט 3 הנקודות --- */
+
+.label-actions {
+  position: relative;
+  padding-right: 8px;
+}
+
+.dots-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 4px;
+  border-radius: 50%;
+  color: #5f6368;
+}
+
+.dots-btn:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.label-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 10;
+  width: 150px;
+  padding: 8px 0;
+}
+
+.menu-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.menu-item:hover {
+  background-color: #f1f3f4;
 }

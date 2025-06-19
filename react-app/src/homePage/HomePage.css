@@ -1,13 +1,13 @@
 .Home-page-btn {
-  width: 15%;
-  height: fit-content;
-  border-radius: 1em;
-  font-size: 2em;
-
-  padding: 1em;
-  padding-top: 0.9em;
-  padding-bottom: 0.9em;
-  border-width: 0;
-  background-color: #0b57d0;
+  /* עיצוב שגורם לזה להיראות כמו כפתור */
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #1a73e8;
   color: white;
+  text-decoration: none; /* חשוב כדי להסיר את הקו התחתון של הקישור */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1rem;
 }

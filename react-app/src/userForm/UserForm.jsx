@@ -8,27 +8,30 @@ function UserForm({
   inputsConf,
   buttonsConf,
   data,
+  errorText,
   displayName = null,
   username = null,
 }) {
   const inputs = data.inputs;
-  const errorText = data.errorText;
+  // const errorText = data.errorText;
   const buttonsText = data.button;
 
   const handleKeyUp = (e) => {
     if (e.key === "Enter") {
-      buttonsConf[1].SubmitFunc();
+      buttonsConf.SubmitFunc();
     }
   };
   return (
     <div id="user-form-page">
       <div className="form-text">
         <Logo containerClass="form-logo-container" />
-        <h1>{data.title} {displayName && displayName}</h1>
+        <h1>
+          {data.title} {displayName && displayName}
+        </h1>
         <p>{!username ? data.text : `${username}@sayhi.com`}</p>
       </div>
 
-      <form id="user-form" onSubmit={buttonsConf[1].SubmitFunc}>
+      <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
         <div id="input-div">
           {inputs.map((input, index) => (
             <FormInputs
@@ -40,22 +43,18 @@ function UserForm({
             />
           ))}
         </div>
-        {inputsConf.inputClass === "bad-input" ? (
-          // <div className="invalid-txt">
-          <p className="invalid-txt">{errorText.errorText[0]}</p>
-        ) : // </div>
-        null}
+        {errorText && <p className="invalid-txt">{errorText}</p>}
         <div className="form-btns-div">
           <button
             type="button"
-            onClick={buttonsConf[0].ClickFunc}
+            onClick={buttonsConf.ClickFunc}
             className="form-btn"
             id="changing-btn"
           >
-            {buttonsText[0].btnText}
+            {buttonsText.changeBtnText}
           </button>
           <button type="submit" className="form-btn" id="next-btn">
-            {buttonsText[1].btnText}
+            {buttonsText.nextBtn}
           </button>
         </div>
       </form>
