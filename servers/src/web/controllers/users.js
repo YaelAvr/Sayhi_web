@@ -107,7 +107,11 @@ exports.createUserName = (req, res) => {
   if (!username) {
     return res.status(400).json({ error: "Username is required" });
   }
+
   const lowUsername = username.trim().toLowerCase();
+  // if (lowUsername.length <username) {
+  //   return res.status(400).json({ error: "Sorry, your username must only include letters, numbers & periods." });
+  // }
 
   if (lowUsername.length < 6 || lowUsername.length > 30) return res.status(400).json({ error: "Sorry, your username must be between 6 and 30 characters long." });
 
