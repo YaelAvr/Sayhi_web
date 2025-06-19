@@ -78,6 +78,7 @@
     ],
     "select": {
       "placeHolder": "gender",
+      "name":"gender",
       "id":"gender-select",
       "className":"form-select",
       "type": "select",

@@ -49,19 +49,18 @@ exports.createUser = (req, res) => {
 
 // Create a Valid display name
 exports.createName = (req, res) => {
-  const { displayName } = req.body;
+  const { firstWord, secondWord } = req.body;
 
-  if (!displayName) {
+  if (!firstWord) {
     return res.status(400).json({ error: "Enter first name" });
   }
-  res.status(201).json({ displayName: displayName });
+  const displayName =firstWord+" " +secondWord;
+  res.status(200).json({ displayName: displayName });
 };
 
 // This function creates a new user with the given parameters
 exports.createPassword = (req, res) => {
   const { password, confirm } = req.body;
-  // const genderOptions = ["female", "male", "other"];
-
   if (!password) {
     return res.status(400).json({ error: "Enter password" });
   }

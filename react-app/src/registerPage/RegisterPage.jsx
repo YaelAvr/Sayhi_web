@@ -28,10 +28,11 @@ const RegisterPage = () => {
 
   const createName = async (e) => {
     e.preventDefault();
+    console.log("first: " + firstWord + " second: [" + secondWord + "]end");
     const res = await fetch("/api/users/displayName", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(`${firstWord} ${secondWord}`),
+      body: JSON.stringify({ firstWord, secondWord }),
     });
 
     if (res.status === 200) {
@@ -78,18 +79,19 @@ const RegisterPage = () => {
     const genderRes = createGender();
 
     if (bdRes.status === 200 && genderRes.status === 200) {
-      setBirthDay({ ...birthDay, date: data });
+      const data = bdRes.json();
 
-      console.log("birthday: "+birthDay.date+" gender "+gender)
+      setBirthDay({ ...birthDay, date: data.birthday });
+
+      console.log("birthday: " + birthDay.date + " gender " + gender);
       handleNext();
-    } else if (
-      genderRes.status === 400 ||
-      bdRes.status === 400 ||
-      genderRes.status === 404 ||
-      bdRes.status === 404
-    ) {
+    } else if (genderRes.status === 400 || genderRes.status === 404) {
       setInputClass("bad-input");
-      const errorData = await res.json();
+      const errorData = await genderRes.json();
+      setError(errorData.error);
+    } else if (bdRes.status === 400 || bdRes.status === 404) {
+      setInputClass("bad-input");
+      const errorData = await bdRes.json();
       setError(errorData.error);
     } else {
       alert("An error occurred, please try again later");
@@ -104,6 +106,7 @@ const RegisterPage = () => {
   const handleNext = () => {
     setPart((prev) => prev + 1);
     setInputClass("no-input");
+    // console.log
     setError(null);
   };
 
@@ -113,11 +116,15 @@ const RegisterPage = () => {
     return data;
   };
 
+  // const handleBdayChange = (e) => {
+  //   const onlyNums = e.target.value.replace(/\D/g, "");
+  //   setBirthDay({ ...birthDay, [e.target.name]: onlyNums });
+  //   console.log(birthDay[e.target.name] + " target name: " + e.target.name);
+  // };
 
   const handleBdayChange = (e) => {
     const onlyNums = e.target.value.replace(/\D/g, "");
-    setBirthDay({ ...birthDay, [e.target.name]: onlyNums });
-    console.log(birthDay[e.target.name] + " target name: " + e.target.name);
+    setBirthDay((prev) => ({ ...prev, [e.target.name]: onlyNums }));
   };
 
   const formConfigs = {
@@ -133,15 +140,35 @@ const RegisterPage = () => {
     },
     1: {
       buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleGenderAgeSub },
-      bDayConf: {
-        inputs: [
-          { inputValue: birthDay.day },
-          { inputValue: birthDay.month },
-          { inputValue: birthDay.year },
-        ],
-        inputClass: inputClass,
-        setVal: setBirthDay,
-      },
+      bDayConf: [
+        {
+          inputClass: inputClass,
+          inputValue: birthDay.day,
+          name: "day",
+          setVal: handleBdayChange,
+        },
+        {
+          inputClass: inputClass,
+          inputValue: birthDay.month,
+          name: "month",
+          setVal: handleBdayChange,
+        },
+        {
+          inputClass: inputClass,
+          inputValue: birthDay.year,
+          name: "year",
+          setVal: handleBdayChange,
+        },
+      ],
+      // bDayConf: {
+      //   inputs: [
+      //     { inputValue: birthDay.day },
+      //     { inputValue: birthDay.month },
+      //     { inputValue: birthDay.year },
+      //   ],
+      //   inputClass: inputClass,
+      //   setVal: setBirthDay,
+      // },
 
       selectConf: {
         inputClass: inputClass,

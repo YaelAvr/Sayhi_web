@@ -16,6 +16,7 @@ function UserForm({
   displayName = null,
   username = null,
 }) {
+
   const handleKeyUp = (e) => {
     if (e.key === "Enter") {
       buttonsConf.SubmitFunc();
@@ -50,7 +51,7 @@ function UserForm({
               handleKeyUp={handleKeyUp}
             />
           )}
-          {data.selectConf && <FormSelect {...selectConf} data={data.select} />}
+          {data.select && <FormSelect {...selectConf} data={data.select} inputClass={`${selectConf.inputClass} ${data.select.className}`} />}
         </div>
         {errorText && <p className="invalid-txt">{errorText}</p>}
         <div className="form-btns-div">
