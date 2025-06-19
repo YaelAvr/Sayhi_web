@@ -7,6 +7,7 @@ import ComposeWindow from './composeWindow/ComposeWindow';
 import AddLabelWindow from './labelTitle/AddLabelWindow';
 import GenericWindow from './genericWindow/GenericWindow';
 
+import { getUserIdFromToken } from "../utils/utils";
 const InboxPage = () => {
   // States קיימים
   const [isComposing, setIsComposing] = useState(false);
@@ -15,36 +16,32 @@ const InboxPage = () => {
   const [customLabels, setCustomLabels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddLabelOpen, setIsAddLabelOpen] = useState(false);
-  const [editingLabel, setEditingLabel] = useState(null); // יחזיק את אובייקט התווית לעריכה
-  const [deletingLabel, setDeletingLabel] = useState(null); // יחזיק את אובייקט התווית למחיקה
-  const [newLabelName, setNewLabelName] = useState(""); // state זמני לשם החדש בעריכה
 
   // פונקציה לטעינת וסינון התוויות, נוכל לקרוא לה שוב לרענון
   const fetchAndFilterLabels = async () => {
     // לא משנה את isloading ל-true כאן כדי שהרענון יהיה שקט
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
     try {
       // שימוש בנתיב יחסי בזכות ה-proxy
-      const response = await fetch('/api/labels', {
-        headers: { 'Authorization': `Bearer ${token}` },
+      const response = await fetch("/api/labels", {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch labels');
+        throw new Error("Failed to fetch labels");
       }
 
       const allLabels = await response.json();
-      const defaults = allLabels.filter(label => label.isDefault === true);
-      const customs = allLabels.filter(label => label.isDefault === false);
-      
+      const defaults = allLabels.filter((label) => label.isDefault === true);
+      const customs = allLabels.filter((label) => label.isDefault === false);
+
       setDefaultLabels(defaults);
       setCustomLabels(customs);
-
     } catch (error) {
       console.error("Error fetching labels:", error);
     } finally {
@@ -94,8 +91,8 @@ const handleUpdateLabel = async () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   if (isLoading) {
@@ -104,9 +101,9 @@ const handleUpdateLabel = async () => {
 
   return (
     <>
-      <div className="inbox-page-layout">
+      <div className="inbox-page" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <TopBar onLogout={handleLogout} />
-        <div className="inbox-main-content">
+        <div style={{ display: 'flex', flex: 1 }}>
           <SideBar 
             onComposeClick={() => setIsComposing(true)} 
             defaultLabels={defaultLabels}
@@ -118,7 +115,7 @@ const handleUpdateLabel = async () => {
                 }}
               onOpenDeleteLabel={(label) => setDeletingLabel(label)}
           />
-          <main className="inbox-content-area">
+          <main style={{ flex: 1, padding: '16px' }}>
             <h2>Welcome to your inbox!</h2>
             {/* כאן תבוא רשימת המיילים בעתיד */}
           </main>
@@ -128,9 +125,9 @@ const handleUpdateLabel = async () => {
       {/* מודאל לכתיבת מייל חדש */}
       {isComposing && <ComposeWindow onClose={() => setIsComposing(false)} />}
       
-      {/* מודאל להוספת תווית חדשה */}
+      {/* הצגה מותנית של חלונית יצירת התווית */}
       {isAddLabelOpen && (
-        <AddLabelWindow 
+        <AddLabelwindow
           onClose={() => setIsAddLabelOpen(false)}
           onLabelAdded={fetchAndFilterLabels}
         />

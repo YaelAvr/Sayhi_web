@@ -4,45 +4,91 @@
     "text": "Enter your name",
     "inputs": [
       {
-        "index": "0",
+        "index": 0,
         "id": "register-name1",
         "type": "text",
+        "name": "firstWord",
         "placeHolder": "First name"
       },
       {
-        "index": "1",
+        "index": 1,
         "id": "register-name2",
         "type": "text",
+        "name": "secondWord",
         "placeHolder": "Last name (optional)"
       }
     ],
-    "errorText": [
-      { "400":"Enter first name" }
-    ],
-    "button": [
-      {
-        
-      },
-      {
-        "index": "1",
-        "btnText": "next"
-      }
-    ]
+    "button": {
+      "nextBtn": "next"
+    }
   },
   "1": {
     "title": "Basic information",
     "text": "Enter your birthday and gender",
-    "birthDay":[{ "placeHolder":"Day", "type":"text"},{ "placeHolder":"Mounth", "type":"select"},{"placeHolder":"Year", "type":"text"}],
-    "select":{ "placeHolder":"gender", "type":"select"},
     "errorText": [
-      { "404":"Please enter a valid date", "400": ["Please fill in a complete birthday","Please select your gender"]}
-    ],
-    "button": [
       {
-        "index": "0",
-        "btnText": "Back"
+        "404": "Please enter a valid date",
+        "400": [
+          "Please fill in a complete birthday",
+          "Please select your gender"
+        ]
       }
-    ]
+    ],
+    "birthDay": [
+      {
+        "index":0,
+        "placeHolder": "Day",
+        "className":"date-param",
+        "id": "day-form",
+        "name": "day",
+        "type":"text",
+        "min": 1,
+        "max": 31
+      },
+      {
+        "index":1,
+        "placeHolder": "Month",
+        "className": "form-select, date-param",
+        "id": "month-form",
+        "name": "month",
+        "type": "select",
+        "options": [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December"
+        ]
+      },
+      {
+        "index":2,
+        "placeHolder": "Year",
+        "className":"date-param",
+        "id": "year-form",
+        "name": "year",
+        "type":"text"
+      }
+    ],
+    "select": {
+      "placeHolder": "gender",
+      "name":"gender",
+      "id":"gender-select",
+      "className":"form-select",
+      "type": "select",
+      "options": ["Male", "Female", "Other"]
+    },
+
+    "button": {
+      "nextBtn": "next",
+      "changeBtnText": "back"
+    }
   },
   "2": {
     "title": "How you will sign in",
@@ -66,12 +112,17 @@
         "id": "reg-confirm",
         "type": "checkbox",
         "placeHolder": "Confirm",
-        "lable":"<p>Show password</p>"
+        "lable": "<p>Show password</p>"
       }
     ],
-    "explainText":"You can use letters, numbers & periods",
+    "explainText": "You can use letters, numbers & periods",
     "errorText": [
-      { "404": ["Use 8 characters or more for your password", "Those passwords did not match. Try again." ]}
+      {
+        "404": [
+          "Use 8 characters or more for your password",
+          "Those passwords did not match. Try again."
+        ]
+      }
     ],
     "button": [
       {

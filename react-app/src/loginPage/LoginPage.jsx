@@ -25,6 +25,7 @@ const LoginPage = () => {
     if (res.status === 201) {
       const data = await res.json();
       localStorage.setItem("token", data.token);
+      setUsername("")
       navigate("/inbox");
     } else if (res.status === 400 || res.status === 404) {
       setInputClass("bad-input");
@@ -77,12 +78,17 @@ const LoginPage = () => {
     return data;
   };
 
+  
+
   const formConfigs = {
     0: {
-      buttonsConf: {
-        ClickFunc: () => navigate("/RegisterPage"),
-        SubmitFunc: handleUsernameSubmit,
-      },
+      buttonsConf: [
+        {
+          ClickFunc: () => navigate("/RegisterPage"),
+        },
+        { SubmitFunc: handleUsernameSubmit}
+      ],
+
       inputsConf: [
         { inputClass: inputClass, inputValue: username, setVal: setUsername },
       ],
