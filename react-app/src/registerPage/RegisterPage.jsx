@@ -137,8 +137,10 @@ const RegisterPage = () => {
         { inputClass: inputClass, inputValue: firstWord, setVal: setFirstWord },
         { inputValue: secondWord, setVal: setSecondWord },
       ],
+      errorText: errorText
     },
     1: {
+      errorText: errorText,
       buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleGenderAgeSub },
       bDayConf: [
         {

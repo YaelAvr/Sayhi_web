@@ -54,7 +54,7 @@ exports.createName = (req, res) => {
   if (!firstWord) {
     return res.status(400).json({ error: "Enter first name" });
   }
-  const displayName =firstWord+" " +secondWord;
+  const displayName = firstWord + " " + secondWord;
   res.status(200).json({ displayName: displayName });
 };
 
@@ -101,20 +101,32 @@ exports.createGender = (req, res) => {
   res.status(201).json({ gender: lowGender });
 };
 
+//Create an only low cased userName that is 6-30 letters long.
+// If the username that was provided included 'user-name@sayhi.com', only usr the first part.
 exports.createUserName = (req, res) => {
   const { username } = req.body;
+  let regex = /^[a-zA-Z0-9.]+$/;
 
   if (!username) {
     return res.status(400).json({ error: "Username is required" });
   }
 
-  const lowUsername = username.trim().toLowerCase();
-  // if (lowUsername.length <username) {
-  //   return res.status(400).json({ error: "Sorry, your username must only include letters, numbers & periods." });
-  // }
+  var lowUsername = username.toLowerCase();
+
+  if (lowUsername.endsWith("@sayhi.com")) {
+    let splitParts = lowUsername.split('@');
+    if (splitParts.length === 2) {
+      lowUsername = splitParts[0];
+    } else {
+      return res.status(400).json({ error: "Sorry, your username must only include letters, numbers & periods." });
+    }
+  }
+
+  if (!regex.test(lowUsername)) {
+    return res.status(400).json({ error: "Sorry, your username must only include letters, numbers & periods." });
+  }
 
   if (lowUsername.length < 6 || lowUsername.length > 30) return res.status(400).json({ error: "Sorry, your username must be between 6 and 30 characters long." });
-
 
   const user = Users.isUserNameRegistered(lowUsername)
   if (!user) {

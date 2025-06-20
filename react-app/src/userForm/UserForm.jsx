@@ -16,10 +16,8 @@ function UserForm({
   displayName = null,
   username = null,
 }) {
-  const inputs = data.inputs;
-  const errorText = data.errorText;
-  const buttonsText = data.button;
-
+  
+  
   const handleKeyUp = (e) => {
     if (e.key === "Enter") {
       buttonsConf.SubmitFunc();
@@ -54,7 +52,7 @@ function UserForm({
               handleKeyUp={handleKeyUp}
             />
           )}
-          {data.select && <FormSelect {...selectConf} data={data.select} inputClass={`${selectConf.inputClass} ${data.select.className}`} />}
+          {data.select && <FormSelect {...selectConf} data={data.select} inputClass={`${selectConf.inputClass}, ${data.select.className}`} />}
         </div>
         {errorText && <p className="invalid-txt">{errorText}</p>}
         <div className="form-btns-div">
@@ -64,10 +62,10 @@ function UserForm({
             className="form-btn"
             id="changing-btn"
           >
-            {buttonsText[0].btnText}
+            {data.button.changeBtnText}
           </button>
           <button type="submit" className="form-btn" id="next-btn">
-            {buttonsText[1].btnText}
+            {data.button.nextBtn}
           </button>
         </div>
       </form>

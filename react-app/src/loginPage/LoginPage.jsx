@@ -82,12 +82,11 @@ const LoginPage = () => {
 
   const formConfigs = {
     0: {
-      buttonsConf: [
+      buttonsConf: 
         {
-          ClickFunc: () => navigate("/RegisterPage"),
-        },
-        { SubmitFunc: handleUsernameSubmit}
-      ],
+         ClickFunc: () => navigate("/register"),
+        SubmitFunc: handleUsernameSubmit
+      },
 
       inputsConf: [
         { inputClass: inputClass, inputValue: username, setVal: setUsername },
