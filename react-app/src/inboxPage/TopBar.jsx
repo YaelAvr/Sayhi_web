@@ -5,7 +5,7 @@ import Logo from '../gmailLogo/Logo';
 import SearchBar from './searchBar/SearchBar';
 import './TopBar.css';
 import UserDetails from "./userDetails/userDetails";
-//import { getUserIdFromToken } from "../utils/utils"; // תלוי בפוש של זוהר
+import { getUserIdFromToken } from "../utils/utils";
 
 const TopBar = ({ onLogout }) => {
   const [showUserDetails, setShowUserDetails] = useState(false);
