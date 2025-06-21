@@ -25,7 +25,7 @@ const LoginPage = () => {
     if (res.status === 201) {
       const data = await res.json();
       localStorage.setItem("token", data.token);
-      setUsername("")
+      setUsername("");
       navigate("/inbox");
     } else if (res.status === 400 || res.status === 404) {
       setInputClass("bad-input");
@@ -48,7 +48,7 @@ const LoginPage = () => {
       if (res.status === 200) {
         const data = await res.json();
         setDisplayName(data.displayName);
-      setError(null);
+        setError(null);
 
         setLoginPart(1);
         setInputClass("no-input");
@@ -78,25 +78,30 @@ const LoginPage = () => {
     return data;
   };
 
-  
-
   const formConfigs = {
     0: {
-      buttonsConf: 
-        {
-         ClickFunc: () => navigate("/register"),
-        SubmitFunc: handleUsernameSubmit
+      buttonsConf: {
+        ClickFunc: () => navigate("/register"),
+        SubmitFunc: handleUsernameSubmit,
       },
 
       inputsConf: [
-        { inputClass: inputClass, inputValue: username, setVal: setUsername },
+        {
+          inputClass: inputClass,
+          inputValue: username,
+          setVal: (e) => setUsername(e.target.value),
+        },
       ],
       errorText: errorText,
     },
     1: {
       buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleLogin },
       inputsConf: [
-        { inputClass: inputClass, inputValue: password, setVal: setPassword },
+        {
+          inputClass: inputClass,
+          inputValue: password,
+          setVal: (e) => setPassword(e.target.value),
+        },
       ],
       displayName: displayName,
       username: username,
@@ -104,18 +109,6 @@ const LoginPage = () => {
     },
   };
 
-
-
-  /*      inputsConf: [
-        { inputClass: inputClass, inputValue: username, setVal: setVal:(e)=> setUsername(e.target.value) },
-      ],
-      errorText: errorText,
-    },
-    1: {
-      buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleLogin },
-      inputsConf: [
-        { inputClass: inputClass, inputValue: password, setVal:(e)=> setPassword(e.target.value)  },*/
-          
   const displayPage = () => {
     const partText = getPartText();
     const config = formConfigs[loginPart];

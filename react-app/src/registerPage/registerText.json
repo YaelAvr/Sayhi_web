@@ -8,7 +8,7 @@
         "id": "register-name1",
         "type": "text",
         "name": "firstWord",
-        "className" : "display-name input-full-row",
+        "className": "display-name input-full-row",
         "placeHolder": "First name"
       },
       {
@@ -16,12 +16,12 @@
         "id": "register-name2",
         "type": "text",
         "name": "secondWord",
-        "className" : "display-name input-full-row",
+        "className": "display-name input-full-row",
         "placeHolder": "Last name (optional)"
       }
     ],
     "button": {
-      "nextBtn": "next"
+      "nextBtn": "Next"
     }
   },
   "1": {
@@ -38,17 +38,17 @@
     ],
     "birthDay": [
       {
-        "index":0,
+        "index": 0,
         "placeHolder": "Day",
-        "className":"date-param",
+        "className": "date-param",
         "id": "day-form",
         "name": "day",
-        "type":"text",
+        "type": "text",
         "min": 1,
         "max": 31
       },
       {
-        "index":1,
+        "index": 1,
         "placeHolder": "Month",
         "className": "form-select, date-param",
         "id": "month-form",
@@ -70,26 +70,26 @@
         ]
       },
       {
-        "index":2,
+        "index": 2,
         "placeHolder": "Year",
-        "className":"date-param",
+        "className": "date-param",
         "id": "year-form",
         "name": "year",
-        "type":"text"
+        "type": "text"
       }
     ],
     "select": {
       "placeHolder": "Gender",
-      "name":"gender",
-      "id":"gender-select",
-      "className":"form-select",
+      "name": "gender",
+      "id": "gender-select",
+      "className": "form-select",
       "type": "select",
       "options": ["Male", "Female", "Other"]
     },
 
     "button": {
-      "nextBtn": "next",
-      "changeBtnText": "back"
+      "nextBtn": "Next",
+      "changeBtnText": "Back"
     }
   },
   "2": {
@@ -101,12 +101,12 @@
         "id": "username",
         "name": "username",
         "type": "text",
-        "className" : "username input-full-row",
-
-        "placeHolder": "Username"
+        "className": "username",
+        "placeHolder": "Username",
+        "explainText": "You can use letters, numbers & periods",
+        "waterMark": "@sayhi.com"
       }
     ],
-    "explainText": "You can use letters, numbers & periods",
     "errorText": [
       {
         "404": [
@@ -115,23 +115,22 @@
         ]
       }
     ],
-    "button": [
-      {
-        "index": "0",
-        "btnText": "Create a new account"
-      }
-    ]
+    "button": {
+      "nextBtn": "Next",
+      "changeBtnText": "Back"
+    }
   },
   "3": {
     "title": "Create a strong password",
     "text": "Create a strong password with a mix of letters, numbers and symbols",
-    
+
     "inputs": [
       {
         "index": "0",
         "id": "reg-password",
         "type": "password",
         "name": "password",
+        "className" : "password input-full-row",
         "placeHolder": "Password",
         "text": "@sayhi"
       },
@@ -140,6 +139,7 @@
         "id": "reg-confirm",
         "type": "password",
         "name": "confirm",
+        "className" : "password input-full-row",
         "placeHolder": "Confirm"
       },
       {
@@ -153,12 +153,10 @@
     "errorText": [
       { "404": "Wrong password. Please try again.", "400": "Enter a password" }
     ],
-    "button": [
-      {
-        "index": "0",
-        "btnText": "Back"
-      }
-    ]
+    "button": {
+      "nextBtn": "Next",
+      "changeBtnText": "Back"
+    }
   },
   "4": {
     "title": "Personalize your account!",
@@ -174,11 +172,9 @@
     "errorText": [
       { "404": "Wrong password. Please try again.", "400": "Enter a password" }
     ],
-    "button": [
-      {
-        "index": "0",
-        "btnText": "Back"
-      }
-    ]
+    "button": {
+      "nextBtn": "Next",
+      "changeBtnText": "Back"
+    }
   }
 }

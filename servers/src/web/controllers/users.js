@@ -173,7 +173,7 @@ function formatDateWithMonthName(day, month, year) {
     "December"
   ];
   // const dd = String(day).padStart(2, '0');
-  // const dd = String(day)
+
   const mm = monthNames[month - 1];
   return `${day} ${mm} ${year}`;
 }
@@ -209,6 +209,17 @@ exports.isUserNameRegistered = (req, res) => {
 
   if (!username) return res.status(400).json({ error: "Enter an email" });
 
+  var lowUsername = username.toLowerCase();
+
+  if (lowUsername.endsWith("@sayhi.com")) {
+    let splitParts = lowUsername.split('@');
+    if (splitParts.length === 2) {
+      lowUsername = splitParts[0];
+    } else {
+      return res.status(400).json({ error: "Invalid username." });
+    }
+  }
+
   const user = Users.isUserNameRegistered(username)
 
   if (!user) { return res.status(404).json({ exists: false, error: 'Could not find your SayHi Account' }); }
@@ -216,6 +227,8 @@ exports.isUserNameRegistered = (req, res) => {
     return res.status(200).json({ displayName: user.displayName });
   }
 }
+
+
 
 function isDateValid(day, month, year) {
   const intDay = parseInt(day);

@@ -25,7 +25,7 @@ const RegisterPage = () => {
     confirm: "",
   });
 
-  const [displayName, setDisplayName] = useState("");
+  // const [displayName, setDisplayName] = useState("");
   const [firstWord, setFirstWord] = useState("");
   const [secondWord, setSecondWord] = useState("");
 
@@ -43,13 +43,13 @@ const RegisterPage = () => {
   const [gInputClass, setGInputClass] = useState("no-input");
 
   const [inputClass, setInputClass] = useState("no-input");
-  // const [part, setPart] = useState(1); //כלי עזר לזמן עבודה
-  const [part, setPart] = useState(0); //להחזיר
+  const [part, setPart] = useState(1); //כלי עזר לזמן עבודה
+  // const [part, setPart] = useState(0); //להחזיר
 
   const navigate = useNavigate();
 
   // create a display name for the user using the Web server
-  const createName = async (e) => {
+  const createDisplayName = async (e) => {
     e.preventDefault();
 
     const res = await fetch("/api/users/displayName", {
@@ -138,10 +138,59 @@ const RegisterPage = () => {
       //if the date was valid, continu to check gender
       const genderRes = await createGender();
 
-      if (bdRes === 200 && genderRes === 200) {
+      if (genderRes === 200) {
         // console.log("birthday: " + birthDay.date + " gender " + gender);
         handleNext();
       }
+    }
+  };
+
+  // create a display name for the user using the Web server
+  const createUserName = async (e) => {
+    e.preventDefault();
+
+    const res = await fetch("/api/users/userName", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username }),
+    });
+
+    if (res.status === 200) {
+      // insert the returned name
+      const data = await res.json();
+      // setDisplayName(data.displayName);
+      setUserData((prev) => ({ ...prev, userName: data.username }));
+      handleNext();
+    } else if (res.status === 400 || res.status === 404) {
+      setInputClass("bad-input");
+      const errorData = await res.json();
+      setError(errorData.error);
+    } else {
+      alert("An error occurred, please try again later");
+    }
+  };
+   // create a display name for the user using the Web server
+  const createPassWord = async (e) => {
+    e.preventDefault();
+
+    const res = await fetch("/api/users/password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...password }),
+    });
+
+    if (res.status === 200) {
+      // insert the returned name
+      const data = await res.json();
+      // setDisplayName(data.displayName);
+      setUserData((prev) => ({ ...prev, password: data.password }));
+      handleNext();
+    } else if (res.status === 400 || res.status === 404) {
+      setInputClass("bad-input");
+      const errorData = await res.json();
+      setError(errorData.error);
+    } else {
+      alert("An error occurred, please try again later");
     }
   };
 
@@ -177,10 +226,14 @@ const RegisterPage = () => {
     setBirthDay((prev) => ({ ...prev, [e.target.name]: val }));
   };
 
+  const handlePasswordChange = (e) => {
+    setPassword((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   const formConfigs = {
     0: {
       buttonsConf: {
-        SubmitFunc: createName,
+        SubmitFunc: createDisplayName,
       },
       inputsConf: [
         {
@@ -188,7 +241,10 @@ const RegisterPage = () => {
           inputValue: firstWord,
           setVal: (e) => setFirstWord(e.target.value),
         },
-        { inputValue: secondWord, setVal:(e) => setSecondWord(e.target.value)  },
+        {
+          inputValue: secondWord,
+          setVal: (e) => setSecondWord(e.target.value),
+        },
       ],
       errorText: errorText,
     },
@@ -223,12 +279,29 @@ const RegisterPage = () => {
       },
     },
     2: {
-      buttonsConf: {
-        ClickFunc: handleBack,
-        SubmitFunc: createName,
-      },
+      errorText: errorText,
+      buttonsConf: { ClickFunc: handleBack, SubmitFunc: createUserName },
       inputsConf: [
-        { inputClass: inputClass, inputValue: firstWord, setVal: setFirstWord },
+        {
+          inputClass: inputClass,
+          inputValue: username,
+          setVal: (e) => setUsername(e.target.value),
+        },
+      ],
+    },
+    3: {
+      buttonsConf: { ClickFunc: handleBack, SubmitFunc: createPassWord },
+      inputsConf: [
+        {
+          inputClass: inputClass,
+          inputValue: password,
+          setVal: handlePasswordChange,
+        },
+        {
+          inputClass: inputClass,
+          inputValue: password,
+          setVal: handlePasswordChange,
+        },
       ],
       errorText: errorText,
     },

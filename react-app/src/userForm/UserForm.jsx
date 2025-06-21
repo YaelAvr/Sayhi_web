@@ -5,6 +5,11 @@ import Logo from "../gmailLogo/Logo";
 import FormInputs from "./formInputs/FormInputs";
 import FormDate from "./formDate/FormDate";
 import FormSelect from "./formSelect/FormSelect";
+import InputWithIcon from "./inputWithIcon/InputWithIcon";
+
+import FormExplainWin from "./formExplainWin/FormExplainWin";
+
+import { ReactComponent as Help } from "./icons/help.svg";
 
 function UserForm({
   buttonsConf,
@@ -30,22 +35,34 @@ function UserForm({
           <h1>
             {data.title} {displayName && displayName}
           </h1>
-          <p>{!username ? data.text : `${username}@sayhi.com`}</p>
+          {/* <p>{!username ? data.text : `${username}@sayhi.com`}</p> */}
+          <p>{`${!username ?"": username}${data.text}`}</p>
         </div>
 
         {/* Create the form veriables */}
         <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
           <div id="input-div">
             {data.inputs &&
-              data.inputs.map((input, index) => (
-                <FormInputs
-                  name={input.id}
-                  key={index}
-                  {...inputsConf[index]}
-                  inputs={input}
-                  handleKeyUp={handleKeyUp}
-                />
-              ))}
+              data.inputs.map((input, index) =>
+                !input.explainText ? (
+                  <FormInputs
+                    name={input.id}
+                    key={index}
+                    {...inputsConf[index]}
+                    inputs={input}
+                    handleKeyUp={handleKeyUp}
+                  />
+                ) : (
+                  <InputWithIcon
+                    name={input.id}
+                    key={index}
+                    {...inputsConf[index]}
+                    inputs={input}
+                    handleKeyUp={handleKeyUp}
+                  />
+                )
+              )}
+            {/* {data.explainText && <Help className="help-logo" />} */}
             {data.birthDay && (
               <FormDate
                 bDayConf={bDayConf}

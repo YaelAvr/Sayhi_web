@@ -2,6 +2,30 @@
 
 } */
 
-.input-full-row{
-    width:98%;
+.input-full-row {
+  width: 98%;
+}
+
+.input-waterMark {
+  position: absolute;
+  right: 2%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4f4d4d;
+  pointer-events: none;
+}
+
+#input-wrapper {
+  position: relative;
+  display: inline;
+  width: inherit;
+}
+
+
+.bad-input {
+  border: 1.6px solid #b3261e;
+}
+
+.no-input {
+  border: 1.4px solid #9a9a9a;
 }
