@@ -37,9 +37,26 @@ const InboxPage = () => {
       }
 
       const allLabels = await response.json();
-      const defaults = allLabels.filter((label) => label.isDefault === true);
-      const customs = allLabels.filter((label) => label.isDefault === false);
 
+      // const defaults = allLabels.filter(label => label.isDefault === true);
+      // const customs = allLabels.filter(label => label.isDefault === false);
+
+       const defaults = allLabels
+        .filter(label => label.isDefault === true)
+        .map(label => ({
+            id: label.id,
+            name: label.name,
+            isDefault: label.isDefault
+        }));
+
+      const customs = allLabels
+        .filter(label => label.isDefault === false)
+        .map(label => ({
+            id: label.id,
+            name: label.name,
+            isDefault: label.isDefault
+        }));
+      
       setDefaultLabels(defaults);
       setCustomLabels(customs);
     } catch (error) {
