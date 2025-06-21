@@ -6,6 +6,7 @@
       {
         "index": "0",
         "id": "login-username",
+        "name": "username",
         "type": "text",
         "placeHolder": "Email"
       }
@@ -15,7 +16,7 @@
     ],
     "button": {
       "changeBtnText": "Create account",
-      "nextBtn":"next"
+      "nextBtn": "Next"
     }
   },
   "1": {
@@ -25,6 +26,7 @@
       {
         "index": "0",
         "id": "login-password",
+        "name": "password",
         "type": "password",
         "placeHolder": "Enter your Password"
       }
@@ -32,9 +34,6 @@
     "errorText": [
       { "404": "Wrong password. Please try again.", "400": "Enter a password" }
     ],
-    "button": {
-      "changeBtnText": "Back",
-      "nextBtn":"next"
-    }
+    "button": { "changeBtnText": "Back", "nextBtn": "next" }
   }
 }

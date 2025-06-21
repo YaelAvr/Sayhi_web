@@ -4,9 +4,12 @@ let userCount = 0;
 
 const createUser = (username, displayName, password, picture, gender, birthday) => {
     // Check if there is already a user with this username
-    if(Users.find(user => user.username === username)) {
+    if(Users.find(user => user.username === username)
+    || Users.find(user => user.username === username.toLowerCase())) {
         return null //400
     }
+
+    username = username.toLowerCase();
 
     const newUser = {
         id: `u-${userCount++}`,
@@ -37,12 +40,13 @@ const createDefaultLabels = (user) => {
     createLabel(user, 'Spam', { isDefault: true })
 }
 
-const isUserNameRegisterd =(username) => {
+const isUserNameRegistered =(username) => {
+    username = username.toLowerCase();
     return Users.find(user => user.username === username);
 }
 
 module.exports = {
     createUser,
     getUserById,
-    isUserNameRegisterd
+    isUserNameRegistered
 }

@@ -77,14 +77,16 @@
   /* height: 100%; */
 }
 
-#user-form-page input {
+#user-form-page input,
+#user-form-page select {
   border: 1.4px solid #9a9a9a;
   border-radius: 5px;
   padding: 10px;
   outline: none;
   font-size: 1em;
     margin: 0.3em;
-    width: 100%;/*להוציר החוצה*/
+        width: inherit;
+    /* width: 100%;להוציר החוצה */
 }
 
 .bad-input {
