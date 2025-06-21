@@ -14,3 +14,18 @@
   margin-left: 1em;
   cursor: pointer;
 }
+
+.input-waterMark {
+  position: absolute;
+  right: 2%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4f4d4d;
+  pointer-events: none;
+}
+
+#input-wrapper {
+  position: relative;
+  display: inline;
+  width: inherit;
+}

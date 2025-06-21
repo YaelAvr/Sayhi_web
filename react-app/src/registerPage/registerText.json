@@ -50,7 +50,7 @@
       {
         "index": 1,
         "placeHolder": "Month",
-        "className": "form-select, date-param",
+        "className": "form-select date-param",
         "id": "month-form",
         "name": "month",
         "type": "select",

@@ -43,7 +43,7 @@ const RegisterPage = () => {
   const [gInputClass, setGInputClass] = useState("no-input");
 
   const [inputClass, setInputClass] = useState("no-input");
-  const [part, setPart] = useState(1); //כלי עזר לזמן עבודה
+  const [part, setPart] = useState(2); //כלי עזר לזמן עבודה
   // const [part, setPart] = useState(0); //להחזיר
 
   const navigate = useNavigate();
