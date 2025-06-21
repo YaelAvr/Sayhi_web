@@ -80,11 +80,14 @@ exports.createPassword = (req, res) => {
     return res.status(400).json({ error: "Those passwords did not match. Try again." });
   }
 
-  res.status(201).json({ password: password });
+  res.status(200).json({ password: password });
 };
 
+
+// this function generate a valid gender option
 exports.createGender = (req, res) => {
   const { gender } = req.body;
+
   const genderOptions = ["female", "male", "other"];
 
   if (!gender) {
@@ -98,7 +101,7 @@ exports.createGender = (req, res) => {
     return res.status(400).json({ error: "Please select your gender" });
   }
 
-  res.status(201).json({ gender: lowGender });
+  res.status(200).json({ gender: lowGender });
 };
 
 //Create an only low cased userName that is 6-30 letters long.
@@ -148,10 +151,31 @@ exports.createBirthday = (req, res) => {
     return res.status(400).json({ error: "Please enter a valid date" });
   }
 
-  const birthday = new Date(year, month - 1, day);
+  const birthday = formatDateWithMonthName(day, month, year);
 
   res.status(200).json({ birthday: birthday });
 };
+
+function formatDateWithMonthName(day, month, year) {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+  // const dd = String(day).padStart(2, '0');
+  // const dd = String(day)
+  const mm = monthNames[month - 1];
+  return `${day} ${mm} ${year}`;
+}
 
 
 // this function returns the information of a specific user with the given id
@@ -196,7 +220,6 @@ function isDateValid(day, month, year) {
   const intDay = parseInt(day);
   const intMonth = parseInt(month);
   const intYear = parseInt(year);
-
   //  Basic range checks
   if (intYear < 1000 || intYear > 3000 ||
     intMonth <= 0 || intMonth > 12 ||
@@ -206,8 +229,8 @@ function isDateValid(day, month, year) {
 
   const dateObj = new Date(intYear, intMonth - 1, intDay);
   // Check if the object construction was successful
-  if (!(!isNaN(dateObj.getTime()) && dateObj.getFullYear() === year &&
-    dateObj.getMonth() === month - 1 && dateObj.getDate() === day)) {
+  if (!(!isNaN(dateObj) && dateObj.getFullYear() === intYear &&
+    dateObj.getMonth() === intMonth - 1 && dateObj.getDate() === intDay)) {
     return false;
   }
 

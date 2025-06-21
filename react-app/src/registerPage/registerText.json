@@ -8,6 +8,7 @@
         "id": "register-name1",
         "type": "text",
         "name": "firstWord",
+        "className" : "display-name input-full-row",
         "placeHolder": "First name"
       },
       {
@@ -15,6 +16,7 @@
         "id": "register-name2",
         "type": "text",
         "name": "secondWord",
+        "className" : "display-name input-full-row",
         "placeHolder": "Last name (optional)"
       }
     ],
@@ -77,7 +79,7 @@
       }
     ],
     "select": {
-      "placeHolder": "gender",
+      "placeHolder": "Gender",
       "name":"gender",
       "id":"gender-select",
       "className":"form-select",
@@ -96,23 +98,12 @@
     "inputs": [
       {
         "index": "0",
-        "id": "reg-password",
-        "type": "password",
-        "placeHolder": "Password",
-        "text": "@sayhi"
-      },
-      {
-        "index": "1",
-        "id": "reg-confirm",
-        "type": "password",
-        "placeHolder": "Confirm"
-      },
-      {
-        "index": "1",
-        "id": "reg-confirm",
-        "type": "checkbox",
-        "placeHolder": "Confirm",
-        "lable": "<p>Show password</p>"
+        "id": "username",
+        "name": "username",
+        "type": "text",
+        "className" : "username input-full-row",
+
+        "placeHolder": "Username"
       }
     ],
     "explainText": "You can use letters, numbers & periods",
@@ -134,12 +125,29 @@
   "3": {
     "title": "Create a strong password",
     "text": "Create a strong password with a mix of letters, numbers and symbols",
+    
     "inputs": [
       {
         "index": "0",
-        "id": "username",
+        "id": "reg-password",
         "type": "password",
-        "placeHolder": "Enter your Password"
+        "name": "password",
+        "placeHolder": "Password",
+        "text": "@sayhi"
+      },
+      {
+        "index": "1",
+        "id": "reg-confirm",
+        "type": "password",
+        "name": "confirm",
+        "placeHolder": "Confirm"
+      },
+      {
+        "index": "1",
+        "id": "password-btn",
+        "type": "checkbox",
+        "placeHolder": "Confirm",
+        "lable": "<p>Show password</p>"
       }
     ],
     "errorText": [

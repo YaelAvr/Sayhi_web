@@ -104,6 +104,18 @@ const LoginPage = () => {
     },
   };
 
+
+
+  /*      inputsConf: [
+        { inputClass: inputClass, inputValue: username, setVal: setVal:(e)=> setUsername(e.target.value) },
+      ],
+      errorText: errorText,
+    },
+    1: {
+      buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleLogin },
+      inputsConf: [
+        { inputClass: inputClass, inputValue: password, setVal:(e)=> setPassword(e.target.value)  },*/
+          
   const displayPage = () => {
     const partText = getPartText();
     const config = formConfigs[loginPart];

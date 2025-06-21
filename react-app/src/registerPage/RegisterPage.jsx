@@ -1,13 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import { createName } from "./createDisplayName/createDisplayName";
+// import { createDesplayName } from "./serverCallFunctions/serverCallFunctions";
 // import "./LoginPage.css";
 import UserForm from "../userForm/UserForm";
 import registerText from "./registerText.json";
 
 const RegisterPage = () => {
+  const [userData, setUserData] = useState({
+    displayName: "",
+    birthDay: "",
+    gender: "",
+    userName: "",
+    password: "",
+    pic: "",
+  });
+
+  useEffect(() => {
+    console.log("final data:", userData);
+  }, [userData]);
+
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState({
+    password: "",
+    confirm: "",
+  });
 
   const [displayName, setDisplayName] = useState("");
   const [firstWord, setFirstWord] = useState("");
@@ -17,18 +33,25 @@ const RegisterPage = () => {
     day: "",
     month: "",
     year: "",
-    date: "",
+    // date: "",
   });
-  const [gender, setGender] = useState(null);
+  const [gender, setGender] = useState("");
 
   const [errorText, setError] = useState(null);
+
+  const [bDayInputClass, setBDayIInputClass] = useState("no-input");
+  const [gInputClass, setGInputClass] = useState("no-input");
+
   const [inputClass, setInputClass] = useState("no-input");
-  const [part, setPart] = useState(0);
+  // const [part, setPart] = useState(1); //כלי עזר לזמן עבודה
+  const [part, setPart] = useState(0); //להחזיר
+
   const navigate = useNavigate();
 
+  // create a display name for the user using the Web server
   const createName = async (e) => {
     e.preventDefault();
-    console.log("first: " + firstWord + " second: [" + secondWord + "]end");
+
     const res = await fetch("/api/users/displayName", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -36,8 +59,12 @@ const RegisterPage = () => {
     });
 
     if (res.status === 200) {
-      const data = res.json();
-      setDisplayName(data.displayName);
+      // insert the returned name
+      const data = await res.json();
+      // setDisplayName(data.displayName);
+      setUserData((prev) => ({ ...prev, displayName: data.displayName }));
+      console.log(userData.displayName);
+
       handleNext();
     } else if (res.status === 400 || res.status === 404) {
       setInputClass("bad-input");
@@ -49,64 +76,86 @@ const RegisterPage = () => {
   };
 
   const createBirthDay = async () => {
-    // e.preventDefault();
+    const numM =
+      registerText[part].birthDay[1].options.indexOf(birthDay.month) + 1;
+
     const res = await fetch("/api/users/birthday", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         day: birthDay.day,
-        month: birthDay.month,
+        month: numM,
         year: birthDay.year,
       }),
     });
 
-    return res;
+    if (res.status === 200) {
+      const data = await res.json();
+
+      console.log("bday: " + data.birthday);
+      setUserData((prev) => ({ ...prev, birthDay: data.birthday }));
+
+      // setBirthDay((prev) => ({ ...prev, date: data.birthday }));
+      return 200;
+    } else if (res.status === 400 || res.status === 404) {
+      const errorData = await res.json();
+      setError(errorData.error);
+      setBDayIInputClass("bad-input");
+      return res.status;
+    }
+    alert("An error occurred, please try again later");
+    return "other fail";
   };
 
   const createGender = async () => {
-    // e.preventDefault();
+    // console.log("gender: " + gender);
     const res = await fetch("/api/users/gender", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(gender),
+      body: JSON.stringify({ gender }),
     });
-    return res;
+    if (res.status === 200) {
+      const data = await res.json();
+      // setGender(data.gender);
+      setUserData((prev) => ({ ...prev, gender: data.gender }));
+
+      return 200;
+    } else if (res.status === 400 || res.status === 404) {
+      const errorData = await res.json();
+      setError(errorData.error);
+      setGInputClass("bad-input");
+      return res.status;
+    }
+    alert("An error occurred, please try again later");
+    return "other fail";
   };
 
   const handleGenderAgeSub = async (e) => {
     e.preventDefault();
-    const bdRes = createBirthDay();
-    const genderRes = createGender();
+    const bdRes = await createBirthDay();
 
-    if (bdRes.status === 200 && genderRes.status === 200) {
-      const data = bdRes.json();
+    if (bdRes === 200) {
+      //if the date was valid, continu to check gender
+      const genderRes = await createGender();
 
-      setBirthDay({ ...birthDay, date: data.birthday });
-
-      console.log("birthday: " + birthDay.date + " gender " + gender);
-      handleNext();
-    } else if (genderRes.status === 400 || genderRes.status === 404) {
-      setInputClass("bad-input");
-      const errorData = await genderRes.json();
-      setError(errorData.error);
-    } else if (bdRes.status === 400 || bdRes.status === 404) {
-      setInputClass("bad-input");
-      const errorData = await bdRes.json();
-      setError(errorData.error);
-    } else {
-      alert("An error occurred, please try again later");
+      if (bdRes === 200 && genderRes === 200) {
+        // console.log("birthday: " + birthDay.date + " gender " + gender);
+        handleNext();
+      }
     }
   };
 
   const handleBack = () => {
     setPart((perv) => perv - 1);
     setInputClass("no-input");
+    setBDayIInputClass("no-input");
+    setGInputClass("no-input");
+    setError(null);
   };
 
   const handleNext = () => {
     setPart((prev) => prev + 1);
     setInputClass("no-input");
-    // console.log
     setError(null);
   };
 
@@ -116,73 +165,72 @@ const RegisterPage = () => {
     return data;
   };
 
-  // const handleBdayChange = (e) => {
-  //   const onlyNums = e.target.value.replace(/\D/g, "");
-  //   setBirthDay({ ...birthDay, [e.target.name]: onlyNums });
-  //   console.log(birthDay[e.target.name] + " target name: " + e.target.name);
-  // };
-
+  /* this function insert the inserted values to the fitting
+   birtday start filed*/
   const handleBdayChange = (e) => {
-    const onlyNums = e.target.value.replace(/\D/g, "");
-    setBirthDay((prev) => ({ ...prev, [e.target.name]: onlyNums }));
+    let val = e.target.value;
+
+    if (!(e.target.name === "month")) {
+      // prevent the uder from entering non digits values
+      val = e.target.value.replace(/\D/g, "");
+    }
+    setBirthDay((prev) => ({ ...prev, [e.target.name]: val }));
   };
 
   const formConfigs = {
     0: {
       buttonsConf: {
-        // ClickFunc: () => navigate("/RegisterPage"),
         SubmitFunc: createName,
       },
       inputsConf: [
-        { inputClass: inputClass, inputValue: firstWord, setVal: setFirstWord },
-        { inputValue: secondWord, setVal: setSecondWord },
+        {
+          inputClass: inputClass,
+          inputValue: firstWord,
+          setVal: (e) => setFirstWord(e.target.value),
+        },
+        { inputValue: secondWord, setVal:(e) => setSecondWord(e.target.value)  },
       ],
-      errorText: errorText
+      errorText: errorText,
     },
     1: {
       errorText: errorText,
       buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleGenderAgeSub },
       bDayConf: [
         {
-          inputClass: inputClass,
+          inputClass: bDayInputClass,
           inputValue: birthDay.day,
           name: "day",
           setVal: handleBdayChange,
         },
         {
-          inputClass: inputClass,
+          inputClass: bDayInputClass,
           inputValue: birthDay.month,
           name: "month",
           setVal: handleBdayChange,
         },
         {
-          inputClass: inputClass,
+          inputClass: bDayInputClass,
           inputValue: birthDay.year,
           name: "year",
           setVal: handleBdayChange,
         },
       ],
-      // bDayConf: {
-      //   inputs: [
-      //     { inputValue: birthDay.day },
-      //     { inputValue: birthDay.month },
-      //     { inputValue: birthDay.year },
-      //   ],
-      //   inputClass: inputClass,
-      //   setVal: setBirthDay,
-      // },
 
       selectConf: {
-        inputClass: inputClass,
+        inputClass: gInputClass,
         inputValue: gender,
-        setVal: setGender,
+        setVal: (e) => setGender(e.target.value),
       },
-
-      // inputsConf: [
-      // { inputClass: inputClass, inputValue: password, setVal: setPassword },
-      // ],
-      // displayName: displayName,
-      // username: username,
+    },
+    2: {
+      buttonsConf: {
+        ClickFunc: handleBack,
+        SubmitFunc: createName,
+      },
+      inputsConf: [
+        { inputClass: inputClass, inputValue: firstWord, setVal: setFirstWord },
+      ],
+      errorText: errorText,
     },
   };
 

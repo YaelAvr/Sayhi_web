@@ -10,7 +10,7 @@ const HomePage = () => {
     <div className="home-page-container">
       <Logo />
       {/* 3. משתמשים ב-Link עם אותו className של הכפתור */}
-      <Link to="/login" className="Home-page-btn">
+      <Link to="/login" className="Home-page-btn btn-border-radius">
         Log in
       </Link>
     </div>

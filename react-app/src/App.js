@@ -18,10 +18,11 @@ function App() {
       <Routes>
         {/* --- זה הנתיב החשוב --- */}
         {/* הנתיב הראשי '/' יטען את ה-InboxOrHomePage, שיחליט לאן להמשיך */}
-        <Route path="/" element={<InboxOrHomePage />} /> 
+        {/* <Route path="/" element={<InboxOrHomePage />} /> 
         
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register" element={<RegisterPage />} /> */}
+        <Route path="/" element={<RegisterPage />} />
         
         {/* הנתיב ל-inbox עדיין מוגן, כדי למנוע גישה ישירה דרך ה-URL */}
         <Route 

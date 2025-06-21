@@ -118,15 +118,15 @@ const InboxPage = () => {
         <TopBar onLogout={handleLogout} />
         <div style={{ display: "flex", flex: 1 }}>
           <SideBar
-            /* onComposeClick={() => setIsComposing(true)}*/
+             onComposeClick={() => setIsComposing(true)}
             defaultLabels={defaultLabels}
             customLabels={customLabels}
-          /*  onAddLabelClick={() => setIsAddLabelOpen(true)}
-            onOpenEditLabel={(label) => {
-              setEditingLabel(label);
-              setNewLabelName(label.name);
-            }}
-            onOpenDeleteLabel={(label) => setDeletingLabel(label)}*/
+          onAddLabelClick={() => setIsAddLabelOpen(true)}
+            // onOpenEditLabel={(label) => {
+            //   setEditingLabel(label);
+            //   setNewLabelName(label.name);
+            // }}
+         /*     onOpenDeleteLabel={(label) => setDeletingLabel(label)}*/
           />
           <main style={{ flex: 1, padding: "16px" }}>
             <h2>Welcome to your inbox!</h2>

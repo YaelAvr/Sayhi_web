@@ -8,6 +8,7 @@
         "id": "login-username",
         "name": "username",
         "type": "text",
+        "className" : "username input-full-row",
         "placeHolder": "Email"
       }
     ],
@@ -27,6 +28,7 @@
         "index": "0",
         "id": "login-password",
         "name": "password",
+        "className" : "password input-full-row",
         "type": "password",
         "placeHolder": "Enter your Password"
       }

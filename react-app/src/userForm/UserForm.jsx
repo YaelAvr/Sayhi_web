@@ -16,8 +16,6 @@ function UserForm({
   displayName = null,
   username = null,
 }) {
-  
-  
   const handleKeyUp = (e) => {
     if (e.key === "Enter") {
       buttonsConf.SubmitFunc();
@@ -25,50 +23,58 @@ function UserForm({
   };
   return (
     <div id="user-form-page">
-      <div className="form-text">
-        <Logo containerClass="form-logo-container" />
-        <h1>
-          {data.title} {displayName && displayName}
-        </h1>
-        <p>{!username ? data.text : `${username}@sayhi.com`}</p>
-      </div>
+      <Logo containerClass="form-logo-container form-conteiner" />
+      {/* Create the left side text.  */}
+      <div id="user-form-container" className="form-conteiner">
+        <div className="form-text">
+          <h1>
+            {data.title} {displayName && displayName}
+          </h1>
+          <p>{!username ? data.text : `${username}@sayhi.com`}</p>
+        </div>
 
-      <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
-        <div id="input-div">
-          {data.inputs &&
-            data.inputs.map((input, index) => (
-              <FormInputs
-                name={input.id}
-                key={index}
-                {...inputsConf[index]}
-                inputs={input}
+        {/* Create the form veriables */}
+        <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
+          <div id="input-div">
+            {data.inputs &&
+              data.inputs.map((input, index) => (
+                <FormInputs
+                  name={input.id}
+                  key={index}
+                  {...inputsConf[index]}
+                  inputs={input}
+                  handleKeyUp={handleKeyUp}
+                />
+              ))}
+            {data.birthDay && (
+              <FormDate
+                bDayConf={bDayConf}
+                data={data.birthDay}
                 handleKeyUp={handleKeyUp}
               />
-            ))}
-          {data.birthDay && (
-            <FormDate
-              bDayConf={bDayConf}
-              data={data.birthDay}
-              handleKeyUp={handleKeyUp}
-            />
-          )}
-          {data.select && <FormSelect {...selectConf} data={data.select} inputClass={`${selectConf.inputClass}, ${data.select.className}`} />}
-        </div>
-        {errorText && <p className="invalid-txt">{errorText}</p>}
-        <div className="form-btns-div">
-          <button
-            type="button"
-            onClick={buttonsConf.ClickFunc}
-            className="form-btn"
-            id="changing-btn"
-          >
-            {data.button.changeBtnText}
-          </button>
-          <button type="submit" className="form-btn" id="next-btn">
-            {data.button.nextBtn}
-          </button>
-        </div>
-      </form>
+            )}
+            {data.select && <FormSelect {...selectConf} data={data.select} />}
+          </div>
+          {errorText && <p className="invalid-txt">{errorText}</p>}
+          <div className="form-btns-div">
+            <button
+              type="button"
+              onClick={buttonsConf.ClickFunc}
+              className="form-btn btn-border-radius"
+              id="changing-btn"
+            >
+              {data.button.changeBtnText}
+            </button>
+            <button
+              type="submit"
+              className="form-btn btn-border-radius"
+              id="next-btn"
+            >
+              {data.button.nextBtn}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
