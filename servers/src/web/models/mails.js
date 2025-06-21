@@ -136,7 +136,7 @@ const createDraft = async (sender, to, subject, body, originalDraftId = null) =>
   const time = new Date().toISOString()
 
   // Check if 'to' is a valid user, otherwise set it to empty string
-  const recipient = to && Store.find(u => u.id === to) ? to : ''
+  const recipient = to && Store.find(u => u.username === to) ? to : ''
 
   //create mail
   const draftMail = {
