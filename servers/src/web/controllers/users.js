@@ -139,6 +139,7 @@ exports.createUserName = (req, res) => {
 
 };
 
+// this function recives a potential birthday and return a valid print date or an error
 exports.createBirthday = (req, res) => {
   const { day, month, year } = req.body;
 
