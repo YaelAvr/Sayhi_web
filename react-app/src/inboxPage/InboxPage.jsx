@@ -4,7 +4,7 @@ import './InboxPage.css';
 import TopBar from './TopBar'; 
 import SideBar from './SideBar';
 import ComposeWindow from './composeWindow/ComposeWindow';
-import AddLabelWindow from './labelTitle/AddLabelWindow';
+import AddLabelWindow from './addLabelWindow/AddLabelWindow';
 import GenericWindow from './genericWindow/GenericWindow';
 
 const InboxPage = () => {
