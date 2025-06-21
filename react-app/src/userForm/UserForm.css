@@ -6,11 +6,25 @@
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  flex-direction: row;
   background-color: white;
   border-radius: 3em;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+#user-form-container {
+  width: 94%;
+  height: 80%;
+  /* position: absolute; */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
   justify-content: space-between;
+}
+
+.form-conteiner {
+  margin-left: 3%;
+  margin-right: 3%;
 }
 
 .form-text {
@@ -20,12 +34,12 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding-left: 5%;
+  /* padding-left: 5%; */
 }
 
 .form-text h1 {
   font-weight: normal;
-  font-size: 2.5em;
+  font-size: 3em;
   margin-bottom: 0.2em;
   margin-top: 0.2em;
 }
@@ -43,13 +57,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 #input-div,
 .form-btns-div,
 .invalid-txt {
-  width: 70%;
+  width: 80%;
 }
 
 .invalid-txt {
@@ -66,36 +80,33 @@
   margin-top: 2%;
 }
 
-
 #input-div {
-  /* width: 70%; */
+  /* align-items: baseline; */
+  align-items: stretch;
   display: flex;
-  height: fit-content;
   flex-direction: column;
-  align-items: center;
+  height: fit-content;
   justify-content: space-around;
+  /* min-width: fit-content;
+  max-width: 100%; */
   /* height: 100%; */
 }
 
-#user-form-page input,
-#user-form-page select {
+.form-input,
+.form-select {
   border: 1.4px solid #9a9a9a;
-  border-radius: 5px;
-  padding: 10px;
+  border-radius: 0.35em;
+  height: 3rem;
+  padding-left: 2%;
   outline: none;
-  font-size: 1em;
-    margin: 0.3em;
-        width: inherit;
-    /* width: 100%;להוציר החוצה */
+  font-size: 1.4rem;
+  margin: 0.3em;
+  margin-left: 0;
+  width: inherit;
+
+  /* width: 100%;להוציר החוצה */
 }
 
-.bad-input {
-  border: 1.6px solid #b3261e;
-}
-
-.no-input {
-  border: 1.4px solid #9a9a9a;
-}
 
 
 /* 

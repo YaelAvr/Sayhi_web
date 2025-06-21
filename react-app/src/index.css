@@ -34,3 +34,9 @@ body,html {
   font-weight: 300; 
   font-style: normal;
 }
+
+
+.btn-border-radius{
+    border-radius: 1em;
+  /* border-radius: ; */
+}

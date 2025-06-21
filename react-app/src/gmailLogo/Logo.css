@@ -12,10 +12,10 @@
 }
 
 .form-logo-container{
-  width: 40%;
+  width: 25%;
     height: fit-content;
-    margin: 2em;
-    margin-left: 0;
+    /* margin: 2em; */
+    /* margin-left: 0; */
 }
 
 #gmail-icon {
