@@ -24,7 +24,10 @@ function ComposeWindow({ onClose }) {
       return;
     }
 
-    const username = to.trim().split('@')[0];
+    const username = null;
+    if (to.trim().endsWith('@sayhi.com')) {
+       username = to.trim().split('@sayhi.com')[0];
+    }
 
     const draftData = {
       to: username,
@@ -67,7 +70,10 @@ function ComposeWindow({ onClose }) {
     //     alert('יש להזין כתובת מייל של הנמען.');
     //     return;
     // }
-    const username = to.trim().split('@')[0];
+    const username = null;
+    if (to.trim().endsWith('@sayhi.com')) {
+       username = to.trim().split('@sayhi.com')[0];
+    }
     // הרכבת אובייקט הנתונים שיישלח לשרת
     const emailData = {
       to: username,       // כתובת המייל שהמשתמש הקליד
