@@ -101,3 +101,10 @@
 .delete-btn:hover {
   opacity: 1;
 }
+
+.error-message {
+  color: red;
+  margin-bottom: 10px; /* קצת רווח מהכפתורים */
+  text-align: left; /* או center, לפי העיצוב */
+  width: 100%;
+}
