@@ -38,14 +38,15 @@ exports.getAllLabels = (req, res) => {
 
 // Get a specific label for a specific user
 exports.getLabelById = (req, res) => {
-  // Check if the user id matches the id in the request header
   const labelId = req.params.id;
-
   const user = getUserById(req.user.id);
+
   if (!user) return res.status(404).json({ error: "User not found" });
 
   const label = Labels.getLabelById(user, labelId);
-  if (!label) return res.status(404).json({ error: "Label not found" });
+  if (!label) {
+    return res.status(403).json({ error: "Unauthorized access to label or label not found" });
+  }
   res.status(200).json(label);
 };
 
@@ -61,14 +62,20 @@ exports.updateLabel = (req, res) => {
 
   const user = getUserById(req.user.id);
   if (!user) return res.status(404).json({ error: "User not found" });
-  
+
+  // valedate the labelId that was given as a parameter
+  const label = Labels.getLabelById(user, labelId);
+  if (!label) {
+    return res.status(403).json({ error: "Unauthorized access to label or label not found" });
+  }
+
   try {
     // Try to update label.
     Labels.updateLabel(user, labelId, name);
     res.status(204).end();
   } catch (error) {
     if (err.message === "INVALID_NAME") {
-        // 400 Bad Request if the name already exists for this user
+      // 400 Bad Request if the name already exists for this user
       return res.status(400).json({ error: "Name already exist" });
     }
     return res.status(404).json({ error: "Label not found" });
@@ -83,22 +90,28 @@ exports.deleteLabel = async (req, res) => {
   const user = await getUserById(req.user.id);
   if (!user) return res.status(404).json({ error: "User not found" });
 
- try {
+  // valedate the labelId that was given as a parameter
+  const label = Labels.getLabelById(user, labelId);
+  if (!label) {
+    return res.status(403).json({ error: "Unauthorized access to label or label not found" });
+  }
+
+  try {
     const result = await Labels.deleteLabel(user, labelId);
     res.status(204).json({ message: 'Label deleted', result })
   } catch (err) {
     // If the label is not found, return a 404 error
     if (err.message === 'LABEL_NOT_FOUND') {
-    return res.status(404).json({ error: 'Not Found' })
-  }
-  // If the user can't delete the label, return a 400 error
-  if (err.message === 'CANNOT_DELETE_THIS_LABEL') {
-    return res.status(400).json({ error: 'Bad Request' })
-  }
+      return res.status(404).json({ error: 'Not Found' })
+    }
+    // If the user can't delete the label, return a 400 error
+    if (err.message === 'CANNOT_DELETE_THIS_LABEL') {
+      return res.status(400).json({ error: 'Bad Request' })
+    }
   }
 }
 
-  exports.addMailToLabel = async (req, res) => {
+exports.addMailToLabel = async (req, res) => {
   const userId = req.user.id;
   const { labelName, mailId } = req.body;
 
@@ -140,7 +153,7 @@ exports.removeMailFromLabel = async (req, res) => {
   const userId = req.user.id;
   const { mailId, labelName } = req.body;
 
-   if (!userId) {
+  if (!userId) {
     return res.status(400).json({ error: "User ID is required" });
   }
 
