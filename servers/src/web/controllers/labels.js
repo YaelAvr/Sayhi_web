@@ -88,9 +88,6 @@ exports.updateLabel = (req, res) => {
 
 // Delete a specific label of a specific user
 exports.deleteLabel = async (req, res) => {
-  if (req.params.id !== req.user.id) {
-    return res.status(403).json({ error: "Unauthorized access" });
-  }
   // Check if the user id matches the id in the request header
   const labelId = req.params.id;
 
