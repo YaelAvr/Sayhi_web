@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './InboxPage.css';
-import TopBar from './TopBar'; 
-import SideBar from './SideBar';
-import ComposeWindow from './composeWindow/ComposeWindow';
-import AddLabelWindow from './addLabelWindow/AddLabelWindow';
-import GenericWindow from './genericWindow/GenericWindow';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./InboxPage.css";
+import TopBar from "./TopBar";
+import SideBar from "./SideBar";
+import ComposeWindow from "./composeWindow/ComposeWindow";
+import AddLabelWindow from "./addLabelWindow/AddLabelWindow";
+import GenericWindow from "./genericWindow/GenericWindow";
+import MailCard from './MailCard/MailCard';
 
 const InboxPage = () => {
   // States קיימים
@@ -137,7 +138,17 @@ const handleUpdateLabel = async () => {
           />
           <main className="inbox-content-area">
             <h2>Welcome to your inbox!</h2>
-            {/* כאן תבוא רשימת המיילים בעתיד */}
+            {/* TEMPORARY: MailCard preview */}
+            <MailCard
+              sender="eden"
+              subject="היי חח"
+              body="still checking it"
+              date={new Date()}
+              isStarred={true}
+              onStar={() => console.log("st0arred")}
+              onDelete={() => console.log("deleted")}
+              onLabel={() => console.log("label added")}
+            />
           </main>
         </div>
       </div>
