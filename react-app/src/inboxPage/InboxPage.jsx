@@ -145,7 +145,7 @@ const handleUpdateLabel = async () => {
               body="still checking it"
               date={new Date()}
               isStarred={true}
-              onStar={() => console.log("starred")}
+              onStar={() => console.log("st0arred")}
               onDelete={() => console.log("deleted")}
               onLabel={() => console.log("label added")}
             />
