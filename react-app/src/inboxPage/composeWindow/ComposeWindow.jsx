@@ -24,7 +24,10 @@ function ComposeWindow({ onClose }) {
       return;
     }
 
-    const username = to.trim().split('@')[0];
+    let username = to.trim();
+    if (username.endsWith('@sayhi.com')) {
+       username = username.split('@sayhi.com')[0];
+    }
 
     const draftData = {
       to: username,
@@ -33,7 +36,6 @@ function ComposeWindow({ onClose }) {
     };
 
     try {
-      // !!! ודא שהנתיב /api/drafts הוא הנתיב הנכון ליצירת טיוטה !!!
       await fetch('/api/mails/drafts', {
         method: 'POST',
         headers: {
@@ -67,7 +69,15 @@ function ComposeWindow({ onClose }) {
     //     alert('יש להזין כתובת מייל של הנמען.');
     //     return;
     // }
-    const username = to.trim().split('@')[0];
+
+    let username = to.trim();
+    if (username.endsWith('@sayhi.com')) {
+       username = username.split('@sayhi.com')[0];
+    }
+    
+    
+    // const username = to.trim().split('@sayhi.com')[0];
+
     // הרכבת אובייקט הנתונים שיישלח לשרת
     const emailData = {
       to: username,       // כתובת המייל שהמשתמש הקליד

@@ -6,7 +6,7 @@ const { createDraft } = require('../models/mails')
 const { addLabelToMail } = require('../models/mails')
 const { deleteMail } = require('../models/mails')
 const { getUserById } = require("../models/users");
-const { isUserNameRegisterd } = require("../models/users");
+const { isUserNameRegistered } = require("../models/users");
 
 // Controller to handle creation of a new mail
 
@@ -22,7 +22,7 @@ exports.createMail = async (req, res) => {
     const sender = getUserById(req.user.id);
 
     // Find the sender and recipient users in the users list
-    const recipient = isUserNameRegisterd(to)
+    const recipient = isUserNameRegistered(to)
 
     // If either user is not found, return an error
     if (!sender || !recipient) {
