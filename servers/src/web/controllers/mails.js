@@ -104,7 +104,7 @@ checkIdValid = (userId, mailId, res) => {
 
     const mail = user.mails.find(m => m.id === mailId)
     if (!mail) {
-        res.status(404).json({ error: 'Mail not found for this user' })
+        res.status(403).json({ error: "Unauthorized access to mail or mail not found" });
         return null
     }
     return { mail, user }
@@ -112,10 +112,6 @@ checkIdValid = (userId, mailId, res) => {
 
 // Controller to Handle handle the option to delete a mail
 exports.deleteMail = async (req, res) => {
-    if (req.params.id !== req.user.id) {
-        return res.status(403).json({ error: "Unauthorized access" });
-    }
-
     // Get the user Id
     const userId = req.user.id
     const mailId = req.params.id
@@ -241,7 +237,7 @@ exports.addLabelToMail = async (req, res) => {
     } catch (err) {
         // Handle expected error cases
         if (err.message === 'MAIL_NOT_FOUND') {
-            return res.status(404).json({ error: 'Mail not found' })
+            res.status(403).json({ error: "Unauthorized access to mail or mail not found" });
         } else if (err.message === 'LABEL_NOT_FOUND') {
             return res.status(404).json({ error: 'Label not found' })
         } else if (err.message === 'CANNOT_ADD_TO_LABEL') {
