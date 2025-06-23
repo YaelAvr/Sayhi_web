@@ -6,6 +6,7 @@ const { createDraft } = require('../models/mails')
 const { addLabelToMail } = require('../models/mails')
 const { deleteMail } = require('../models/mails')
 const { getUserById } = require("../models/users");
+const { isUserNameRegistered } = require("../models/users");
 
 // Controller to handle creation of a new mail
 
@@ -21,7 +22,7 @@ exports.createMail = async (req, res) => {
     const sender = getUserById(req.user.id);
 
     // Find the sender and recipient users in the users list
-    const recipient = getUserById(to)
+    const recipient = isUserNameRegistered(to)
 
     // If either user is not found, return an error
     if (!sender || !recipient) {
@@ -103,7 +104,7 @@ checkIdValid = (userId, mailId, res) => {
 
     const mail = user.mails.find(m => m.id === mailId)
     if (!mail) {
-        res.status(404).json({ error: 'Mail not found for this user' })
+        res.status(403).json({ error: "Unauthorized access to mail or mail not found" });
         return null
     }
     return { mail, user }
@@ -111,10 +112,6 @@ checkIdValid = (userId, mailId, res) => {
 
 // Controller to Handle handle the option to delete a mail
 exports.deleteMail = async (req, res) => {
-    if (req.params.id !== req.user.id) {
-        return res.status(403).json({ error: "Unauthorized access" });
-    }
-
     // Get the user Id
     const userId = req.user.id
     const mailId = req.params.id
@@ -240,7 +237,7 @@ exports.addLabelToMail = async (req, res) => {
     } catch (err) {
         // Handle expected error cases
         if (err.message === 'MAIL_NOT_FOUND') {
-            return res.status(404).json({ error: 'Mail not found' })
+            res.status(403).json({ error: "Unauthorized access to mail or mail not found" });
         } else if (err.message === 'LABEL_NOT_FOUND') {
             return res.status(404).json({ error: 'Label not found' })
         } else if (err.message === 'CANNOT_ADD_TO_LABEL') {

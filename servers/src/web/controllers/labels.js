@@ -38,27 +38,22 @@ exports.getAllLabels = (req, res) => {
 
 // Get a specific label for a specific user
 exports.getLabelById = (req, res) => {
-  if (req.params.id !== req.user.id) {
-    return res.status(403).json({ error: "Unauthorized access" });
-  }
 
-  // Check if the user id matches the id in the request header
   const labelId = req.params.id;
-
   const user = getUserById(req.user.id);
+
   if (!user) return res.status(404).json({ error: "User not found" });
 
   const label = Labels.getLabelById(user, labelId);
-  if (!label) return res.status(404).json({ error: "Label not found" });
+  if (!label) {
+    return res.status(403).json({ error: "Unauthorized access to label or label not found" });
+  }
   res.status(200).json(label);
 };
 
 // Update a specific label name of a specific user
 exports.updateLabel = (req, res) => {
-  if (req.params.id !== req.user.id) {
-    return res.status(403).json({ error: "Unauthorized access" });
-  }
-  // Check if the user id matches the id in the request header
+
   const labelId = req.params.id;
   const { name } = req.body;
 
@@ -67,26 +62,29 @@ exports.updateLabel = (req, res) => {
   }
 
   const user = getUserById(req.user.id);
-  if (!user) return res.status(404).json({ error: "User not found" });
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
 
   try {
-    // Try to update label.
-    Labels.updateLabel(user, labelId, name);
-    res.status(204).end();
-  } catch (error) {
+    const updatedLabel = Labels.updateLabel(user, labelId, name);
+    res.status(200).json(updatedLabel); // אפשר גם 204 ללא תוכן אם לא מחזירים את התווית
+  } catch (err) {
     if (err.message === "INVALID_NAME") {
       // 400 Bad Request if the name already exists for this user
-      return res.status(400).json({ error: "Name already exist" });
+      return res.status(400).json({ error: "Name already exists" });
     }
-    return res.status(404).json({ error: "Label not found" });
+    if (err.message === "LABEL_NOT_FOUND") {
+      // valedate the labelId that was given as a parameter
+      return res.status(403).json({ error: "Unauthorized access to label or label not found" });
+    }
+    return res.status(500).json({ error: "An unexpected error occurred" });
   }
 };
 
+
 // Delete a specific label of a specific user
 exports.deleteLabel = async (req, res) => {
-  if (req.params.id !== req.user.id) {
-    return res.status(403).json({ error: "Unauthorized access" });
-  }
   // Check if the user id matches the id in the request header
   const labelId = req.params.id;
 
@@ -97,9 +95,10 @@ exports.deleteLabel = async (req, res) => {
     const result = await Labels.deleteLabel(user, labelId);
     res.status(204).json({ message: 'Label deleted', result })
   } catch (err) {
-    // If the label is not found, return a 404 error
+    // If the label was not found
     if (err.message === 'LABEL_NOT_FOUND') {
-      return res.status(404).json({ error: 'Not Found' })
+      return res.status(403).json({ error: "Unauthorized access to label or label not found" });
+
     }
     // If the user can't delete the label, return a 400 error
     if (err.message === 'CANNOT_DELETE_THIS_LABEL') {
