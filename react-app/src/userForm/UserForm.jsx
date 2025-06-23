@@ -7,6 +7,7 @@ import FormDate from "./formDate/FormDate";
 import FormSelect from "./formSelect/FormSelect";
 import InputWithIcon from "./inputWithIcon/InputWithIcon";
 import FormPassword from "./formPassword/FormPassword";
+import FormImage from "./formImage/FormImage";
 
 import FormExplainWin from "./formExplainWin/FormExplainWin";
 
@@ -37,7 +38,9 @@ function UserForm({
             {data.title} {displayName && displayName}
           </h1>
           {/* <p>{!username ? data.text : `${username}@sayhi.com`}</p> */}
-          <p className="form-text">{`${!username ? "" : username}${data.text}`}</p>
+          <p className="form-text">{`${!username ? "" : username}${
+            data.text
+          }`}</p>
         </div>
 
         {/* Create the form veriables */}
@@ -45,34 +48,32 @@ function UserForm({
           <div id="input-div">
             {!data.showPass ? (
               data.inputs &&
-              data.inputs.map(
-                (input, index) =>
-                  !input.explainText ? (
-                    <FormInputs
-                      name={input.id}
-                      key={index}
-                      {...inputsConf[index]}
-                      inputs={input}
-                      handleKeyUp={handleKeyUp}
-                    />
-                  ) : (
-                    <InputWithIcon
-                      name={input.id}
-                      key={index}
-                      {...inputsConf[index]}
-                      inputs={input}
-                      handleKeyUp={handleKeyUp}
-                    />
-                  )
-                // : (
-                
-                // )
+              data.inputs.map((input, index) =>
+                !input.explainText ? (
+                  <FormInputs
+                    name={input.id}
+                    key={index}
+                    {...inputsConf[index]}
+                    inputs={input}
+                    handleKeyUp={handleKeyUp}
+                  />
+                ) : (
+                  <InputWithIcon
+                    name={input.id}
+                    key={index}
+                    {...inputsConf[index]}
+                    inputs={input}
+                    handleKeyUp={handleKeyUp}
+                  />
+                )
               )
             ) : (
-              <FormPassword inputsConf={inputsConf}
-                      inputs={data.inputs}
-                      showPass={data.showPass}
-                      handleKeyUp={handleKeyUp}/>
+              <FormPassword
+                inputsConf={inputsConf}
+                inputs={data.inputs}
+                showPass={data.showPass}
+                handleKeyUp={handleKeyUp}
+              />
             )}
 
             {data.birthDay && (
@@ -83,6 +84,15 @@ function UserForm({
               />
             )}
             {data.select && <FormSelect {...selectConf} data={data.select} />}
+            {data.image && (
+              <FormImage
+                src={inputsConf.src}
+                inputClass={inputsConf.inputClass}
+                fileName= {inputsConf.fileName}
+                setVal={inputsConf.setVal}
+                data={data.image}
+              />
+            )}
           </div>
           {errorText && <p className="invalid-txt">{errorText}</p>}
           <div className="form-btns-div">

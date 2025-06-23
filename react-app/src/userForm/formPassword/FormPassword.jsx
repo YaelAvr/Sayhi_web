@@ -4,7 +4,7 @@ import FormInputs from "../formInputs/FormInputs";
 const FormPassword = ({ inputsConf, inputs, showPass, handleKeyUp }) => {
     const [showPassword, setShowPassword] = useState(false)
   return (
-    <div>
+    <>
       {inputs.map((input, index) => (
         <FormInputs
           name={input.id}
@@ -24,7 +24,7 @@ const FormPassword = ({ inputsConf, inputs, showPass, handleKeyUp }) => {
         />
         {showPass.label}
       </label>
-    </div>
+    </>
   );
 };
 

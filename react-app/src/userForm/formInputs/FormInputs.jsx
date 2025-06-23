@@ -10,7 +10,6 @@ const FormInputs = ({
   inputType=null
 }) => {
   return (
-    // <div id= {inputs.waterMark ?"input-wrapper":"only-input"}>
       <input
         className={`${inputClass} form-input ${inputs.className && inputs.className}`}
         id={inputs.id}
@@ -25,9 +24,6 @@ const FormInputs = ({
         min={inputs.min && inputs.min}
         max={inputs.max && inputs.max}
       />
-    //   {inputs.waterMark &&
-    //   <span className="input-waterMark">{inputs.waterMark}</span>}
-    // </div>
   );
 };
 

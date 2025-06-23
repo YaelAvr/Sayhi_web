@@ -12,6 +12,12 @@
   justify-content: space-between;
 }
 
+.form-flex-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
 #user-form-container {
   width: 94%;
   height: 80%;
@@ -38,21 +44,23 @@
 
   /* padding-left: 5%; */
 }
-.form-text{
-    margin-block: 0.2em;
-    width: 100%;
-
+.form-text {
+  margin-block: 0.2em;
+  width: 100%;
 }
 
+.hide-filde{
+  display: none;
+}
 .form-text-cont h1 {
-font-weight: 500;
-    font-size: 2.5rem;
-    /* font-size: 100%; */
-    width: 100%;
+  font-weight: 500;
+  font-size: 2.5rem;
+  /* font-size: 100%; */
+  width: 100%;
 }
 
 .form-text-cont p {
- font-size: 100%;
+  font-size: 1.17rem;
 }
 
 #user-form {
@@ -89,7 +97,7 @@ font-weight: 500;
   /* height: 3rem; */
   padding-left: 2%;
   outline: none;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   margin: 0.3em;
   margin-left: 0;
   width: inherit;

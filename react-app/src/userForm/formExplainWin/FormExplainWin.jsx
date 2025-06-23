@@ -3,7 +3,7 @@ const FormExplainWin = ({explainText, setShowHelp})=>{
 
     return (
         <div className="form-explain-text" onMouseLeave={() => setShowHelp(false)}>
-              <p>{explainText}</p>  
+              <p className="form-explain-text" onMouseLeave={() => setShowHelp(false)}>{explainText}</p>  
         </div>
     )
 }

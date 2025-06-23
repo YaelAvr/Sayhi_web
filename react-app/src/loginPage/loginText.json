@@ -29,7 +29,7 @@
         "id": "login-password",
         "name": "password",
         "className" : "password input-full-row",
-        "type": "password",
+        "type": "file",
         "placeHolder": "Enter your Password"
       }
     ],

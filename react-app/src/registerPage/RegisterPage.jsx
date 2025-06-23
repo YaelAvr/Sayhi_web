@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import UserForm from "../userForm/UserForm";
 import registerText from "./registerText.json";
 
+import CreatePic from "./createPic/CreatePic";
+
 const RegisterPage = () => {
   const [userData, setUserData] = useState({
     displayName: "",
@@ -25,6 +27,11 @@ const RegisterPage = () => {
     confirm: "",
   });
 
+  // const [picture, setPicture] = useState({
+  //   img: null,
+  //   url: null
+  // })
+
   // const [displayName, setDisplayName] = useState("");
   const [firstWord, setFirstWord] = useState("");
   const [secondWord, setSecondWord] = useState("");
@@ -32,8 +39,7 @@ const RegisterPage = () => {
   const [birthDay, setBirthDay] = useState({
     day: "",
     month: "",
-    year: "",
-    // date: "",
+    year: ""
   });
   const [gender, setGender] = useState("");
 
@@ -41,10 +47,9 @@ const RegisterPage = () => {
 
   const [bDayInputClass, setBDayIInputClass] = useState("no-input");
   const [gInputClass, setGInputClass] = useState("no-input");
-
   const [inputClass, setInputClass] = useState("no-input");
-  // const [part, setPart] = useState(3); //כלי עזר לזמן עבודה
-  const [part, setPart] = useState(0); //להחזיר
+  const [part, setPart] = useState(4); //כלי עזר לזמן עבודה
+  // const [part, setPart] = useState(0); //להחזיר
 
   const navigate = useNavigate();
 
@@ -194,6 +199,24 @@ const RegisterPage = () => {
     }
   };
 
+   /* this function insert the inserted values to the fitting
+   birtday start filed*/
+  const handleBdayChange = (e) => {
+    let val = e.target.value;
+
+    if (!(e.target.name === "month")) {
+      // prevent the uder from entering non digits values
+      val = e.target.value.replace(/\D/g, "");
+    }
+    setBirthDay((prev) => ({ ...prev, [e.target.name]: val }));
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+
+
   const handleBack = () => {
     setPart((perv) => perv - 1);
     setInputClass("no-input");
@@ -214,22 +237,7 @@ const RegisterPage = () => {
     return data;
   };
 
-  /* this function insert the inserted values to the fitting
-   birtday start filed*/
-  const handleBdayChange = (e) => {
-    let val = e.target.value;
-
-    if (!(e.target.name === "month")) {
-      // prevent the uder from entering non digits values
-      val = e.target.value.replace(/\D/g, "");
-    }
-    setBirthDay((prev) => ({ ...prev, [e.target.name]: val }));
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
+ 
   const formConfigs = {
     0: {
       buttonsConf: {
@@ -305,13 +313,36 @@ const RegisterPage = () => {
       ],
       errorText: errorText,
     },
+
+  //    const [picture, setPicture] = useState({
+  //   img: null,
+  //   url: null
+  // })
+     4: {
+      buttonsConf: { ClickFunc: handleBack, SubmitFunc: createPassWord },
+      inputsConf: [
+        {
+          inputClass: inputClass,
+          inputValue: password.password,
+          setVal: handlePasswordChange,
+        }
+      ],
+      errorText: errorText,
+    }
   };
 
   const displayPage = () => {
     const partText = getPartText();
     const config = formConfigs[part];
     if (!config) return null;
+
+    if (part === 4) {
+      return <CreatePic userInfo={userData.pic} partText={partText} handleBack={handleBack} handleNext={handleNext} />
+    }
+    else{
     return <UserForm {...config} data={partText} />;
+
+    }
   };
 
   return displayPage();

@@ -157,17 +157,15 @@
   "4": {
     "title": "Personalize your account!",
     "text": "Choose your profile picture",
-    "inputs": [
-      {
-        "index": "0",
-        "id": "username",
-        "type": "password",
-        "placeHolder": "Enter your Password"
-      }
-    ],
-    "errorText": [
-      { "404": "Wrong password. Please try again.", "400": "Enter a password" }
-    ],
+    "image": {
+      "id": "form-picture",
+      "className": "hide-filde",
+      "type": "file",
+      "name": "pic",
+      "alt": "preview",
+      "fileType": "image/*",
+      "placeHolder": "choose pic"
+    },
     "button": {
       "nextBtn": "Next",
       "changeBtnText": "Back"
