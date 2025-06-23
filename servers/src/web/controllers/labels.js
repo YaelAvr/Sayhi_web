@@ -66,7 +66,6 @@ exports.updateLabel = (req, res) => {
     return res.status(404).json({ error: "User not found" });
   }
 
-
   try {
     const updatedLabel = Labels.updateLabel(user, labelId, name);
     res.status(200).json(updatedLabel); // אפשר גם 204 ללא תוכן אם לא מחזירים את התווית
@@ -77,9 +76,7 @@ exports.updateLabel = (req, res) => {
     }
     if (err.message === "LABEL_NOT_FOUND") {
       // valedate the labelId that was given as a parameter
-
       return res.status(403).json({ error: "Unauthorized access to label or label not found" });
-
     }
     return res.status(500).json({ error: "An unexpected error occurred" });
   }
@@ -88,9 +85,6 @@ exports.updateLabel = (req, res) => {
 
 // Delete a specific label of a specific user
 exports.deleteLabel = async (req, res) => {
-  if (req.params.id !== req.user.id) {
-    return res.status(403).json({ error: "Unauthorized access" });
-  }
   // Check if the user id matches the id in the request header
   const labelId = req.params.id;
 
