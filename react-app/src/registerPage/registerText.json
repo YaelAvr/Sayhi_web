@@ -130,16 +130,16 @@
         "id": "reg-password",
         "type": "password",
         "name": "password",
-        "className" : "password input-full-row",
+        "className": "password",
         "placeHolder": "Password",
-        "text": "@sayhi"
+        "explainText": "Your password must contain at least 8 characters, 1 uppercase letter & 1 lowercase letter."
       },
       {
         "index": "1",
         "id": "reg-confirm",
         "type": "password",
         "name": "confirm",
-        "className" : "password input-full-row",
+        "className": "password input-full-row",
         "placeHolder": "Confirm"
       },
       {

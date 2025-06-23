@@ -16,7 +16,9 @@ const InputWithIcon = ({
 
   return (
     <div className="input-icon-cont">
-      <div id={inputs.waterMark && "input-wrapper"}>
+      {/* <div id={inputs.waterMark && "input-wrapper"}> */}
+      <div id="input-wrapper">
+
         <FormInputs
           inputValue={inputValue}
           setVal={setVal}

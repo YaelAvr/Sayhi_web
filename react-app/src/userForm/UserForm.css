@@ -39,13 +39,13 @@
 
 .form-text h1 {
   font-weight: normal;
-  font-size: 3em;
+    font-size: 2.8rem;
   margin-bottom: 0.2em;
   margin-top: 0.2em;
 }
 
 .form-text p {
-  font-size: 1.3em;
+  font-size: 1rem;
   margin-bottom: 0.2em;
   margin-top: 0.2em;
   font-weight: lighter;
