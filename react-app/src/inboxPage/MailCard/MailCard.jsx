@@ -46,7 +46,7 @@ const MailCard = ({ sender, subject, body, date, onStar, onDelete, onLabel, isSt
   };
 
   // Display the subject first, and add part of the body if space allows
-  const subjectPreview = subject.slice(0, PREVIEW_LIMIT);
+  const subjectPreview = subject ? subject.slice(0, PREVIEW_LIMIT) : '(no subject)';
   const remaining = PREVIEW_LIMIT - subjectPreview.length;
   const bodyPreview = remaining > 0 ? body.slice(0, remaining) : '';
 
@@ -70,9 +70,9 @@ const MailCard = ({ sender, subject, body, date, onStar, onDelete, onLabel, isSt
         <div className="mail-sender">{sender}</div>
 
         {/* Preview line with subject + body */}
-        <div className="mail-preview-line">
+        <div className="mail-preview-line" dir="ltr">
           <strong>{subjectPreview}</strong>
-          {bodyPreview && <span> – {bodyPreview}</span>}
+          {bodyPreview && <> – {bodyPreview}</>}
         </div>
 
         {/* Formatted date */}

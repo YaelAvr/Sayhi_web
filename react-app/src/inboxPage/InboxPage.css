@@ -13,13 +13,36 @@
   /* text-align: center; */
 }
 
-/* האזור המרכזי שבו יוצגו המיילים */
 .inbox-content-area {
-  flex: 1; /* גורם לחלק הזה למלא את כל הרוחב הפנוי */
-  padding: 16px;
-  overflow-y: auto; /* מוסיף סרגל גלילה רק לאזור הזה אם התוכן ארוך */
+  flex: 1;
+  padding: 0 16px;
+  overflow-y: auto;
+  height: calc(100vh - 60px - 40px); /* 60px TopBar + 40px Toolbar */
 }
 
 .inbox-content-area h2 {
   margin-top: 0;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px;
+  background-color: #f1f3f4; 
+  border-bottom: 1px solid #ccc;
+  
+}.toolbar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.empty-message {
+  text-align: center;
+  font-size: 14px;
+  color: #5f6368;
+  padding: 60px 0;
+  user-select: none;
 }
