@@ -3,19 +3,21 @@ import "./UserForm.css";
 import { useState, useRef, memo } from "react";
 import Logo from "../gmailLogo/Logo";
 import FormInputs from "./formInputs/FormInputs";
+import FormDate from "./formDate/FormDate";
+import FormSelect from "./formSelect/FormSelect";
 
 function UserForm({
-  inputsConf,
   buttonsConf,
   data,
   errorText,
+  inputsConf = null,
+  selectConf = null,
+  bDayConf = null,
   displayName = null,
   username = null,
 }) {
-  const inputs = data.inputs;
-  // const errorText = data.errorText;
-  const buttonsText = data.button;
-
+  
+  
   const handleKeyUp = (e) => {
     if (e.key === "Enter") {
       buttonsConf.SubmitFunc();
@@ -33,15 +35,24 @@ function UserForm({
 
       <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
         <div id="input-div">
-          {inputs.map((input, index) => (
-            <FormInputs
-              name={input.id}
-              key={index}
-              {...inputsConf[index]}
-              inputs={input}
+          {data.inputs &&
+            data.inputs.map((input, index) => (
+              <FormInputs
+                name={input.id}
+                key={index}
+                {...inputsConf[index]}
+                inputs={input}
+                handleKeyUp={handleKeyUp}
+              />
+            ))}
+          {data.birthDay && (
+            <FormDate
+              bDayConf={bDayConf}
+              data={data.birthDay}
               handleKeyUp={handleKeyUp}
             />
-          ))}
+          )}
+          {data.select && <FormSelect {...selectConf} data={data.select} inputClass={`${selectConf.inputClass}, ${data.select.className}`} />}
         </div>
         {errorText && <p className="invalid-txt">{errorText}</p>}
         <div className="form-btns-div">
@@ -51,10 +62,10 @@ function UserForm({
             className="form-btn"
             id="changing-btn"
           >
-            {buttonsText.changeBtnText}
+            {data.button.changeBtnText}
           </button>
           <button type="submit" className="form-btn" id="next-btn">
-            {buttonsText.nextBtn}
+            {data.button.nextBtn}
           </button>
         </div>
       </form>

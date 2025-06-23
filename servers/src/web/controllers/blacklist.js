@@ -14,14 +14,17 @@ exports.addUrlToBlacklist = async (req, res) => {
   } catch (err) {
     // If the link is not valid, return a 400 error
     if (err.message === 'BAD_REQUEST_CPP_SERVER') {
-    return res.status(400).json({ error: 'Bad Request' })
-  }
+      return res.status(400).json({ error: 'Bad Request' })
+    }
     res.status(500).json({ error: err.message });
   }
 }
 
 //Delete URL from blacklist 
 exports.deleteUrlFromBlacklist = async (req, res) => {
+  if (req.params.id !== req.user.id) {
+    return res.status(403).json({ error: "Unauthorized access" });
+  }
   const { id } = req.params;
   if (!id) {
     // If the link is missing, return a 400 error
@@ -34,12 +37,12 @@ exports.deleteUrlFromBlacklist = async (req, res) => {
   } catch (err) {
     // If the link is not valid, return a 400 error
     if (err.message === 'BAD_REQUEST_CPP_SERVER') {
-    return res.status(400).json({ error: 'Bad Request' })
-  }
-  if (err.message === 'URL_NOT_FOUND') {
-    // If the link wasn't in the blacklist from the start, return a 404 error
-    return res.status(404).json({ error: 'Not Found' })
-  }
+      return res.status(400).json({ error: 'Bad Request' })
+    }
+    if (err.message === 'URL_NOT_FOUND') {
+      // If the link wasn't in the blacklist from the start, return a 404 error
+      return res.status(404).json({ error: 'Not Found' })
+    }
     res.status(500).json({ error: err.message })
   }
 }

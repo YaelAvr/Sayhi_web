@@ -10,10 +10,10 @@ const JWT_SECRET = process.env.JWT_SECRET || "secret-key";
 exports.isUserRegistered = (req, res) => {
     const { username, password } = req.body;
  
-    if (!username || !password) { return res.status(400).json({ error: "Bad Request" }); }
+    if (!username || !password) { return res.status(400).json({ error: "Enter a password" }); }
 
     const user = Tokens.isUserRegistered(username, password);
-    if (!user) return res.status(404).json({ error: 'Not Found' });
+    if (!user) return res.status(404).json({ error: 'Wrong password. Please try again.' });
        
     // Generate a JWT token for the user
     // The token contains the user id and username, and expires in 1 hour.

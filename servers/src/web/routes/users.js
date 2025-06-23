@@ -6,8 +6,18 @@ const authenticateToken = require('../middlewares/authenticateToken');
 
 router.route('/')
         .post(controller.createUser)
+router.route('/displayName')
+        .post(controller.createName)
+router.route('/password')
+        .post(controller.createPassword)
+router.route('/gender')
+        .post(controller.createGender)
+router.route('/userName')
+        .post(controller.createUserName)
+router.route('/birthday')
+        .post(controller.createBirthday)
 
-router.route('/validation/:username').post(controller.isUserNameRegisterd)
+router.route('/validation/:username').post(controller.isUserNameRegistered)
 
 router.route('/:id')
         .get(authenticateToken, controller.getUserById)

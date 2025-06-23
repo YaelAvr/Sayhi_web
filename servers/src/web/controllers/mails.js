@@ -6,6 +6,7 @@ const { createDraft } = require('../models/mails')
 const { addLabelToMail } = require('../models/mails')
 const { deleteMail } = require('../models/mails')
 const { getUserById } = require("../models/users");
+const { isUserNameRegisterd } = require("../models/users");
 
 // Controller to handle creation of a new mail
 
@@ -21,7 +22,7 @@ exports.createMail = async (req, res) => {
     const sender = getUserById(req.user.id);
 
     // Find the sender and recipient users in the users list
-    const recipient = getUserById(to)
+    const recipient = isUserNameRegisterd(to)
 
     // If either user is not found, return an error
     if (!sender || !recipient) {
@@ -133,6 +134,10 @@ exports.deleteMail = async (req, res) => {
 
 // Controller to Handle the option to get a specific mail 
 exports.getSpecificMail = (req, res) => {
+    if (req.params.id !== req.user.id) {
+        return res.status(403).json({ error: "Unauthorized access" });
+    }
+
     // Get the user Id
     const userId = req.user.id
     //Get the mails'id from the url
