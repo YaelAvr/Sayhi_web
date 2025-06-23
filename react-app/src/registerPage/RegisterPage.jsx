@@ -43,8 +43,8 @@ const RegisterPage = () => {
   const [gInputClass, setGInputClass] = useState("no-input");
 
   const [inputClass, setInputClass] = useState("no-input");
-  const [part, setPart] = useState(3); //כלי עזר לזמן עבודה
-  // const [part, setPart] = useState(0); //להחזיר
+  // const [part, setPart] = useState(3); //כלי עזר לזמן עבודה
+  const [part, setPart] = useState(0); //להחזיר
 
   const navigate = useNavigate();
 
@@ -301,7 +301,7 @@ const RegisterPage = () => {
           inputClass: inputClass,
           inputValue: password.confirm,
           setVal: handlePasswordChange,
-        },
+        }
       ],
       errorText: errorText,
     },

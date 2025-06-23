@@ -128,28 +128,24 @@
       {
         "index": "0",
         "id": "reg-password",
-        "type": "password",
         "name": "password",
-        "className": "password",
-        "placeHolder": "Password",
-        "explainText": "Your password must contain at least 8 characters, 1 uppercase letter & 1 lowercase letter."
+        "className": "password input-full-row",
+        "placeHolder": "Password"
       },
       {
         "index": "1",
         "id": "reg-confirm",
-        "type": "password",
         "name": "confirm",
         "className": "password input-full-row",
         "placeHolder": "Confirm"
-      },
-      {
-        "index": "1",
-        "id": "password-btn",
-        "type": "checkbox",
-        "placeHolder": "Confirm",
-        "lable": "<p>Show password</p>"
       }
     ],
+    "showPass": {
+      "id": "password-btn",
+      "type": "checkbox",
+      "name": "toggel",
+      "label": "Show password"
+    },
     "errorText": [
       { "404": "Wrong password. Please try again.", "400": "Enter a password" }
     ],

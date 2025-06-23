@@ -7,13 +7,14 @@ const FormInputs = ({
   inputClass,
   inputs,
   handleKeyUp,
+  inputType=null
 }) => {
   return (
     // <div id= {inputs.waterMark ?"input-wrapper":"only-input"}>
       <input
         className={`${inputClass} form-input ${inputs.className && inputs.className}`}
         id={inputs.id}
-        type={inputs.type}
+        type={!inputType ? inputs.type : inputType}
         name={inputs.name}
         autoComplete="off"
         value={inputValue}

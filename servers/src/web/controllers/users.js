@@ -65,15 +65,18 @@ exports.createPassword = (req, res) => {
     return res.status(400).json({ error: "Enter password" });
   }
 
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+  // const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
   // Check if all the given parameters are valid
-  if (!passwordPattern.test(password)) {
+    if (password.trim().length < 8) {
     return res.status(400).json({ error: "Use 8 characters or more for your password" });
   }
+  // if (!passwordPattern.test(password)) {
+  //   return res.status(400).json({ error: "Use 8 characters or more for your password" });
+  // }
 
   if (!confirm) {
-    return res.status(400).json({ error: "Enter password confirmation" });
+    return res.status(400).json({ error: "Confirm your password" });
   }
 
   if (confirm !== password) {

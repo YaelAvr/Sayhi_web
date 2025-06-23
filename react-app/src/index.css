@@ -6,7 +6,7 @@ body,html {
   /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif; */
-    font-family: mail-font, Arial, Helvetica, sans-serif;
+    font-family: 'mail-font', Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -25,16 +25,28 @@ body,html {
   gap: 1rem; 
 } */
 
-/* כלל נוסף עבור המשקל העבה */
+
 @font-face {
   font-family: 'mail-font';
 
-  src: url('../public/Fonts/Roboto-Regular.ttf') format('woff2');
+  src: url('../public/Fonts/Roboto-VariableFont_wdth\,wght.ttf') format('truetype');
 
-  font-weight: 300; 
+  font-weight: 100 900; 
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'RedHatText';
+  src: url('../public/Fonts/RedHatText-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../public/Fonts/OpenSans-VariableFont_wdth\,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
 
 .btn-border-radius{
     border-radius: 1em;

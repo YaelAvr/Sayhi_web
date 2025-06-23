@@ -6,6 +6,7 @@ import FormInputs from "./formInputs/FormInputs";
 import FormDate from "./formDate/FormDate";
 import FormSelect from "./formSelect/FormSelect";
 import InputWithIcon from "./inputWithIcon/InputWithIcon";
+import FormPassword from "./formPassword/FormPassword";
 
 import FormExplainWin from "./formExplainWin/FormExplainWin";
 
@@ -31,38 +32,49 @@ function UserForm({
       <Logo containerClass="form-logo-container form-conteiner" />
       {/* Create the left side text.  */}
       <div id="user-form-container" className="form-conteiner">
-        <div className="form-text">
-          <h1>
+        <div className="form-text-cont">
+          <h1 className="form-text">
             {data.title} {displayName && displayName}
           </h1>
           {/* <p>{!username ? data.text : `${username}@sayhi.com`}</p> */}
-          <p>{`${!username ?"": username}${data.text}`}</p>
+          <p className="form-text">{`${!username ? "" : username}${data.text}`}</p>
         </div>
 
         {/* Create the form veriables */}
         <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
           <div id="input-div">
-            {data.inputs &&
-              data.inputs.map((input, index) =>
-                !input.explainText ? (
-                  <FormInputs
-                    name={input.id}
-                    key={index}
-                    {...inputsConf[index]}
-                    inputs={input}
-                    handleKeyUp={handleKeyUp}
-                  />
-                ) : (
-                  <InputWithIcon
-                    name={input.id}
-                    key={index}
-                    {...inputsConf[index]}
-                    inputs={input}
-                    handleKeyUp={handleKeyUp}
-                  />
-                )
-              )}
-            {/* {data.explainText && <Help className="help-logo" />} */}
+            {!data.showPass ? (
+              data.inputs &&
+              data.inputs.map(
+                (input, index) =>
+                  !input.explainText ? (
+                    <FormInputs
+                      name={input.id}
+                      key={index}
+                      {...inputsConf[index]}
+                      inputs={input}
+                      handleKeyUp={handleKeyUp}
+                    />
+                  ) : (
+                    <InputWithIcon
+                      name={input.id}
+                      key={index}
+                      {...inputsConf[index]}
+                      inputs={input}
+                      handleKeyUp={handleKeyUp}
+                    />
+                  )
+                // : (
+                
+                // )
+              )
+            ) : (
+              <FormPassword inputsConf={inputsConf}
+                      inputs={data.inputs}
+                      showPass={data.showPass}
+                      handleKeyUp={handleKeyUp}/>
+            )}
+
             {data.birthDay && (
               <FormDate
                 bDayConf={bDayConf}
