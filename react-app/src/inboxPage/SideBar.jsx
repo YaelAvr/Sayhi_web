@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react'; // --- שינוי #1: אין צורך ב-useState יותר ---
 import LabelButton from './labelButton/LabelButton';
 import CreateMailButton from './createMailButton/CreateMailButton';
 import LabelsTitle from './labelTitle/LabelsTitle';
@@ -18,29 +18,33 @@ const iconMap = {
   'Spam': spamIcon,
 };
 
+// --- שינוי #2: הוספת props חדשים: currentLabelName ו-onLabelClick ---
 function SideBar({ 
   onComposeClick, 
   defaultLabels, 
   customLabels, 
   onAddLabelClick,
   onOpenEditLabel,
-  onOpenDeleteLabel
+  onOpenDeleteLabel,
+  currentLabelName,
+  onLabelClick
 }) { 
-    const [selected, setSelected] = useState('Inbox');
+    // --- שינוי #3: מחקנו את ה-useState שהיה כאן ---
     
   return (
     <div className="sidebar-container">
       <CreateMailButton onClick={onComposeClick} /> 
       
-      {/* default labels part (ללא שינוי) */}
       <div className="default-labels-section" style={{ marginTop: '16px' }}>
         {defaultLabels.map(label => (
           <LabelButton
             key={label.id}
             label={label}
-            selected={selected === label.name}
+            // --- שינוי #4: ההחלטה על סימון מגיעה מההורה ---
+            selected={currentLabelName === label.name}
             iconSrc={iconMap[label.name]} 
-            onClick={() => setSelected(label.name)}
+            // --- שינוי #5: קוראים לפונקציה מההורה בלחיצה ---
+            onClick={() => onLabelClick(label.name)}
           />
         ))}
       </div>
@@ -48,17 +52,16 @@ function SideBar({
       <hr className="sidebar-divider" /> 
       <LabelsTitle onAddClick={onAddLabelClick} />
 
-      {/* custom labels part (עם התיקון) */}
       <div className="custom-labels-section">
         {customLabels && customLabels.map(label => (
           <LabelButton
             key={label.id}
             label={label}
-            selected={selected === label.name}
+            // ההחלטה על סימון מגיעה מההורה
+            selected={currentLabelName === label.name}
             iconSrc={customLabelIcon} 
-            onClick={() => setSelected(label.name)}
-            // 2. עכשיו מעבירים את הפונקציות הנכונות ל-LabelButton
-            // השמות onEditClick ו-onDeleteClick הם השמות ש-LabelButton מצפה לקבל
+            // קוראים לפונקציה מההורה בלחיצה
+            onClick={() => onLabelClick(label.name)}
             onEditClick={() => onOpenEditLabel(label)} 
             onDeleteClick={() => onOpenDeleteLabel(label)}
           />
