@@ -1,0 +1,20 @@
+{
+  "title": "How you will sign in",
+  "text": "Create a SayHi address for signing in to your SayHi Account",
+  "inputs": [
+    {
+      "index": "0",
+      "id": "username",
+      "name": "username",
+      "type": "text",
+      "className": "username",
+      "placeHolder": "Username",
+      "explainText": "You can use letters, numbers & periods",
+      "waterMark": "@sayhi.com"
+    }
+  ],
+  "button": {
+    "nextBtn": "Next",
+    "changeBtnText": "Back"
+  }
+}

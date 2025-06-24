@@ -1,4 +1,20 @@
 {
+  "confirm": {
+    "title": "Confirm your SayHi Account",
+    "text": "We have sent a confirmation code to your email address. Please enter it below.",
+    "fildes": [
+      "displayName: ",
+      "birthDay: ",
+      "gender: ",
+      "userName: ",
+      "password: ",
+      "picture: "
+    ],
+    "button": {
+      "nextBtn": "Confirm",
+      "changeBtnText": "Restart"
+    }
+  },
   "0": {
     "title": "Create a SayHi Account",
     "text": "Enter your name",

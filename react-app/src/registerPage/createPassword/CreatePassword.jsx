@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import UserForm from "../../userForm/UserForm";
-// import {handleBack, handleNext } from "../RegisterPage";
+import Text from "./text.json";
 
 const CreatePassword = (props) => {
   const [password, setPassword] = useState({
@@ -13,7 +13,7 @@ const CreatePassword = (props) => {
     setPassword((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const createPassWord = async (e) => {
+  const validatePassword = async (e) => {
     e.preventDefault();
 
     const res = await fetch("/api/users/password", {
@@ -24,7 +24,7 @@ const CreatePassword = (props) => {
 
     const data = await res.json();
     if (res.ok) {
-        setPassword({ password: "", confirm: "" });
+      setPassword({ password: "", confirm: "" });
       setError(null);
       props.setUserData("password", data.password);
       props.handleNext();
@@ -34,7 +34,7 @@ const CreatePassword = (props) => {
   };
 
   const config = {
-    buttonsConf: { ClickFunc: props.handleBack, SubmitFunc: createPassWord },
+    buttonsConf: { ClickFunc: props.handleBack, SubmitFunc: validatePassword },
     inputsConf: [
       {
         inputClass: !errorText ? "no-input" : "bad-input",
@@ -49,7 +49,7 @@ const CreatePassword = (props) => {
     ],
     errorText: errorText,
   };
-  return <UserForm {...config} data={props.text} />;
+  return <UserForm {...config} data={Text} />;
 };
 
 export default CreatePassword;

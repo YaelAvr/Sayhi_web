@@ -1,0 +1,59 @@
+ {
+    "title": "Basic information",
+    "text": "Enter your birthday and gender",
+    "birthDay": [
+      {
+        "index": 0,
+        "placeHolder": "Day",
+        "className": "date-param",
+        "id": "day-form",
+        "name": "day",
+        "type": "text",
+        "min": 1,
+        "max": 31
+      },
+      {
+        "index": 1,
+        "placeHolder": "Month",
+        "className": "form-select date-param",
+        "id": "month-form",
+        "name": "month",
+        "type": "select",
+        "options": [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December"
+        ]
+      },
+      {
+        "index": 2,
+        "placeHolder": "Year",
+        "className": "date-param",
+        "id": "year-form",
+        "name": "year",
+        "type": "text"
+      }
+    ],
+    "select": {
+      "placeHolder": "Gender",
+      "name": "gender",
+      "id": "gender-select",
+      "className": "form-select",
+      "type": "select",
+      "options": ["Male", "Female", "Other"]
+    },
+
+    "button": {
+      "nextBtn": "Next",
+      "changeBtnText": "Back"
+    }
+  }

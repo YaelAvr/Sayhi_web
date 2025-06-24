@@ -8,6 +8,7 @@ import FormSelect from "./formSelect/FormSelect";
 import InputWithIcon from "./inputWithIcon/InputWithIcon";
 import FormPassword from "./formPassword/FormPassword";
 import FormImage from "./formImage/FormImage";
+import ConfirmSub from "./confirmSub/ConfirmSub";
 
 import FormExplainWin from "./formExplainWin/FormExplainWin";
 
@@ -20,6 +21,7 @@ function UserForm({
   inputsConf = null,
   selectConf = null,
   bDayConf = null,
+  userData= null,
   displayName = null,
   username = null,
 }) {
@@ -46,6 +48,7 @@ function UserForm({
         {/* Create the form veriables */}
         <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
           <div id="input-div">
+            {userData&& <ConfirmSub userData={userData} data={data.fildes}/>}
             {!data.showPass ? (
               data.inputs &&
               data.inputs.map((input, index) =>

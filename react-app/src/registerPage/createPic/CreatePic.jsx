@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import UserForm from "../../userForm/UserForm";
+import Text from "./text.json"
+
 // import {handleBack, handleNext } from "../RegisterPage";
 
 const CreatePic = (props) => {
@@ -56,8 +58,8 @@ const CreatePic = (props) => {
       const data = await res.json();
       if (res.ok) {
         props.setUserData("picture", data.tempImageUrl);
-        console.log("Image uploaded successfully:", data.tempImageUrl);
-        
+        setPicture({ name: "", img: null, url: null });
+        setError(null);
         props.handleNext();
       } else {
         setError(data.error);
@@ -78,7 +80,7 @@ const CreatePic = (props) => {
     },
     errorText: errorText,
   };
-  return <UserForm key={picture.url} {...config} data={props.partText} />;
+  return <UserForm key={picture.url} {...config} data={Text} />;
 };
 
 export default CreatePic;

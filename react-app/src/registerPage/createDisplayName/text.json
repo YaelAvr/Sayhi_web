@@ -1,0 +1,25 @@
+{
+  "title": "Create a SayHi Account",
+  "text": "Enter your name",
+  "inputs": [
+    {
+      "index": 0,
+      "id": "register-name1",
+      "type": "text",
+      "name": "firstWord",
+      "className": "display-name input-full-row",
+      "placeHolder": "First name"
+    },
+    {
+      "index": 1,
+      "id": "register-name2",
+      "type": "text",
+      "name": "secondWord",
+      "className": "display-name input-full-row",
+      "placeHolder": "Last name (optional)"
+    }
+  ],
+  "button": {
+    "nextBtn": "Next"
+  }
+}
