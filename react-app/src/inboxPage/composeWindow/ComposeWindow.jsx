@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import './ComposeWindow.css'; 
 import deleteIcon from '../labelButton/icons/spam.svg';
 
-function ComposeWindow({ onClose }) {
+function ComposeWindow({ onClose, draftData = null }) {
   // 1. ניהול מצב (State) עבור כל אחד משדות הקלט
-  const [to, setTo] = useState(''); // ישמור את כתובת המייל של הנמען
-  const [subject, setSubject] = useState(''); // ישמור את נושא המייל
-  const [body, setBody] = useState(''); // ישמור את גוף המייל
+  const [to, setTo] = useState(draftData?.toUserName || '');
+  const [subject, setSubject] = useState(draftData?.subject || '');
+  const [body, setBody] = useState(draftData?.body || '');
   const [errorMessage, setErrorMessage] = useState('');
   
 
