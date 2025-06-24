@@ -1,6 +1,8 @@
+const fs = require('fs').promises;
 const path = require('path');
 const multer = require("multer");
 const Users = require("../models/users");
+
 
 // This function creates a new user with the given parameters
 exports.createUser = (req, res) => {
@@ -48,7 +50,7 @@ exports.createUser = (req, res) => {
 };
 
 // Create a Valid display name
-exports.createName = (req, res) => {
+exports.validateDisplayName = (req, res) => {
   const { firstWord, secondWord } = req.body;
 
   if (!firstWord) {
@@ -59,7 +61,7 @@ exports.createName = (req, res) => {
 };
 
 // This function creates a new user with the given parameters
-exports.createPassword = (req, res) => {
+exports.validatePassword = (req, res) => {
   const { password, confirm } = req.body;
   if (!password) {
     return res.status(400).json({ error: "Enter password" });
@@ -88,7 +90,7 @@ exports.createPassword = (req, res) => {
 
 
 // this function generate a valid gender option
-exports.createGender = (req, res) => {
+exports.validateGender = (req, res) => {
   const { gender } = req.body;
 
   const genderOptions = ["female", "male", "other"];
@@ -107,9 +109,9 @@ exports.createGender = (req, res) => {
   res.status(200).json({ gender: lowGender });
 };
 
-//Create an only low cased userName that is 6-30 letters long.
+//validate a given username if it's only low cased and is 6-30 letters long.
 // If the username that was provided included 'user-name@sayhi.com', only usr the first part.
-exports.createUserName = (req, res) => {
+exports.validateUserName = (req, res) => {
   const { username } = req.body;
   let regex = /^[a-zA-Z0-9.]+$/;
 
@@ -143,7 +145,7 @@ exports.createUserName = (req, res) => {
 };
 
 // this function recives a potential birthday and return a valid print date or an error
-exports.createBirthday = (req, res) => {
+exports.validateBirthday = (req, res) => {
   const { day, month, year } = req.body;
 
   if (!day || !month || !year) {
@@ -179,6 +181,26 @@ function formatDateWithMonthName(day, month, year) {
 
   const mm = monthNames[month - 1];
   return `${day} ${mm} ${year}`;
+}
+
+// const isImageMimeType = (mime) => {
+//   return ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"].includes(mime);
+// };
+exports.validatePicture = (req, res) => {
+   const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({ error: "No file uploaded or file type is invalid." });
+  }
+
+  res.status(200).json({
+        // message: 'Image validated and uploaded temporarily.',
+        tempImageUrl: req.file.path // e.g., 'temp_uploads/a1b2c3d4.jpg'
+    });
+
+  // // create a reletive URL for the image
+  // const imageUrl = `/pictures/${file.filename}`;
+  // returnres.status(200).json({ imageUrl: imageUrl });
 }
 
 
@@ -230,8 +252,6 @@ exports.isUserNameRegistered = (req, res) => {
     return res.status(200).json({ displayName: user.displayName });
   }
 }
-
-
 
 function isDateValid(day, month, year) {
   const intDay = parseInt(day);
