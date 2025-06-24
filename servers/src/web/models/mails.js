@@ -42,7 +42,11 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
         body: body || '',
         links,
         labels: [],
-        time
+        time,
+        fromName: sender.displayName,
+        toName: recipient.displayName,
+        fromUserName: sender.username,
+        toUserName: recipient.username
     }
     const recipientMail = {
       id: `${mailId}-copy`,
@@ -52,7 +56,11 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
       body: body || '',
       links,
       labels: [],
-      time
+      time,
+      fromName: sender.displayName,
+      toName: recipient.displayName,
+      fromUserName: sender.username,
+      toUserName: recipient.username
   }
 
   // Find label objects by name
@@ -135,19 +143,23 @@ const createDraft = async (sender, to, subject, body, originalDraftId = null) =>
   const mailId = `m-${sender.id}-${sender.mailCounter++}`
   const time = new Date().toISOString()
 
-  // Check if 'to' is a valid user, otherwise set it to empty string
-  const recipient = to && Store.find(u => u.username === to) ? to : ''
+  // Check if 'to' is a valid user, if it is keeps it in recipient
+  const recipient = to ? Store.find(u => u.username === to) : null;
 
   //create mail
   const draftMail = {
     id: mailId,
     from: sender.id,
-    to: recipient,
+    to: recipient ? recipient.id : '',
     subject: subject || '',
     body: body || '',
     links: [],
     labels: [],
-    time
+    time,
+    fromName: sender.displayName,
+    toName: recipient ? recipient.displayName : '',
+    fromUserName: sender.username,
+    toUserName: recipient ? recipient.username : ''
   }
 
   const draftLabel = sender.labels.find(l => l.name === 'Drafts')

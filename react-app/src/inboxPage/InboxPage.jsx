@@ -7,6 +7,9 @@ import ComposeWindow from "./composeWindow/ComposeWindow";
 import AddLabelWindow from "./addLabelWindow/AddLabelWindow";
 import GenericWindow from "./genericWindow/GenericWindow";
 import MailCard from './MailCard/MailCard';
+import { getUserIdFromToken } from "../utils/utils";
+import Toolbar from "./Toolbar/Toolbar";
+
 
 const InboxPage = () => {
   // States קיימים
@@ -19,6 +22,14 @@ const InboxPage = () => {
   const [editingLabel, setEditingLabel] = useState(null); // יחזיק את אובייקט התווית לעריכה
   const [deletingLabel, setDeletingLabel] = useState(null); // יחזיק את אובייקט התווית למחיקה
   const [newLabelName, setNewLabelName] = useState(""); // state זמני לשם החדש בעריכה
+  //state for displaying the last 50 mails
+  const [emails, setEmails] = useState([]);
+  const [offset, setOffset] = useState(0);
+  //state for knowing if there are more mails to display(which means you can press the "next" button)
+  const [hasMore, setHasMore] = useState(true);
+  // Start by showing mails from the "Inbox" label by default
+  const [currentLabel, setCurrentLabel] = useState('Inbox'); 
+  const currentPage = offset === 0 ? 1 : Math.floor(offset / 50) + 1;
 
   // פונקציה לטעינת וסינון התוויות, נוכל לקרוא לה שוב לרענון
   const fetchAndFilterLabels = async () => {
@@ -93,23 +104,57 @@ const InboxPage = () => {
     setDeletingLabel(null); // סוגרים את מודאל המחיקה בכל מקרה
   };
 
+  // איפוס האופסט בכל שינוי תווית עדן
+  useEffect(() => {
+    fetchAndFilterLabels();
+  }, []);
 
-const handleUpdateLabel = async () => {
-    if (!editingLabel || !newLabelName.trim()) return;
-    const token = localStorage.getItem('token');
-    try {
-      const response = await fetch(`/api/labels/${editingLabel.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`},
-        body: JSON.stringify({ name: newLabelName }),
-      });
-      if (response.ok) {
-        fetchAndFilterLabels();
-      } else { alert('Failed to update label.'); }
-    } catch (error) { console.error("Error updating label:", error); }
-    setEditingLabel(null); // סוגרים את מודאל העריכה
-    setNewLabelName("");   // מאפסים את השם
-  };
+  // Load 50 mails using label "Inbox" and current offset
+  useEffect(() => {
+    const fetchMails = async () => {
+      const token = localStorage.getItem("token");
+      const userId = getUserIdFromToken();
+
+      try {
+        const res = await fetch(`/api/mails/label-mails?label=${currentLabel}&offset=${offset}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch mails");
+        }
+
+        const data = await res.json();
+        setEmails(data);
+        //checks if there are less than 50 mails(which means we cannot press button "next")
+        setHasMore(data.length === 50);
+
+      } catch (err) {
+        console.error("Error loading mails:", err);
+      }
+    };
+
+    fetchMails();
+  }, [offset, currentLabel]);
+
+
+
+  const handleUpdateLabel = async () => {
+      if (!editingLabel || !newLabelName.trim()) return;
+      const token = localStorage.getItem('token');
+      try {
+        const response = await fetch(`/api/labels/${editingLabel.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`},
+          body: JSON.stringify({ name: newLabelName }),
+        });
+        if (response.ok) {
+          fetchAndFilterLabels();
+        } else { alert('Failed to update label.'); }
+      } catch (error) { console.error("Error updating label:", error); }
+      setEditingLabel(null); // סוגרים את מודאל העריכה
+      setNewLabelName("");   // מאפסים את השם
+    };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -124,6 +169,11 @@ const handleUpdateLabel = async () => {
     <>
       <div className="inbox-page-layout">
         <TopBar onLogout={handleLogout} />
+        <Toolbar 
+          onPrevClick={() => setOffset(Math.max(0, offset - 50))}
+          onNextClick={() => {if (hasMore) setOffset(offset + 50);}}
+          currentPage={currentPage}
+        />
         <div className="inbox-main-content">
           <SideBar 
             onComposeClick={() => setIsComposing(true)} 
@@ -135,20 +185,30 @@ const handleUpdateLabel = async () => {
               setNewLabelName(label.name); 
                 }}
               onOpenDeleteLabel={(label) => setDeletingLabel(label)}
+                onLabelSelect={(labelName) => {
+                setCurrentLabel(labelName); // Update the label that was clicked
+                setOffset(0); // Always reset pagination when label changes
+            }}
           />
           <main className="inbox-content-area">
-            <h2>Welcome to your inbox!</h2>
-            {/* TEMPORARY: MailCard preview */}
-            <MailCard
-              sender="eden"
-              subject="היי חח"
-              body="still checking it"
-              date={new Date()}
-              isStarred={true}
-              onStar={() => console.log("st0arred")}
-              onDelete={() => console.log("deleted")}
-              onLabel={() => console.log("label added")}
-            />
+            {/* Display 50 mails */}
+            {emails.length === 0 ? (
+              <div className="empty-message">No mails to show</div>
+            ) : (
+              emails.map((mail) => (
+                <MailCard
+                  id={mail.id}
+                  sender={mail.fromName}
+                  subject={mail.subject}
+                  body={mail.body}
+                  date={mail.time}
+                  isStarred={mail.labels.includes("starred")}
+                  onStar={() => console.log("Toggle star")}
+                  onDelete={() => console.log("Delete mail")}
+                  onLabel={() => console.log("Add label")}
+                />
+              ))
+            )}
           </main>
         </div>
       </div>
