@@ -25,8 +25,11 @@ const InboxPage = () => {
   //state for displaying the last 50 mails
   const [emails, setEmails] = useState([]);
   const [offset, setOffset] = useState(0);
+  //state for knowing if there are more mails to display(which means you can press the "next" button)
+  const [hasMore, setHasMore] = useState(true);
+
   const [currentLabel, setCurrentLabel] = useState('Inbox'); //   לתקן ברירת מחדל
- const currentPage = offset === 0 ? 1 : Math.floor(offset / 50) + 1;
+  const currentPage = offset === 0 ? 1 : Math.floor(offset / 50) + 1;
 
   // פונקציה לטעינת וסינון התוויות, נוכל לקרוא לה שוב לרענון
   const fetchAndFilterLabels = async () => {
@@ -123,6 +126,9 @@ const InboxPage = () => {
 
         const data = await res.json();
         setEmails(data);
+        //checks if there are less than 50 mails(which means we cannot press button "next")
+        setHasMore(data.length === 50);
+
       } catch (err) {
         console.error("Error loading mails:", err);
       }
@@ -165,7 +171,7 @@ const InboxPage = () => {
         <TopBar onLogout={handleLogout} />
         <Toolbar 
           onPrevClick={() => setOffset(Math.max(0, offset - 50))}
-          onNextClick={() => setOffset(offset + 50)}
+          onNextClick={() => {if (hasMore) setOffset(offset + 50);}}
           currentPage={currentPage}
         />
         <div className="inbox-main-content">
