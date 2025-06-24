@@ -6,6 +6,7 @@ import UserForm from "../userForm/UserForm";
 import registerText from "./registerText.json";
 
 import CreatePic from "./createPic/CreatePic";
+import CreatePassword from "./createPassword/CreatePassword";
 
 const RegisterPage = () => {
   const [userData, setUserData] = useState({
@@ -17,15 +18,20 @@ const RegisterPage = () => {
     pic: "",
   });
 
+
+  const changeUserData = (fild, data) => {
+    setUserData((prev) => ({ ...prev, [fild]: data }));
+  }
+
   useEffect(() => {
     console.log("final data:", userData);
   }, [userData]);
 
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState({
-    password: "",
-    confirm: "",
-  });
+  // const [password, setPassword] = useState({
+  //   password: "",
+  //   confirm: "",
+  // });
 
   // const [picture, setPicture] = useState({
   //   img: null,
@@ -48,7 +54,7 @@ const RegisterPage = () => {
   const [bDayInputClass, setBDayIInputClass] = useState("no-input");
   const [gInputClass, setGInputClass] = useState("no-input");
   const [inputClass, setInputClass] = useState("no-input");
-  const [part, setPart] = useState(4); //כלי עזר לזמן עבודה
+  const [part, setPart] = useState(3); //כלי עזר לזמן עבודה
   // const [part, setPart] = useState(0); //להחזיר
 
   const navigate = useNavigate();
@@ -174,30 +180,28 @@ const RegisterPage = () => {
       alert("An error occurred, please try again later");
     }
   };
-   // create a display name for the user using the Web server
-  const createPassWord = async (e) => {
-    e.preventDefault();
 
-    const res = await fetch("/api/users/password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...password }),
-    });
+  // const createPassWord = async (e) => {
+  //   e.preventDefault();
 
-    if (res.status === 200) {
-      // insert the returned name
-      const data = await res.json();
-      // setDisplayName(data.displayName);
-      setUserData((prev) => ({ ...prev, password: data.password }));
-      handleNext();
-    } else if (res.status === 400 || res.status === 404) {
-      setInputClass("bad-input");
-      const errorData = await res.json();
-      setError(errorData.error);
-    } else {
-      alert("An error occurred, please try again later");
-    }
-  };
+  //   const res = await fetch("/api/users/password", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ ...password }),
+  //   });
+
+  //   if (res.status === 200) {
+  //     const data = await res.json();
+  //     setUserData((prev) => ({ ...prev, password: data.password }));
+  //     handleNext();
+  //   } else if (res.status === 400 || res.status === 404) {
+  //     setInputClass("bad-input");
+  //     const errorData = await res.json();
+  //     setError(errorData.error);
+  //   } else {
+  //     alert("An error occurred, please try again later");
+  //   }
+  // };
 
    /* this function insert the inserted values to the fitting
    birtday start filed*/
@@ -211,9 +215,9 @@ const RegisterPage = () => {
     setBirthDay((prev) => ({ ...prev, [e.target.name]: val }));
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  // const handlePasswordChange = (e) => {
+  //   setPassword((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  // };
 
 
 
@@ -245,7 +249,7 @@ const RegisterPage = () => {
       },
       inputsConf: [
         {
-          inputClass: inputClass,
+          inputClass: !errorText ? "no-input" : "bad-input",
           inputValue: firstWord,
           setVal: (e) => setFirstWord(e.target.value),
         },
@@ -291,53 +295,63 @@ const RegisterPage = () => {
       buttonsConf: { ClickFunc: handleBack, SubmitFunc: createUserName },
       inputsConf: [
         {
-          inputClass: inputClass,
+          inputClass: !errorText ? "no-input" : "bad-input",
           inputValue: username,
           setVal: (e) => setUsername(e.target.value),
         },
       ],
-    },
-    3: {
-      buttonsConf: { ClickFunc: handleBack, SubmitFunc: createPassWord },
-      inputsConf: [
-        {
-          inputClass: inputClass,
-          inputValue: password.password,
-          setVal: handlePasswordChange,
-        },
-        {
-          inputClass: inputClass,
-          inputValue: password.confirm,
-          setVal: handlePasswordChange,
-        }
-      ],
-      errorText: errorText,
-    },
-
-  //    const [picture, setPicture] = useState({
-  //   img: null,
-  //   url: null
-  // })
-     4: {
-      buttonsConf: { ClickFunc: handleBack, SubmitFunc: createPassWord },
-      inputsConf: [
-        {
-          inputClass: inputClass,
-          inputValue: password.password,
-          setVal: handlePasswordChange,
-        }
-      ],
-      errorText: errorText,
     }
+  
+    // 3: {
+    //   buttonsConf: { ClickFunc: handleBack, SubmitFunc: createPassWord },
+    //   inputsConf: [
+    //     {
+    //       inputClass: !errorText ? "no-input" : "bad-input",
+    //       inputValue: password.password,
+    //       setVal: handlePasswordChange,
+    //     },
+    //     {
+    //       inputClass: !errorText ? "no-input" : "bad-input",
+    //       inputValue: password.confirm,
+    //       setVal: handlePasswordChange,
+    //     }
+    //   ],
+    //   errorText: errorText,
+    // },
+
   };
 
   const displayPage = () => {
     const partText = getPartText();
     const config = formConfigs[part];
-    if (!config) return null;
+    // if (!config) return null;
 
-    if (part === 4) {
-      return <CreatePic userInfo={userData.pic} partText={partText} handleBack={handleBack} handleNext={handleNext} />
+    console.log("part: " + part + " text: " + partText);
+    
+    // switch (part) {
+    //   case 0: {
+
+    //   }
+    //   case 1: {}
+    //   case 2: {}
+    //   case 3: {
+    //   return <CreatePassword userData={userData.password} setUserData={changeUserData} text={partText} handleBack={handleBack} handleNext={handleNext} />
+
+    //   }
+    //     case 4: {
+    //   return <CreatePic userData={userData.pic} setUserData={changeUserData} partText={partText} handleBack={handleBack} handleNext={handleNext} />
+
+    //     }
+    //     default:
+    //     break;
+    //   }
+      
+    
+    if (part === 3) {
+        return <CreatePassword userData={userData.password} setUserData={changeUserData} text={partText} handleBack={handleBack} handleNext={handleNext} />
+}
+    else if (part === 4) {
+      return <CreatePic userData={userData.pic} setUserData={changeUserData} partText={partText} handleBack={handleBack} handleNext={handleNext} />
     }
     else{
     return <UserForm {...config} data={partText} />;

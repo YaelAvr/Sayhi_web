@@ -1,6 +1,10 @@
 const Users = require('./store');
 const { createLabel } = require('./labels')
+const multer = require("multer");
+
 let userCount = 0;
+const storage = multer.memoryStorage(); // Store files in memory
+
 
 const createUser = (username, displayName, password, picture, gender, birthday) => {
     // Check if there is already a user with this username
@@ -44,6 +48,20 @@ const isUserNameRegistered =(username) => {
     username = username.toLowerCase();
     return Users.find(user => user.username === username);
 }
+
+const uploadPicture = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    // בדיקה שהקובץ הוא מסוג תמונה
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("הקובץ שהועלה אינו תמונה"));
+    }
+  },
+});
+
+
 
 module.exports = {
     createUser,

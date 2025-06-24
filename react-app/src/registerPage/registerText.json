@@ -156,7 +156,7 @@
   },
   "4": {
     "title": "Personalize your account!",
-    "text": "Choose your profile picture",
+    "text": "Choose your profile picture \n (Supported formats: JPEG, PNG, WEBP, SVG).",
     "image": {
       "id": "form-picture",
       "className": "hide-filde",

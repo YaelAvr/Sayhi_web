@@ -24,6 +24,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.webserver
+    volumes:
+      - ./servers/pictures:/usr/src/gmail-project/servers/pictures
+      - ./servers/tempUploads:/usr/src/gmail-project/servers/tempUploads
     ports:
       - "3000:3000"
     stdin_open: true

@@ -8,6 +8,10 @@ app.use(express.json());
 const reactBuildPath = path.join(__dirname, '..', '..', '..', 'react-app', 'build');
 app.use(express.static(reactBuildPath));
 
+// --- NEW: Serve the permanent 'pictures' folder statically ---
+// This allows the client to access final images via URLs like /pictures/user_123.jpg
+app.use('/pictures', express.static(path.join(__dirname, '/pictures')));
+
 const userRoutes = require('./routes/users')
 const mailRoutes = require('./routes/mails')
 const tokenRoutes = require('./routes/tokens')
