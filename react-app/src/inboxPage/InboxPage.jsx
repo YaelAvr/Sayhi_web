@@ -27,8 +27,8 @@ const InboxPage = () => {
   const [offset, setOffset] = useState(0);
   //state for knowing if there are more mails to display(which means you can press the "next" button)
   const [hasMore, setHasMore] = useState(true);
-
-  const [currentLabel, setCurrentLabel] = useState('Inbox'); //   לתקן ברירת מחדל
+  // Start by showing mails from the "Inbox" label by default
+  const [currentLabel, setCurrentLabel] = useState('Inbox'); 
   const currentPage = offset === 0 ? 1 : Math.floor(offset / 50) + 1;
 
   // פונקציה לטעינת וסינון התוויות, נוכל לקרוא לה שוב לרענון
@@ -185,6 +185,10 @@ const InboxPage = () => {
               setNewLabelName(label.name); 
                 }}
               onOpenDeleteLabel={(label) => setDeletingLabel(label)}
+                onLabelSelect={(labelName) => {
+                setCurrentLabel(labelName); // Update the label that was clicked
+                setOffset(0); // Always reset pagination when label changes
+            }}
           />
           <main className="inbox-content-area">
             {/* Display 50 mails */}
