@@ -1,6 +1,6 @@
 .mail-card {
   direction: rtl; /* right-to-left layout */
-  padding: 12px 16px;
+  padding: 9px 16px;
   border-bottom: 1px solid #ddd;
   background-color: white;
   transition: background-color 0.2s;
@@ -47,7 +47,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   flex-grow: 1;
-  direction: ltr;
   text-align: left;
 }
 

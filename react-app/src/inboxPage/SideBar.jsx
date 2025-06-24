@@ -27,7 +27,8 @@ function SideBar({
   onOpenEditLabel,
   onOpenDeleteLabel,
   currentLabelName,
-  onLabelClick
+  onLabelClick,
+  onLabelSelect // new prop from parent to update currentLabel
 }) { 
     // --- שינוי #3: מחקנו את ה-useState שהיה כאן ---
     
@@ -43,8 +44,8 @@ function SideBar({
             // --- שינוי #4: ההחלטה על סימון מגיעה מההורה ---
             selected={currentLabelName === label.name}
             iconSrc={iconMap[label.name]} 
-            // --- שינוי #5: קוראים לפונקציה מההורה בלחיצה ---
-            onClick={() => onLabelClick(label.name)}
+            // highlight this label and inform parent to load mails of this label
+            onClick={() => { setSelected(label.name); onLabelSelect(label.name);}}
           />
         ))}
       </div>
@@ -60,8 +61,10 @@ function SideBar({
             // ההחלטה על סימון מגיעה מההורה
             selected={currentLabelName === label.name}
             iconSrc={customLabelIcon} 
-            // קוראים לפונקציה מההורה בלחיצה
-            onClick={() => onLabelClick(label.name)}
+            // highlight this label and inform parent to load mails of this label
+            onClick={() => { setSelected(label.name); onLabelSelect(label.name);}}
+            // 2. עכשיו מעבירים את הפונקציות הנכונות ל-LabelButton
+            // השמות onEditClick ו-onDeleteClick הם השמות ש-LabelButton מצפה לקבל
             onEditClick={() => onOpenEditLabel(label)} 
             onDeleteClick={() => onOpenDeleteLabel(label)}
           />
