@@ -6,13 +6,7 @@ function AddLabelWindow({ onClose, onLabelAdded }) {
   const [labelName, setLabelName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // זו הפונקציה היחידה שאנחנו צריכים
   const handleCreateLabel = async () => {
-    // הוספנו את הולידציה לכאן
-    // if (!labelName.trim()) {
-    //   setErrorMessage('Please enter a label name.');
-    //   return;
-    // }
     setErrorMessage('');
     
     const token = localStorage.getItem('token');
@@ -39,7 +33,6 @@ function AddLabelWindow({ onClose, onLabelAdded }) {
     }
   };
 
-  // פונקציה שתופעל כשהטופס נשלח (למשל, בלחיצת Enter)
   const onFormSubmit = (e) => {
     e.preventDefault();
     handleCreateLabel();
