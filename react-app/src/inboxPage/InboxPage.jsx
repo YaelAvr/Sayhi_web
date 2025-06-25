@@ -26,6 +26,7 @@ const InboxPage = () => {
   const [selectedMail, setSelectedMail] = useState(null); 
   const [currentLabel, setCurrentLabel] = useState('Inbox');
   const [editingDraft, setEditingDraft] = useState(null); 
+   const [modalError, setModalError] = useState("");
   //state for displaying the last 50 mails
   const [offset, setOffset] = useState(0);
   //state for knowing if there are more mails to display(which means you can press the "next" button)
@@ -97,7 +98,7 @@ const InboxPage = () => {
 // };
 
    const handleDeleteLabel = async () => {
-    if (!deletingLabel) return;
+    setModalError("");
     const token = localStorage.getItem('token');
     try {
       const response = await fetch(`/api/labels/${deletingLabel.id}`, {
@@ -106,9 +107,15 @@ const InboxPage = () => {
       });
       if (response.ok) {
         fetchAndFilterLabels();
-      } else { alert('Failed to delete label.'); }
-    } catch (error) { console.error("Error deleting label:", error); }
-    setDeletingLabel(null); // סוגרים את מודאל המחיקה בכל מקרה
+        setDeletingLabel(null);
+      } else { 
+        const errorData = await response.json();
+        setModalError(errorData.error || 'Failed to delete label.');
+       }
+    } catch (error) { 
+      console.error("Error deleting label:", error); 
+      setModalError("An error occurred.");
+    }
   };
 
   // איפוס האופסט בכל שינוי תווית עדן
@@ -148,7 +155,7 @@ const InboxPage = () => {
 
 
   const handleUpdateLabel = async () => {
-      if (!editingLabel || !newLabelName.trim()) return;
+      setModalError("");
       const token = localStorage.getItem('token');
       try {
         const response = await fetch(`/api/labels/${editingLabel.id}`, {
@@ -158,11 +165,23 @@ const InboxPage = () => {
         });
         if (response.ok) {
           fetchAndFilterLabels();
-        } else { alert('Failed to update label.'); }
-      } catch (error) { console.error("Error updating label:", error); }
-      setEditingLabel(null); // סוגרים את מודאל העריכה
-      setNewLabelName("");   // מאפסים את השם
+          setEditingLabel(null);
+        } else { 
+          const errorData = await response.json();
+          setModalError(errorData.error || 'Failed to update label.');
+         }
+      } catch (error) { 
+         console.error("Error updating label:", error);
+          setModalError("An error occurred.");
+       }
     };
+
+
+    const closeModal = () => {
+    setEditingLabel(null);
+    setDeletingLabel(null);
+    setModalError("");
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -337,9 +356,10 @@ const handleCardClick = (mail) => {
       {editingLabel && (
         <GenericWindow
           title="Edit label"
-          onClose={() => setEditingLabel(null)}
+          onClose={closeModal}
           onConfirm={handleUpdateLabel}
           confirmText="Save"
+          errorMessage={modalError}
         >
           <label htmlFor="edit-label-name">New label name:</label>
           <input
@@ -356,9 +376,10 @@ const handleCardClick = (mail) => {
       {deletingLabel && (
         <GenericWindow
           title="Delete label"
-          onClose={() => setDeletingLabel(null)}
+          onClose={closeModal}
           onConfirm={handleDeleteLabel}
           confirmText="Delete"
+          errorMessage={modalError}
         >
           <p>Are you sure you want to delete the label "<strong>{deletingLabel.name}</strong>"?</p>
           <p>This will not delete any messages.</p>
