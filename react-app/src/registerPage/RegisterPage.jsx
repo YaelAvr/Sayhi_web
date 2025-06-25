@@ -91,7 +91,6 @@ const RegisterPage = () => {
 
     // if (!config) return null;
 
-    console.log("part: " + part);
 
     // switch (part) {
     //   case 0: {
