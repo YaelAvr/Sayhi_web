@@ -6,8 +6,6 @@ const Users = require("../models/users");
 
 // This function creates a new user with the given parameters
 exports.createUser = async (req, res) => {
-  console.log(req.body);
-
   const { username, displayName, password, picture, gender, birthday } = req.body;
   const genderOptions = ["female", "male", "other"];
 
@@ -41,8 +39,6 @@ exports.createUser = async (req, res) => {
       await fs.unlink(sourcePath);  // Delete the temporary file
       return res.status(400).json({ error: "This username is taken" });
     }
-
-
     const newUserId = newUser.id;
     const finalFileName = `${newUserId}${fileExtension}`; // The final file name will be the user id with the original file extension 
     const destinationPath = path.resolve('pictures', finalFileName); // The final path where the picture will be stored
@@ -67,19 +63,6 @@ exports.createUser = async (req, res) => {
 
     res.status(500).json({ message: 'An internal server error occurred.' });
   }
-
-  // Check if all the given parameters are valid
-  // if (!genderOptions.includes(lowGender) || (!imagePattern.test(picture))
-  //   || !OLDisDateValid(birthday) || !passwordPattern.test(password)) {
-  //   return res.status(400).json({ error: "One of the fildes are not valid" });
-  // }
-
-  // const lowUsername = username.trim().toLowerCase();
-  // const newUser = Users.createUser(lowUsername, displayName, password, picture, lowGender, birthday);
-  // if (newUser === null) {
-  //   return res.status(400).json({ error: "This username is taken" });
-  // }
-  // res.status(201).location(`/api/users/${newUser.id}`).end();
 };
 
 // Create a Valid display name
@@ -89,7 +72,10 @@ exports.validateDisplayName = (req, res) => {
   if (!firstWord) {
     return res.status(400).json({ error: "Enter first name" });
   }
-  const displayName = firstWord + " " + secondWord;
+  const displayName = firstWord;
+  if (secondWord !== "" ) {
+    displayName += " " + secondWord;
+  }
   res.status(200).json({ displayName: displayName });
 };
 
@@ -100,15 +86,10 @@ exports.validatePassword = (req, res) => {
     return res.status(400).json({ error: "Enter password" });
   }
 
-  // const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-
   // Check if all the given parameters are valid
   if (password.trim().length < 8) {
     return res.status(400).json({ error: "Use 8 characters or more for your password" });
   }
-  // if (!passwordPattern.test(password)) {
-  //   return res.status(400).json({ error: "Use 8 characters or more for your password" });
-  // }
 
   if (!confirm) {
     return res.status(400).json({ error: "Confirm your password" });
@@ -255,13 +236,8 @@ exports.validatePicture = (req, res) => {
   }
 
   res.status(200).json({
-    // message: 'Image validated and uploaded temporarily.',
     tempImageUrl: req.file.path // e.g., 'tempUploads/u-0.jpg'
   });
-
-  // // create a reletive URL for the image
-  // const imageUrl = `/pictures/${file.filename}`;
-  // returnres.status(200).json({ imageUrl: imageUrl });
 }
 
 
@@ -306,11 +282,11 @@ exports.isUserNameRegistered = (req, res) => {
     }
   }
 
-  const user = Users.isUserNameRegistered(username)
+  const user = Users.isUserNameRegistered(lowUsername)
 
   if (!user) { return res.status(404).json({ exists: false, error: 'Could not find your SayHi Account' }); }
   else {
-    return res.status(200).json({ displayName: user.displayName });
+    return res.status(200).json({ displayName: user.displayName, username: user.username});
   }
 }
 

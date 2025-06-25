@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import "./LoginPage.css";
 import UserForm from "../userForm/UserForm";
 import loginText from "./loginText.json";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [inputClass, setInputClass] = useState("no-input");
   const [displayName, setDisplayName] = useState("");
   const [errorText, setError] = useState(null);
-  const [loginPart, setLoginPart] = useState(1);
+  const [loginPart, setLoginPart] = useState(0);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -60,6 +58,7 @@ const LoginPage = () => {
   const handleBack = () => {
     setLoginPart(0);
     setDisplayName("");
+    setPassword("");
     setError(null);
   };
 
