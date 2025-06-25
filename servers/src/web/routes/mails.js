@@ -16,11 +16,11 @@ router.route('/search/:query')
 router.route('/drafts')
     .post(mails.createDraft)
 
-router.route('/:id/add-label')
-  .post(mails.addLabelToMail)
-
 router.route('/label-mails')
     .get(mails.getMailsByLableWithOffset)
+
+router.route('/:id/add-label')
+  .post(mails.addLabelToMail)
 
 router.route('/:id')  
     .get(mails.getSpecificMail)

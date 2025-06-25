@@ -40,8 +40,9 @@ exports.createMail = async (req, res) => {
 
     //if draftid was send, check if it exist
     if (originalDraftId) {
-        const draft = sender.mails.find(m => m.id === originalDraftId)
-        if (!draft || !draft.labels.includes('Draft')) {
+        const draft = sender.mails.find(m => m.id === originalDraftId);
+        const draftsLabel = sender.labels.find(l => l.name === 'Drafts');
+        if (!draft || !draftsLabel || !draft.labels.includes(draftsLabel.id)) {
             return res.status(400).json({ error: 'Invalid or non-draft mail ID' });
         }
     }

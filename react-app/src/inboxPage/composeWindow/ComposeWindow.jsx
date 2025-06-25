@@ -2,20 +2,26 @@ import React, { useState } from 'react';
 import './ComposeWindow.css'; 
 import deleteIcon from '../labelButton/icons/spam.svg';
 
-function ComposeWindow({ onClose }) {
+function ComposeWindow({ onClose, draftData = null, onDraftSaved }) {
   // 1. ניהול מצב (State) עבור כל אחד משדות הקלט
-  const [to, setTo] = useState(''); // ישמור את כתובת המייל של הנמען
-  const [subject, setSubject] = useState(''); // ישמור את נושא המייל
-  const [body, setBody] = useState(''); // ישמור את גוף המייל
+  const [to, setTo] = useState(draftData?.toUserName || '');
+  const [subject, setSubject] = useState(draftData?.subject || '');
+  const [body, setBody] = useState(draftData?.body || '');
   const [errorMessage, setErrorMessage] = useState('');
   
 
-    const handleCloseAndCreateDraft = async () => {
-    // if all the fields are empty, close the window
-    if (!to.trim() && !subject.trim() && !body.trim()) {
-      onClose();
-      return;
-    }
+  const handleCloseAndCreateDraft = async () => {
+  // בדיקה אם זו טיוטה קיימת ואם לא חל שינוי
+  if (draftData && (draftData.toUserName || '') === to && (draftData.subject || '') === subject && (draftData.body || '') === body) {
+    onClose(); // אם אין שינויים, פשוט סגור
+    return;
+  }
+  
+  // בדיקה אם זו טיוטה חדשה והיא ריקה לחלוטין
+  if (!draftData && !to.trim() && !subject.trim() && !body.trim()) {
+    onClose(); // אם היא ריקה, פשוט סגור
+    return;
+  }
 
     const token = localStorage.getItem('token');
     if (!token) {
@@ -29,21 +35,28 @@ function ComposeWindow({ onClose }) {
        username = username.split('@sayhi.com')[0];
     }
 
-    const draftData = {
+    const draftDataToFetch = {
       to: username,
       subject: subject,
       body: body,
     };
 
+     if (draftData && draftData.id) {
+      draftDataToFetch.originalDraftId = draftData.id;
+    }
+
     try {
-      await fetch('/api/mails/drafts', {
+      const response = await fetch('/api/mails/drafts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(draftData),
+        body: JSON.stringify(draftDataToFetch),
       });
+      if (response.ok && onDraftSaved) {
+        onDraftSaved();
+      }
     } catch (error) {
       console.error('Failed to save draft:', error);
       // לא מציגים הודעת שגיאה למשתמש כי החלון נסגר בכל מקרה
@@ -64,12 +77,6 @@ function ComposeWindow({ onClose }) {
       return;
     }
 
-    // ולידציה בסיסית: לוודא שהמשתמש הכניס כתובת נמען
-    // if (!to.trim()) {
-    //     alert('יש להזין כתובת מייל של הנמען.');
-    //     return;
-    // }
-
     let username = to.trim();
     if (username.endsWith('@sayhi.com')) {
        username = username.split('@sayhi.com')[0];
@@ -84,6 +91,12 @@ function ComposeWindow({ onClose }) {
       subject: subject,
       body: body,
     };
+
+    if (draftData?.id) {
+      emailData.originalDraftId = draftData.id;
+      console.log("originalDraftId:", draftData.id);
+
+    }
 
     try {
       // 3. שליחת בקשת POST לשרת
@@ -100,6 +113,7 @@ function ComposeWindow({ onClose }) {
       // 4. טיפול בתגובת השרת
       if (response.ok) {
         onClose(); // סגירת החלון לאחר שליחה מוצלחת
+        onDraftSaved();
       } else {
         // אם השרת החזיר שגיאה, נציג אותה למשתמש
         const errorData = await response.json();

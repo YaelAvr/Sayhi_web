@@ -1,5 +1,7 @@
 const Labels = require("../models/labels");
 const { getUserById } = require("../models/users");
+const { addMailToUserLabel } = require('../models/labels');
+
 
 // Create a new label for a specific user
 exports.createLabel = (req, res) => {

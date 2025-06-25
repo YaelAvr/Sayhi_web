@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react'; // --- שינוי #1: אין צורך ב-useState יותר ---
 import LabelButton from './labelButton/LabelButton';
 import CreateMailButton from './createMailButton/CreateMailButton';
 import LabelsTitle from './labelTitle/LabelsTitle';
@@ -18,6 +18,7 @@ const iconMap = {
   'Spam': spamIcon,
 };
 
+// --- שינוי #2: הוספת props חדשים: currentLabelName ו-onLabelClick ---
 function SideBar({ 
   onComposeClick, 
   defaultLabels, 
@@ -25,24 +26,27 @@ function SideBar({
   onAddLabelClick,
   onOpenEditLabel,
   onOpenDeleteLabel,
+  currentLabelName,
+  // onLabelClick,
   onLabelSelect // new prop from parent to update currentLabel
 }) { 
-    const [selected, setSelected] = useState('Inbox');
+    // --- שינוי #3: מחקנו את ה-useState שהיה כאן ---
+    // const [selected, setSelected] = useState('Inbox');
     
   return (
     <div className="sidebar-container">
       <CreateMailButton onClick={onComposeClick} /> 
       
-      {/* default labels part (ללא שינוי) */}
       <div className="default-labels-section" style={{ marginTop: '16px' }}>
         {defaultLabels.map(label => (
           <LabelButton
             key={label.id}
             label={label}
-            selected={selected === label.name}
+            // --- שינוי #4: ההחלטה על סימון מגיעה מההורה ---
+            selected={currentLabelName === label.name}
             iconSrc={iconMap[label.name]} 
             // highlight this label and inform parent to load mails of this label
-            onClick={() => { setSelected(label.name); onLabelSelect(label.name);}}
+            onClick={() =>  onLabelSelect(label.name)}
           />
         ))}
       </div>
@@ -50,16 +54,16 @@ function SideBar({
       <hr className="sidebar-divider" /> 
       <LabelsTitle onAddClick={onAddLabelClick} />
 
-      {/* custom labels part (עם התיקון) */}
       <div className="custom-labels-section">
         {customLabels && customLabels.map(label => (
           <LabelButton
             key={label.id}
             label={label}
-            selected={selected === label.name}
+            // ההחלטה על סימון מגיעה מההורה
+            selected={currentLabelName === label.name}
             iconSrc={customLabelIcon} 
             // highlight this label and inform parent to load mails of this label
-            onClick={() => { setSelected(label.name); onLabelSelect(label.name);}}
+            onClick={() => onLabelSelect(label.name)}
             // 2. עכשיו מעבירים את הפונקציות הנכונות ל-LabelButton
             // השמות onEditClick ו-onDeleteClick הם השמות ש-LabelButton מצפה לקבל
             onEditClick={() => onOpenEditLabel(label)} 

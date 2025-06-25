@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './MailCard.css';
 import StarOutline from './icons/star.svg';
 import StarFilled from './icons/yellow_star.svg';
@@ -8,15 +8,23 @@ import LabelIcon from './icons/add_to_lable.svg';
 // Character limit for displaying subject + body preview
 const PREVIEW_LIMIT = 80;
 
-const MailCard = ({ sender, subject, body, date, onStar, onDelete, onLabel, isStarred }) => {
-  // Local state for star toggle
-  const [starred, setStarred] = useState(isStarred || false);
+const MailCard = ({ sender, subject, body, date, onStar, onDelete, onLabel, isStarred, onClick }) => {
 
   // Toggle star status on click
-  const handleStarClick = () => {
-    const newStarred = !starred;
-    setStarred(newStarred);
-    if (onStar) onStar(newStarred);
+   const handleStarClick = (event) => {
+    event.stopPropagation(); // עוצר את התפשטות האירוע
+    if (onStar) onStar();
+  };
+
+
+   const handleDeleteClick = (event) => {
+    event.stopPropagation();
+    if (onDelete) onDelete();
+  };
+  
+  const handleLabelClick = (event) => {
+    event.stopPropagation();
+    if (onLabel) onLabel();
   };
 
   // Format date:
@@ -51,17 +59,17 @@ const MailCard = ({ sender, subject, body, date, onStar, onDelete, onLabel, isSt
   const bodyPreview = remaining > 0 ? body.slice(0, remaining) : '';
 
   return (
-    <div className="mail-card">
+    <div className="mail-card" onClick={onClick}>
       <div className="mail-main">
         {/* Left side icons (visually, right in RTL) */}
         <div className="mail-icons">
           <button className="icon-button" onClick={handleStarClick} title="Star">
-            <img src={starred ? StarFilled : StarOutline} alt="star" className="icon-img" />
+            <img src={isStarred ? StarFilled : StarOutline} alt="star" className="icon-img" />
           </button>
-          <button className="icon-button" onClick={onDelete} title="Delete">
+          <button className="icon-button" onClick={handleDeleteClick} title="Delete">
             <img src={TrashIcon} alt="delete" className="icon-img" />
           </button>
-          <button className="icon-button" onClick={onLabel} title="Add Label">
+          <button className="icon-button" onClick={handleLabelClick} title="Add Label">
             <img src={LabelIcon} alt="label" className="icon-img" />
           </button>
         </div>

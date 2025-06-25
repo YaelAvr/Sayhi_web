@@ -3,6 +3,7 @@ const Store = require('../models/store')
 const { addMailToLabel, addMailToUserLabel, removeMailFromLabel } = require('../models/labels')
 
 
+
 // Extract all valid links from a given text (e.g., body or subject)
 const extractLink = (text) => {
     if (typeof text !== 'string') return []
@@ -77,10 +78,13 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
 
   // If it was a draft - delete it from mails and label references
   if (originalDraftId) {
+    const originalDraft = sender.mails.find(m => m.id === originalDraftId);
     sender.mails = sender.mails.filter(m => m.id !== originalDraftId)
-    for (const label in sender.labels) {
-      sender.labels[label].mails = sender.labels[label].mails.filter(id => id !== originalDraftId)
-    }
+    // for (const label in sender.labels) {
+    //   sender.labels[label].mails = sender.labels[label].mails.filter(id => id !== originalDraftId)
+    // }
+    removeMailFromLabel(sender,originalDraft,'Drafts')
+
   }
 
   return senderMail;
