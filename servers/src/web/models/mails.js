@@ -3,6 +3,7 @@ const Store = require('../models/store')
 const { addMailToLabel, addMailToUserLabel, removeMailFromLabel } = require('../models/labels')
 
 
+
 // Extract all valid links from a given text (e.g., body or subject)
 const extractLink = (text) => {
     if (typeof text !== 'string') return []
@@ -42,7 +43,11 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
         body: body || '',
         links,
         labels: [],
-        time
+        time,
+        fromName: sender.displayName,
+        toName: recipient.displayName,
+        fromUserName: sender.username,
+        toUserName: recipient.username
     }
     const recipientMail = {
       id: `${mailId}-copy`,
@@ -52,7 +57,11 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
       body: body || '',
       links,
       labels: [],
-      time
+      time,
+      fromName: sender.displayName,
+      toName: recipient.displayName,
+      fromUserName: sender.username,
+      toUserName: recipient.username
   }
 
   // Find label objects by name
@@ -69,10 +78,13 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
 
   // If it was a draft - delete it from mails and label references
   if (originalDraftId) {
+    const originalDraft = sender.mails.find(m => m.id === originalDraftId);
     sender.mails = sender.mails.filter(m => m.id !== originalDraftId)
-    for (const label in sender.labels) {
-      sender.labels[label].mails = sender.labels[label].mails.filter(id => id !== originalDraftId)
-    }
+    // for (const label in sender.labels) {
+    //   sender.labels[label].mails = sender.labels[label].mails.filter(id => id !== originalDraftId)
+    // }
+    removeMailFromLabel(sender,originalDraft,'Drafts')
+
   }
 
   return senderMail;
@@ -135,19 +147,23 @@ const createDraft = async (sender, to, subject, body, originalDraftId = null) =>
   const mailId = `m-${sender.id}-${sender.mailCounter++}`
   const time = new Date().toISOString()
 
-  // Check if 'to' is a valid user, otherwise set it to empty string
-  const recipient = to && Store.find(u => u.id === to) ? to : ''
+  // Check if 'to' is a valid user, if it is keeps it in recipient
+  const recipient = to ? Store.find(u => u.username === to) : null;
 
   //create mail
   const draftMail = {
     id: mailId,
     from: sender.id,
-    to: recipient,
+    to: recipient ? recipient.id : '',
     subject: subject || '',
     body: body || '',
     links: [],
     labels: [],
-    time
+    time,
+    fromName: sender.displayName,
+    toName: recipient ? recipient.displayName : '',
+    fromUserName: sender.username,
+    toUserName: recipient ? recipient.username : ''
   }
 
   const draftLabel = sender.labels.find(l => l.name === 'Drafts')

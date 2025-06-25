@@ -107,3 +107,10 @@
 .btn-confirm:hover {
   background-color: #185abc;
 }
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  text-align: left;
+  width: 100%;
+}

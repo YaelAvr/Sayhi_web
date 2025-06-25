@@ -2,22 +2,18 @@
   position: fixed;
   bottom: 0;
   right: 80px;
-  
-  width: 560px; /* <<--- כאן את שולטת ברוחב! */
-  height: 500px; /* <<--- כאן את שולטת בגובה! */
-  max-height: 85vh; /* לא תופס יותר מ-85% מגובה המסך */
-
+  width: 560px;
+  height: 500px;
+  max-height: 85vh;
   background-color: white;
   border: 1px solid #dadce0;
-  border-radius: 8px 8px 0 0; /* פינות מעוגלות רק למעלה */
+  border-radius: 8px 8px 0 0;
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
   
   display: flex;
-  flex-direction: column; /* מסדר את ה-header, body, footer אחד מתחת לשני */
+  flex-direction: column;
   
 }
-
-/* --- עיצוב החלקים הפנימיים --- */
 
 .compose-header {
   display: flex;
@@ -49,11 +45,10 @@
 .compose-body {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* גורם לחלק הזה למלא את כל הגובה הפנוי */
+  flex-grow: 1;
   padding: 0 16px;
 }
 
-/* עיצוב שדות הטקסט */
 .compose-body input,
 .compose-body .message-area {
   border: none;
@@ -64,14 +59,14 @@
 }
 .compose-body input:focus,
 .compose-body .message-area:focus {
-  outline: none; /* מסיר את הגבול הכחול בלחיצה */
+  outline: none;
   border-bottom-color: #1a73e8;
 }
 
 .compose-body .message-area {
-  flex-grow: 1; /* גורם לתיבת הטקסט למלא את שאר הגובה */
-  border-bottom: none; /* לתיבה הראשית אין קו תחתון */
-  resize: none; /* מונע מהמשתמש לשנות את הגודל */
+  flex-grow: 1;
+  border-bottom: none;
+  resize: none;
 }
 
 .compose-footer {
@@ -88,6 +83,8 @@
   padding: 8px 24px;
   font-weight: 500;
   cursor: pointer;
+  margin-left: auto;
+  margin-right: 8px;
 }
 
 .delete-btn {
@@ -96,8 +93,14 @@
   font-size: 1.2rem;
   cursor: pointer;
   opacity: 0.6;
-  margin-left: auto; /* דוחף את הפח לצד ימין */
 }
 .delete-btn:hover {
   opacity: 1;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  text-align: left;
+  width: 100%;
 }

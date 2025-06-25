@@ -7,6 +7,7 @@ function GenericWindow({
   onClose,       // פונקציה לסגירה (ביטול)
   onConfirm,     // פונקציה לאישור
   confirmText,   // טקסט לכפתור האישור
+  errorMessage 
 }) {
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -19,6 +20,7 @@ function GenericWindow({
         {/* הגוף של המודאל מגיע מה-children */}
         <div className="modal-body">
           {children}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
         
         {/* החלק התחתון עם הכפתורים, מובנה בתוך המודאל */}
