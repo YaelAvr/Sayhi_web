@@ -15,7 +15,7 @@ exports.createMail = async (req, res) => {
 
     // Validate presence of 'from' and 'to' fields
     if (!to) {
-        return res.status(400).json({ error: 'Missing recipient ID' })
+        return res.status(400).json({ error: 'Missing recipient' })
     }
 
     // get the auterized sender from the request user

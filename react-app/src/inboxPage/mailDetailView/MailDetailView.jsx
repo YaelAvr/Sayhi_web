@@ -41,7 +41,13 @@ function MailDetailView({ mail, onClose, sourceLabel }) {
           <span className="sender-name">{mail.fromName}</span>
           <span className="sender-email">{`<${mail.fromUserName}@sayhi.com>`}</span>
         </div>
-        <div className="mail-detail-date">{new Date(mail.time).toLocaleString()}</div>
+        <div className="mail-detail-date">
+             {new Date(mail.time).toLocaleString('en-US', {
+                month: 'short', day: 'numeric',
+                 hour: 'numeric', minute: '2-digit',
+                 hour12: false
+                 })}
+           </div>
       </div>
 
       <main className="mail-detail-body">
