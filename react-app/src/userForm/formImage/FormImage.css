@@ -1,0 +1,12 @@
+.form-image-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#chosen-pic {
+  width: 10em;
+  height: 10em;
+}

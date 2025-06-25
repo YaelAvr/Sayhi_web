@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import "./LoginPage.css";
 import UserForm from "../userForm/UserForm";
 import loginText from "./loginText.json";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [inputClass, setInputClass] = useState("no-input");
   const [displayName, setDisplayName] = useState("");
   const [errorText, setError] = useState(null);
   const [loginPart, setLoginPart] = useState(0);
@@ -22,18 +20,15 @@ const LoginPage = () => {
       body: JSON.stringify({ username, password }),
     });
 
-    if (res.status === 201) {
+    if (res.ok) {
       const data = await res.json();
       localStorage.setItem("token", data.token);
-      setUsername("")
+      setUsername("");
       navigate("/inbox");
-    } else if (res.status === 400 || res.status === 404) {
-      setInputClass("bad-input");
+    } else  {
       const errorData = await res.json();
       setError(errorData.error);
-    } else {
-      alert("An error occurred, please try again later");
-    }
+    } 
   };
 
   const handleUsernameSubmit = async (e) => {
@@ -44,21 +39,16 @@ const LoginPage = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
-
-      if (res.status === 200) {
+      
+      if (res.ok) {
         const data = await res.json();
         setDisplayName(data.displayName);
-      setError(null);
-
+        setError(null);
         setLoginPart(1);
-        setInputClass("no-input");
-      } else if (res.status === 404 || res.status === 400) {
-        setInputClass("bad-input");
+      } else  {
         const errorData = await res.json();
         setError(errorData.error);
-      } else {
-        alert("An error occurred, please try again later");
-      }
+      } 
     } catch (err) {
       console.error("Fetch failed:", err);
       alert("Network error: Could not reach server");
@@ -68,7 +58,7 @@ const LoginPage = () => {
   const handleBack = () => {
     setLoginPart(0);
     setDisplayName("");
-    setInputClass("no-input");
+    setPassword("");
     setError(null);
   };
 
@@ -78,25 +68,30 @@ const LoginPage = () => {
     return data;
   };
 
-  
-
   const formConfigs = {
     0: {
-      buttonsConf: 
-        {
-         ClickFunc: () => navigate("/register"),
-        SubmitFunc: handleUsernameSubmit
+      buttonsConf: {
+        ClickFunc: () => navigate("/register"),
+        SubmitFunc: handleUsernameSubmit,
       },
 
       inputsConf: [
-        { inputClass: inputClass, inputValue: username, setVal: setUsername },
+        {
+          inputClass:  !errorText ? "no-input" : "bad-input",
+          inputValue: username,
+          setVal: (e) => setUsername(e.target.value),
+        },
       ],
       errorText: errorText,
     },
     1: {
       buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleLogin },
       inputsConf: [
-        { inputClass: inputClass, inputValue: password, setVal: setPassword },
+        {
+          inputClass:  !errorText ? "no-input" : "bad-input",
+          inputValue: password,
+          setVal: (e) => setPassword(e.target.value),
+        },
       ],
       displayName: displayName,
       username: username,

@@ -1,9 +1,11 @@
+const fs = require('fs').promises;
 const path = require('path');
 const multer = require("multer");
 const Users = require("../models/users");
 
+
 // This function creates a new user with the given parameters
-exports.createUser = (req, res) => {
+exports.createUser = async (req, res) => {
   const { username, displayName, password, picture, gender, birthday } = req.body;
   const genderOptions = ["female", "male", "other"];
 
@@ -26,65 +28,85 @@ exports.createUser = (req, res) => {
     return res.status(400).json({ error: "Picture is required" });
   }
 
-  const lowGender = gender.trim().toLowerCase();
-  // Check if the picture is a valid image file
-  const imagePattern = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i;
-  // The password must be at least 8 characters long, 
-  // contain at least one uppercase letter and one lowercase letter
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
-  // Check if all the given parameters are valid
-  if (!genderOptions.includes(lowGender) || (!imagePattern.test(picture))
-    || !OLDisDateValid(birthday) || !passwordPattern.test(password)) {
-    return res.status(400).json({ error: "One of the fildes are not valid" });
-  }
+  try {
+    const sourcePath = path.resolve(picture); // Gets the absolute path of the picture in the tempUploads folder
+    const fileExtension = path.extname(picture); //Gets the file extension: .jpg\.png\...
 
-  const lowUsername = username.trim().toLowerCase();
-  const newUser = Users.createUser(lowUsername, displayName, password, picture, lowGender, birthday);
-  if (newUser === null) {
-    return res.status(400).json({ error: "This username is taken" });
+    // We pass `null` for the picture initially, because we don't know the final path.
+    const newUser = Users.createUser(username, displayName, password, null, gender, birthday);
+    if (!newUser) { // the username was taken.
+      await fs.unlink(sourcePath);  // Delete the temporary file
+      return res.status(400).json({ error: "This username is taken" });
+    }
+    const newUserId = newUser.id;
+    const finalFileName = `${newUserId}${fileExtension}`; // The final file name will be the user id with the original file extension 
+    const destinationPath = path.resolve('pictures', finalFileName); // The final path where the picture will be stored
+
+    // Replace fs.rename with fs.copyFile and fs.unlink
+    await fs.copyFile(sourcePath, destinationPath); // 1. Copy the file to the new location
+    await fs.unlink(sourcePath); // 2. Delete the original file from the temp directory
+
+    //  Update the user object with the final, permanent picture path.
+    const finalImagePath = `pictures/${finalFileName}`;
+    newUser.picture = finalImagePath;
+    res.status(201).location(`/api/users/${newUser.id}`).end();
+
+  } catch (error) {
+    // This catches errors from fs.rename or fs.unlink
+    console.error('Server error during user registration:', error);
+
+    // Attempt to clean up the temp file if it still exists
+    if (tempImagePath) {
+      try { await fs.unlink(path.resolve(tempImagePath)); } catch (e) { /* ignore cleanup error */ }
+    }
+
+    res.status(500).json({ message: 'An internal server error occurred.' });
   }
-  res.status(201).location(`/api/users/${newUser.id}`).end();
 };
 
 // Create a Valid display name
-exports.createName = (req, res) => {
+exports.validateDisplayName = (req, res) => {
   const { firstWord, secondWord } = req.body;
 
   if (!firstWord) {
     return res.status(400).json({ error: "Enter first name" });
   }
-  const displayName = firstWord + " " + secondWord;
+  const displayName = firstWord;
+  if (secondWord !== "" ) {
+    displayName += " " + secondWord;
+  }
   res.status(200).json({ displayName: displayName });
 };
 
 // This function creates a new user with the given parameters
-exports.createPassword = (req, res) => {
+exports.validatePassword = (req, res) => {
   const { password, confirm } = req.body;
   if (!password) {
     return res.status(400).json({ error: "Enter password" });
   }
 
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-
   // Check if all the given parameters are valid
-  if (!passwordPattern.test(password)) {
+  if (password.trim().length < 8) {
     return res.status(400).json({ error: "Use 8 characters or more for your password" });
   }
 
   if (!confirm) {
-    return res.status(400).json({ error: "Enter password confirmation" });
+    return res.status(400).json({ error: "Confirm your password" });
   }
 
   if (confirm !== password) {
     return res.status(400).json({ error: "Those passwords did not match. Try again." });
   }
 
-  res.status(201).json({ password: password });
+  res.status(200).json({ password: password });
 };
 
-exports.createGender = (req, res) => {
+
+// this function generate a valid gender option
+exports.validateGender = (req, res) => {
   const { gender } = req.body;
+
   const genderOptions = ["female", "male", "other"];
 
   if (!gender) {
@@ -98,12 +120,12 @@ exports.createGender = (req, res) => {
     return res.status(400).json({ error: "Please select your gender" });
   }
 
-  res.status(201).json({ gender: lowGender });
+  res.status(200).json({ gender: lowGender });
 };
 
-//Create an only low cased userName that is 6-30 letters long.
+//validate a given username if it's only low cased and is 6-30 letters long.
 // If the username that was provided included 'user-name@sayhi.com', only usr the first part.
-exports.createUserName = (req, res) => {
+exports.validateUserName = (req, res) => {
   const { username } = req.body;
   let regex = /^[a-zA-Z0-9.]+$/;
 
@@ -136,7 +158,8 @@ exports.createUserName = (req, res) => {
 
 };
 
-exports.createBirthday = (req, res) => {
+// this function recives a potential birthday and return a valid print date or an error
+exports.validateBirthday = (req, res) => {
   const { day, month, year } = req.body;
 
   if (!day || !month || !year) {
@@ -148,10 +171,74 @@ exports.createBirthday = (req, res) => {
     return res.status(400).json({ error: "Please enter a valid date" });
   }
 
-  const birthday = new Date(year, month - 1, day);
+  const birthday = formatDateWithMonthName(day, month, year);
 
   res.status(200).json({ birthday: birthday });
 };
+
+function formatDateWithMonthName(day, month, year) {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+  // const dd = String(day).padStart(2, '0');
+
+  const mm = monthNames[month - 1];
+  return `${day} ${mm} ${year}`;
+}
+
+//This function checks if the date string is valid 
+function isDateValid(day, month, year) {
+  const intDay = parseInt(day);
+  const intMonth = parseInt(month);
+  const intYear = parseInt(year);
+  //  Basic range checks
+  if (intYear < 1000 || intYear > 3000 ||
+    intMonth <= 0 || intMonth > 12 ||
+    intDay <= 0 || intDay > 31) {
+    return false;
+  }
+
+  const dateObj = new Date(intYear, intMonth - 1, intDay);
+  // Check if the object construction was successful
+  if (!(!isNaN(dateObj) && dateObj.getFullYear() === intYear &&
+    dateObj.getMonth() === intMonth - 1 && dateObj.getDate() === intDay)) {
+    return false;
+  }
+
+  // Get today's date and check if the "birthday" is a past date
+  const today = new Date();
+  if (dateObj >= today) {
+    return false;
+  }
+
+  return true;
+}
+
+// const isImageMimeType = (mime) => {
+//   return ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"].includes(mime);
+// };
+exports.validatePicture = (req, res) => {
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({ error: "No file uploaded or file type is invalid." });
+  }
+
+  res.status(200).json({
+    tempImageUrl: req.file.path // e.g., 'tempUploads/u-0.jpg'
+  });
+}
 
 
 // this function returns the information of a specific user with the given id
@@ -184,41 +271,25 @@ exports.isUserNameRegistered = (req, res) => {
 
   if (!username) return res.status(400).json({ error: "Enter an email" });
 
-  const user = Users.isUserNameRegistered(username)
+  var lowUsername = username.toLowerCase();
+
+  if (lowUsername.endsWith("@sayhi.com")) {
+    let splitParts = lowUsername.split('@');
+    if (splitParts.length === 2) {
+      lowUsername = splitParts[0];
+    } else {
+      return res.status(400).json({ error: "Invalid username." });
+    }
+  }
+
+  const user = Users.isUserNameRegistered(lowUsername)
 
   if (!user) { return res.status(404).json({ exists: false, error: 'Could not find your SayHi Account' }); }
   else {
-    return res.status(200).json({ displayName: user.displayName });
+    return res.status(200).json({ displayName: user.displayName, username: user.username});
   }
 }
 
-function isDateValid(day, month, year) {
-  const intDay = parseInt(day);
-  const intMonth = parseInt(month);
-  const intYear = parseInt(year);
-
-  //  Basic range checks
-  if (intYear < 1000 || intYear > 3000 ||
-    intMonth <= 0 || intMonth > 12 ||
-    intDay <= 0 || intDay > 31) {
-    return false;
-  }
-
-  const dateObj = new Date(intYear, intMonth - 1, intDay);
-  // Check if the object construction was successful
-  if (!(!isNaN(dateObj.getTime()) && dateObj.getFullYear() === year &&
-    dateObj.getMonth() === month - 1 && dateObj.getDate() === day)) {
-    return false;
-  }
-
-  // Get today's date and check if the "birthday" is a past date
-  const today = new Date();
-  if (dateObj >= today) {
-    return false;
-  }
-
-  return true;
-}
 
 /*  This function checks if the date string is valid 
     and if it is in the format "DD.MM.YYYY".*/
@@ -263,21 +334,6 @@ function OLDisDateValid(dateString) {
   }
 
   return true;
-}
-
-
-function isPicValid(picture) {
-  const imagePattern = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i;
-
-  return (
-    picture.toLowerCase().endsWith('.png') ||
-    picture.toLowerCase().endsWith('.jpg') ||
-    picture.toLowerCase().endsWith('.jpeg') ||
-    picture.toLowerCase().endsWith('.gif') ||
-    picture.toLowerCase().endsWith('.bmp') ||
-    picture.toLowerCase().endsWith('.webp')
-  );
-
 }
 
 // function isImage(picture) {

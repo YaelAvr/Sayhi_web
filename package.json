@@ -10,9 +10,15 @@
     "start": "npm run start:server",
     "start:server": "npm start --workspace=servers",
     "build": "npm run build --workspace=react-app",
-    "deploy": "npm run build && npm start"
+    "deploy": "npm run build && npm start",
+    "dev": "npm start dev --workspace=react-app"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "multer": "^2.0.1"
   }
 }
