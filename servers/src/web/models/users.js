@@ -8,12 +8,9 @@ const storage = multer.memoryStorage(); // Store files in memory
 
 const createUser = (username, displayName, password, picture, gender, birthday) => {
     // Check if there is already a user with this username
-    if(Users.find(user => user.username === username)
-    || Users.find(user => user.username === username.toLowerCase())) {
+    if(Users.find(user => user.username === username)) {
         return null //400
     }
-
-    username = username.toLowerCase();
 
     const newUser = {
         id: `u-${userCount++}`,

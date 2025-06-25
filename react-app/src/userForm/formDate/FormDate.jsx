@@ -1,6 +1,7 @@
 import FormInputs from "../formInputs/FormInputs";
 import FormSelect from "../formSelect/FormSelect";
 import "./FormDate.css";
+
 const FormDate = ({ bDayConf, data, handleKeyUp }) => {
 
   return (

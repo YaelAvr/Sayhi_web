@@ -2,7 +2,7 @@
   "title": "Personalize your account!",
   "text": "Choose your profile picture (Supported formats: JPEG, PNG, WEBP, SVG).",
   "image": {
-    "id": "form-picture",
+    "id": "input-picture",
     "className": "hide-filde",
     "type": "file",
     "name": "pic",

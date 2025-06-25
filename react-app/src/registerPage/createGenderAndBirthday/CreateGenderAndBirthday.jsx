@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import UserForm from "../../userForm/UserForm";
-import Text from "./text.json"
-
+import Text from "./text.json";
 
 const CreateGenderAndBirthday = (props) => {
   const [birthDay, setBirthDay] = useState({
@@ -13,17 +12,20 @@ const CreateGenderAndBirthday = (props) => {
   const [BDErrorText, setBDError] = useState(null);
   const [GErrorText, setGError] = useState(null);
 
-  const createBirthDay = async (e) => {
-    e.preventDefault();
-    const numM =
-      registerText[part].birthDay[1].options.indexOf(birthDay.month) + 1;
+  const createBirthDay = async () => {
+    const monthJson = Text.birthDay.find((item) => item.name === "month");
+    const monthIndex = monthJson ? monthJson.options.indexOf(birthDay.month) : -1;
+
+    // Calculate the month number (1-12). If not found, it will be 0.
+    const monthNum = monthIndex !== -1 ? monthIndex + 1 : 0;
+    // const numM = monthJson.options.indexOf(birthDay.month) + 1;
 
     const res = await fetch("/api/users/birthday", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         day: birthDay.day,
-        month: numM,
+        month: monthNum,
         year: birthDay.year,
       }),
     });
@@ -32,12 +34,13 @@ const CreateGenderAndBirthday = (props) => {
     if (res.ok) {
       //   setBirthDay({ day: "", month: "", year: "" });
       setBDError(null);
-      props.setUserData("birthDay", data.birthday);
+      props.setUserData("birthday", data.birthday);
       //   props.handleNext();
+      return true;
     } else {
       setBDError(data.error);
+      return false;
     }
-    return res.status;
   };
 
   const createGender = async () => {
@@ -51,28 +54,29 @@ const CreateGenderAndBirthday = (props) => {
     if (res.ok) {
       props.setUserData("gender", data.gender);
       setGError(null);
-
+      return true;
       //   return 200;
     } else {
-      setGError(errorData.error);
+      setGError(data.error);
+      return false;
     }
-    return res.status;
+    // return res.status;
   };
 
   const handleGenderAgeSub = async (e) => {
     e.preventDefault();
-    const bdRes = await createBirthDay();
+    const bdStatuse = await createBirthDay();
+      const genderStatuse = await createGender();
 
-    if (!BDErrorText) {
+    if (bdStatuse && genderStatuse) {
       //if the date was valid, continu to check gender
-      const genderRes = await createGender();
 
-      if (!GErrorText) {
+      // if (genderStatuse) {
         setBirthDay({ day: "", month: "", year: "" });
         setGender("");
         // console.log("birthday: " + birthDay.date + " gender " + gender);
-        handleNext();
-      }
+        props.handleNext();
+      // }
     }
   };
 
@@ -89,14 +93,11 @@ const CreateGenderAndBirthday = (props) => {
   };
 
   const config = {
-    errorText: (
-      <>
-        <p>{BDErrorText}</p>
-        <br />
-        <p>{GErrorText}</p>
-      </>
-    ),
-    buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleGenderAgeSub },
+    errorText: [BDErrorText, GErrorText],
+    buttonsConf: {
+      ClickFunc: props.handleBack,
+      SubmitFunc: handleGenderAgeSub,
+    },
     bDayConf: [
       {
         inputClass: !BDErrorText ? "no-input" : "bad-input",
@@ -124,7 +125,7 @@ const CreateGenderAndBirthday = (props) => {
       setVal: (e) => setGender(e.target.value),
     },
   };
-  return <UserForm key={picture.url} {...config} data={Text} />;
+  return <UserForm {...config} data={Text} />;
 };
 
 export default CreateGenderAndBirthday;

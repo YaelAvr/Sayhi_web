@@ -8,6 +8,7 @@ const CreateDisplayName = (props) => {
 
   const [errorText, setError] = useState(null);
 
+
   const validateDisplayName = async (e) => {
     e.preventDefault();
 

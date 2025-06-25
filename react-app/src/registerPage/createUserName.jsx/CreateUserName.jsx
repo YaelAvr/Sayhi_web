@@ -24,7 +24,7 @@ const CreateUserName = (props) => {
     if (res.ok) {
       setUsername("");
       setError(null);
-      props.setUserData("userName", data.username);
+      props.setUserData("username", data.username);
       props.handleNext();
     } else {
       setError(data.error);
@@ -33,7 +33,7 @@ const CreateUserName = (props) => {
 
   const config = {
      errorText: errorText,
-      buttonsConf: { ClickFunc: handleBack, SubmitFunc: submitUserName },
+      buttonsConf: { ClickFunc: props.handleBack, SubmitFunc: submitUserName },
       inputsConf: [
         {
           inputClass: !errorText ? "no-input" : "bad-input",

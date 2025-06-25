@@ -1,4 +1,3 @@
-import "../UserForm.css";
 import "./FormInputs.css";
 
 const FormInputs = ({

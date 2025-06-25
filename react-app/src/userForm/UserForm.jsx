@@ -10,10 +10,6 @@ import FormPassword from "./formPassword/FormPassword";
 import FormImage from "./formImage/FormImage";
 import ConfirmSub from "./confirmSub/ConfirmSub";
 
-import FormExplainWin from "./formExplainWin/FormExplainWin";
-
-import { ReactComponent as Help } from "./icons/help.svg";
-
 function UserForm({
   buttonsConf,
   data,
@@ -21,7 +17,7 @@ function UserForm({
   inputsConf = null,
   selectConf = null,
   bDayConf = null,
-  userData= null,
+  userData = null,
   displayName = null,
   username = null,
 }) {
@@ -48,7 +44,7 @@ function UserForm({
         {/* Create the form veriables */}
         <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
           <div id="input-div">
-            {userData&& <ConfirmSub userData={userData} data={data.fildes}/>}
+            {userData && <ConfirmSub userData={userData} data={data.fildes} />}
             {!data.showPass ? (
               data.inputs &&
               data.inputs.map((input, index) =>
@@ -91,18 +87,24 @@ function UserForm({
               <FormImage
                 src={inputsConf.src}
                 inputClass={inputsConf.inputClass}
-                fileName= {inputsConf.fileName}
+                fileName={inputsConf.fileName}
                 setVal={inputsConf.setVal}
                 data={data.image}
               />
             )}
           </div>
-          {errorText && <p className="invalid-txt">{errorText}</p>}
+          {errorText &&
+            (data.birthDay ? (
+              errorText.map((text, index) => (<p key={index} className="invalid-txt">{text}</p>))
+            ) : (
+              <p className="invalid-txt">{errorText}</p>
+            ))}
+
           <div className="form-btns-div">
             <button
               type="button"
               onClick={buttonsConf.ClickFunc}
-              className="form-btn btn-border-radius"
+              className={`form-btn btn-border-radius ${!buttonsConf.ClickFunc && "remove-btn"}`}
               id="changing-btn"
             >
               {data.button.changeBtnText}

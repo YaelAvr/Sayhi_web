@@ -12,7 +12,7 @@ console.log("FormImage props:", { src, fileName, data });
   };
 
   return (
-    <>
+    <div className="form-image-container">
       <input
         ref={fileInputRef}
         className={data.className}
@@ -23,11 +23,11 @@ console.log("FormImage props:", { src, fileName, data });
         placeholder={data.placeHolder}
       />
 
-      {src && <img src={src} alt={data.alt} width={200} />}
+      {src && <img id="chosen-pic" className="form-pic" src={src} alt={data.alt} width={200} />}
+      {fileName&&<p>{fileName}</p>}
       <button className={`${inputClass} form-btn`} onClick={handleClick}>Choose Image</button>
-      <p>{fileName}</p>
 
-    </>
+    </div>
   );
 };
 

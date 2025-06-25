@@ -57,6 +57,8 @@ const CreatePic = (props) => {
 
       const data = await res.json();
       if (res.ok) {
+        props.setUserData("preview", picture.url);
+
         props.setUserData("picture", data.tempImageUrl);
         setPicture({ name: "", img: null, url: null });
         setError(null);

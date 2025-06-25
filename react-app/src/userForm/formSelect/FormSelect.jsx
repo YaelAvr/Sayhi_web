@@ -6,9 +6,9 @@ const FormSelect = ({ inputValue, setVal, inputClass, data }) => {
       value={!inputValue ? data.placeHolder : inputValue}
       id={data.id}
       onChange={setVal}
-      className={`${inputClass} form-select ${data.className}`}
+      className={`${inputClass} form-select ${data.className} ${inputValue === "" && "default-option"}`}
     >
-      <option id="default-option" value="">
+      <option value="">
         {data.placeHolder}
       </option>
       {data.options.map((val, index) => (
