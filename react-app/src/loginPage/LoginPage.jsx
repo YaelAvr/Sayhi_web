@@ -10,7 +10,7 @@ const LoginPage = () => {
   const [inputClass, setInputClass] = useState("no-input");
   const [displayName, setDisplayName] = useState("");
   const [errorText, setError] = useState(null);
-  const [loginPart, setLoginPart] = useState(0);
+  const [loginPart, setLoginPart] = useState(1);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -22,18 +22,15 @@ const LoginPage = () => {
       body: JSON.stringify({ username, password }),
     });
 
-    if (res.status === 201) {
+    if (res.ok) {
       const data = await res.json();
       localStorage.setItem("token", data.token);
       setUsername("");
       navigate("/inbox");
-    } else if (res.status === 400 || res.status === 404) {
-      setInputClass("bad-input");
+    } else  {
       const errorData = await res.json();
       setError(errorData.error);
-    } else {
-      alert("An error occurred, please try again later");
-    }
+    } 
   };
 
   const handleUsernameSubmit = async (e) => {
@@ -44,21 +41,16 @@ const LoginPage = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
-
-      if (res.status === 200) {
+      
+      if (res.ok) {
         const data = await res.json();
         setDisplayName(data.displayName);
         setError(null);
-
         setLoginPart(1);
-        setInputClass("no-input");
-      } else if (res.status === 404 || res.status === 400) {
-        setInputClass("bad-input");
+      } else  {
         const errorData = await res.json();
         setError(errorData.error);
-      } else {
-        alert("An error occurred, please try again later");
-      }
+      } 
     } catch (err) {
       console.error("Fetch failed:", err);
       alert("Network error: Could not reach server");
@@ -68,7 +60,6 @@ const LoginPage = () => {
   const handleBack = () => {
     setLoginPart(0);
     setDisplayName("");
-    setInputClass("no-input");
     setError(null);
   };
 
@@ -87,7 +78,7 @@ const LoginPage = () => {
 
       inputsConf: [
         {
-          inputClass: inputClass,
+          inputClass:  !errorText ? "no-input" : "bad-input",
           inputValue: username,
           setVal: (e) => setUsername(e.target.value),
         },
@@ -98,7 +89,7 @@ const LoginPage = () => {
       buttonsConf: { ClickFunc: handleBack, SubmitFunc: handleLogin },
       inputsConf: [
         {
-          inputClass: inputClass,
+          inputClass:  !errorText ? "no-input" : "bad-input",
           inputValue: password,
           setVal: (e) => setPassword(e.target.value),
         },
