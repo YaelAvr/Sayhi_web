@@ -1,0 +1,24 @@
+.conf-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#privew-pic {
+  height: 6em;
+  width: 6em;
+  margin-right: 1em;
+}
+
+.conf-text-line {
+  line-height: 1.4em;
+  font-size: 1.27em;
+  margin-block: 1%;
+}
+
+#confirm-disname{
+    font-weight: 600;
+}
+
+#confirm-username{
+    font-weight: 350;
+}
