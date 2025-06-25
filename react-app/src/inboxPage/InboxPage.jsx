@@ -17,7 +17,7 @@ const InboxPage = () => {
   const navigate = useNavigate();
   const [defaultLabels, setDefaultLabels] = useState([]);
   const [customLabels, setCustomLabels] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const [isAddLabelOpen, setIsAddLabelOpen] = useState(false);
   const [editingLabel, setEditingLabel] = useState(null); 
   const [deletingLabel, setDeletingLabel] = useState(null); 
@@ -27,7 +27,6 @@ const InboxPage = () => {
   const [currentLabel, setCurrentLabel] = useState('Inbox');
   const [editingDraft, setEditingDraft] = useState(null); 
   //state for displaying the last 50 mails
-  const [emails, setEmails] = useState([]);
   const [offset, setOffset] = useState(0);
   //state for knowing if there are more mails to display(which means you can press the "next" button)
   const [hasMore, setHasMore] = useState(true);
@@ -82,45 +81,20 @@ const InboxPage = () => {
     }
   };
 
-  const fetchMailsForLabel = async (labelName) => {
-  // בפרויקט אמיתי, כאן תהיה בקשת fetch אמיתית עם טוקן
-  // const token = localStorage.getItem('token');
-  // const response = await fetch(`/api/mails?label=${labelName}`, { headers: { ... } });
-  // ...
+//   const fetchMailsForLabel = async (labelName) => {
+//   // בפרויקט אמיתי, כאן תהיה בקשת fetch אמיתית עם טוקן
+//   // const token = localStorage.getItem('token');
+//   // const response = await fetch(`/api/mails?label=${labelName}`, { headers: { ... } });
+//   // ...
   
-  // כרגע, נשתמש בנתונים המדומים
-  console.log(`(Pretending to fetch mails for: ${labelName})`);
-  const dummyMails = [
-    { id: 'm1', subject: 'Security Alert', body: '...', time: new Date().toISOString(), isStarred: true, fromName: 'Google', fromUserName: 'google-alerts', labels: ['l-inbox'] },
-    { id: 'm2', subject: 'New connection request', body: '...', time: '2024-06-20T10:00:00Z', isStarred: false, fromName: 'LinkedIn', fromUserName: 'linkedin-noreply', labels: ['l-inbox', 'l-social'] },
-  ];
-  setMails(dummyMails);
-};
-
-useEffect(() => {
-  // פונקציית "מנהל" אסינכרונית שרצה בתוך ה-useEffect
-  const loadInitialData = async () => {
-    setIsLoading(true);
-
-    try {
-      // שלב א': קרא לפונקציה של התוויות וחכה לה שתסתיים
-      await fetchAndFilterLabels();
-
-      // שלב ב': רק אחרי שהתוויות נטענו, קרא לפונקציה של המיילים
-      await fetchMailsForLabel(currentLabel);
-
-    } catch (error) {
-      // ה-catch כאן יתפוס שגיאות משתי הפונקציות
-      console.error("Failed to load page data:", error);
-    } finally {
-      // שלב ג': בסוף התהליך כולו, הסר את הטעינה
-      setIsLoading(false);
-    }
-  };
-
-  loadInitialData(); // הפעל את תהליך הטעינה
-
-}, [currentLabel]); // המערך הזה מבטיח שהכל ייטען מחדש כשהמשתמש מחליף תווית
+//   // כרגע, נשתמש בנתונים המדומים
+//   console.log(`(Pretending to fetch mails for: ${labelName})`);
+//   const dummyMails = [
+//     { id: 'm1', subject: 'Security Alert', body: '...', time: new Date().toISOString(), isStarred: true, fromName: 'Google', fromUserName: 'google-alerts', labels: ['l-inbox'] },
+//     { id: 'm2', subject: 'New connection request', body: '...', time: '2024-06-20T10:00:00Z', isStarred: false, fromName: 'LinkedIn', fromUserName: 'linkedin-noreply', labels: ['l-inbox', 'l-social'] },
+//   ];
+//   setMails(dummyMails);
+// };
 
    const handleDeleteLabel = async () => {
     if (!deletingLabel) return;
@@ -142,9 +116,8 @@ useEffect(() => {
     fetchAndFilterLabels();
   }, []);
 
-  // Load 50 mails using label "Inbox" and current offset
-  useEffect(() => {
-    const fetchMails = async () => {
+
+   const fetchMails = async () => {
       const token = localStorage.getItem("token");
       const userId = getUserIdFromToken();
 
@@ -158,7 +131,7 @@ useEffect(() => {
         }
 
         const data = await res.json();
-        setEmails(data);
+        setMails(data);
         //checks if there are less than 50 mails(which means we cannot press button "next")
         setHasMore(data.length === 50);
 
@@ -167,6 +140,8 @@ useEffect(() => {
       }
     };
 
+  // Load 50 mails using label "Inbox" and current offset
+  useEffect(() => {
     fetchMails();
   }, [offset, currentLabel]);
 
@@ -244,11 +219,19 @@ const handleCardClick = (mail) => {
     // בפרויקט אמיתי, כאן גם תשלח בקשת PATCH לשרת כדי לעדכן את המצב
   };
 
+
+  const refreshData = async () => {
+  console.log("Refreshing all data...");
+  await fetchAndFilterLabels(); // טוען מחדש את התוויות
+  // כרגע, אפשר להשאיר את זה ריק או לקרוא ל-fetchMails אם היא מופרדת
+  await fetchMails();
+  };
+
    const allLabels = [...defaultLabels, ...customLabels];
 
-  if (isLoading) {
-    return <div>Loading your inbox...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading your inbox...</div>;
+  // }
 
   return (
     <>
@@ -274,6 +257,7 @@ const handleCardClick = (mail) => {
                 setCurrentLabel(labelName); // Update the label that was clicked
                 setOffset(0); // Always reset pagination when label changes
             }}
+            currentLabelName={currentLabel}
           />
           <main className="inbox-content-area">
            {selectedMail ? (
@@ -302,7 +286,7 @@ const handleCardClick = (mail) => {
               // ... החלק של רשימת המיילים, ללא שינוי ...
               <>
                  {/* Display 50 mails */}
-                  {emails.length === 0 ? (
+                  {mails.length === 0 ? (
                   <div className="empty-message">No mails to show</div>
                     ) : (
                 <div className="mail-list">
@@ -337,6 +321,7 @@ const handleCardClick = (mail) => {
          setIsComposing(false);
          setEditingDraft(null); // מאפסים את הטיוטה הנבחרת
     }}
+      onDraftSaved={refreshData}
   />
 )}
       
