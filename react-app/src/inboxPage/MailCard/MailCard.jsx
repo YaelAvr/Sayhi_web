@@ -3,7 +3,7 @@ import './MailCard.css';
 import StarOutline from './icons/star.svg';
 import StarFilled from './icons/yellow_star.svg';
 import TrashIcon from './icons/delete.svg';
-import LabelIcon from './icons/add_to_lable.svg';
+import LabelIcon from './icons/edit_lables.svg';
 
 // Character limit for displaying subject + body preview
 const PREVIEW_LIMIT = 80;
