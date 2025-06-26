@@ -43,7 +43,7 @@ function UserForm({
 
         {/* Create the form veriables */}
         <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
-          <div id="input-div">
+          <div id="input-div" className="fill-parent-width">
             {userData && <ConfirmSub userData={userData} data={data.fildes} />}
             {!data.showPass ? (
               data.inputs &&
@@ -92,19 +92,28 @@ function UserForm({
                 data={data.image}
               />
             )}
-          </div>
-          {errorText &&
+            {errorText &&
             (data.birthDay ? (
-              errorText.map((text, index) => (<p key={index} className="invalid-txt">{text}</p>))
+              <div className="invalid-txt-div fill-parent-width">
+                {errorText.map((text, index) => (
+                  <p key={index} className="invalid-txt fill-parent-width">
+                    {text}
+                  </p>
+                ))}
+              </div>
             ) : (
-              <p className="invalid-txt">{errorText}</p>
+              <p className="invalid-txt fill-parent-width">{errorText}</p>
             ))}
 
-          <div className="form-btns-div form-flex-row ">
+          </div>
+          
+          <div className="form-btns-div fill-parent-width form-flex-row ">
             <button
               type="button"
               onClick={buttonsConf.ClickFunc}
-              className={`form-btn btn-border-radius ${!buttonsConf.ClickFunc && "remove-btn"}`}
+              className={`form-btn btn-border-radius ${
+                !buttonsConf.ClickFunc && "remove-btn"
+              }`}
               id="changing-btn"
             >
               {data.button.changeBtnText}

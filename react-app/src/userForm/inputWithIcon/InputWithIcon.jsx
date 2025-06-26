@@ -15,7 +15,7 @@ const InputWithIcon = ({
   const [showHelp, setShowHelp] = useState(false);
 
   return (
-    <div className="input-icon-cont form-flex-row">
+    <div className="input-icon-cont form-flex-row fill-parent-width">
       {/* <div id={inputs.waterMark && "input-wrapper"}> */}
       <div id="input-wrapper">
 

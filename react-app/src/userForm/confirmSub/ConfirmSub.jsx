@@ -3,7 +3,7 @@ import React from "react";
 
 const ConfirmSub = ({ userData, data }) => {
   return (
-    <div className="confirm-sub form-flex-row">
+    <div className="confirm-sub fill-parent-width form-flex-row">
       <img
         id="privew-pic"
         className="form-pic"
