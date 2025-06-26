@@ -258,6 +258,29 @@ const handleCardClick = (mail) => {
 
   };
 
+  const handleDeleteMail = async (mailId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`/api/mails/${mailId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      console.error("Failed to delete mail", await res.json());
+      return;
+    }
+
+    // עדכון רשימת המיילים – מסיר את המייל מהרשימה הנוכחית
+    setMails(prevMails => prevMails.filter(mail => mail.id !== mailId));
+
+  } catch (err) {
+    console.error("Error deleting mail:", err);
+  }
+};
 
   const refreshData = async () => {
   console.log("Refreshing all data...");
@@ -343,6 +366,7 @@ const handleCardClick = (mail) => {
                       isStarred={mail.isStarred}
                       onClick={() => handleCardClick(mail)}
                       onStar={() => handleToggleStar(mail.id, mail.isStarred)}
+                      onDelete={() => handleDeleteMail(mail.id)}
                     />
                   ))}
                 </div>

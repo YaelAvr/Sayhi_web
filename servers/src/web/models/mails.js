@@ -35,6 +35,7 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
     const  { links, isContain } = await checkLinks(body, subject)
     const mailId = `m-${sender.id}-${sender.mailCounter++}`
     const time = new Date().toISOString()
+
     const senderMail  = {
         id: mailId,
         from: sender.id,
@@ -52,7 +53,8 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
         isStarred: false
     }
     const recipientMail = {
-      id: `${mailId}-copy`,
+      // If sender and recipient are the same user (mail sent to self), use the same ID to allow consistent deletion across labels
+      id: sender.id === recipient.id ? mailId : `${mailId}-copy`,
       from: sender.id,
       to: recipient.id,
       subject: subject || '',
@@ -209,6 +211,9 @@ const deleteMail = async (user, mailId) => {
   if (!mail) {
     throw new Error('MAIL_NOT_FOUND')
   }
+
+  const isSelfMail = mail.from === mail.to;
+
 
   // If mail is in Spam, remove its links from the blacklist
   const wasInSpam = user.labels.find(label =>
