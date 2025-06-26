@@ -47,7 +47,8 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
         fromName: sender.displayName,
         toName: recipient.displayName,
         fromUserName: sender.username,
-        toUserName: recipient.username
+        toUserName: recipient.username,
+        fromPicture: sender.picture
     }
     const recipientMail = {
       id: `${mailId}-copy`,
@@ -61,7 +62,8 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
       fromName: sender.displayName,
       toName: recipient.displayName,
       fromUserName: sender.username,
-      toUserName: recipient.username
+      toUserName: recipient.username,
+      fromPicture: sender.picture
   }
 
   // Find label objects by name
@@ -163,7 +165,8 @@ const createDraft = async (sender, to, subject, body, originalDraftId = null) =>
     fromName: sender.displayName,
     toName: recipient ? recipient.displayName : '',
     fromUserName: sender.username,
-    toUserName: recipient ? recipient.username : ''
+    toUserName: recipient ? recipient.username : '',
+    fromPicture: sender.picture 
   }
 
   const draftLabel = sender.labels.find(l => l.name === 'Drafts')
