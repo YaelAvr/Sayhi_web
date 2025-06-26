@@ -228,14 +228,33 @@ const handleCardClick = (mail) => {
 // };
 
    // פונקציה חדשה לטיפול בלחיצה על כוכב
-  const handleToggleStar = (mailId) => {
+  const handleToggleStar = async (mailId) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`/api/mails/${mailId}/add-label`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ labelName: 'starred' })
+    });
+
+    if (!res.ok) {
+      console.error("Failed to add label to mail:", await res.json());
+    }
+  } catch (err) {
+    console.error("Error adding label:", err);
+    }
+
     // עדכון המיילים בצורה בלתי-משתנה (immutable)
     setMails(prevMails => 
       prevMails.map(mail => 
         mail.id === mailId ? { ...mail, isStarred: !mail.isStarred } : mail
       )
     );
-    // בפרויקט אמיתי, כאן גם תשלח בקשת PATCH לשרת כדי לעדכן את המצב
+
   };
 
 
@@ -320,7 +339,6 @@ const handleCardClick = (mail) => {
                       isStarred={mail.isStarred}
                       onClick={() => handleCardClick(mail)}
                       onStar={() => handleToggleStar(mail.id)}
-                      onDelete={() => console.log('Delete clicked on mail:', mail.id)}
                     />
                   ))}
                 </div>
