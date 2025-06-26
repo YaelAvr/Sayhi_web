@@ -1,3 +1,30 @@
 #gender-select {
- 
+  width: initial;
 }
+
+.form-select{
+  min-width: fit-content;
+}
+
+.default-option {
+  color: #757575;; 
+}
+
+.form-select option:first-child {
+  color: #757575;
+} 
+.form-select option {
+  color: #000;
+} 
+/* 
+select.no-input{
+  color: #9a9a9a;
+}
+
+select.bad-input  {
+  color: #b3261e;
+}
+
+select.bad-input option {
+  color: #000;
+} */

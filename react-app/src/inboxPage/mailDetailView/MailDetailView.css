@@ -123,3 +123,10 @@
   color: #202124;
   white-space: pre-wrap; /* Preserves line breaks and spaces from the original text */
 }
+
+.sender-profile-pic {
+  width: 100%;       /* גורם לתמונה למלא את כל רוחב העיגול */
+  height: 100%;      /* גורם לתמונה למלא את כל גובה העיגול */
+  object-fit: cover; /* הכלל הכי חשוב: שומר על יחס התמונה וחותך אותה כדי שתתאים, במקום למתוח אותה */
+  border-radius: 50%; /* מוודא שהפינות של התמונה עצמה יהיו עגולות */
+}

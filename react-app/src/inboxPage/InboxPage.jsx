@@ -276,6 +276,8 @@ const handleCardClick = (mail) => {
       <div className="inbox-page-layout">
         <TopBar onLogout={handleLogout} />
         <Toolbar 
+          showBackArrow={!!selectedMail}  // יהיה true אם יש מייל נבחר, אחרת false
+          onBackClick={handleBackToInbox}   // הפונקציה לחזרה לרשימה
           onPrevClick={() => setOffset(Math.max(0, offset - 50))}
           onNextClick={() => {if (hasMore) setOffset(offset + 50);}}
           currentPage={currentPage}
@@ -294,6 +296,7 @@ const handleCardClick = (mail) => {
              onLabelSelect={(labelName) => {
                 setCurrentLabel(labelName); // Update the label that was clicked
                 setOffset(0); // Always reset pagination when label changes
+                setSelectedMail(null);   
             }}
             currentLabelName={currentLabel}
           />

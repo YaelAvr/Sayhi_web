@@ -8,11 +8,9 @@
         "id": "login-username",
         "name": "username",
         "type": "text",
+        "className": "username input-full-row",
         "placeHolder": "Email"
       }
-    ],
-    "errorText": [
-      { "404": "Username not found,\n please try again or register" }
     ],
     "button": {
       "changeBtnText": "Create account",
@@ -21,19 +19,23 @@
   },
   "1": {
     "title": "Hi",
-    "text": "",
+    "text": "@sayhi.com",
     "inputs": [
       {
         "index": "0",
         "id": "login-password",
         "name": "password",
+        "className": "password input-full-row",
         "type": "password",
         "placeHolder": "Enter your Password"
       }
     ],
-    "errorText": [
-      { "404": "Wrong password. Please try again.", "400": "Enter a password" }
-    ],
+    "showPass": {
+      "id": "password-btn",
+      "type": "checkbox",
+      "name": "toggel",
+      "label": "Show password"
+    },
     "button": { "changeBtnText": "Back", "nextBtn": "next" }
   }
 }

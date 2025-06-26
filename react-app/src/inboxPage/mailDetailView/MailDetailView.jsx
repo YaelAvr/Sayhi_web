@@ -1,24 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './MailDetailView.css';
-import BackArrowIcon from './back_arrow.svg';
 
-// הקומפוננטה מקבלת את הנתונים הנכונים ולא צריכה את allUserLabels
-function MailDetailView({ mail, onClose, sourceLabel }) {
+function MailDetailView({ mail }) {
   // אם במקרה אין מייל, לא נציג כלום
+  console.log("Mail object received:", mail);
   if (!mail) return null;
 
   return (
     <div className="mail-detail-view">
-      <div className="mail-detail-toolbar">
-        <button 
-          className="icon-button" 
-          onClick={onClose} 
-          title={`Back to ${sourceLabel || 'Inbox'}`}
-        >
-          <img src={BackArrowIcon} alt="Back" />
-        </button>
-      </div>
-
       <header className="mail-detail-header">
         <h2 className="mail-detail-subject">{mail.subject}</h2>
         <div className="mail-detail-labels">
@@ -36,7 +25,19 @@ function MailDetailView({ mail, onClose, sourceLabel }) {
 
       {/* החלק של פרטי השולח והגוף נשארים זהים ותקינים */}
       <div className="mail-detail-sender-info">
-        <div className="sender-avatar">{(mail.fromName || ' ').charAt(0).toUpperCase()}</div>
+        <div className="sender-avatar">
+           {mail.fromPicture ? (
+            <img
+              src={mail.fromPicture}
+              alt={`${mail.fromName}'s profile`}
+              className="sender-profile-pic"
+            />
+          ) : (
+            <div className="avatar-placeholder">
+              {(mail.fromName || ' ').charAt(0).toUpperCase()}
+            </div>
+          )}
+        </div>
         <div className="sender-details">
           <span className="sender-name">{mail.fromName}</span>
           <span className="sender-email">{`<${mail.fromUserName}@sayhi.com>`}</span>
