@@ -3,7 +3,6 @@
   flex-direction: column; /* מסדר את TopBar מעל שאר התוכן */
   height: 100vh; /* גובה מלא של המסך */
   overflow: hidden; /* מונע גלילה מיותרת של כל הדף */
-
 }
 
 /* המיכל שמחזיק את הסרגל הצידי ואת התוכן המרכזי */
@@ -15,28 +14,18 @@
 
 .inbox-content-area {
   flex: 1;
-  padding: 0 16px;
+  /* padding: 0 16px; */
   overflow-y: auto;
-  height: calc(100vh - 60px - 40px); /* 60px TopBar + 40px Toolbar */
+  /* height: calc(100vh - 60px - 40px); 60px TopBar + 40px Toolbar */
+  width: 93%;
+  height: 95%;
+  justify-content: flex-start;
+  align-items: stretch;
+  margin-top: 1em;
 }
 
 .inbox-content-area h2 {
   margin-top: 0;
-}
-
-.toolbar {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  padding: 8px;
-  background-color: #f1f3f4; 
-  border-bottom: 1px solid #ccc;
-  
-}.toolbar button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
 }
 
 .empty-message {
@@ -45,4 +34,38 @@
   color: #5f6368;
   padding: 60px 0;
   user-select: none;
+}
+
+.dark-app {
+  background-color: #111111;
+}
+.dark-app svg {
+  fill: #f0f4f9;
+}
+
+.light-app {
+  background-color: #f0f4f9;
+}
+
+.dark-app .dark-white-text{
+  color: #f1f3f4;
+}
+
+
+
+.dark-main-contant,
+.dark-main-contant .mail-card,
+.dark-app .mail-detail-view,
+.dark-app .user-details-popup {
+  color: white;
+  background-color: #2c2c2c;
+  border-bottom-color: #8b8b8b;
+}
+
+.light-main-contant {
+  background-color: white;
+}
+
+.dark-main-contant .empty-message {
+  color: #d2d1d1;
 }

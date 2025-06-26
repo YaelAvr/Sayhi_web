@@ -1,27 +1,29 @@
 .topbar-container {
   height: 60px;
-  background-color: #f1f3f4;
+  /* background-color: #f1f3f4; */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  gap: 20px;
+  width: 100%;
+  /* padding: 0 16px; */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* הקבוצה של הלוגו ושורת החיפוש */
+/* הקבוצה של הלוגו ושורת החיפוש
 .topbar {
   display: flex;
   align-items: center;
   gap: 20px;
   width: 100%;
-}
+} */
 
 /* שורת החיפוש */
 .search-container {
   flex: 1;
   max-width: 700px;
   display: flex;
-  position: relative;  /* חשוב למיקום האבסולוטי של הכפתור */
+  position: relative; /* חשוב למיקום האבסולוטי של הכפתור */
   align-items: center;
 }
 
@@ -49,7 +51,7 @@
   left: 8px;
   top: 50%;
   transform: translateY(-50%);
-  
+
   width: 40px;
   height: 40px;
 
@@ -81,16 +83,25 @@
   opacity: 0.7;
 }
 
+.topbar-btns {
+  display: flex;
+  gap: 2em;
+  margin: 1em;
+}
+
 .topbar-profile {
-  margin-left: auto; 
+  margin-left: auto;
   display: flex;
   align-items: center;
   position: relative;
 }
 
-.topbar-profile-pic {
+.topbar-profile-pic,
+.mode-pic {
   width: 36px;
   height: 36px;
   border-radius: 50%;
   cursor: pointer;
 }
+
+

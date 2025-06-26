@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// import { useState } from "react";
 import InboxPage from './inboxPage/InboxPage';
 import LoginPage from './loginPage/LoginPage';
 import RegisterPage from './registerPage/RegisterPage';
@@ -14,7 +15,6 @@ function App() {
           {/* --- זה הנתיב החשוב --- */}
           {/* הנתיב הראשי '/' יטען את ה-InboxOrHomePage, שיחליט לאן להמשיך */}
           <Route index path="/" element={<InboxOrHomePage />} />
-
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 

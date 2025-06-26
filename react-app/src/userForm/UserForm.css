@@ -1,13 +1,13 @@
 #user-form-page {
-  width: 65%;
+  width: 75%;
   height: 65%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
+  /* display: flex;
+  border-radius: 3em; */
   background-color: white;
-  border-radius: 3em;
   flex-direction: column;
   justify-content: space-around;
 }
@@ -29,6 +29,7 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
+  gap: 2%;
 }
 
 .form-conteiner {
@@ -96,9 +97,6 @@
   width: inherit;
   padding-block: 0.5em;
   height: fit-content;
-}
-
-.invalid-txt-div {
 }
 
 .form-btns-div {

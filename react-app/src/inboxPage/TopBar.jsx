@@ -1,20 +1,22 @@
 // src/components/TopBar.jsx
 
 import React, { useState, useRef, useEffect } from "react";
-import Logo from '../gmailLogo/Logo';
-import SearchBar from './searchBar/SearchBar';
-import './TopBar.css';
+import Logo from "../gmailLogo/Logo";
+import { ReactComponent as Dark_Mode_Logo } from "./mode-icons/dark_mode.svg";
+import { ReactComponent as Light_Mode_Logo } from "./mode-icons/light_mode.svg";
+import SearchBar from "./searchBar/SearchBar";
+import "./TopBar.css";
 import UserDetails from "./userDetails/userDetails";
 import { getUserIdFromToken } from "../utils/utils";
 
-const TopBar = ({ onLogout }) => {
+const TopBar = ({ onLogout, isDarkMode, toggleDarkMode }) => {
   const [showUserDetails, setShowUserDetails] = useState(false);
   const userDetailsRef = useRef(null);
 
   const [userData, setUserData] = useState({
     displayName: "",
     email: "",
-    picture: ""
+    picture: "",
   });
 
   useEffect(() => {
@@ -25,7 +27,7 @@ const TopBar = ({ onLogout }) => {
 
         const res = await fetch(`/api/users/${userId}`, {
           method: "GET",
-          headers: { Authorization: `Bearer ${token}`},
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (res.status === 200) {
@@ -64,31 +66,35 @@ const TopBar = ({ onLogout }) => {
 
   return (
     <div className="topbar-container">
-      <div className="topbar">
+      {/* <div className="topbar"> */}
         <Logo containerClass="topbar-logo-container" />
         <SearchBar />
+        <div className="topbar-btns">
+          {/* <div id="theam-pic"> */}
+            {isDarkMode ? <Light_Mode_Logo className="mode-pic" onClick={toggleDarkMode}/> : <Dark_Mode_Logo className="mode-pic" onClick={toggleDarkMode}/>}
+          {/* </div> */}
+          <div className="topbar-profile">
+            <img
+              className="topbar-profile-pic"
+              src={userData.picture}
+              alt="User profile"
+              onClick={() => setShowUserDetails((prev) => !prev)}
+            />
 
-        <div className="topbar-profile">
-          <img
-            className="topbar-profile-pic"
-            src={userData.picture}
-            alt="User profile"
-            onClick={() => setShowUserDetails((prev) => !prev)}
-          />
-
-          {showUserDetails && (
-            <div ref={userDetailsRef}>
-              <UserDetails
-                displayName={userData.displayName}
-                email={userData.email}
-                imageUrl={userData.picture}
-                onClose={() => setShowUserDetails(false)}
-                onLogout={onLogout}
-              />
-            </div>
-          )}
+            {showUserDetails && (
+              <div ref={userDetailsRef}>
+                <UserDetails
+                  displayName={userData.displayName}
+                  email={userData.email}
+                  imageUrl={userData.picture}
+                  onClose={() => setShowUserDetails(false)}
+                  onLogout={onLogout}
+                />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      {/* </div> */}
     </div>
   );
 };

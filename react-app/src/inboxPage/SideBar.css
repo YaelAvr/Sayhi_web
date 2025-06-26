@@ -5,6 +5,14 @@
   flex-direction: column;
 }
 
+.default-labels-section {
+  margin-top: 16px;
+}
+.dark-app .sidebar-container{
+  /* background-color: #3c4043; צבע רקע כהה */
+  color: white; /* צבע טקסט בהיר */
+}
+
 .labels-section {
   margin-top: 16px;
 }

@@ -3,19 +3,28 @@ import LabelButton from './labelButton/LabelButton';
 import CreateMailButton from './createMailButton/CreateMailButton';
 import LabelsTitle from './labelTitle/LabelsTitle';
 import './SideBar.css';
-import inboxIcon from './labelButton/icons/inbox.svg';
-import starredIcon from './labelButton/icons/starred.svg';
-import sentIcon from './labelButton/icons/sent.svg';
-import draftsIcon from './labelButton/icons/drafts.svg';
-import spamIcon from './labelButton/icons/spam.svg';
-import customLabelIcon from './labelButton/icons/customLabel.svg'; 
+import { ReactComponent as Inbox } from './labelButton/icons/inbox.svg';
+import { ReactComponent as Starred } from './labelButton/icons/starred.svg';
+import { ReactComponent as Sent } from './labelButton/icons/sent.svg';
+import { ReactComponent as Drafts } from './labelButton/icons/drafts.svg';
+import { ReactComponent as Spam } from './labelButton/icons/spam.svg';
+import { ReactComponent as Custom } from './labelButton/icons/customLabel.svg';
+
+
+
+// import inboxIcon from './labelButton/icons/inbox.svg';
+// import starredIcon from './labelButton/icons/starred.svg';
+// import sentIcon from './labelButton/icons/sent.svg';
+// import draftsIcon from './labelButton/icons/drafts.svg';
+// import spamIcon from './labelButton/icons/spam.svg';
+// import customLabelIcon from './labelButton/icons/customLabel.svg'; 
 
 const iconMap = {
-  'Inbox': inboxIcon,
-  'starred': starredIcon,
-  'Sent': sentIcon,
-  'Drafts': draftsIcon,
-  'Spam': spamIcon,
+  'Inbox': <Inbox className="label-icon " alt="Inbox icon" />,
+  'Starred': <Starred className="label-icon" alt="Starred icon" />,
+  'Sent': <Sent className="label-icon" alt="Sent icon" />,
+  'Drafts': <Drafts className="label-icon" alt="Drafts icon" />,
+  'Spam': <Spam className="label-icon" alt="Spam icon" />
 };
 
 // --- שינוי #2: הוספת props חדשים: currentLabelName ו-onLabelClick ---
@@ -37,7 +46,7 @@ function SideBar({
     <div className="sidebar-container">
       <CreateMailButton onClick={onComposeClick} /> 
       
-      <div className="default-labels-section" style={{ marginTop: '16px' }}>
+      <div className="default-labels-section">
         {defaultLabels.map(label => (
           <LabelButton
             key={label.id}
@@ -61,7 +70,9 @@ function SideBar({
             label={label}
             // ההחלטה על סימון מגיעה מההורה
             selected={currentLabelName === label.name}
-            iconSrc={customLabelIcon} 
+            // iconSrc={customLabelIcon} 
+            iconSrc={ <Custom className="label-icon" alt="Custom icon" />} 
+
             // highlight this label and inform parent to load mails of this label
             onClick={() => onLabelSelect(label.name)}
             // 2. עכשיו מעבירים את הפונקציות הנכונות ל-LabelButton

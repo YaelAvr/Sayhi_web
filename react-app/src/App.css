@@ -6,6 +6,7 @@
   background-color: #f0f4f9;
 }
 
+
 button {
   cursor: pointer;
 }
@@ -24,3 +25,11 @@ button {
 .App-link {
   color: #61dafb;
 }
+
+.app-content-back {
+  display: flex;
+  /* background-color: white; */
+  border-radius: 3em;
+  flex-direction: column;
+}
+

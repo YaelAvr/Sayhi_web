@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import HomePage from "./homePage/HomePage";
+import { verifyToken } from "./utils/utils"; 
 
 const InboxOrHomePage = () => {
   // שלב 1: ניהול מצב
@@ -11,37 +12,7 @@ const InboxOrHomePage = () => {
 
 // check once when the component mounts
   useEffect(() => {
-    const verifyToken = async () => {
-      const token = localStorage.getItem("token");
-
-      // there is no token in localStorage
-      if (!token) {
-        setAuthStatus("unauthenticated");
-        return;
-      }
-
-      // check if the token is valid
-      try {
-        const res = await fetch("/api/tokens/verify", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (res.ok) {
-          // the token is valid
-          setAuthStatus("authenticated");
-        } else {
-          throw new Error("Token verification failed");
-        }
-      } catch (error) {
-        //Token is invalid- removing from storage.
-        localStorage.removeItem("token");
-        setAuthStatus("unauthenticated");
-      }
-    };
-
-    verifyToken();
+    verifyToken({setAuthStatus});
   }, []); 
   
   if (authStatus === "pending") {

@@ -1,9 +1,16 @@
 import React from 'react';
 import './MailCard.css';
-import StarOutline from './icons/star.svg';
-import StarFilled from './icons/yellow_star.svg';
-import TrashIcon from './icons/delete.svg';
-import LabelIcon from './icons/add_to_lable.svg';
+// import StarOutline from './icons/star.svg';
+// import StarFilled from './icons/yellow_star.svg';
+// import TrashIcon from './icons/delete.svg';
+// import LabelIcon from './icons/add_to_lable.svg';
+
+import { ReactComponent as StarOutline } from './icons/star.svg';
+import { ReactComponent as StarFilled } from './icons/yellow_star.svg';
+import { ReactComponent as TrashIcon } from './icons/delete.svg';
+import { ReactComponent as LabelIcon } from './icons/add_to_lable.svg';
+
+
 
 // Character limit for displaying subject + body preview
 const PREVIEW_LIMIT = 80;
@@ -64,13 +71,16 @@ const MailCard = ({ sender, subject, body, date, onStar, onDelete, onLabel, isSt
         {/* Left side icons (visually, right in RTL) */}
         <div className="mail-icons">
           <button className="icon-button" onClick={handleStarClick} title="Star">
-            <img src={isStarred ? StarFilled : StarOutline} alt="star" className="icon-img" />
+            {isStarred ? <StarFilled alt="star" className="icon-img filled-star"/> : <StarOutline alt="star" className="icon-img"/>}
+            {/* <img src={isStarred ? StarFilled : StarOutline} alt="star" className="icon-img" /> */}
           </button>
           <button className="icon-button" onClick={handleDeleteClick} title="Delete">
-            <img src={TrashIcon} alt="delete" className="icon-img" />
+            <TrashIcon alt="delete" className="icon-img" />
+            {/* <img src={TrashIcon} alt="delete" className="icon-img" /> */}
           </button>
           <button className="icon-button" onClick={handleLabelClick} title="Add Label">
-            <img src={LabelIcon} alt="label" className="icon-img" />
+            <LabelIcon alt="label" className="icon-img" />
+            {/* <img src={LabelIcon} alt="label" className="icon-img" /> */}
           </button>
         </div>
 

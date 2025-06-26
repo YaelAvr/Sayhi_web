@@ -16,6 +16,7 @@ const RegisterPage = () => {
     username: "",
     password: "",
     picture: "",
+    preview: "",
   });
 
   const changeUserData = (fild, data) => {

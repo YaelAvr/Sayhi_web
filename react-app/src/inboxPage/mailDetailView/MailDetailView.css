@@ -7,6 +7,7 @@
   overflow-y: auto; /* Adds scroll if content is too long */
 }
 
+
 /* Top toolbar with back button and actions */
 .mail-detail-toolbar {
   display: flex;

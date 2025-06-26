@@ -42,6 +42,7 @@ const LoginPage = () => {
       
       if (res.ok) {
         const data = await res.json();
+        setUsername(data.username);
         setDisplayName(data.displayName);
         setError(null);
         setLoginPart(1);

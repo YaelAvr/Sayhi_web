@@ -8,7 +8,13 @@
   margin-bottom: 2px;
   transition: background-color 0.15s ease-in-out;
 }
+.dark-app .label-main-btn {
+  color: white;
+}
 
+.dark-app .label-icon {
+  fill: white; /* צבע אייקון בהיר במצב כהה */
+}
 /* אפקט במעבר עכבר או כשהתווית נבחרה */
 .LabelButton:hover {
   background-color: #f1f3f4;
@@ -17,6 +23,13 @@
 .LabelButton.selected {
   background-color: #d3e3fd;
   font-weight: 500;
+}
+.dark-app .LabelButton.selected {
+  background-color: #7a7d81;
+}
+
+.dark-app .LabelButton.selected:hover {
+  background-color: #9a9b9c;
 }
 
 .label-main-btn {
@@ -40,6 +53,10 @@
 .label-name {
   font-size: 0.9rem;
   color: #3c4043; /* צבע טקסט כהה */
+}
+
+.dark-app .label-name {
+  color: #e8eaed; /* צבע טקסט בהיר במצב כהה */
 }
 
 /* --- עיצוב תפריט 3 הנקודות --- */
@@ -69,7 +86,7 @@
   right: 0;
   background: white;
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 10;
   width: 150px;
   padding: 8px 0;

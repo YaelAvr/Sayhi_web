@@ -27,7 +27,7 @@ function UserForm({
     }
   };
   return (
-    <div id="user-form-page">
+    <div id="user-form-page" className="app-content-back">
       <Logo containerClass="form-logo-container form-conteiner" />
       {/* Create the left side text.  */}
       <div id="user-form-container" className="form-conteiner">
@@ -93,20 +93,19 @@ function UserForm({
               />
             )}
             {errorText &&
-            (data.birthDay ? (
-              <div className="invalid-txt-div fill-parent-width">
-                {errorText.map((text, index) => (
-                  <p key={index} className="invalid-txt fill-parent-width">
-                    {text}
-                  </p>
-                ))}
-              </div>
-            ) : (
-              <p className="invalid-txt fill-parent-width">{errorText}</p>
-            ))}
-
+              (data.birthDay ? (
+                <div className="invalid-txt-div fill-parent-width">
+                  {errorText.map((text, index) => (
+                    <p key={index} className="invalid-txt fill-parent-width">
+                      {text}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p className="invalid-txt fill-parent-width">{errorText}</p>
+              ))}
           </div>
-          
+
           <div className="form-btns-div fill-parent-width form-flex-row ">
             <button
               type="button"

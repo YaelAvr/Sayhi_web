@@ -99,3 +99,10 @@
 .btn-confirm:hover {
   background-color: #185abc;
 }
+
+.dark-app .btn-confirm {
+  box-shadow: 0 4px 12px #3b3b3b;
+}
+.dark-app .btn-confirm:hover {
+  box-shadow: 0 4px 12px #5c5b5b;
+}

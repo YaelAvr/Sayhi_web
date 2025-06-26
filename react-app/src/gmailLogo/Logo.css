@@ -1,8 +1,9 @@
 /* לוגו - טקסט ואייקון */
 .topbar-logo-container {
   gap: 8px;
+  height: fit-content;
+  margin: 1em;
   width: 120px;
-  height: 120px;
 }
 
 .logo-container {
