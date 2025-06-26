@@ -1,0 +1,114 @@
+.searchbar-wrapper {
+  position: relative; /* חובה כדי שהחלונית הקופצת תישאר מתחת */
+  width: 100%;
+  max-width: 720px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  background-color: #f1f3f4;
+  border-radius: 8px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.search-container.focused {
+  background-color: #fff;
+  box-shadow: 0 1px 6px rgba(32,33,36,.28);
+  border-color: rgba(223,225,229,0);
+  border-radius: 8px 8px 0 0; /* פינות עליונות מעוגלות כשהחלונית פתוחה */
+}
+
+.search-button, .clear-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
+}
+
+.clear-button {
+  font-size: 20px;
+  color: #5f6368;
+}
+
+.search-input {
+  flex-grow: 1;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 16px;
+  padding: 10px 0;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #dfe1e5;
+  border-top: none;
+  box-shadow: 0 4px 6px rgba(32,33,36,.28);
+  border-radius: 0 0 8px 8px;
+  z-index: 1000;
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: default;
+  border-top: 1px solid #f1f3f4;
+}
+
+.mail-preview {
+  display: flex;
+  gap: 10px;
+}
+.mail-preview-sender {
+  font-weight: bold;
+}
+.mail-preview-subject {
+  color: #5f6368;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.full-search-trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #1a73e8;
+}
+.full-search-trigger:hover {
+  background-color: #f1f3f4;
+}
+
+.search-icon-small {
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+}
+
+.mail-preview {
+  display: flex;
+  gap: 10px;
+  cursor: pointer; /* הופך את סמן העכבר ליד */
+}
+
+.mail-preview:hover {
+  background-color: #f1f3f4; /* אפקט hover */
+}

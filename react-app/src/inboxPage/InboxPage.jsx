@@ -34,6 +34,11 @@ const InboxPage = () => {
   // Start by showing mails from the "Inbox" label by default
   const currentPage = offset === 0 ? 1 : Math.floor(offset / 50) + 1;
 
+   // --- States עבור חיפוש ---
+  const [searchResults, setSearchResults] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState(null);
+
   // פונקציה לטעינת וסינון התוויות, נוכל לקרוא לה שוב לרענון
   const fetchAndFilterLabels = async () => {
     // לא משנה את isloading ל-true כאן כדי שהרענון יהיה שקט
@@ -246,22 +251,63 @@ const handleCardClick = (mail) => {
   await fetchMails();
   };
 
+  const handleFullSearch = async (query) => {
+    const trimmedQuery = query.trim();
+    if (trimmedQuery === '') {
+      setSearchResults(null);
+      setSearchError(null);
+      return;
+    }
+    setIsSearching(true);
+    setSearchError(null);
+    setSelectedMail(null);
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`/api/mails/search/${encodeURIComponent(trimmedQuery)}`, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Search failed`);
+      }
+      const results = await response.json();
+      setSearchResults(results);
+    } catch (err) {
+      setSearchError(err.message);
+      setSearchResults([]);
+      console.error("Error during full search:", err);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+
+    useEffect(() => {
+    if (searchResults === null) {
+      fetchMails();
+    }
+  }, [offset, currentLabel, searchResults]);
+
+
    const allLabels = [...defaultLabels, ...customLabels];
 
   // if (isLoading) {
   //   return <div>Loading your inbox...</div>;
   // }
 
+  const isSearchActive = searchResults !== null;
+  const mailsToDisplay = isSearchActive ? searchResults : mails;
+
+
   return (
     <>
       <div className="inbox-page-layout">
-        <TopBar onLogout={handleLogout} />
+         <TopBar onLogout={handleLogout} onFullSearch={handleFullSearch} onPreviewItemClick={handleCardClick} />
         <Toolbar 
           showBackArrow={!!selectedMail}  // יהיה true אם יש מייל נבחר, אחרת false
           onBackClick={handleBackToInbox}   // הפונקציה לחזרה לרשימה
           onPrevClick={() => setOffset(Math.max(0, offset - 50))}
           onNextClick={() => {if (hasMore) setOffset(offset + 50);}}
           currentPage={currentPage}
+          paginationDisabled={isSearchActive}
         />
         <div className="inbox-main-content">
           <SideBar 
@@ -278,6 +324,8 @@ const handleCardClick = (mail) => {
                 setCurrentLabel(labelName); // Update the label that was clicked
                 setOffset(0); // Always reset pagination when label changes
                 setSelectedMail(null);   
+                setSearchResults(null); 
+                setSearchError(null);
             }}
             currentLabelName={currentLabel}
           />
@@ -304,33 +352,33 @@ const handleCardClick = (mail) => {
                   />
                 );
               })()
-            ) : (
-              // ... החלק של רשימת המיילים, ללא שינוי ...
-              <>
-                 {/* Display 50 mails */}
-                  {mails.length === 0 ? (
-                  <div className="empty-message">No mails to show</div>
-                    ) : (
-                <div className="mail-list">
-                  {mails.map(mail => (
-                    // שיניתי את sender ל-fromName כדי להתאים למבנה החדש
-                    <MailCard
-                      key={mail.id}
-                      sender={mail.fromName} // שימוש ב-fromName
-                      subject={mail.subject}
-                      body={mail.body}
-                      date={mail.time} // שימוש ב-time
-                      isStarred={mail.isStarred}
-                      onClick={() => handleCardClick(mail)}
-                      onStar={() => handleToggleStar(mail.id)}
-                      onDelete={() => console.log('Delete clicked on mail:', mail.id)}
-                    />
-                  ))}
-                </div>
-                )}
-                </>  
-            )}            
-          </main>
+            ) : isSearching ? (
+    <div className="empty-message">Searching...</div>
+  ) : searchError ? (
+    <div className="error-message">Error: {searchError}</div>
+  ) : mails.length === 0 ? (
+    <div className="empty-message">
+      {isSearchActive ? "No mails found matching your search." : "No mails to show."}
+    </div>
+  ) : (
+    <div className="mail-list">
+      {mailsToDisplay.map(mail => (
+        <MailCard
+          key={mail.id}
+          sender={mail.fromName}
+          subject={mail.subject}
+          body={mail.body}
+          date={mail.time}
+          isStarred={mail.isStarred}
+          onClick={() => handleCardClick(mail)}
+          onStar={() => handleToggleStar(mail.id)}
+          onDelete={() => console.log('Delete clicked on mail:', mail.id)}
+        />
+      ))}
+    </div>
+  )}
+</main>
+
         </div>
       </div>
 
