@@ -25,7 +25,7 @@ app.use('/api/labels', labelRoutes)
 app.use('/api/blacklist', blacklistRoutes)
 
 // React fallback
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(reactBuildPath, 'index.html'));
 });
 

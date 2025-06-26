@@ -86,78 +86,44 @@ const RegisterPage = () => {
     errorText: errorText,
   };
 
+  const functions = {
+    setUserData: changeUserData,
+    handleBack: handleBack,
+    handleNext: handleNext,
+  };
+
   const displayPage = () => {
-    // const partText = getPartText();
+    switch (part) {
+      case 0: {
+        return (
+          <CreateDisplayName userData={userData.displayName} {...functions} />
+        );
+      }
+      case 1: {
+        return (
+          <CreateGenderAndBirthday
+            userData={userData.displayName}
+            {...functions}
+          />
+        );
+      }
+      case 2: {
+        return <CreateUserName userData={userData.username} {...functions} />;
+      }
 
-    // if (!config) return null;
-
-    console.log("part: " + part);
-
-    // switch (part) {
-    //   case 0: {
-
-    //   }
-    //   case 1: {}
-    //   case 2: {}
-    //   case 3: {
-    //   return <CreatePassword userData={userData.password} setUserData={changeUserData} text={partText} handleBack={handleBack} handleNext={handleNext} />
-
-    //   }
-    //     case 4: {
-    //   return <CreatePic userData={userData.pic} setUserData={changeUserData} partText={partText} handleBack={handleBack} handleNext={handleNext} />
-
-    //     }
-    //     default:
-    //     break;
-    //   }
-
-    if (part === 0) {
-      return (
-        <CreateDisplayName
-          userData={userData.displayName}
-          setUserData={changeUserData}
-          handleBack={handleBack}
-          handleNext={handleNext}
-        />
-      );
-    } else if (part === 1) {
-      return (
-        <CreateGenderAndBirthday
-          userData={userData.displayName}
-          setUserData={changeUserData}
-          handleBack={handleBack}
-          handleNext={handleNext}
-        />
-      );
-    } else if (part === 2) {
-      return (
-        <CreateUserName
-          userData={userData.userName}
-          setUserData={changeUserData}
-          handleBack={handleBack}
-          handleNext={handleNext}
-        />
-      );
-    } else if (part === 3) {
-      return (
-        <CreatePassword
-          userData={userData.password}
-          setUserData={changeUserData}
-          handleBack={handleBack}
-          handleNext={handleNext}
-        />
-      );
-    } else if (part === 4) {
-      return (
-        <CreatePic
-          userData={userData.pic}
-          setUserData={changeUserData}
-          handleBack={handleBack}
-          handleNext={handleNext}
-        />
-      );
-    } else if (part === 5) {
-      return <UserForm {...config} data={registerText["confirm"]} />;
+      case 3: {
+        return <CreatePassword userData={userData.password} {...functions} />;
+      }
+      case 4: {
+        return <CreatePic userData={userData.pic} {...functions} />;
+      }
+      case 5: {
+        return <UserForm {...config} data={registerText["confirm"]} />;
+      }
+      default:
+        return (
+          <CreateDisplayName userData={userData.displayName} {...functions} />
+        );
     }
   };
 
