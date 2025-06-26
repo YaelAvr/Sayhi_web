@@ -7,6 +7,8 @@ const { addLabelToMail } = require('../models/mails')
 const { deleteMail } = require('../models/mails')
 const { getUserById } = require("../models/users");
 const { isUserNameRegistered } = require("../models/users");
+const { removeMailFromLabel } = require('../models/labels')
+
 
 // Controller to handle creation of a new mail
 
@@ -234,6 +236,12 @@ exports.addLabelToMail = async (req, res) => {
     try {
         // Add the label (with blacklist logic for "Spam")
         await addLabelToMail(user, mailId, labelName);
+
+        if (labelName === 'starred') {
+            const mail = user.mails.find(m => m.id === mailId);
+            mail.isStarred = true;
+        }
+
         return res.status(200).json({ message: `Mail ${mailId} labeled as ${labelName}` })
     } catch (err) {
         // Handle expected error cases
@@ -252,3 +260,30 @@ exports.addLabelToMail = async (req, res) => {
         }
     }
 }
+
+
+exports.removeLabelFromMail = async (req, res) => {
+  const userId = req.user.id;
+  const mailId = req.params.id;
+  const { labelName } = req.body;
+
+  const user = getUserById(userId);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+
+  const mail = user.mails.find(m => m.id === mailId);
+  if (!mail) return res.status(404).json({ error: 'Mail not found' });
+
+  try {
+    removeMailFromLabel(user, mail, labelName);
+
+    if (labelName === 'starred') {
+      mail.isStarred = false;
+    }
+
+    return res.status(200).json({ message: `Removed ${labelName} from mail ${mailId}` });
+  } catch (err) {
+    if (err.message === 'LABEL_NOT_FOUND') return res.status(404).json({ error: 'Label not found' });
+    if (err.message === 'MAIL_NOT_IN_LABEL') return res.status(400).json({ error: 'Mail not in label' });
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
