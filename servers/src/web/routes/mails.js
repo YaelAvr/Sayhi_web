@@ -22,6 +22,9 @@ router.route('/label-mails')
 router.route('/:id/add-label')
   .post(mails.addLabelToMail)
 
+router.route('/:id/remove-label')
+  .post(mails.removeLabelFromMail)
+
 router.route('/:id')  
     .get(mails.getSpecificMail)
     .delete(mails.deleteMail)

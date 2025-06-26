@@ -86,22 +86,7 @@ const InboxPage = () => {
       console.error("Error fetching labels:", error);
     }
   };
-
-//   const fetchMailsForLabel = async (labelName) => {
-//   // בפרויקט אמיתי, כאן תהיה בקשת fetch אמיתית עם טוקן
-//   // const token = localStorage.getItem('token');
-//   // const response = await fetch(`/api/mails?label=${labelName}`, { headers: { ... } });
-//   // ...
   
-//   // כרגע, נשתמש בנתונים המדומים
-//   console.log(`(Pretending to fetch mails for: ${labelName})`);
-//   const dummyMails = [
-//     { id: 'm1', subject: 'Security Alert', body: '...', time: new Date().toISOString(), isStarred: true, fromName: 'Google', fromUserName: 'google-alerts', labels: ['l-inbox'] },
-//     { id: 'm2', subject: 'New connection request', body: '...', time: '2024-06-20T10:00:00Z', isStarred: false, fromName: 'LinkedIn', fromUserName: 'linkedin-noreply', labels: ['l-inbox', 'l-social'] },
-//   ];
-//   setMails(dummyMails);
-// };
-
    const handleDeleteLabel = async () => {
     setModalError("");
     const token = localStorage.getItem('token');
@@ -129,27 +114,26 @@ const InboxPage = () => {
   }, []);
 
 
-   const fetchMails = async () => {
-      const token = localStorage.getItem("token");
-      const userId = getUserIdFromToken();
+  const fetchMails = async () => {
+    const token = localStorage.getItem("token");
+    const userId = getUserIdFromToken();
 
-      try {
-        const res = await fetch(`/api/mails/label-mails?label=${currentLabel}&offset=${offset}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+    try {
+      const res = await fetch(`/api/mails/label-mails?label=${currentLabel}&offset=${offset}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch mails");
-        }
-
-        const data = await res.json();
-        setMails(data);
-        //checks if there are less than 50 mails(which means we cannot press button "next")
-        setHasMore(data.length === 50);
-
-      } catch (err) {
-        console.error("Error loading mails:", err);
+      if (!res.ok) {
+        throw new Error("Failed to fetch mails");
       }
+      const data = await res.json();
+      setMails(data);
+      //checks if there are less than 50 mails(which means we cannot press button "next")
+      setHasMore(data.length === 50);
+
+    } catch (err) {
+      console.error("Error loading mails:", err);
+    }
     };
 
   // Load 50 mails using label "Inbox" and current offset
@@ -233,14 +217,35 @@ const handleCardClick = (mail) => {
 // };
 
    // פונקציה חדשה לטיפול בלחיצה על כוכב
-  const handleToggleStar = (mailId) => {
+  const handleToggleStar = async (mailId, currentlyStarred) => {
+    try {
+      const token = localStorage.getItem("token");
+      const endpoint = currentlyStarred ? '/remove-label' : '/add-label';
+      const labelName = 'starred';
+
+      const res = await fetch(`/api/mails/${mailId}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ labelName })
+    });
+
+    if (!res.ok) {
+      console.error(`Failed to ${currentlyStarred ? 'remove' : 'add'} label to mail:`, await res.json());
+    }
+  } catch (err) {
+    console.error("Error toggle star:", err);
+    }
+
     // עדכון המיילים בצורה בלתי-משתנה (immutable)
     setMails(prevMails => 
       prevMails.map(mail => 
-        mail.id === mailId ? { ...mail, isStarred: !mail.isStarred } : mail
+        mail.id === mailId ? { ...mail, isStarred: !currentlyStarred } : mail
       )
     );
-    // בפרויקט אמיתי, כאן גם תשלח בקשת PATCH לשרת כדי לעדכן את המצב
+
   };
 
 
@@ -371,14 +376,13 @@ const handleCardClick = (mail) => {
           date={mail.time}
           isStarred={mail.isStarred}
           onClick={() => handleCardClick(mail)}
-          onStar={() => handleToggleStar(mail.id)}
+          onStar={() => handleToggleStar(mail.id, mail.isStarred)}
           onDelete={() => console.log('Delete clicked on mail:', mail.id)}
         />
       ))}
     </div>
   )}
 </main>
-
         </div>
       </div>
 
