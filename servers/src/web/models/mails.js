@@ -121,8 +121,8 @@ const searchMailsByQuery = (user, query) => {
     return (
             (mail.subject?.toLowerCase().includes(lowerQuery)) ||  // Check subject if exists
             (mail.body?.toLowerCase().includes(lowerQuery)) ||     // Check body if exists
-            mail.from.toLowerCase().includes(lowerQuery) ||        // Check 'from' field (always exists)
-            mail.to.toLowerCase().includes(lowerQuery)             // Check 'to' field (always exists)
+            mail.fromName.toLowerCase().includes(lowerQuery) ||        // Check 'from' field (always exists)
+            mail.toName.toLowerCase().includes(lowerQuery)             // Check 'to' field (always exists)
         )
   })
 }
