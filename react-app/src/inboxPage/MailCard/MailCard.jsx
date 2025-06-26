@@ -12,7 +12,7 @@ const MailCard = ({ sender, subject, body, date, onStar, onDelete, onLabel, isSt
 
   // Toggle star status on click
    const handleStarClick = (event) => {
-    event.stopPropagation(); // עוצר את התפשטות האירוע
+    event.stopPropagation(); 
     if (onStar) onStar();
   };
 

@@ -100,7 +100,7 @@ function UserForm({
               <p className="invalid-txt">{errorText}</p>
             ))}
 
-          <div className="form-btns-div">
+          <div className="form-btns-div form-flex-row ">
             <button
               type="button"
               onClick={buttonsConf.ClickFunc}

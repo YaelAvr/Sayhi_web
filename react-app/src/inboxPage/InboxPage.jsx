@@ -124,27 +124,26 @@ const InboxPage = () => {
   }, []);
 
 
-   const fetchMails = async () => {
-      const token = localStorage.getItem("token");
-      const userId = getUserIdFromToken();
+  const fetchMails = async () => {
+    const token = localStorage.getItem("token");
+    const userId = getUserIdFromToken();
 
-      try {
-        const res = await fetch(`/api/mails/label-mails?label=${currentLabel}&offset=${offset}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+    try {
+      const res = await fetch(`/api/mails/label-mails?label=${currentLabel}&offset=${offset}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch mails");
-        }
-
-        const data = await res.json();
-        setMails(data);
-        //checks if there are less than 50 mails(which means we cannot press button "next")
-        setHasMore(data.length === 50);
-
-      } catch (err) {
-        console.error("Error loading mails:", err);
+      if (!res.ok) {
+        throw new Error("Failed to fetch mails");
       }
+      const data = await res.json();
+      setMails(data);
+      //checks if there are less than 50 mails(which means we cannot press button "next")
+      setHasMore(data.length === 50);
+
+    } catch (err) {
+      console.error("Error loading mails:", err);
+    }
     };
 
   // Load 50 mails using label "Inbox" and current offset
@@ -228,14 +227,35 @@ const handleCardClick = (mail) => {
 // };
 
    // פונקציה חדשה לטיפול בלחיצה על כוכב
-  const handleToggleStar = (mailId) => {
+  const handleToggleStar = async (mailId, currentlyStarred) => {
+    try {
+      const token = localStorage.getItem("token");
+      const endpoint = currentlyStarred ? '/remove-label' : '/add-label';
+      const labelName = 'starred';
+
+      const res = await fetch(`/api/mails/${mailId}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ labelName })
+    });
+
+    if (!res.ok) {
+      console.error(`Failed to ${currentlyStarred ? 'remove' : 'add'} label to mail:`, await res.json());
+    }
+  } catch (err) {
+    console.error("Error toggle star:", err);
+    }
+
     // עדכון המיילים בצורה בלתי-משתנה (immutable)
     setMails(prevMails => 
       prevMails.map(mail => 
-        mail.id === mailId ? { ...mail, isStarred: !mail.isStarred } : mail
+        mail.id === mailId ? { ...mail, isStarred: !currentlyStarred } : mail
       )
     );
-    // בפרויקט אמיתי, כאן גם תשלח בקשת PATCH לשרת כדי לעדכן את המצב
+
   };
 
 
@@ -322,8 +342,7 @@ const handleCardClick = (mail) => {
                       date={mail.time} // שימוש ב-time
                       isStarred={mail.isStarred}
                       onClick={() => handleCardClick(mail)}
-                      onStar={() => handleToggleStar(mail.id)}
-                      onDelete={() => console.log('Delete clicked on mail:', mail.id)}
+                      onStar={() => handleToggleStar(mail.id, mail.isStarred)}
                     />
                   ))}
                 </div>
