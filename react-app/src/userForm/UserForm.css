@@ -49,7 +49,7 @@
   width: 100%;
 }
 
-.hide-filde{
+.hide-filde {
   display: none;
 }
 .form-text-cont h1 {
@@ -70,11 +70,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  
 }
 
 #input-div,
-.form-btns-div,
 .invalid-txt {
   width: 100%;
 }
@@ -115,11 +113,9 @@ form {
 } */
 
 .form-btns-div {
-  height: 10%;
-  margin-top: 1em;
-  display: flex;
-  flex-direction: row;
+  height: fit-content;
   justify-content: space-between;
+  /* margin-top: 1em; */
 }
 
 .form-btn {
@@ -163,12 +159,11 @@ form {
   border: 1.6px solid #b3261e;
 }
 
-
-.remove-btn{
+.remove-btn {
   pointer-events: none;
 }
 
 .form-pic {
-    border-radius: 50%; /* עיגול */
+  border-radius: 50%; /* עיגול */
   object-fit: cover;
 }
