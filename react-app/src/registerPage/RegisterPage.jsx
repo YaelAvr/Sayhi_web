@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { createDesplayName } from "./serverCallFunctions/serverCallFunctions";
-// import "./LoginPage.css";
 import UserForm from "../userForm/UserForm";
 import registerText from "./registerText.json";
-
 import CreateUserName from "./createUserName.jsx/CreateUserName";
 import CreatePic from "./createPic/CreatePic";
 import CreatePassword from "./createPassword/CreatePassword";
@@ -25,21 +22,12 @@ const RegisterPage = () => {
     setUserData((prev) => ({ ...prev, [fild]: data }));
   };
 
-  useEffect(() => {
-    console.log("final data:", userData);
-  }, [userData]);
-
   const [errorText, setError] = useState(null);
-
-  // const [part, setPart] = useState(4); //כלי עזר לזמן עבודה
-  const [part, setPart] = useState(0); //להחזיר
-
+  const [part, setPart] = useState(0);
   const navigate = useNavigate();
 
   const handleBack = () => {
     setPart((perv) => perv - 1);
-
-    // setError(null);
   };
 
   const handleNext = () => {
@@ -76,7 +64,6 @@ const RegisterPage = () => {
       navigate("/login");
     }
   };
-  // const formConfigs = {  };
   const config = {
     buttonsConf: {
       ClickFunc: initRegister,
