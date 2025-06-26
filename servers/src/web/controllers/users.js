@@ -72,8 +72,8 @@ exports.validateDisplayName = (req, res) => {
   if (!firstWord) {
     return res.status(400).json({ error: "Enter first name" });
   }
-  const displayName = firstWord;
-  if (secondWord !== "" ) {
+  let displayName = firstWord;
+  if (secondWord !== "") {
     displayName += " " + secondWord;
   }
   res.status(200).json({ displayName: displayName });
@@ -286,57 +286,50 @@ exports.isUserNameRegistered = (req, res) => {
 
   if (!user) { return res.status(404).json({ exists: false, error: 'Could not find your SayHi Account' }); }
   else {
-    return res.status(200).json({ displayName: user.displayName, username: user.username});
+    return res.status(200).json({ displayName: user.displayName, username: user.username });
   }
 }
 
+exports.getUserDarkMode = (req, res) => {
+  // Check if the user id matches the id in the request header
+  const userHeader = req.user.id
+  const userId = req.params.id
 
-/*  This function checks if the date string is valid 
-    and if it is in the format "DD.MM.YYYY".*/
-function OLDisDateValid(dateString) {
-  // Check if the string is an optional date
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) {
-    return false;
+  if (req.params.id !== req.user.id) {
+    return res.status(403).json({ error: "Unauthorized access" });
   }
 
-  // Check if the date is of the format "DD.MM.YYYY"
-  const regex = /^\d{1,2}\.\d{1,2}\.\d{4}$/;
-  if (!regex.test(dateString)) {
-    return false; // Format is incorrect
+  if (!userHeader || !userId || userHeader !== userId) {
+    return res.status(400).json({ error: 'All fields are required' })
   }
 
-  const parts = dateString.split(".");
-  const day = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10);
-  const year = parseInt(parts[2], 10);
+  const user = Users.getUserById(userId)
+  if (!user) return res.status(404).json({ error: 'No user was found' })
 
-  //  Basic range checks
-  if (year < 1000 || year > 3000 ||
-    month === 0 || month > 12 ||
-    day === 0 || day > 31) {
-    return false;
-  }
 
-  // Create a Date object. of the input components
-  const dateObj = new Date(year, month - 1, day);
-
-  // Check if the object construction was successful
-  if (!(!isNaN(dateObj.getTime()) && dateObj.getFullYear() === year &&
-    dateObj.getMonth() === month - 1 && dateObj.getDate() === day)) {
-    return false;
-  }
-
-  // Get today's date and check if the "birthday" is a past date
-  const today = new Date();
-  if (dateObj >= today) {
-    return false;
-  }
-
-  return true;
+  res
+    .status(200)
+    .json({ isDarkMode: user.isDarkMode })
 }
 
-// function isImage(picture) {
-//     const ext = path.extname(picture).toLowerCase();
-//     return ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'].includes(ext);
-// }
+exports.toggleDarkMode = (req, res) => {
+  // Check if the user id matches the id in the request header
+  const userHeader = req.user.id
+  const userId = req.params.id
+
+  if (userHeader !== userId) {
+    return res.status(403).json({ error: "Unauthorized access" });
+  }
+
+  if (!userHeader || !userId || userHeader !== userId) {
+    return res.status(400).json({ error: 'All fields are required' })
+  }
+  try {
+    const userIsDarkMode = Users.toggleDarkMode(userId)
+    res
+      .status(200)
+      .json({ isDarkMode: userIsDarkMode })
+  } catch (error) {
+    return res.status(404).json({ error: error.message });
+  }
+}
