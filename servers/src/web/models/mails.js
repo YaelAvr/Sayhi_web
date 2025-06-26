@@ -35,7 +35,7 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
     const  { links, isContain } = await checkLinks(body, subject)
     const mailId = `m-${sender.id}-${sender.mailCounter++}`
     const time = new Date().toISOString()
-
+    
     const senderMail  = {
         id: mailId,
         from: sender.id,
@@ -53,8 +53,7 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
         isStarred: false
     }
     const recipientMail = {
-      // If sender and recipient are the same user (mail sent to self), use the same ID to allow consistent deletion across labels
-      id: sender.id === recipient.id ? mailId : `${mailId}-copy`,
+      id: `${mailId}-copy`,
       from: sender.id,
       to: recipient.id,
       subject: subject || '',
@@ -74,13 +73,18 @@ const createMail = async (sender, recipient, subject, body, originalDraftId = nu
   const senderLabel = sender.labels.find(l => l.name === 'Sent')
   const recipientLabel = recipient.labels.find(l => l.name === (isContain ? 'Spam' : 'Inbox'));
 
-  // Add mail to labels using external helper
-  addMailToLabel(senderLabel, senderMail)
-  addMailToLabel(recipientLabel, recipientMail)
-
-  // Save the mails to the users' mailboxes
-  sender.mails.push(senderMail)
-  recipient.mails.push(recipientMail)
+  if (sender.id === recipient.id) {
+    // Add mail to labels using external helper
+    addMailToLabel(senderLabel, senderMail);
+    addMailToLabel(recipientLabel, senderMail);
+    sender.mails.push(senderMail);
+  } else {
+    addMailToLabel(senderLabel, senderMail);
+    addMailToLabel(recipientLabel, recipientMail);
+    // Save the mails to the users' mailboxes
+    sender.mails.push(senderMail);
+    recipient.mails.push(recipientMail);
+  }
 
   // If it was a draft - delete it from mails and label references
   if (originalDraftId) {
