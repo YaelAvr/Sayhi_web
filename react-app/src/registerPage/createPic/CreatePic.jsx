@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import UserForm from "../../userForm/UserForm";
 import Text from "./text.json"
 
-// import {handleBack, handleNext } from "../RegisterPage";
-
 const CreatePic = (props) => {
   const [picture, setPicture] = useState({
     name: "",
@@ -15,8 +13,6 @@ const CreatePic = (props) => {
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    // const fileUrl = URL.createObjectURL(file);
 
     if (file.type.startsWith("image/")) {
       setPicture({
@@ -35,16 +31,10 @@ const CreatePic = (props) => {
         `The file "${file.name}" is not a supported image format. Please try again with one of the following types: JPG, PNG, GIF, WEBP`
       );
     }
-
-    console.log(picture.name + " " + picture.img + " " + picture.url);
   };
 
   const handleImageUpload = async (e) => {
     e.preventDefault();
-    // if (!picture.img) {
-
-    //   return;
-    // }
 
     const uploadData = new FormData();
     uploadData.append("profilePic", picture.img);
@@ -77,7 +67,6 @@ const CreatePic = (props) => {
       inputClass: !errorText ? "no-input" : "bad-input",
       src: picture.url,
       fileName: picture.name,
-      //   img: picture.img,
       setVal: handleImageChange,
     },
     errorText: errorText,
