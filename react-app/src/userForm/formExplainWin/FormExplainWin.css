@@ -1,0 +1,15 @@
+.form-explain-text {
+  border-radius: 0.6em;
+  border: 0.05em solid black;
+  position: absolute;
+  background-color: whitesmoke;
+  width: 12%;
+  padding: 1%;
+  font-size: 1rem;
+  /* padding: 0.5em; */
+  margin-block: 0.5em;
+}
+
+/* .form-explain-text p{
+   
+} */

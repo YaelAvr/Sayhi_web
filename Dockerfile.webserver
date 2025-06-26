@@ -10,6 +10,9 @@ COPY react-app/ react-app/
 COPY servers/src/web/ servers/src/web/
 COPY servers/data/ servers/data/
 
+COPY servers/pictures/ servers/pictures/
+COPY servers/tempUploads/ servers/tempUploads/
+
 RUN npm install
 
 EXPOSE 3000

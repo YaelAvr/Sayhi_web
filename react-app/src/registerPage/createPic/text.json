@@ -1,0 +1,17 @@
+{
+  "title": "Personalize your account!",
+  "text": "Choose your profile picture (Supported formats: JPEG, PNG, WEBP, SVG).",
+  "image": {
+    "id": "input-picture",
+    "className": "hide-filde",
+    "type": "file",
+    "name": "pic",
+    "alt": "preview",
+    "fileType": "image/*",
+    "placeHolder": "choose pic"
+  },
+  "button": {
+    "nextBtn": "Next",
+    "changeBtnText": "Back"
+  }
+}
