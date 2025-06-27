@@ -10,6 +10,7 @@ import MailCard from './MailCard/MailCard';
 import MailDetailView from './mailDetailView/MailDetailView';
 import { getUserIdFromToken } from "../utils/utils";
 import Toolbar from "./Toolbar/Toolbar";
+import LabelPopup from './LabelPopup/LabelPopup';
 
 const InboxPage = () => {
   // States קיימים
@@ -33,7 +34,9 @@ const InboxPage = () => {
   const [hasMore, setHasMore] = useState(true);
   // Start by showing mails from the "Inbox" label by default
   const currentPage = offset === 0 ? 1 : Math.floor(offset / 50) + 1;
-  // state for the search bar
+    const [showLabelPopup, setShowLabelPopup] = useState(false);
+  const [labelPopupMailId, setLabelPopupMailId] = useState(null);
+   // state for the search bar
   const [searchResults, setSearchResults] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
@@ -235,6 +238,70 @@ const handleCardClick = (mail) => {
 
   };
 
+  const handleDeleteMail = async (mailId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`/api/mails/${mailId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      console.error("Failed to delete mail", await res.json());
+      return;
+    }
+
+    // עדכון רשימת המיילים – מסיר את המייל מהרשימה הנוכחית
+    setMails(prevMails => prevMails.filter(mail => mail.id !== mailId));
+
+  } catch (err) {
+    console.error("Error deleting mail:", err);
+  }
+};
+
+const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
+  try {
+    const token = localStorage.getItem("token");
+    const endpoint = isCurrentlyInLabel ? "/remove-label" : "/add-label";
+    const allLabels = [...defaultLabels, ...customLabels];
+
+    const res = await fetch(`/api/mails/${mailId}${endpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ labelName }) // השרת מקבל שם
+    });
+
+    if (!res.ok) {
+      console.error(`Failed to ${endpoint}:`, await res.json());
+    }
+
+    // עידכון הסטייט לפי השם → צריך לתרגם לשמירה של id
+    const updatedLabelId = allLabels.find(l => l.name === labelName)?.id;
+    if (!updatedLabelId) return;
+
+    setMails(prevMails =>
+      prevMails.map(mail =>
+        mail.id === mailId
+          ? {
+              ...mail,
+              labels: isCurrentlyInLabel
+                ? mail.labels.filter(id => id !== updatedLabelId)
+                : [...mail.labels, updatedLabelId]
+            }
+          : mail
+      )
+    );
+
+  } catch (err) {
+    console.error("Toggle label error:", err);
+  }
+};
 
   //function to refresh mails and labels
   const refreshData = async () => {
@@ -280,10 +347,8 @@ const handleCardClick = (mail) => {
   }, [offset, currentLabel, searchResults]);
 
 
-   const allLabels = [...defaultLabels, ...customLabels];
+  const allLabels = [...defaultLabels, ...customLabels];
 
-  const isSearchActive = searchResults !== null;
-  const mailsToDisplay = isSearchActive ? searchResults : mails;
 
 
   return (
@@ -358,7 +423,11 @@ const handleCardClick = (mail) => {
           isStarred={mail.isStarred}
           onClick={() => handleCardClick(mail)}
           onStar={() => handleToggleStar(mail.id, mail.isStarred)}
-          onDelete={() => console.log('Delete clicked on mail:', mail.id)}
+          onDelete={() => handleDeleteMail(mail.id)}
+          onLabel={() => {
+                        setLabelPopupMailId(mail.id); 
+                        setShowLabelPopup(true);
+              }}
         />
       ))}
     </div>
@@ -416,6 +485,22 @@ const handleCardClick = (mail) => {
           <p>This will not delete any messages.</p>
         </GenericWindow>
       )}
+
+      {showLabelPopup && labelPopupMailId && (() => {
+        const mailForPopup = mails.find(m => m.id === labelPopupMailId);
+        return (
+          <LabelPopup
+            key={labelPopupMailId + (mailForPopup?.labels?.join(',') || '')} 
+            mail={mailForPopup}
+            allLabels={[...defaultLabels, ...customLabels]}
+            onToggleLabel={handleToggleLabel}
+            onClose={() => {
+              setShowLabelPopup(false);
+              setLabelPopupMailId(null);
+            }}
+          />
+        );
+      })()}
     </>
   );
 };
