@@ -1,3 +1,4 @@
+/* Main container for the top bar */
 .topbar-container {
   height: 60px;
   display: flex;
@@ -72,6 +73,7 @@
   margin: 1em;
 }
 
+/* Profile section aligned to the right */
 .topbar-profile {
   margin-left: auto;
   display: flex;
@@ -79,6 +81,7 @@
   position: relative;
 }
 
+/* Circular profile picture with hover cursor */
 .topbar-profile-pic,
 .mode-pic {
   width: 36px;

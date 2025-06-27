@@ -2,11 +2,11 @@ import React from "react";
 import "./Toolbar.css";
 
 const Toolbar = ({ 
-  showBackArrow, 
-  onBackClick, 
-  onPrevClick, 
-  onNextClick, 
-  currentPage 
+  showBackArrow,       // whether to show the back arrow (true in mail view)
+  onBackClick,         // callback for back arrow click
+  onPrevClick,         // callback for previous page button
+  onNextClick,         // callback for next page button
+  currentPage          // current page number to display
 }) => {
   return (
     <div className="toolbar-container">

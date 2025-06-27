@@ -1,3 +1,4 @@
+/* Main layout of the inbox page */
 .inbox-page-layout {
   display: flex;
   flex-direction: column; 
@@ -5,11 +6,13 @@
   overflow: hidden;
 }
 
+/* Horizontal container: sidebar + main content */
 .inbox-main-content {
   display: flex;
   flex: 1; 
 }
 
+/* Scrollable mail content area (excluding topbar and toolbar) */
 .inbox-content-area {
   flex: 1;
   overflow-y: auto;
@@ -20,10 +23,12 @@
   margin-top: 1em;
 }
 
+/* Header inside inbox content */
 .inbox-content-area h2 {
   margin-top: 0;
 }
 
+/* Message shown when no mails are available */
 .empty-message {
   text-align: center;
   font-size: 14px;

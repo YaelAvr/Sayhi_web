@@ -19,8 +19,12 @@
   padding: 20px;
   border-radius: 8px;
   width: 280px;
+  max-height: 400px; 
+  display: flex; 
+  flex-direction: column; 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   pointer-events: auto;
+  overflow: hidden;
 }
 
 /* Label list */
@@ -47,4 +51,11 @@
 
 .label-popup button:hover {
   background-color: #0056b3;
+}
+
+.label-list-scrollable {
+  max-height: 200px;
+  flex-grow:1;
+  overflow-y: auto;
+  margin-bottom: 12px;
 }

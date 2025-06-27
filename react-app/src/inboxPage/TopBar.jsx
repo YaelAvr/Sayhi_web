@@ -11,12 +11,14 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick, isDarkMode, toggle
   const [showUserDetails, setShowUserDetails] = useState(false);
   const userDetailsRef = useRef(null);
 
+  // State to hold user data (name, email, picture)
   const [userData, setUserData] = useState({
     displayName: "",
     email: "",
     picture: "",
   });
 
+  // Fetch user data from the backend on mount
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -44,6 +46,7 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick, isDarkMode, toggle
     fetchUserData();
   }, []);
 
+  // Close the user details popup when clicking outside of it
   const handleOutsideClick = (event) => {
     if (
       userDetailsRef.current &&
@@ -53,6 +56,7 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick, isDarkMode, toggle
     }
   };
 
+  // Attach/remove event listener based on popup state
   useEffect(() => {
     if (showUserDetails) {
       document.addEventListener("mousedown", handleOutsideClick);
@@ -64,14 +68,16 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick, isDarkMode, toggle
 
   return (
     <div className="topbar-container">
+        {/* App logo */}
       <Logo containerClass="topbar-logo-container" />
+        {/* Search bar component */}
       <SearchBar onFullSearch={onFullSearch} onPreviewItemClick={onPreviewItemClick} />
       <div className="topbar-btns">
         {isDarkMode ? (
           <LightModeLogo className="mode-pic" onClick={toggleDarkMode} />
         ) : (
           <DarkModeLogo className="mode-pic" onClick={toggleDarkMode} />
-        )}
+        )}        {/* User profile section */}
         <div className="topbar-profile">
           <img
             className="topbar-profile-pic"
@@ -80,6 +86,7 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick, isDarkMode, toggle
             onClick={() => setShowUserDetails((prev) => !prev)}
           />
 
+          {/* User details popup */}
           {showUserDetails && (
             <div ref={userDetailsRef}>
               <UserDetails
