@@ -77,7 +77,8 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick, isDarkMode, toggle
           <LightModeLogo className="mode-pic" onClick={toggleDarkMode} />
         ) : (
           <DarkModeLogo className="mode-pic" onClick={toggleDarkMode} />
-        )}        {/* User profile section */}
+        )}        
+        {/* User profile section */}
         <div className="topbar-profile">
           <img
             className="topbar-profile-pic"
