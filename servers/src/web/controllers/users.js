@@ -44,8 +44,8 @@ exports.createUser = async (req, res) => {
     const destinationPath = path.resolve('pictures', finalFileName); // The final path where the picture will be stored
 
     // Replace fs.rename with fs.copyFile and fs.unlink
-    await fs.copyFile(sourcePath, destinationPath); // 1. Copy the file to the new location
-    await fs.unlink(sourcePath); // 2. Delete the original file from the temp directory
+    await fs.copyFile(sourcePath, destinationPath); // Copy the file to the new location
+    await fs.unlink(sourcePath); // Delete the original file from the temp directory
 
     //  Update the user object with the final, permanent picture path.
     const finalImagePath = `pictures/${finalFileName}`;

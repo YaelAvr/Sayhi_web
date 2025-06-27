@@ -1,6 +1,6 @@
 {
   "title": "Personalize your account!",
-  "text": "Choose your profile picture (Supported formats: JPEG, PNG, WEBP, SVG).",
+  "text": "Choose your profile picture (Supported formats: JPEG, JPG, PNG, WEBP, SVG, GIF).",
   "image": {
     "id": "input-picture",
     "className": "hide-filde",

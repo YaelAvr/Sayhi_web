@@ -5,7 +5,7 @@ const isImageMimeType = (mime) => {
   return ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"].includes(mime);
 };
 
-// Helper function to validate file type (remains the same)
+// Helper function to validate file type 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype.startsWith('image/') && isImageMimeType(file.mimetype)) {
         cb(null, true); // Accept file
@@ -17,7 +17,6 @@ const fileFilter = (req, file, cb) => {
 // Multer configuration for TEMPORARY storage
 const tempStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // We assume 'temp_uploads' exists in the 'servers' root directory
         cb(null, 'tempUploads'); 
     },
     filename: (req, file, cb) => {
