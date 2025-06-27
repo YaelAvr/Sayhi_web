@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './MailDetailView.css';
 
 function MailDetailView({ mail }) {
-  // אם במקרה אין מייל, לא נציג כלום
   console.log("Mail object received:", mail);
   if (!mail) return null;
 
@@ -11,10 +10,6 @@ function MailDetailView({ mail }) {
       <header className="mail-detail-header">
         <h2 className="mail-detail-subject dark-white-text">{mail.subject}</h2>
         <div className="mail-detail-labels">
-          {/* 
-            הלולאה הזו עוברת על מערך שמות התוויות (שכבר נמצא ב-mail.labels)
-            ויוצרת 'chip' לכל אחד מהם.
-          */}
           {mail.labels && mail.labels.map(labelName => (
             <span key={labelName} className="label-chip">
               {labelName}
@@ -23,7 +18,6 @@ function MailDetailView({ mail }) {
         </div>
       </header>
 
-      {/* החלק של פרטי השולח והגוף נשארים זהים ותקינים */}
       <div className="mail-detail-sender-info">
         <div className="sender-avatar">
            {mail.fromPicture ? (

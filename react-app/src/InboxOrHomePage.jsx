@@ -4,6 +4,7 @@ import HomePage from "./homePage/HomePage";
 import { verifyToken } from "./utils/utils"; 
 
 const InboxOrHomePage = () => {
+  // save the token statuse
   // 'pending' - still checking the token
   // 'authenticated' - the token is valid
   // 'unauthenticated' - the token id invalid or not present

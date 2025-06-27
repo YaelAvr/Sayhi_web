@@ -7,7 +7,7 @@ import "./TopBar.css";
 import UserDetails from "./userDetails/userDetails";
 import { getUserIdFromToken } from "../utils/utils";
 
-const TopBar = ({ onLogout, isDarkMode, toggleDarkMode }) => {
+const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick, isDarkMode, toggleDarkMode }) => { 
   const [showUserDetails, setShowUserDetails] = useState(false);
   const userDetailsRef = useRef(null);
 
@@ -65,7 +65,7 @@ const TopBar = ({ onLogout, isDarkMode, toggleDarkMode }) => {
   return (
     <div className="topbar-container">
       <Logo containerClass="topbar-logo-container" />
-      <SearchBar />
+      <SearchBar onFullSearch={onFullSearch} onPreviewItemClick={onPreviewItemClick} />
       <div className="topbar-btns">
         {isDarkMode ? (
           <LightModeLogo className="mode-pic" onClick={toggleDarkMode} />

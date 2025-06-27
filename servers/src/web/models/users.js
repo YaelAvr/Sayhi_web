@@ -57,6 +57,18 @@ const toggleDarkMode = (id) => {
     user.isDarkMode = !temp; // Toggle dark mode
     return user.isDarkMode; // Return the new dark mode state
 }
+const uploadPicture = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("הקובץ שהועלה אינו תמונה"));
+    }
+  },
+});
+
+
 
 module.exports = {
     createUser,
