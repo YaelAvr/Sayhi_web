@@ -7,7 +7,7 @@ import './TopBar.css';
 import UserDetails from "./userDetails/userDetails";
 import { getUserIdFromToken } from "../utils/utils";
 
-const TopBar = ({ onLogout }) => {
+const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick }) => { 
   const [showUserDetails, setShowUserDetails] = useState(false);
   const userDetailsRef = useRef(null);
 
@@ -66,7 +66,7 @@ const TopBar = ({ onLogout }) => {
     <div className="topbar-container">
       <div className="topbar">
         <Logo containerClass="topbar-logo-container" />
-        <SearchBar />
+        <SearchBar onFullSearch={onFullSearch} onPreviewItemClick={onPreviewItemClick} />
 
         <div className="topbar-profile">
           <img

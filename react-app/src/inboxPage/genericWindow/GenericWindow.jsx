@@ -2,11 +2,11 @@ import React from 'react';
 import './GenericWindow.css';
 
 function GenericWindow({ 
-  title,         // כותרת המודאל
-  children,      // התוכן המרכזי (הגוף)
-  onClose,       // פונקציה לסגירה (ביטול)
-  onConfirm,     // פונקציה לאישור
-  confirmText,   // טקסט לכפתור האישור
+  title,        
+  children,     
+  onClose,       
+  onConfirm,     
+  confirmText,   
   errorMessage 
 }) {
   return (
@@ -17,13 +17,11 @@ function GenericWindow({
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         
-        {/* הגוף של המודאל מגיע מה-children */}
         <div className="modal-body">
           {children}
           {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
         
-        {/* החלק התחתון עם הכפתורים, מובנה בתוך המודאל */}
         <div className="modal-footer">
           <button type="button" className="btn-cancel" onClick={onClose}>
             Cancel
@@ -33,7 +31,7 @@ function GenericWindow({
             className="btn-confirm" 
             onClick={onConfirm}
           >
-            {confirmText || 'OK'} {/* אם לא נתנו טקסט, ברירת המחדל היא OK */}
+            {confirmText || 'OK'}
           </button>
         </div>
       </div>

@@ -1,4 +1,3 @@
-/* לוגו - טקסט ואייקון */
 .topbar-logo-container {
   gap: 8px;
   width: 120px;
@@ -14,16 +13,11 @@
   width: 24%;
   height: fit-content;
   margin-top: 1em;
-  /* margin: 2em; */
-  /* margin-left: 0; */
 }
 
 #gmail-icon {
   width: 100%;
   height: 100%;
-}
-
-#Envelope {
 }
 
 #logo-text {
