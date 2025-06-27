@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import './SearchBar.css';
 import searchIcon from './search.svg'; 
 
-// שינינו את שם ה-prop ל-onFullSearch כדי שיהיה ברור
 const SearchBar = ({ onFullSearch, onPreviewItemClick  }) => {
   const [query, setQuery] = useState('');
   const [previewResults, setPreviewResults] = useState([]);
@@ -10,7 +9,6 @@ const SearchBar = ({ onFullSearch, onPreviewItemClick  }) => {
   const [isLoading, setIsLoading] = useState(false);
   const searchBarRef = useRef(null);
 
-  // Hook לזיהוי לחיצה מחוץ לרכיב כדי לסגור את החלונית
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
@@ -23,16 +21,13 @@ const SearchBar = ({ onFullSearch, onPreviewItemClick  }) => {
     };
   }, []);
 
-  // Hook לביצוע חיפוש מקדים עם השהיה (Debounce)
   useEffect(() => {
-    // אם אין שאילתה, נקה הכל
     if (query.trim() === '') {
       setPreviewResults([]);
       setIsDropdownVisible(false);
       return;
     }
 
-    // הפעל את החיפוש המקדים רק אחרי שהמשתמש הפסיק להקליד ל-300ms
     const debounceTimer = setTimeout(() => {
       const fetchPreview = async () => {
         setIsLoading(true);
@@ -43,11 +38,10 @@ const SearchBar = ({ onFullSearch, onPreviewItemClick  }) => {
           });
           if (!response.ok) throw new Error('Preview search failed');
           const data = await response.json();
-          // לוקחים רק את 5 התוצאות הראשונות לתצוגה המקדימה
           setPreviewResults(data.slice(0, 5)); 
         } catch (error) {
           console.error("Error fetching preview:", error);
-          setPreviewResults([]); // במקרה של שגיאה, נקה תוצאות
+          setPreviewResults([]);
         } finally {
           setIsLoading(false);
         }
@@ -56,11 +50,9 @@ const SearchBar = ({ onFullSearch, onPreviewItemClick  }) => {
       fetchPreview();
     }, 300);
 
-    // ניקוי הטיימר בכל הקלדה חדשה
     return () => clearTimeout(debounceTimer);
   }, [query]);
 
-  // פונקציה שמפעילה את החיפוש המלא
   const handleTriggerFullSearch = () => {
     if (query.trim()) {
     onFullSearch(query);
@@ -81,16 +73,13 @@ const SearchBar = ({ onFullSearch, onPreviewItemClick  }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // מונע התנהגות דיפולטיבית של טפסים
+      e.preventDefault();
       handleTriggerFullSearch();
     }
   };
 
    const handlePreviewItemClick = (mail) => {
-    // 1. קוראים לפונקציה מההורה (InboxPage) כדי לפתוח את המייל
     onPreviewItemClick(mail);
-
-    // 2. מנקים את ממשק החיפוש
     setIsDropdownVisible(false);
     setQuery('');
   };
@@ -126,7 +115,7 @@ const SearchBar = ({ onFullSearch, onPreviewItemClick  }) => {
               <div
                 key={mail.id}
                 className="dropdown-item mail-preview"
-                onClick={() => handlePreviewItemClick(mail)} // הפעלת הפונקציה החדשה
+                onClick={() => handlePreviewItemClick(mail)}
               >
                 <span className="mail-preview-sender">{mail.fromName}</span>
                 <span className="mail-preview-subject">{mail.subject}</span>
@@ -139,8 +128,6 @@ const SearchBar = ({ onFullSearch, onPreviewItemClick  }) => {
           <div
             className="dropdown-item full-search-trigger"
             onMouseDown={() => {
-    // מונעים את התנהגות ברירת המחדל כדי שה-input לא יאבד פוקוס
-    // (למרות שכאן זה פחות קריטי כי אנחנו מיד סוגרים את החלונית)
            handleTriggerFullSearch(); 
              }}
           >

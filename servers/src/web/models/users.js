@@ -49,7 +49,6 @@ const isUserNameRegistered =(username) => {
 const uploadPicture = multer({
   storage,
   fileFilter: (req, file, cb) => {
-    // בדיקה שהקובץ הוא מסוג תמונה
     if (file.mimetype.startsWith("image/")) {
       cb(null, true);
     } else {

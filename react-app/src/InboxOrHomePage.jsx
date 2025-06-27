@@ -3,10 +3,7 @@ import { Navigate } from "react-router-dom";
 import HomePage from "./homePage/HomePage";
 
 const InboxOrHomePage = () => {
-  // שלב 1: ניהול מצב
-  // 'pending' - still checking the token
-  // 'authenticated' - the token is valid
-  // 'unauthenticated' - the token id invalid or not present
+  // save the token statuse
   const [authStatus, setAuthStatus] = useState("pending");
 
 // check once when the component mounts
@@ -49,7 +46,6 @@ const InboxOrHomePage = () => {
   }
 
   if (authStatus === "authenticated") {
-    // אם האימות הצליח, נעביר את המשתמש ל-inbox
     return <Navigate to="/inbox" replace />;
   }
 

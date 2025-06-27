@@ -33,15 +33,13 @@ const InboxPage = () => {
   const [hasMore, setHasMore] = useState(true);
   // Start by showing mails from the "Inbox" label by default
   const currentPage = offset === 0 ? 1 : Math.floor(offset / 50) + 1;
-
-   // --- States עבור חיפוש ---
+  // state for the search bar
   const [searchResults, setSearchResults] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
 
-  // פונקציה לטעינת וסינון התוויות, נוכל לקרוא לה שוב לרענון
+//refresh the labels
   const fetchAndFilterLabels = async () => {
-    // לא משנה את isloading ל-true כאן כדי שהרענון יהיה שקט
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
@@ -49,7 +47,6 @@ const InboxPage = () => {
     }
 
     try {
-      // שימוש בנתיב יחסי בזכות ה-proxy
       const response = await fetch('/api/labels', {
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -59,8 +56,6 @@ const InboxPage = () => {
       }
 
       const allLabels = await response.json();
-      // const defaults = allLabels.filter(label => label.isDefault === true);
-      // const customs = allLabels.filter(label => label.isDefault === false);
 
        const defaults = allLabels
         .filter(label => label.isDefault === true)
@@ -87,6 +82,7 @@ const InboxPage = () => {
     }
   };
   
+  //delete specific label
    const handleDeleteLabel = async () => {
     setModalError("");
     const token = localStorage.getItem('token');
@@ -108,12 +104,12 @@ const InboxPage = () => {
     }
   };
 
-  // איפוס האופסט בכל שינוי תווית עדן
   useEffect(() => {
     fetchAndFilterLabels();
   }, []);
 
 
+  //refresh the mails
   const fetchMails = async () => {
     const token = localStorage.getItem("token");
     const userId = getUserIdFromToken();
@@ -142,7 +138,7 @@ const InboxPage = () => {
   }, [offset, currentLabel]);
 
 
-
+  //handle change in the name of label
   const handleUpdateLabel = async () => {
       setModalError("");
       const token = localStorage.getItem('token');
@@ -166,57 +162,49 @@ const InboxPage = () => {
     };
 
 
+    //close the window of edit or delete label
     const closeModal = () => {
     setEditingLabel(null);
     setDeletingLabel(null);
     setModalError("");
   };
 
+  //handle logout functionallity
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
 
 
-   // --- שינוי #3: פונקציה לבחירת מייל ---
+   // handle clicking on a specific mail and handles the case where the mail is a draft or a sent mail
 const handleCardClick = (mail) => {
-  // 1. ניצור את המערך המלא של כל התוויות הזמינות
   const allLabels = [...defaultLabels, ...customLabels];
   
-  // 2. נמצא את אובייקט התווית של "Drafts" כדי לקבל את ה-ID שלה
   const draftsLabel = allLabels.find(label => label.name === 'Drafts');
   
-  // 3. אם לא מצאנו תווית כזו, נתייחס לכל המיילים כרגילים (מצב הגנה)
   if (!draftsLabel) {
     setSelectedMail(mail);
     return;
   }
   
-  const draftsLabelId = draftsLabel.id; // ה-ID האמיתי של תווית הטיוטות
+  const draftsLabelId = draftsLabel.id;
 
-  // 4. נבדוק אם מערך ה-ID-ים של המייל מכיל את ה-ID של תווית הטיוטות
   if (mail.labels && mail.labels.includes(draftsLabelId)) {
-    // אם זו טיוטה:
+    // if it is a draft
     setEditingDraft(mail);
     setIsComposing(true);
   } else {
-    // אם זה מייל רגיל:
+    //if it a sent mail
     setSelectedMail(mail);
   }
 };
 
-  // --- שינוי #4: פונקציה לחזרה לרשימת המיילים ---
+  //function that take us back to the list of emails associated with that label
   const handleBackToInbox = () => {
     setSelectedMail(null);
   };
 
-//   const handleLabelSelect = (labelName) => {
-//     setCurrentLabel(labelName);
-//   // בעתיד, כאן תקרא לשרת כדי לקבל את המיילים של התווית הזו חשוב
-//   console.log(`Switched to label: ${labelName}`);
-// };
-
-   // פונקציה חדשה לטיפול בלחיצה על כוכב
+   //handle clicking on a star
   const handleToggleStar = async (mailId, currentlyStarred) => {
     try {
       const token = localStorage.getItem("token");
@@ -239,7 +227,6 @@ const handleCardClick = (mail) => {
     console.error("Error toggle star:", err);
     }
 
-    // עדכון המיילים בצורה בלתי-משתנה (immutable)
     setMails(prevMails => 
       prevMails.map(mail => 
         mail.id === mailId ? { ...mail, isStarred: !currentlyStarred } : mail
@@ -249,13 +236,14 @@ const handleCardClick = (mail) => {
   };
 
 
+  //function to refresh mails and labels
   const refreshData = async () => {
   console.log("Refreshing all data...");
-  await fetchAndFilterLabels(); // טוען מחדש את התוויות
-  // כרגע, אפשר להשאיר את זה ריק או לקרוא ל-fetchMails אם היא מופרדת
+  await fetchAndFilterLabels();
   await fetchMails();
   };
 
+  //function to handle the functionallity of search bar
   const handleFullSearch = async (query) => {
     const trimmedQuery = query.trim();
     if (trimmedQuery === '') {
@@ -294,10 +282,6 @@ const handleCardClick = (mail) => {
 
    const allLabels = [...defaultLabels, ...customLabels];
 
-  // if (isLoading) {
-  //   return <div>Loading your inbox...</div>;
-  // }
-
   const isSearchActive = searchResults !== null;
   const mailsToDisplay = isSearchActive ? searchResults : mails;
 
@@ -307,8 +291,8 @@ const handleCardClick = (mail) => {
       <div className="inbox-page-layout">
          <TopBar onLogout={handleLogout} onFullSearch={handleFullSearch} onPreviewItemClick={handleCardClick} />
         <Toolbar 
-          showBackArrow={!!selectedMail}  // יהיה true אם יש מייל נבחר, אחרת false
-          onBackClick={handleBackToInbox}   // הפונקציה לחזרה לרשימה
+          showBackArrow={!!selectedMail}
+          onBackClick={handleBackToInbox}
           onPrevClick={() => setOffset(Math.max(0, offset - 50))}
           onNextClick={() => {if (hasMore) setOffset(offset + 50);}}
           currentPage={currentPage}
@@ -336,17 +320,14 @@ const handleCardClick = (mail) => {
           />
           <main className="inbox-content-area">
            {selectedMail ? (
-              // --- שינוי #2: בצע את התרגום כאן, ישירות לפני העברה ---
               (() => {
-                // לוקחים את מערך ה-ID-ים מהמייל שנבחר
                 const labelIds = selectedMail.labels || [];
-                // מתרגמים אותו למערך של שמות
                 const labelNames = labelIds.map(id => {
                   const foundLabel = allLabels.find(l => l.id === id);
                   return foundLabel ? foundLabel.name : null;
                 }).filter(Boolean);
                 
-                // יוצרים עותק של המייל עם התוויות המתורגמות
+                // saves the display of the list of mails or the specific mail, dependes on what the user clicked on
                 const mailForView = { ...selectedMail, labels: labelNames };
 
                 return (
@@ -386,20 +367,17 @@ const handleCardClick = (mail) => {
         </div>
       </div>
 
-      {/* מודאל לכתיבת מייל חדש */}
       {isComposing && (
         <ComposeWindow
-    // מעבירים את נתוני הטיוטה (או אובייקט ריק אם זו הודעה חדשה)
          draftData={editingDraft} 
          onClose={() => {
          setIsComposing(false);
-         setEditingDraft(null); // מאפסים את הטיוטה הנבחרת
+         setEditingDraft(null);
     }}
       onDraftSaved={refreshData}
   />
 )}
       
-      {/* מודאל להוספת תווית חדשה */}
       {isAddLabelOpen && (
         <AddLabelWindow 
           onClose={() => setIsAddLabelOpen(false)}
@@ -407,7 +385,6 @@ const handleCardClick = (mail) => {
         />
       )}
 
-      {/* מודאל לעריכת תווית */}
       {editingLabel && (
         <GenericWindow
           title="Edit label"
@@ -427,7 +404,6 @@ const handleCardClick = (mail) => {
         </GenericWindow>
       )}
 
-      {/* מודאל לאישור מחיקה */}
       {deletingLabel && (
         <GenericWindow
           title="Delete label"

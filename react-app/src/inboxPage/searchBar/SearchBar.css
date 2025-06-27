@@ -1,5 +1,5 @@
 .searchbar-wrapper {
-  position: relative; /* חובה כדי שהחלונית הקופצת תישאר מתחת */
+  position: relative;
   width: 100%;
   max-width: 720px;
 }
@@ -18,7 +18,7 @@
   background-color: #fff;
   box-shadow: 0 1px 6px rgba(32,33,36,.28);
   border-color: rgba(223,225,229,0);
-  border-radius: 8px 8px 0 0; /* פינות עליונות מעוגלות כשהחלונית פתוחה */
+  border-radius: 8px 8px 0 0;
 }
 
 .search-button, .clear-button {
@@ -106,9 +106,9 @@
 .mail-preview {
   display: flex;
   gap: 10px;
-  cursor: pointer; /* הופך את סמן העכבר ליד */
+  cursor: pointer;
 }
 
 .mail-preview:hover {
-  background-color: #f1f3f4; /* אפקט hover */
+  background-color: #f1f3f4;
 }

@@ -70,7 +70,7 @@ exports.updateLabel = (req, res) => {
 
   try {
     const updatedLabel = Labels.updateLabel(user, labelId, name);
-    res.status(200).json(updatedLabel); // אפשר גם 204 ללא תוכן אם לא מחזירים את התווית
+    res.status(200).json(updatedLabel);
   } catch (err) {
     if (err.message === "INVALID_NAME") {
       // 400 Bad Request if the name already exists for this user
