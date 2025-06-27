@@ -80,8 +80,6 @@ environment:
  SERVER_PORT: 8080
 ```
 
-
-
 ## Screenshots
 
 ### Project Management - JIRA Board
@@ -89,7 +87,35 @@ environment:
 
 
 ### Application Run Example
-The following screenshot demonstrates user creation and retrieval using curl:
-![Application Run](https://github.com/eden05221/gmail_project/blob/main/images/create%20and%20get%20user.png)
+The following screenshot demonstrates user registration and login to Gmail, and actions that the user can perform:
+Registration:
+![The user registers for Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/1.png)
+![The user registers for Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/2.png)
+![The user registers for Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/3.png)
+
+Login:
+![The user logs in to Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/4.png)
+![The user logs in to Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/5.png)
+
+Actions in Gmail:
+Create and send a mail:
+![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/6.png)
+![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/7.png)
+Create a label and add a mail to this label:
+![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/8.png)
+![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/9.png)
+![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/10.png)
+![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/11.png)
+
+
+
+
+
+
+
+
+
+
+
 
 
