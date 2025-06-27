@@ -83,7 +83,7 @@ environment:
 ## Screenshots
 
 ### Project Management - JIRA Board
-![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/jira.png)
+![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/part4/jira.png)
 
 
 ### Application Run Example
