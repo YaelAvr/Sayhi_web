@@ -10,15 +10,13 @@ import MailCard from "./MailCard/MailCard";
 import MailDetailView from "./mailDetailView/MailDetailView";
 import { getUserIdFromToken } from "../utils/utils";
 import Toolbar from "./Toolbar/Toolbar";
-import LabelPopup from './LabelPopup/LabelPopup';
+import LabelPopup from "./LabelPopup/LabelPopup";
 
 const InboxPage = () => {
-  // States קיימים
   const [isComposing, setIsComposing] = useState(false);
   const navigate = useNavigate();
   const [defaultLabels, setDefaultLabels] = useState([]);
   const [customLabels, setCustomLabels] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
   const [isAddLabelOpen, setIsAddLabelOpen] = useState(false);
   const [editingLabel, setEditingLabel] = useState(null);
   const [deletingLabel, setDeletingLabel] = useState(null);
@@ -37,24 +35,24 @@ const InboxPage = () => {
   const [hasMore, setHasMore] = useState(true);
   // Start by showing mails from the "Inbox" label by default
   const currentPage = offset === 0 ? 1 : Math.floor(offset / 50) + 1;
-    const [showLabelPopup, setShowLabelPopup] = useState(false);
+  const [showLabelPopup, setShowLabelPopup] = useState(false);
   const [labelPopupMailId, setLabelPopupMailId] = useState(null);
-   // state for the search bar
+  // state for the search bar
   const [searchResults, setSearchResults] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
 
-//refresh the labels
+  //refresh the labels
   const fetchAndFilterLabels = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
       return;
     }
 
     try {
-      const response = await fetch('/api/labels', {
-        headers: { 'Authorization': `Bearer ${token}` },
+      const response = await fetch("/api/labels", {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!response.ok) {
@@ -85,9 +83,9 @@ const InboxPage = () => {
       console.error("Error fetching labels:", error);
     }
   };
-  
+
   //delete specific label
-   const handleDeleteLabel = async () => {
+  const handleDeleteLabel = async () => {
     setModalError("");
     const token = localStorage.getItem("token");
     try {
@@ -154,7 +152,6 @@ const InboxPage = () => {
     fetchAndFilterLabels();
   }, []);
 
-
   //refresh the mails
   const fetchMails = async () => {
     const token = localStorage.getItem("token");
@@ -185,7 +182,6 @@ const InboxPage = () => {
     fetchMails();
   }, [offset, currentLabel]);
 
-
   //handle change in the name of label
   const handleUpdateLabel = async () => {
     setModalError("");
@@ -212,8 +208,8 @@ const InboxPage = () => {
     }
   };
 
-    //close the window of edit or delete label
-    const closeModal = () => {
+  //close the window of edit or delete label
+  const closeModal = () => {
     setEditingLabel(null);
     setDeletingLabel(null);
     setModalError("");
@@ -225,40 +221,39 @@ const InboxPage = () => {
     navigate("/login");
   };
 
-   // handle clicking on a specific mail and handles the case where the mail is a draft or a sent mail
-const handleCardClick = (mail) => {
-  const allLabels = [...defaultLabels, ...customLabels];
-  
-  const draftsLabel = allLabels.find(label => label.name === 'Drafts');
-  
-  if (!draftsLabel) {
-    setSelectedMail(mail);
-    return;
-  }
-  
-  const draftsLabelId = draftsLabel.id;
+  // handle clicking on a specific mail and handles the case where the mail is a draft or a sent mail
+  const handleCardClick = (mail) => {
+    const allLabels = [...defaultLabels, ...customLabels];
+    const draftsLabel = allLabels.find((label) => label.name === "Drafts");
 
-  if (mail.labels && mail.labels.includes(draftsLabelId)) {
-    // if it is a draft
-    setEditingDraft(mail);
-    setIsComposing(true);
-  } else {
-    //if it a sent mail
-    setSelectedMail(mail);
-  }
-};
+    if (!draftsLabel) {
+      setSelectedMail(mail);
+      return;
+    }
+
+    const draftsLabelId = draftsLabel.id;
+
+    if (mail.labels && mail.labels.includes(draftsLabelId)) {
+      // if it is a draft
+      setEditingDraft(mail);
+      setIsComposing(true);
+    } else {
+      //if it a sent mail
+      setSelectedMail(mail);
+    }
+  };
 
   //function that take us back to the list of emails associated with that label
   const handleBackToInbox = () => {
     setSelectedMail(null);
   };
 
-   //handle clicking on a star
+  //handle clicking on a star
   const handleToggleStar = async (mailId, currentlyStarred) => {
     try {
       const token = localStorage.getItem("token");
       const endpoint = currentlyStarred ? "/remove-label" : "/add-label";
-      const labelName = "starred";
+      const labelName = "Starred";
 
       const res = await fetch(`/api/mails/${mailId}${endpoint}`, {
         method: "POST",
@@ -279,89 +274,85 @@ const handleCardClick = (mail) => {
       console.error("Error toggle star:", err);
     }
 
-    setMails(prevMails => 
-      prevMails.map(mail => 
+    setMails((prevMails) =>
+      prevMails.map((mail) =>
         mail.id === mailId ? { ...mail, isStarred: !currentlyStarred } : mail
       )
     );
   };
 
   const handleDeleteMail = async (mailId) => {
-  try {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    const res = await fetch(`/api/mails/${mailId}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      const res = await fetch(`/api/mails/${mailId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (!res.ok) {
-      console.error("Failed to delete mail", await res.json());
-      return;
+      if (!res.ok) {
+        console.error("Failed to delete mail", await res.json());
+        return;
+      }
+
+      setMails((prevMails) => prevMails.filter((mail) => mail.id !== mailId));
+    } catch (err) {
+      console.error("Error deleting mail:", err);
     }
+  };
 
-    // עדכון רשימת המיילים – מסיר את המייל מהרשימה הנוכחית
-    setMails(prevMails => prevMails.filter(mail => mail.id !== mailId));
+  const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
+    try {
+      const token = localStorage.getItem("token");
+      const endpoint = isCurrentlyInLabel ? "/remove-label" : "/add-label";
+      const allLabels = [...defaultLabels, ...customLabels];
 
-  } catch (err) {
-    console.error("Error deleting mail:", err);
-  }
-};
+      const res = await fetch(`/api/mails/${mailId}${endpoint}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ labelName }),
+      });
 
-const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
-  try {
-    const token = localStorage.getItem("token");
-    const endpoint = isCurrentlyInLabel ? "/remove-label" : "/add-label";
-    const allLabels = [...defaultLabels, ...customLabels];
+      if (!res.ok) {
+        console.error(`Failed to ${endpoint}:`, await res.json());
+      }
 
-    const res = await fetch(`/api/mails/${mailId}${endpoint}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ labelName }) // השרת מקבל שם
-    });
+      const updatedLabelId = allLabels.find((l) => l.name === labelName)?.id;
+      if (!updatedLabelId) return;
 
-    if (!res.ok) {
-      console.error(`Failed to ${endpoint}:`, await res.json());
+      setMails((prevMails) =>
+        prevMails.map((mail) =>
+          mail.id === mailId
+            ? {
+                ...mail,
+                labels: isCurrentlyInLabel
+                  ? mail.labels.filter((id) => id !== updatedLabelId)
+                  : [...mail.labels, updatedLabelId],
+              }
+            : mail
+        )
+      );
+    } catch (err) {
+      console.error("Toggle label error:", err);
     }
-
-    // עידכון הסטייט לפי השם → צריך לתרגם לשמירה של id
-    const updatedLabelId = allLabels.find(l => l.name === labelName)?.id;
-    if (!updatedLabelId) return;
-
-    setMails(prevMails =>
-      prevMails.map(mail =>
-        mail.id === mailId
-          ? {
-              ...mail,
-              labels: isCurrentlyInLabel
-                ? mail.labels.filter(id => id !== updatedLabelId)
-                : [...mail.labels, updatedLabelId]
-            }
-          : mail
-      )
-    );
-
-  } catch (err) {
-    console.error("Toggle label error:", err);
-  }
-};
+  };
 
   //function to refresh mails and labels
   const refreshData = async () => {
-  console.log("Refreshing all data...");
-  await fetchAndFilterLabels();
-  await fetchMails();
+    console.log("Refreshing all data...");
+    await fetchAndFilterLabels();
+    await fetchMails();
   };
 
   //function to handle the functionallity of search bar
   const handleFullSearch = async (query) => {
     const trimmedQuery = query.trim();
-    if (trimmedQuery === '') {
+    if (trimmedQuery === "") {
       setSearchResults(null);
       setSearchError(null);
       return;
@@ -369,9 +360,14 @@ const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
     setIsSearching(true);
     setSearchError(null);
     setSelectedMail(null);
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     try {
-      const response = await fetch(`/api/mails/search/${encodeURIComponent(trimmedQuery)}`, { headers: { 'Authorization': `Bearer ${token}` } });
+      const response = await fetch(
+        `/api/mails/search/${encodeURIComponent(trimmedQuery)}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || `Search failed`);
@@ -387,44 +383,47 @@ const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
     }
   };
 
-
-    useEffect(() => {
+  useEffect(() => {
     if (searchResults === null) {
       fetchMails();
     }
   }, [offset, currentLabel, searchResults]);
-
 
   const allLabels = [...defaultLabels, ...customLabels];
 
   const isSearchActive = searchResults !== null;
   const mailsToDisplay = isSearchActive ? searchResults : mails;
 
-
-
   return (
     <>
-      <div className={`inbox-page-layout ${isDarkMode ? "dark-app" : "light-app"}`} // change background color based on dark mode
+      {/* change background color based on dark mode */}
+      <div
+        className={`inbox-page-layout ${isDarkMode ? "dark-app" : "light-app"}`}
       >
-                 <TopBar onLogout={handleLogout} onFullSearch={handleFullSearch} onPreviewItemClick={handleCardClick} isDarkMode={isDarkMode}
-          toggleDarkMode={toggleDarkMode} />
+        <TopBar
+          onLogout={handleLogout}
+          onFullSearch={handleFullSearch}
+          onPreviewItemClick={handleCardClick}
+          isDarkMode={isDarkMode}
+          toggleDarkMode={toggleDarkMode}
+        />
         <div className="inbox-main-content">
           <SideBar
             onComposeClick={() => setIsComposing(true)}
             defaultLabels={defaultLabels}
             customLabels={customLabels}
             onAddLabelClick={() => setIsAddLabelOpen(true)}
-             onOpenEditLabel={(label) => { 
-              setEditingLabel(label); 
-              setNewLabelName(label.name); 
-                }}
-              onOpenDeleteLabel={(label) => setDeletingLabel(label)}
-             onLabelSelect={(labelName) => {
-                setCurrentLabel(labelName); // Update the label that was clicked
-                setOffset(0); // Always reset pagination when label changes
-                setSelectedMail(null);   
-                setSearchResults(null); 
-                setSearchError(null);
+            onOpenEditLabel={(label) => {
+              setEditingLabel(label);
+              setNewLabelName(label.name);
+            }}
+            onOpenDeleteLabel={(label) => setDeletingLabel(label)}
+            onLabelSelect={(labelName) => {
+              setCurrentLabel(labelName); // Update the label that was clicked
+              setOffset(0); // Always reset pagination when label changes
+              setSelectedMail(null);
+              setSearchResults(null);
+              setSearchError(null);
             }}
             currentLabelName={currentLabel}
           />
@@ -433,23 +432,26 @@ const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
               isDarkMode ? "dark-main-contant" : "light-main-contant"
             }`}
           >
-            <Toolbar 
-          showBackArrow={!!selectedMail}
-          onBackClick={handleBackToInbox}
-          onPrevClick={() => setOffset(Math.max(0, offset - 50))}
-          onNextClick={() => {if (hasMore) setOffset(offset + 50);}}
-          currentPage={currentPage}
-          paginationDisabled={isSearchActive}
-        />
+            <Toolbar
+              showBackArrow={!!selectedMail}
+              onBackClick={handleBackToInbox}
+              onPrevClick={() => setOffset(Math.max(0, offset - 50))}
+              onNextClick={() => {
+                if (hasMore) setOffset(offset + 50);
+              }}
+              currentPage={currentPage}
+              paginationDisabled={isSearchActive}
+            />
             {selectedMail ? (
-              // --- שינוי #2: בצע את התרגום כאן, ישירות לפני העברה ---
               (() => {
                 const labelIds = selectedMail.labels || [];
-                const labelNames = labelIds.map(id => {
-                  const foundLabel = allLabels.find(l => l.id === id);
-                  return foundLabel ? foundLabel.name : null;
-                }).filter(Boolean);
-                
+                const labelNames = labelIds
+                  .map((id) => {
+                    const foundLabel = allLabels.find((l) => l.id === id);
+                    return foundLabel ? foundLabel.name : null;
+                  })
+                  .filter(Boolean);
+
                 // saves the display of the list of mails or the specific mail, dependes on what the user clicked on
                 const mailForView = { ...selectedMail, labels: labelNames };
 
@@ -462,49 +464,51 @@ const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
                 );
               })()
             ) : isSearching ? (
-    <div className="empty-message">Searching...</div>
-  ) : searchError ? (
-    <div className="error-message">Error: {searchError}</div>
-  ) : mails.length === 0 ? (
-    <div className="empty-message">
-      {isSearchActive ? "No mails found matching your search." : "No mails to show."}
-    </div>
-  ) : (
-    <div className="mail-list">
-      {mailsToDisplay.map(mail => (
-        <MailCard
-          key={mail.id}
-          sender={mail.fromName}
-          subject={mail.subject}
-          body={mail.body}
-          date={mail.time}
-          isStarred={mail.isStarred}
-          onClick={() => handleCardClick(mail)}
-          onStar={() => handleToggleStar(mail.id, mail.isStarred)}
-          onDelete={() => handleDeleteMail(mail.id)}
-          onLabel={() => {
-                        setLabelPopupMailId(mail.id); 
-                        setShowLabelPopup(true);
-              }}
-        />
-      ))}
-    </div>
-  )}
-</main>
+              <div className="empty-message">Searching...</div>
+            ) : searchError ? (
+              <div className="error-message">Error: {searchError}</div>
+            ) : mails.length === 0 ? (
+              <div className="empty-message">
+                {isSearchActive
+                  ? "No mails found matching your search."
+                  : "No mails to show."}
+              </div>
+            ) : (
+              <div className="mail-list">
+                {mailsToDisplay.map((mail) => (
+                  <MailCard
+                    key={mail.id}
+                    sender={mail.fromName}
+                    subject={mail.subject}
+                    body={mail.body}
+                    date={mail.time}
+                    isStarred={mail.isStarred}
+                    onClick={() => handleCardClick(mail)}
+                    onStar={() => handleToggleStar(mail.id, mail.isStarred)}
+                    onDelete={() => handleDeleteMail(mail.id)}
+                    onLabel={() => {
+                      setLabelPopupMailId(mail.id);
+                      setShowLabelPopup(true);
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+          </main>
         </div>
       </div>
 
       {isComposing && (
         <ComposeWindow
-         draftData={editingDraft} 
-         onClose={() => {
-         setIsComposing(false);
-         setEditingDraft(null);
-    }}
-      onDraftSaved={refreshData}
-  />
-)}
-      
+          draftData={editingDraft}
+          onClose={() => {
+            setIsComposing(false);
+            setEditingDraft(null);
+          }}
+          onDraftSaved={refreshData}
+        />
+      )}
+
       {isAddLabelOpen && (
         <AddLabelWindow
           onClose={() => setIsAddLabelOpen(false)}
@@ -547,21 +551,23 @@ const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
         </GenericWindow>
       )}
 
-      {showLabelPopup && labelPopupMailId && (() => {
-        const mailForPopup = mails.find(m => m.id === labelPopupMailId);
-        return (
-          <LabelPopup
-            key={labelPopupMailId + (mailForPopup?.labels?.join(',') || '')} 
-            mail={mailForPopup}
-            allLabels={[...defaultLabels, ...customLabels]}
-            onToggleLabel={handleToggleLabel}
-            onClose={() => {
-              setShowLabelPopup(false);
-              setLabelPopupMailId(null);
-            }}
-          />
-        );
-      })()}
+      {showLabelPopup &&
+        labelPopupMailId &&
+        (() => {
+          const mailForPopup = mails.find((m) => m.id === labelPopupMailId);
+          return (
+            <LabelPopup
+              key={labelPopupMailId + (mailForPopup?.labels?.join(",") || "")}
+              mail={mailForPopup}
+              allLabels={[...defaultLabels, ...customLabels]}
+              onToggleLabel={handleToggleLabel}
+              onClose={() => {
+                setShowLabelPopup(false);
+                setLabelPopupMailId(null);
+              }}
+            />
+          );
+        })()}
     </>
   );
 };

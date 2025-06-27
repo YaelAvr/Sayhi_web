@@ -1,7 +1,7 @@
 import React from "react";
 import "./Logo.css";
 
-const Logo = ({ containerClass, LogoClass }) => {
+const Logo = ({ containerClass }) => {
   return (
     <div className={`logo-container ${containerClass}`}>
       <svg
@@ -11,7 +11,6 @@ const Logo = ({ containerClass, LogoClass }) => {
         fill="none"
         alt="Gmail logo"
         id="gmail-icon"
-        // className={`logo-container ${containerClass}`}
       >
         <g id="LogoGroup">
           <g id="IconGroup" transform="translate(3, 3)">

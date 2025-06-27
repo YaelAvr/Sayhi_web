@@ -55,7 +55,6 @@ function SideBar({
             key={label.id}
             label={label}
             selected={currentLabelName === label.name}
-            // iconSrc={customLabelIcon} 
             iconSrc={ <Custom className="label-icon" alt="Custom icon" />} 
 
             // highlight this label and inform parent to load mails of this label
