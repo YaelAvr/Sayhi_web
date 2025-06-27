@@ -315,7 +315,6 @@ const InboxPage = () => {
 
     if (!updatedLabelId || !inboxLabelId || !spamLabelId) return;
 
-    // קריאה ראשית להוספה או הסרה של הלייבל שנלחץ
     await fetch(`/api/mails/${mailId}${endpoint}`, {
       method: "POST",
       headers: {
@@ -325,10 +324,8 @@ const InboxPage = () => {
       body: JSON.stringify({ labelName })
     });
 
-    // אם מדובר בלייבל ספאם, צריך לטפל גם באינבוקס בהתאם
     if (updatedLabelId === spamLabelId) {
       if (isCurrentlyInLabel) {
-        // מסירים ספאם → מוסיפים אינבוקס בכפייה
         await fetch(`/api/mails/${mailId}/force-add-label`, {
           method: "POST",
           headers: {
@@ -338,7 +335,6 @@ const InboxPage = () => {
           body: JSON.stringify({ labelName: "Inbox" })
         });
       } else {
-        // מוסיפים ספאם → מסירים אינבוקס
         await fetch(`/api/mails/${mailId}/remove-label`, {
           method: "POST",
           headers: {
@@ -350,7 +346,6 @@ const InboxPage = () => {
       }
     }
 
-    // עידכון סטייט מקומי בפרונט
     setMails(prevMails =>
       prevMails.map(mail => {
         if (mail.id !== mailId) return mail;

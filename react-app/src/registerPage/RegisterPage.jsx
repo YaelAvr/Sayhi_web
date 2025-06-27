@@ -9,7 +9,7 @@ import CreateDisplayName from "./createDisplayName/CreateDisplayName";
 import CreateGenderAndBirthday from "./createGenderAndBirthday/CreateGenderAndBirthday";
 
 const RegisterPage = () => {
-  // initializing user registretion states
+  // initializing user registration states
   const [userData, setUserData] = useState({
     displayName: "",
     birthday: "",

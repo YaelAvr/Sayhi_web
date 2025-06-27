@@ -6,6 +6,7 @@
   border-bottom: 1px solid #ddd;
 }
 
+/* Toolbar section: center-aligned buttons */
 .toolbar {
   display: flex;
   justify-content: center;
@@ -21,7 +22,7 @@
   cursor: pointer;
 }
 
-/* Page number display (e.g., "1 of 10") */
+/* Page number display */
 .page-number {
   margin: 0 10px;
   font-size: 16px;
