@@ -5,8 +5,6 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* display: flex;
-  border-radius: 3em; */
   background-color: white;
   flex-direction: column;
   justify-content: space-around;
@@ -24,7 +22,6 @@
 #user-form-container {
   width: 94%;
   height: 80%;
-  /* position: absolute; */
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -45,8 +42,6 @@
   justify-content: flex-start;
   align-items: flex-start;
   font-family: "RedHatText";
-
-  /* padding-left: 5%; */
 }
 .form-text {
   margin-block: 0.2em;
@@ -59,7 +54,6 @@
 .form-text-cont h1 {
   font-weight: 500;
   font-size: 2.5rem;
-  /* font-size: 100%; */
   width: 100%;
 }
 
@@ -102,7 +96,6 @@
 .form-btns-div {
   height: fit-content;
   justify-content: space-between;
-  /* margin-top: 1em; */
 }
 
 .form-btn {
@@ -118,11 +111,18 @@
 
 #changing-btn {
   color: #0b57d0;
-  background-color: white;
+  background-color: transparent;
+}
+
+#changing-btn:hover {
+  background-color: rgba(26, 115, 232, 0.08);
 }
 #next-btn {
   background-color: #0b57d0;
   color: white;
+}
+#next-btn:hover {
+  background-color: #0845a8;
 }
 
 .invalid-txt {
@@ -151,6 +151,6 @@
 }
 
 .form-pic {
-  border-radius: 50%; /* עיגול */
+  border-radius: 50%;
   object-fit: cover;
 }

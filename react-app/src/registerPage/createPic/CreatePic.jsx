@@ -10,6 +10,8 @@ const CreatePic = (props) => {
   });
   const [errorText, setError] = useState(null);
 
+  // Function to handle the image change input.
+  // It updates the picture state with the new file and its URL.
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -32,7 +34,7 @@ const CreatePic = (props) => {
       );
     }
   };
-
+  // Function to handle the image upload.
   const handleImageUpload = async (e) => {
     e.preventDefault();
 
@@ -47,6 +49,7 @@ const CreatePic = (props) => {
 
       const data = await res.json();
       if (res.ok) {
+      // Update the user data with the new pricture URL and its preview
         props.setUserData("preview", picture.url);
         props.setUserData("picture", data.tempImageUrl);
         setPicture({ name: "", img: null, url: null });

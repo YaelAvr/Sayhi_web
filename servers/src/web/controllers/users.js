@@ -191,7 +191,6 @@ function formatDateWithMonthName(day, month, year) {
     "November",
     "December"
   ];
-  // const dd = String(day).padStart(2, '0');
 
   const mm = monthNames[month - 1];
   return `${day} ${mm} ${year}`;
@@ -225,9 +224,6 @@ function isDateValid(day, month, year) {
   return true;
 }
 
-// const isImageMimeType = (mime) => {
-//   return ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"].includes(mime);
-// };
 exports.validatePicture = (req, res) => {
   const file = req.file;
 

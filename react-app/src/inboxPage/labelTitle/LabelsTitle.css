@@ -6,7 +6,6 @@
   padding: 0 4px;
 }
 
-
 .title-text {
   font-size: 17px;
 }
@@ -28,15 +27,14 @@
 }
 
 .dark-app .add-button {
-  /* background-color: #3c4043; צבע רקע כהה */
-  color: white; /* צבע טקסט בהיר */
+  color: white; 
 }
 .dark-app .add-button:hover {
-  background-color: #5f6368; /* רקע כהה יותר בעת ריחוף */
+  background-color: #5f6368; 
 }
 
 .error-message {
-  color: #d93025; /* אדום כמו של גוגל */
+  color: #d93025; 
   font-size: 0.8rem;
   margin-top: 8px;
   text-align: left;

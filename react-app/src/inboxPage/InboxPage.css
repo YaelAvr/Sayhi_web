@@ -1,22 +1,18 @@
 .inbox-page-layout {
   display: flex;
-  flex-direction: column; /* מסדר את TopBar מעל שאר התוכן */
-  height: 100vh; /* גובה מלא של המסך */
-  overflow: hidden; /* מונע גלילה מיותרת של כל הדף */
+  flex-direction: column; 
+  height: 100vh; 
+  overflow: hidden;
 }
 
-/* המיכל שמחזיק את הסרגל הצידי ואת התוכן המרכזי */
 .inbox-main-content {
   display: flex;
-  flex: 1; /* גורם לחלק הזה למלא את כל הגובה הפנוי */
-  /* text-align: center; */
+  flex: 1; 
 }
 
 .inbox-content-area {
   flex: 1;
-  /* padding: 0 16px; */
   overflow-y: auto;
-  /* height: calc(100vh - 60px - 40px); 60px TopBar + 40px Toolbar */
   width: 93%;
   height: 95%;
   justify-content: flex-start;
@@ -50,8 +46,6 @@
 .dark-app .dark-white-text{
   color: #f1f3f4;
 }
-
-
 
 .dark-main-contant,
 .dark-main-contant .mail-card,

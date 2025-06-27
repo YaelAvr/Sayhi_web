@@ -1,13 +1,9 @@
-//CreateUserName
-
 import React, { useState } from "react";
 import UserForm from "../../userForm/UserForm";
 import Text from "./text.json"
 
-
 const CreateUserName = (props) => {
   const [username, setUsername] = useState("");
-
   const [errorText, setError] = useState(null);
 
   // create a display name for the user using the Web server

@@ -1,9 +1,7 @@
 import FormInputs from "../formInputs/FormInputs";
 import FormSelect from "../formSelect/FormSelect";
-import "./FormDate.css";
 
 const FormDate = ({ bDayConf, data, handleKeyUp }) => {
-
   return (
     <div id="date-div" className="form-flex-row fill-parent-width">
       <FormInputs {...bDayConf[0]} inputs={data[0]} handleKeyUp={handleKeyUp} />

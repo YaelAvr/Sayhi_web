@@ -11,13 +11,9 @@
   background-color: #f5f5f5;
 }
 .dark-app .mail-card:hover {
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2), 0px 0px 5px 0 rgba(0, 0, 0, 0.19); /* background-color: #444444; */
-  /* color: #333; */
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2), 0px 0px 5px 0 rgba(0, 0, 0, 0.19); 
 }
 
-/* .dark-app .mail-card:hover .mail-preview-line {
-  color: #333;
-} */
 .mail-main {
   display: flex;
   align-items: center;
@@ -74,6 +70,7 @@
   cursor: pointer;
 }
 
+/* Google yellow */
 .dark-app .filled-star {
-  fill: #fbbc05; /* Google yellow */
+  fill: #fbbc05; 
 }

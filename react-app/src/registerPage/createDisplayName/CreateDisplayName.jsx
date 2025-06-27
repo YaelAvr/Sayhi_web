@@ -5,10 +5,9 @@ import Text from "./text.json"
 const CreateDisplayName = (props) => {
   const [firstWord, setFirstWord] = useState("");
   const [secondWord, setSecondWord] = useState("");
-
   const [errorText, setError] = useState(null);
 
-
+  // Function to validate the display name that the user entered.
   const validateDisplayName = async (e) => {
     e.preventDefault();
 
@@ -23,6 +22,7 @@ const CreateDisplayName = (props) => {
       setFirstWord("");
       setSecondWord("");
       setError(null);
+      // Update the user data with the new display name
       props.setUserData("displayName", data.displayName);
       props.handleNext();
     } else {

@@ -12,13 +12,13 @@ const CreateGenderAndBirthday = (props) => {
   const [BDErrorText, setBDError] = useState(null);
   const [GErrorText, setGError] = useState(null);
 
+  // Function to validate the Birthday that the user entered.
   const createBirthDay = async () => {
     const monthJson = Text.birthDay.find((item) => item.name === "month");
-    const monthIndex = monthJson ? monthJson.options.indexOf(birthDay.month) : -1;
-
-    // Calculate the month number (1-12). If not found, it will be 0.
+    const monthIndex = monthJson
+      ? monthJson.options.indexOf(birthDay.month)
+      : -1;
     const monthNum = monthIndex !== -1 ? monthIndex + 1 : 0;
-    // const numM = monthJson.options.indexOf(birthDay.month) + 1;
 
     const res = await fetch("/api/users/birthday", {
       method: "POST",
@@ -32,10 +32,9 @@ const CreateGenderAndBirthday = (props) => {
 
     const data = await res.json();
     if (res.ok) {
-      //   setBirthDay({ day: "", month: "", year: "" });
       setBDError(null);
+      // Update the user data with the new birthday
       props.setUserData("birthday", data.birthday);
-      //   props.handleNext();
       return true;
     } else {
       setBDError(data.error);
@@ -43,8 +42,8 @@ const CreateGenderAndBirthday = (props) => {
     }
   };
 
+  // Function to validate the Gender that the user entered.
   const createGender = async () => {
-    // console.log("gender: " + gender);
     const res = await fetch("/api/users/gender", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -52,31 +51,26 @@ const CreateGenderAndBirthday = (props) => {
     });
     const data = await res.json();
     if (res.ok) {
+      // Update the user data with the new gender name
       props.setUserData("gender", data.gender);
       setGError(null);
       return true;
-      //   return 200;
     } else {
       setGError(data.error);
       return false;
     }
-    // return res.status;
   };
 
   const handleGenderAgeSub = async (e) => {
     e.preventDefault();
     const bdStatuse = await createBirthDay();
-      const genderStatuse = await createGender();
+    const genderStatuse = await createGender();
 
+    // move to the next page only if both requests were successful
     if (bdStatuse && genderStatuse) {
-      //if the date was valid, continu to check gender
-
-      // if (genderStatuse) {
-        setBirthDay({ day: "", month: "", year: "" });
-        setGender("");
-        // console.log("birthday: " + birthDay.date + " gender " + gender);
-        props.handleNext();
-      // }
+      setBirthDay({ day: "", month: "", year: "" });
+      setGender("");
+      props.handleNext();
     }
   };
 

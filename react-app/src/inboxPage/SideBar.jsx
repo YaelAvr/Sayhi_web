@@ -10,15 +10,6 @@ import { ReactComponent as Drafts } from './labelButton/icons/drafts.svg';
 import { ReactComponent as Spam } from './labelButton/icons/spam.svg';
 import { ReactComponent as Custom } from './labelButton/icons/customLabel.svg';
 
-
-
-// import inboxIcon from './labelButton/icons/inbox.svg';
-// import starredIcon from './labelButton/icons/starred.svg';
-// import sentIcon from './labelButton/icons/sent.svg';
-// import draftsIcon from './labelButton/icons/drafts.svg';
-// import spamIcon from './labelButton/icons/spam.svg';
-// import customLabelIcon from './labelButton/icons/customLabel.svg'; 
-
 const iconMap = {
   'Inbox': <Inbox className="label-icon " alt="Inbox icon" />,
   'Starred': <Starred className="label-icon" alt="Starred icon" />,

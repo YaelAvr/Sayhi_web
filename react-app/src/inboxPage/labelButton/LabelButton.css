@@ -1,10 +1,9 @@
-/* LabelButton.css */
 .LabelButton {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* דוחף את הנקודות לקצה */
+  justify-content: space-between;
   width: 100%;
-  border-radius: 999px; /* פינות עגולות מאוד */
+  border-radius: 999px;
   margin-bottom: 2px;
   transition: background-color 0.15s ease-in-out;
 }
@@ -13,9 +12,9 @@
 }
 
 .dark-app .label-icon {
-  fill: white; /* צבע אייקון בהיר במצב כהה */
+  fill: white;
 }
-/* אפקט במעבר עכבר או כשהתווית נבחרה */
+
 .LabelButton:hover {
   background-color: #f1f3f4;
 }
@@ -36,10 +35,10 @@
 }
 
 .label-main-btn {
-  flex-grow: 1; /* יתפוס את כל המקום הפנוי */
+  flex-grow: 1;
   display: flex;
   align-items: center;
-  gap: 16px; /* רווח בין האייקון לטקסט */
+  gap: 16px;
   padding: 6px 16px;
   background: transparent;
   border: none;
@@ -55,14 +54,12 @@
 
 .label-name {
   font-size: 0.9rem;
-  color: #3c4043; /* צבע טקסט כהה */
+  color: #3c4043;
 }
 
 .dark-app .label-name {
-  color: #e8eaed; /* צבע טקסט בהיר במצב כהה */
+  color: #e8eaed;
 }
-
-/* --- עיצוב תפריט 3 הנקודות --- */
 
 .label-actions {
   position: relative;

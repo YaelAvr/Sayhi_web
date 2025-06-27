@@ -30,28 +30,6 @@ const InboxPage = () => {
   const [modalError, setModalError] = useState("");
 
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const toggleDarkMode = async () => {
-    const token = localStorage.getItem("token");
-    const userId = getUserIdFromToken();
-
-    try {
-      // שימוש בנתיב יחסי בזכות ה-proxy
-      const response = await fetch(`/api/users/darkMode/${userId}`, {
-        method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch dark mode setting");
-      }
-      const data = await response.json();
-      setIsDarkMode(data.isDarkMode);
-    } catch (error) {
-      console.error("Error fetching labels:", error);
-    }
-
-    // setIsDarkMode((prev) => !prev);
-  };
 
   //state for displaying the last 50 mails
   const [offset, setOffset] = useState(0);
@@ -145,12 +123,12 @@ const InboxPage = () => {
     }
   };
 
+  // Function to get the user theam statuse from the server
   const initDarkMode = async () => {
     const token = localStorage.getItem("token");
     const userId = getUserIdFromToken();
 
     try {
-      // שימוש בנתיב יחסי בזכות ה-proxy
       const response = await fetch(`/api/users/darkMode/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -164,6 +142,28 @@ const InboxPage = () => {
       console.error("Error fetching methode:", error);
     }
   };
+
+  // Function to toggle dark mode
+  const toggleDarkMode = async () => {
+    const token = localStorage.getItem("token");
+    const userId = getUserIdFromToken();
+
+    try {
+      const response = await fetch(`/api/users/darkMode/${userId}`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch dark mode setting");
+      }
+      const data = await response.json();
+      setIsDarkMode(data.isDarkMode);
+    } catch (error) {
+      console.error("Error fetching labels:", error);
+    }
+  };
+
   // איפוס האופסט בכל שינוי תווית עדן
   useEffect(() => {
     initDarkMode();
@@ -389,7 +389,7 @@ const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
   return (
     <>
       <div
-        className={`inbox-page-layout ${isDarkMode ? "dark-app" : "light-app"}`}
+        className={`inbox-page-layout ${isDarkMode ? "dark-app" : "light-app"}`} // change background color based on dark mode
       >
         <TopBar
           onLogout={handleLogout}

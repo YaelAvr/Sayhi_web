@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import "./FormImage.css";
 
 const FormImage = ({ inputClass, src, fileName, setVal, data }) => {

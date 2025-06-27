@@ -1,6 +1,6 @@
 import React from "react";
 import "./UserForm.css";
-import { useState, useRef, memo } from "react";
+import { memo } from "react";
 import Logo from "../gmailLogo/Logo";
 import FormInputs from "./formInputs/FormInputs";
 import FormDate from "./formDate/FormDate";
@@ -35,7 +35,6 @@ function UserForm({
           <h1 className="form-text">
             {data.title} {displayName && displayName}
           </h1>
-          {/* <p>{!username ? data.text : `${username}@sayhi.com`}</p> */}
           <p className="form-text">{`${!username ? "" : username}${
             data.text
           }`}</p>
@@ -106,6 +105,7 @@ function UserForm({
               ))}
           </div>
 
+          {/* buttons section */}
           <div className="form-btns-div fill-parent-width form-flex-row ">
             <button
               type="button"

@@ -1,4 +1,4 @@
-import { useState, useRef, memo } from "react";
+import { useState, memo } from "react";
 
 import { ReactComponent as Help } from "../icons/help.svg";
 import FormInputs from "../formInputs/FormInputs";
@@ -16,7 +16,6 @@ const InputWithIcon = ({
 
   return (
     <div className="input-icon-cont form-flex-row fill-parent-width">
-      {/* <div id={inputs.waterMark && "input-wrapper"}> */}
       <div id="input-wrapper">
 
         <FormInputs
