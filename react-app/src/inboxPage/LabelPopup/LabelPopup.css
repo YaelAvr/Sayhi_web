@@ -1,0 +1,50 @@
+/* Fullscreen overlay for the popup */
+.label-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* semi-transparent background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+/* The popup container */
+.label-popup {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+}
+
+/* Label list */
+.label-popup ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+
+/* Each label item */
+.label-popup li {
+  margin-bottom: 8px;
+}
+
+/* Close button */
+.label-popup button {
+  padding: 6px 12px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.label-popup button:hover {
+  background-color: #0056b3;
+}
