@@ -268,34 +268,68 @@ const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
     const endpoint = isCurrentlyInLabel ? "/remove-label" : "/add-label";
     const allLabels = [...defaultLabels, ...customLabels];
 
-    const res = await fetch(`/api/mails/${mailId}${endpoint}`, {
+    const updatedLabelId = allLabels.find(l => l.name === labelName)?.id;
+    const inboxLabelId = allLabels.find(l => l.name === "Inbox")?.id;
+    const spamLabelId = allLabels.find(l => l.name === "Spam")?.id;
+
+    if (!updatedLabelId || !inboxLabelId || !spamLabelId) return;
+
+    // קריאה ראשית להוספה או הסרה של הלייבל שנלחץ
+    await fetch(`/api/mails/${mailId}${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ labelName }) // השרת מקבל שם
+      body: JSON.stringify({ labelName })
     });
 
-    if (!res.ok) {
-      console.error(`Failed to ${endpoint}:`, await res.json());
+    // אם מדובר בלייבל ספאם, צריך לטפל גם באינבוקס בהתאם
+    if (updatedLabelId === spamLabelId) {
+      if (isCurrentlyInLabel) {
+        // מסירים ספאם → מוסיפים אינבוקס בכפייה
+        await fetch(`/api/mails/${mailId}/force-add-label`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ labelName: "Inbox" })
+        });
+      } else {
+        // מוסיפים ספאם → מסירים אינבוקס
+        await fetch(`/api/mails/${mailId}/remove-label`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ labelName: "Inbox" })
+        });
+      }
     }
 
-    // עידכון הסטייט לפי השם → צריך לתרגם לשמירה של id
-    const updatedLabelId = allLabels.find(l => l.name === labelName)?.id;
-    if (!updatedLabelId) return;
-
+    // עידכון סטייט מקומי בפרונט
     setMails(prevMails =>
-      prevMails.map(mail =>
-        mail.id === mailId
-          ? {
-              ...mail,
-              labels: isCurrentlyInLabel
-                ? mail.labels.filter(id => id !== updatedLabelId)
-                : [...mail.labels, updatedLabelId]
-            }
-          : mail
-      )
+      prevMails.map(mail => {
+        if (mail.id !== mailId) return mail;
+
+        let updatedLabels = new Set(mail.labels);
+
+        if (isCurrentlyInLabel) {
+          updatedLabels.delete(updatedLabelId);
+          if (updatedLabelId === spamLabelId) {
+            updatedLabels.add(inboxLabelId);
+          }
+        } else {
+          updatedLabels.add(updatedLabelId);
+          if (updatedLabelId === spamLabelId) {
+            updatedLabels.delete(inboxLabelId);
+          }
+        }
+
+        return { ...mail, labels: Array.from(updatedLabels) };
+      })
     );
 
   } catch (err) {
