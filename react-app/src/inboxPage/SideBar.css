@@ -18,3 +18,25 @@
   border: none;
   border-top: 1px solid #e0e0e0;
 }
+
+.custom-labels-section {
+  max-height: 250px; 
+  
+  overflow-y: auto; 
+  
+  padding-right: 4px; 
+}
+
+.custom-labels-section::-webkit-scrollbar {
+  width: 9px;
+}
+
+.custom-labels-section::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-labels-section::-webkit-scrollbar-thumb {
+  background-color: #cccccc;
+  border-radius: 10px;
+  border: 2px solid transparent;
+}
