@@ -11,12 +11,14 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick }) => {
   const [showUserDetails, setShowUserDetails] = useState(false);
   const userDetailsRef = useRef(null);
 
+  // State to hold user data (name, email, picture)
   const [userData, setUserData] = useState({
     displayName: "",
     email: "",
     picture: ""
   });
 
+  // Fetch user data from the backend on mount
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -44,6 +46,7 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick }) => {
     fetchUserData();
   }, []);
 
+  // Close the user details popup when clicking outside of it
   const handleOutsideClick = (event) => {
     if (
       userDetailsRef.current &&
@@ -53,6 +56,7 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick }) => {
     }
   };
 
+  // Attach/remove event listener based on popup state
   useEffect(() => {
     if (showUserDetails) {
       document.addEventListener("mousedown", handleOutsideClick);
@@ -65,9 +69,11 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick }) => {
   return (
     <div className="topbar-container">
       <div className="topbar">
+        {/* App logo */}
         <Logo containerClass="topbar-logo-container" />
+        {/* Search bar component */}
         <SearchBar onFullSearch={onFullSearch} onPreviewItemClick={onPreviewItemClick} />
-
+        {/* User profile section */}
         <div className="topbar-profile">
           <img
             className="topbar-profile-pic"
@@ -76,6 +82,7 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick }) => {
             onClick={() => setShowUserDetails((prev) => !prev)}
           />
 
+          {/* User details popup */}
           {showUserDetails && (
             <div ref={userDetailsRef}>
               <UserDetails

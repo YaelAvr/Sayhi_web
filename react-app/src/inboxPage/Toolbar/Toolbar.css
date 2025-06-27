@@ -1,3 +1,4 @@
+/* Container for the toolbar (top bar of Inbox) */
 .toolbar-container {
   display: flex;
   justify-content: flex-end;
@@ -6,6 +7,7 @@
   background-color: #f6f8fc;
 }
 
+/* Styles for toolbar buttons (e.g., delete, next, previous) */
 .toolbar button {
   margin-left: 8px;
   background: none;
@@ -14,6 +16,7 @@
   cursor: pointer;
 }
 
+/* Page number display (e.g., "1 of 10") */
 .page-number {
   margin: 0 10px;
   font-size: 16px;

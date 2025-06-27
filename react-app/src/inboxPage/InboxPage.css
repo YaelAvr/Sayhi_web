@@ -1,3 +1,4 @@
+/* Main layout of the inbox page */
 .inbox-page-layout {
   display: flex;
   flex-direction: column;
@@ -6,11 +7,13 @@
 
 }
 
+/* Horizontal container: sidebar + main content */
 .inbox-main-content {
   display: flex;
   flex: 1;
 }
 
+/* Scrollable mail content area (excluding topbar and toolbar) */
 .inbox-content-area {
   flex: 1;
   padding: 0 16px;
@@ -18,10 +21,12 @@
   height: calc(100vh - 60px - 40px);
 }
 
+/* Header inside inbox content */
 .inbox-content-area h2 {
   margin-top: 0;
 }
 
+/* Toolbar section: center-aligned buttons */
 .toolbar {
   display: flex;
   justify-content: center;
@@ -30,6 +35,7 @@
   background-color: #f1f3f4; 
   border-bottom: 1px solid #ccc;
   
+/* Toolbar buttons */
 }.toolbar button {
   background: none;
   border: none;
@@ -37,6 +43,7 @@
   font-size: 16px;
 }
 
+/* Message shown when no mails are available */
 .empty-message {
   text-align: center;
   font-size: 14px;

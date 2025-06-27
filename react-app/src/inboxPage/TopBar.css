@@ -1,3 +1,4 @@
+/* Main container for the top bar */
 .topbar-container {
   height: 60px;
   background-color: #f1f3f4;
@@ -8,7 +9,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* הקבוצה של הלוגו ושורת החיפוש */
+/* Inner group: logo + search bar */
 .topbar {
   display: flex;
   align-items: center;
@@ -16,6 +17,7 @@
   width: 100%;
 }
 
+/* Profile section aligned to the right */
 .topbar-profile {
   margin-left: auto; 
   display: flex;
@@ -23,6 +25,7 @@
   position: relative;
 }
 
+/* Circular profile picture with hover cursor */
 .topbar-profile-pic {
   width: 36px;
   height: 36px;

@@ -262,7 +262,7 @@ exports.addLabelToMail = async (req, res) => {
     }
 }
 
-
+// Controller to handle removing mail from lable
 exports.removeLabelFromMail = async (req, res) => {
   const userId = req.user.id;
   const mailId = req.params.id;
