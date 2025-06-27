@@ -50,15 +50,17 @@ docker-compose run --rm --build server
 ```
 To run one instance of the webserver, While the previous terminal is open, open another dedicated terminal, and run:
 ```bash
-docker-compose run --rm --build -p 3001:3000 webserver
+docker-compose run --rm --build -p 3000:3000 webserver
 ```
 To launch additional instances, open new terminals and run the same command with different ports:
 ```bash
+docker-compose run --rm --build -p 3001:3000 webserver
 docker-compose run --rm --build -p 3002:3000 webserver
-docker-compose run --rm --build -p 3003:3000 webserver
 ```
 **Note**: The internal port (`3000`) should remain fixed for all instances.  
 Only the external port (`3001`, `3002`, etc.) should be changed when running multiple servers in parallel.
+You should **access the server using the left-side port** in the `-p` flag.  
+For example, if you run: `-p 3001:3000`, you should open the browser at: `http://localhost:3001`.
 
 ### Changing CMD Parameters – Format & Instructions:
   
