@@ -349,6 +349,9 @@ const handleToggleLabel = async (mailId, labelName, isCurrentlyInLabel) => {
 
   const allLabels = [...defaultLabels, ...customLabels];
 
+  const isSearchActive = searchResults !== null;
+  const mailsToDisplay = isSearchActive ? searchResults : mails;
+
 
 
   return (
