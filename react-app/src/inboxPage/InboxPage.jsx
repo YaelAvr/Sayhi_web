@@ -44,7 +44,6 @@ const InboxPage = () => {
         throw new Error("Failed to fetch dark mode setting");
       }
       const data = await response.json();
-
       setIsDarkMode(data.isDarkMode);
     } catch (error) {
       console.error("Error fetching labels:", error);
@@ -155,8 +154,8 @@ const InboxPage = () => {
       if (!response.ok) {
         throw new Error("Failed to fetch dark mode setting");
       }
-
-      setIsDarkMode(await response.json().isDarkMode);
+      const data = await response.json();
+      setIsDarkMode(data.isDarkMode);
     } catch (error) {
       console.error("Error fetching methode:", error);
     }

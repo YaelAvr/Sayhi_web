@@ -7,6 +7,11 @@
   overflow-y: auto; /* Adds scroll if content is too long */
 }
 
+.dark-app.mail-detail-date, .dark-app.sender-email {
+    color: #8b8f95;
+    font-size: 12px;
+}
+
 
 /* Top toolbar with back button and actions */
 .mail-detail-toolbar {

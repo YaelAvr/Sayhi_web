@@ -12,13 +12,13 @@
 }
 .dark-app .mail-card:hover {
   background-color: #9a9b9c;
-  color: #333;
+  /* color: #333; */
 }
 
 
-.dark-app .mail-card:hover .mail-preview-line {
+/* .dark-app .mail-card:hover .mail-preview-line {
   color: #333;
-}
+} */
 .mail-main {
   display: flex;
   align-items: center;

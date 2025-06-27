@@ -28,6 +28,9 @@
   background-color: #7a7d81;
 }
 
+.dark-app .LabelButton:hover {
+  background-color: #9898989e;
+}
 .dark-app .LabelButton.selected:hover {
   background-color: #9a9b9c;
 }
