@@ -1,13 +1,13 @@
-// src/components/TopBar.jsx
-
 import React, { useState, useRef, useEffect } from "react";
-import Logo from '../gmailLogo/Logo';
-import SearchBar from './searchBar/SearchBar';
-import './TopBar.css';
+import Logo from "../gmailLogo/Logo";
+import { ReactComponent as DarkModeLogo } from "./mode-icons/dark_mode.svg";
+import { ReactComponent as LightModeLogo } from "./mode-icons/light_mode.svg";
+import SearchBar from "./searchBar/SearchBar";
+import "./TopBar.css";
 import UserDetails from "./userDetails/userDetails";
 import { getUserIdFromToken } from "../utils/utils";
 
-const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick }) => { 
+const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick, isDarkMode, toggleDarkMode }) => { 
   const [showUserDetails, setShowUserDetails] = useState(false);
   const userDetailsRef = useRef(null);
 
@@ -15,7 +15,7 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick }) => {
   const [userData, setUserData] = useState({
     displayName: "",
     email: "",
-    picture: ""
+    picture: "",
   });
 
   // Fetch user data from the backend on mount
@@ -27,7 +27,7 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick }) => {
 
         const res = await fetch(`/api/users/${userId}`, {
           method: "GET",
-          headers: { Authorization: `Bearer ${token}`},
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (res.status === 200) {
@@ -68,11 +68,16 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick }) => {
 
   return (
     <div className="topbar-container">
-      <div className="topbar">
         {/* App logo */}
-        <Logo containerClass="topbar-logo-container" />
+      <Logo containerClass="topbar-logo-container" />
         {/* Search bar component */}
-        <SearchBar onFullSearch={onFullSearch} onPreviewItemClick={onPreviewItemClick} />
+      <SearchBar onFullSearch={onFullSearch} onPreviewItemClick={onPreviewItemClick} />
+      <div className="topbar-btns">
+        {isDarkMode ? (
+          <LightModeLogo className="mode-pic" onClick={toggleDarkMode} />
+        ) : (
+          <DarkModeLogo className="mode-pic" onClick={toggleDarkMode} />
+        )}        
         {/* User profile section */}
         <div className="topbar-profile">
           <img

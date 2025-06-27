@@ -1,0 +1,11 @@
+{
+  "confirm": {
+    "title": "Review your account info",
+    "text": "You can use this email address to sign in later",
+    "fildes": ["displayName", "userName", "preview"],
+    "button": {
+      "nextBtn": "Confirm",
+      "changeBtnText": "Restart"
+    }
+  }
+}

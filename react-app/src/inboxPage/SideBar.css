@@ -5,6 +5,10 @@
   flex-direction: column;
 }
 
+.default-labels-section {
+  margin-top: 16px;
+}
+
 .labels-section {
   margin-top: 16px;
 }

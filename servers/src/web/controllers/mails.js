@@ -238,7 +238,7 @@ exports.addLabelToMail = async (req, res) => {
         // Add the label (with blacklist logic for "Spam")
         await addLabelToMail(user, mailId, labelName);
 
-        if (labelName === 'starred') {
+        if (labelName === 'Starred') {
             const mail = user.mails.find(m => m.id === mailId);
             mail.isStarred = true;
         }
@@ -277,7 +277,7 @@ exports.removeLabelFromMail = async (req, res) => {
   try {
     removeMailFromLabel(user, mail, labelName);
 
-    if (labelName === 'starred') {
+    if (labelName === 'Starred') {
       mail.isStarred = false;
     }
 

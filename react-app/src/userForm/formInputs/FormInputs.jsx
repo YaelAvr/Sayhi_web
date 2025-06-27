@@ -16,7 +16,6 @@ const FormInputs = ({
         name={inputs.name}
         autoComplete="off"
         value={inputValue}
-        // onChange={handleChange}
         onChange={(e) => setVal(e)}
         onKeyUp={handleKeyUp}
         placeholder={inputs.placeHolder}

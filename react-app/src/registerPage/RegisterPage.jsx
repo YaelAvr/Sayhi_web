@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { createDesplayName } from "./serverCallFunctions/serverCallFunctions";
-// import "./LoginPage.css";
 import UserForm from "../userForm/UserForm";
-import registerText from "./registerText.json";
-
+import registerText from "./confirmRegisterText.json";
 import CreateUserName from "./createUserName.jsx/CreateUserName";
 import CreatePic from "./createPic/CreatePic";
 import CreatePassword from "./createPassword/CreatePassword";
@@ -12,6 +9,7 @@ import CreateDisplayName from "./createDisplayName/CreateDisplayName";
 import CreateGenderAndBirthday from "./createGenderAndBirthday/CreateGenderAndBirthday";
 
 const RegisterPage = () => {
+  // initializing user registration states
   const [userData, setUserData] = useState({
     displayName: "",
     birthday: "",
@@ -19,33 +17,19 @@ const RegisterPage = () => {
     username: "",
     password: "",
     picture: "",
+    preview: "",
   });
 
+  const [errorText, setError] = useState(null);
+  const [part, setPart] = useState(0);
+  const navigate = useNavigate();
+
+  // this function updates the userData state with the new data
+  // it takes a field name and the new data as arguments
   const changeUserData = (fild, data) => {
     setUserData((prev) => ({ ...prev, [fild]: data }));
   };
-
-  useEffect(() => {
-    console.log("final data:", userData);
-  }, [userData]);
-
-  const [errorText, setError] = useState(null);
-
-  // const [part, setPart] = useState(4); //כלי עזר לזמן עבודה
-  const [part, setPart] = useState(0); //להחזיר
-
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    setPart((perv) => perv - 1);
-
-    // setError(null);
-  };
-
-  const handleNext = () => {
-    setPart((prev) => prev + 1);
-  };
-
+  // this function initializes the registration process on restart button click
   const initRegister = () => {
     setPart(0);
     setUserData({
@@ -59,6 +43,15 @@ const RegisterPage = () => {
     });
   };
 
+  // these functions handles the back and next buttons functionality
+  const handleBack = () => {
+    setPart((perv) => perv - 1);
+  };
+  const handleNext = () => {
+    setPart((prev) => prev + 1);
+  };
+
+  // function to handle user final registration with the server
   const registerUser = async (e) => {
     e.preventDefault();
 
@@ -76,7 +69,6 @@ const RegisterPage = () => {
       navigate("/login");
     }
   };
-  // const formConfigs = {  };
   const config = {
     buttonsConf: {
       ClickFunc: initRegister,
@@ -86,12 +78,14 @@ const RegisterPage = () => {
     errorText: errorText,
   };
 
+  // this object contains all the functions that are passed to the child components
   const functions = {
     setUserData: changeUserData,
     handleBack: handleBack,
     handleNext: handleNext,
   };
 
+  // this function returns the current page based on the part state
   const displayPage = () => {
     switch (part) {
       case 0: {

@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import UserForm from "../../userForm/UserForm";
 import Text from "./text.json"
 
-// import {handleBack, handleNext } from "../RegisterPage";
-
 const CreatePic = (props) => {
   const [picture, setPicture] = useState({
     name: "",
@@ -12,11 +10,11 @@ const CreatePic = (props) => {
   });
   const [errorText, setError] = useState(null);
 
+  // Function to handle the image change input.
+  // It updates the picture state with the new file and its URL.
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    // const fileUrl = URL.createObjectURL(file);
 
     if (file.type.startsWith("image/")) {
       setPicture({
@@ -35,16 +33,10 @@ const CreatePic = (props) => {
         `The file "${file.name}" is not a supported image format. Please try again with one of the following types: JPG, PNG, GIF, WEBP`
       );
     }
-
-    console.log(picture.name + " " + picture.img + " " + picture.url);
   };
-
+  // Function to handle the image upload.
   const handleImageUpload = async (e) => {
     e.preventDefault();
-    // if (!picture.img) {
-
-    //   return;
-    // }
 
     const uploadData = new FormData();
     uploadData.append("profilePic", picture.img);
@@ -57,8 +49,8 @@ const CreatePic = (props) => {
 
       const data = await res.json();
       if (res.ok) {
+      // Update the user data with the new pricture URL and its preview
         props.setUserData("preview", picture.url);
-
         props.setUserData("picture", data.tempImageUrl);
         setPicture({ name: "", img: null, url: null });
         setError(null);
@@ -77,7 +69,6 @@ const CreatePic = (props) => {
       inputClass: !errorText ? "no-input" : "bad-input",
       src: picture.url,
       fileName: picture.name,
-      //   img: picture.img,
       setVal: handleImageChange,
     },
     errorText: errorText,

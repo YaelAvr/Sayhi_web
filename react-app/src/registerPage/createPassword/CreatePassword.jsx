@@ -9,10 +9,13 @@ const CreatePassword = (props) => {
   });
   const [errorText, setError] = useState(null);
 
+  // Function to handle the password change input.
+  // It updates the password state with the new value.
   const handlePasswordChange = (e) => {
     setPassword((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // Function to validate the password that the user entered.
   const validatePassword = async (e) => {
     e.preventDefault();
 
@@ -26,6 +29,7 @@ const CreatePassword = (props) => {
     if (res.ok) {
       setPassword({ password: "", confirm: "" });
       setError(null);
+      // Update the user data with the new password
       props.setUserData("password", data.password);
       props.handleNext();
     } else {
@@ -49,6 +53,7 @@ const CreatePassword = (props) => {
     ],
     errorText: errorText,
   };
+  
   return <UserForm {...config} data={Text} />;
 };
 

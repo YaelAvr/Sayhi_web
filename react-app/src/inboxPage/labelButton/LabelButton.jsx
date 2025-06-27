@@ -38,7 +38,9 @@ function LabelButton({ label, onClick, selected, iconSrc, onEditClick, onDeleteC
   return (
     <div className={`LabelButton ${selected ? ' selected' : ''}`}>
       <button className="label-main-btn" onClick={onClick}>
-        {iconSrc && <img className="label-icon" src={iconSrc} alt={`${label.name} icon`} />}
+        {/* {iconSrc && <img className="label-icon" src={iconSrc} alt={`${label.name} icon`} />} */}
+        {iconSrc && iconSrc}
+
         <span className="label-name">{label.name}</span>
       </button>
 

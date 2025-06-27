@@ -4,21 +4,33 @@
   justify-content: flex-end;
   padding: 8px 16px;
   border-bottom: 1px solid #ddd;
-  background-color: #f6f8fc;
+}
+
+/* Toolbar section: center-aligned buttons */
+.toolbar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 1%;
 }
 
 /* Styles for toolbar buttons (e.g., delete, next, previous) */
 .toolbar button {
-  margin-left: 8px;
   background: none;
   border: none;
   font-size: 18px;
   cursor: pointer;
 }
 
-/* Page number display (e.g., "1 of 10") */
+/* Page number display */
 .page-number {
   margin: 0 10px;
   font-size: 16px;
   color: #555;
+}
+
+.dark-main-contant .page-number,
+.dark-main-contant .toolbar button {
+  color: #b7b6b6;
+  font-weight: 500;
 }

@@ -1,4 +1,4 @@
-import { useState, useRef, memo } from "react";
+import { useState, memo } from "react";
 
 import { ReactComponent as Help } from "../icons/help.svg";
 import FormInputs from "../formInputs/FormInputs";
@@ -15,8 +15,7 @@ const InputWithIcon = ({
   const [showHelp, setShowHelp] = useState(false);
 
   return (
-    <div className="input-icon-cont form-flex-row">
-      {/* <div id={inputs.waterMark && "input-wrapper"}> */}
+    <div className="input-icon-cont form-flex-row fill-parent-width">
       <div id="input-wrapper">
 
         <FormInputs

@@ -26,6 +26,12 @@
   background-color: #f0f0f0; 
 }
 
+.dark-app .add-button {
+  color: white; 
+}
+.dark-app .add-button:hover {
+  background-color: #5f6368; 
+}
 
 .error-message {
   color: #d93025;

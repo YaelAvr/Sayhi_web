@@ -11,14 +11,13 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          {/* --- זה הנתיב החשוב --- */}
-          {/* הנתיב הראשי '/' יטען את ה-InboxOrHomePage, שיחליט לאן להמשיך */}
-          <Route index path="/" element={<InboxOrHomePage />} />
 
+          {/* if a user is signed in- go to inbox. o.w go to the home page  */}
+          <Route index path="/" element={<InboxOrHomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* הנתיב ל-inbox עדיין מוגן, כדי למנוע גישה ישירה דרך ה-URL */}
+          {/* only go to the inbox page if a user is signed in */}
           <Route
             path="/inbox"
             element={

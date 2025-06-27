@@ -33,3 +33,11 @@
 
 /node_modules
 servers/data/BloomFilterBackup.txt
+
+#  Ignore all the pictures in the pictures and tempUploads directories
+servers/pictures/*
+servers/tempUploads/*
+
+# keep the place holder files
+!servers/pictures/*.txt
+!servers/tempUploads/*.txt

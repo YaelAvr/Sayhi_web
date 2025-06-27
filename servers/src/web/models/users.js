@@ -23,7 +23,8 @@ const createUser = (username, displayName, password, picture, gender, birthday) 
         mailCounter: 0,
         mails: [],
         labelCounter: 0,
-        labels: []
+        labels: [],
+        isDarkMode: false
     }
     createDefaultLabels(newUser);
     Users.push(newUser);
@@ -35,7 +36,7 @@ const getUserById = (id) => Users.find(user => user.id === id)
 //Create default labels for each new user
 const createDefaultLabels = (user) => {
     createLabel(user, 'Inbox' ,{ isDefault: true, allowAdd: false })
-    createLabel(user, 'starred',{ isDefault: true })
+    createLabel(user, 'Starred',{ isDefault: true })
     createLabel(user, 'Sent', { isDefault: true, allowAdd: false })
     createLabel(user, 'Drafts', { isDefault: true, allowAdd: false })
     createLabel(user, 'Spam', { isDefault: true })
@@ -46,6 +47,16 @@ const isUserNameRegistered =(username) => {
     return Users.find(user => user.username === username);
 }
 
+const toggleDarkMode = (id) => {
+    const user = getUserById(id); 
+    if (!user) {
+        throw new Error("User not found");
+        
+    }
+    const temp = user.isDarkMode; // Store the current state
+    user.isDarkMode = !temp; // Toggle dark mode
+    return user.isDarkMode; // Return the new dark mode state
+}
 const uploadPicture = multer({
   storage,
   fileFilter: (req, file, cb) => {
@@ -62,5 +73,6 @@ const uploadPicture = multer({
 module.exports = {
     createUser,
     getUserById,
-    isUserNameRegistered
+    isUserNameRegistered,
+    toggleDarkMode
 }

@@ -1,34 +1,93 @@
 /* Main container for the top bar */
 .topbar-container {
   height: 60px;
-  background-color: #f1f3f4;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  gap: 20px;
+  width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Inner group: logo + search bar */
-.topbar {
+.search-container {
+  flex: 1;
+  max-width: 700px;
+  display: flex;
+  position: relative; 
+  align-items: center;
+}
+
+.search-container.focused .search-input {
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+
+.search-input {
+  flex: 1;
+  padding: 10px 20px 10px 55px; 
+  border: none;
+  border-radius: 24px;
+  background-color: #eaf1fb;
+  font-size: 16px;
+  outline: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-button {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 40px;
+  height: 40px;
+
+  background: transparent;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 50%; 
+
   display: flex;
   align-items: center;
-  gap: 20px;
-  width: 100%;
+  justify-content: center;
+
+  transition: box-shadow 0.2s ease;
+}
+
+.search-button:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.search-icon {
+  width: 23px;
+  height: 23px;
+  pointer-events: none; 
+  opacity: 0.7;
+}
+
+.topbar-btns {
+  display: flex;
+  gap: 2em;
+  margin: 1em;
 }
 
 /* Profile section aligned to the right */
 .topbar-profile {
-  margin-left: auto; 
+  margin-left: auto;
   display: flex;
   align-items: center;
   position: relative;
 }
 
 /* Circular profile picture with hover cursor */
-.topbar-profile-pic {
+.topbar-profile-pic,
+.mode-pic {
   width: 36px;
   height: 36px;
   border-radius: 50%;
   cursor: pointer;
 }
+
+

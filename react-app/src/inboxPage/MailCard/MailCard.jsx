@@ -1,27 +1,35 @@
-import React from 'react';
-import './MailCard.css';
-import StarOutline from './icons/star.svg';
-import StarFilled from './icons/yellow_star.svg';
-import TrashIcon from './icons/delete.svg';
-import LabelIcon from './icons/edit_lables.svg';
+import React from "react";
+import "./MailCard.css";
+import { ReactComponent as StarOutline } from "./icons/star.svg";
+import { ReactComponent as StarFilled } from "./icons/yellow_star.svg";
+import { ReactComponent as TrashIcon } from "./icons/delete.svg";
+import { ReactComponent as LabelIcon } from "./icons/add_to_lable.svg";
 
 // Character limit for displaying subject + body preview
 const PREVIEW_LIMIT = 80;
 
-const MailCard = ({ sender, subject, body, date, onStar, onDelete, onLabel, isStarred, onClick }) => {
-
+const MailCard = ({
+  sender,
+  subject,
+  body,
+  date,
+  onStar,
+  onDelete,
+  onLabel,
+  isStarred,
+  onClick,
+}) => {
   // Toggle star status on click
-   const handleStarClick = (event) => {
-    event.stopPropagation(); 
+  const handleStarClick = (event) => {
+    event.stopPropagation();
     if (onStar) onStar();
   };
 
-
-   const handleDeleteClick = (event) => {
+  const handleDeleteClick = (event) => {
     event.stopPropagation();
     if (onDelete) onDelete();
   };
-  
+
   const handleLabelClick = (event) => {
     event.stopPropagation();
     if (onLabel) onLabel();
@@ -41,36 +49,54 @@ const MailCard = ({ sender, subject, body, date, onStar, onDelete, onLabel, isSt
 
     if (isToday) {
       return emailDate.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
+        hour: "2-digit",
+        minute: "2-digit",
         hour12: false,
       });
     } else {
-      return emailDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
+      return emailDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
       });
     }
   };
 
   // Display the subject first, and add part of the body if space allows
-  const subjectPreview = subject ? subject.slice(0, PREVIEW_LIMIT) : '(no subject)';
+  const subjectPreview = subject
+    ? subject.slice(0, PREVIEW_LIMIT)
+    : "(no subject)";
   const remaining = PREVIEW_LIMIT - subjectPreview.length;
-  const bodyPreview = remaining > 0 ? body.slice(0, remaining) : '';
+  const bodyPreview = remaining > 0 ? body.slice(0, remaining) : "";
 
   return (
     <div className="mail-card" onClick={onClick}>
       <div className="mail-main">
         {/* Left side icons (visually, right in RTL) */}
         <div className="mail-icons">
-          <button className="icon-button" onClick={handleStarClick} title="Star">
-            <img src={isStarred ? StarFilled : StarOutline} alt="star" className="icon-img" />
+          <button
+            className="icon-button"
+            onClick={handleStarClick}
+            title="Star"
+          >
+            {isStarred ? (
+              <StarFilled alt="star" className="icon-img filled-star" />
+            ) : (
+              <StarOutline alt="star" className="icon-img" />
+            )}
           </button>
-          <button className="icon-button" onClick={handleDeleteClick} title="Delete">
-            <img src={TrashIcon} alt="delete" className="icon-img" />
+          <button
+            className="icon-button"
+            onClick={handleDeleteClick}
+            title="Delete"
+          >
+            <TrashIcon alt="delete" className="icon-img" />
           </button>
-          <button className="icon-button" onClick={handleLabelClick} title="Add Label">
-            <img src={LabelIcon} alt="label" className="icon-img" />
+          <button
+            className="icon-button"
+            onClick={handleLabelClick}
+            title="Add Label"
+          >
+            <LabelIcon alt="label" className="icon-img" />
           </button>
         </div>
 

@@ -1,6 +1,6 @@
 import React from "react";
 import "./UserForm.css";
-import { useState, useRef, memo } from "react";
+import { memo } from "react";
 import Logo from "../gmailLogo/Logo";
 import FormInputs from "./formInputs/FormInputs";
 import FormDate from "./formDate/FormDate";
@@ -27,7 +27,7 @@ function UserForm({
     }
   };
   return (
-    <div id="user-form-page">
+    <div id="user-form-page" className="app-content-back">
       <Logo containerClass="form-logo-container form-conteiner" />
       {/* Create the left side text.  */}
       <div id="user-form-container" className="form-conteiner">
@@ -35,7 +35,6 @@ function UserForm({
           <h1 className="form-text">
             {data.title} {displayName && displayName}
           </h1>
-          {/* <p>{!username ? data.text : `${username}@sayhi.com`}</p> */}
           <p className="form-text">{`${!username ? "" : username}${
             data.text
           }`}</p>
@@ -43,7 +42,7 @@ function UserForm({
 
         {/* Create the form veriables */}
         <form id="user-form" onSubmit={buttonsConf.SubmitFunc}>
-          <div id="input-div">
+          <div id="input-div" className="fill-parent-width">
             {userData && <ConfirmSub userData={userData} data={data.fildes} />}
             {!data.showPass ? (
               data.inputs &&
@@ -92,19 +91,28 @@ function UserForm({
                 data={data.image}
               />
             )}
+            {errorText &&
+              (data.birthDay ? (
+                <div className="invalid-txt-div fill-parent-width">
+                  {errorText.map((text, index) => (
+                    <p key={index} className="invalid-txt fill-parent-width">
+                      {text}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p className="invalid-txt fill-parent-width">{errorText}</p>
+              ))}
           </div>
-          {errorText &&
-            (data.birthDay ? (
-              errorText.map((text, index) => (<p key={index} className="invalid-txt">{text}</p>))
-            ) : (
-              <p className="invalid-txt">{errorText}</p>
-            ))}
 
-          <div className="form-btns-div form-flex-row ">
+          {/* buttons section */}
+          <div className="form-btns-div fill-parent-width form-flex-row ">
             <button
               type="button"
               onClick={buttonsConf.ClickFunc}
-              className={`form-btn btn-border-radius ${!buttonsConf.ClickFunc && "remove-btn"}`}
+              className={`form-btn btn-border-radius ${
+                !buttonsConf.ClickFunc && "remove-btn"
+              }`}
               id="changing-btn"
             >
               {data.button.changeBtnText}

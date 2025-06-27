@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const multer = require("multer");
 const controller = require('../controllers/users')
 const authenticateToken = require('../middlewares/authenticateToken');
 const { uploadTemp } = require('../middlewares/uploadImage');
@@ -42,5 +43,9 @@ router.route('/validation/:username').post(controller.isUserNameRegistered)
 
 router.route('/:id')
         .get(authenticateToken, controller.getUserById)
+
+router.route('/darkMode/:id')
+        .get(authenticateToken, controller.getUserDarkMode)
+        .patch(authenticateToken, controller.toggleDarkMode)
 
 module.exports = router

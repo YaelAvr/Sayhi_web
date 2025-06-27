@@ -1,12 +1,10 @@
 .input-icon-cont {
-
   justify-content: flex-end;
 }
 
 .help-logo {
   width: 35px;
   height: 35px;
-  /* right: 2%; */
   top: -40%;
   transform: translateY(40%);
   margin-left: 1em;

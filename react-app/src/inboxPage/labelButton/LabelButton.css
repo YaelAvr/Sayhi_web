@@ -7,6 +7,13 @@
   margin-bottom: 2px;
   transition: background-color 0.15s ease-in-out;
 }
+.dark-app .label-main-btn {
+  color: white;
+}
+
+.dark-app .label-icon {
+  fill: white;
+}
 
 .LabelButton:hover {
   background-color: #f1f3f4;
@@ -15,6 +22,16 @@
 .LabelButton.selected {
   background-color: #d3e3fd;
   font-weight: 500;
+}
+.dark-app .LabelButton.selected {
+  background-color: #7a7d81;
+}
+
+.dark-app .LabelButton:hover {
+  background-color: #9898989e;
+}
+.dark-app .LabelButton.selected:hover {
+  background-color: #9a9b9c;
 }
 
 .label-main-btn {
@@ -38,6 +55,10 @@
 .label-name {
   font-size: 0.9rem;
   color: #3c4043; 
+}
+
+.dark-app .label-name {
+  color: #e8eaed;
 }
 
 .label-actions {
@@ -65,7 +86,7 @@
   right: 0;
   background: white;
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 10;
   width: 150px;
   padding: 8px 0;
