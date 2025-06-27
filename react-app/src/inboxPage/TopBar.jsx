@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Logo from "../gmailLogo/Logo";
 import { ReactComponent as DarkModeLogo } from "./mode-icons/dark_mode.svg";
-import { ReactComponent as Light_Mode_Logo } from "./mode-icons/light_mode.svg";
+import { ReactComponent as LightModeLogo } from "./mode-icons/light_mode.svg";
 import SearchBar from "./searchBar/SearchBar";
 import "./TopBar.css";
 import UserDetails from "./userDetails/userDetails";
@@ -68,7 +68,7 @@ const TopBar = ({ onLogout, isDarkMode, toggleDarkMode }) => {
       <SearchBar />
       <div className="topbar-btns">
         {isDarkMode ? (
-          <Light_Mode_Logo className="mode-pic" onClick={toggleDarkMode} />
+          <LightModeLogo className="mode-pic" onClick={toggleDarkMode} />
         ) : (
           <DarkModeLogo className="mode-pic" onClick={toggleDarkMode} />
         )}
