@@ -88,24 +88,60 @@ environment:
 
 ### Application Run Example
 The following screenshot demonstrates user registration and login to Gmail, and actions that the user can perform:
-Registration:
+### Registration:
+- **Username**
+  Must be **6 to 30 characters** long.  
+  You can use **letters**, **numbers**, and **periods** only.
+  Each username must be **unique** — no duplicates allowed.
+  Example: `dana.s123`
+
+- **Password**  
+  Must be at least **8 characters** long.  
+  Example: `12345678`
+
+- **Display Name**  
+  Must include at least a **first name**; **last name is optional**.  
+  No restrictions on length or characters used.  
+  Multiple users can share the same display name.  
+  Example: `Dana` or `Dana Sela`
+
+- **Birthday**  
+  The **day** and **year** fields must contain **digits only**.  
+  The entered date must be **valid** (e.g., `30.2.2002` is invalid).  
+  The date must be **before today** (no future birthdays).  
+  The final saved format is: `30 April 2002`.
+
+- **Profile Picture**  
+  The uploaded file must not exceed **5MB** in size.  
+  Accepted formats: `.jpeg`, `.jpg`, `.png`, `.webp`, `.svg`, `.gif`.  
+  Example: `https://example.com/profile.jpg`
+  
 ![The user registers for Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/1.png)
 ![The user registers for Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/2.png)
 ![The user registers for Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/3.png)
 
-Login:
+
+### Login:
 ![The user logs in to Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/4.png)
 ![The user logs in to Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/5.png)
 
-Actions in Gmail:
+
+### Actions in Gmail:
+
 Create and send a mail:
 ![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/6.png)
 ![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/7.png)
+
 Create a label and add a mail to this label:
 ![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/8.png)
 ![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/9.png)
 ![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/10.png)
 ![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/11.png)
+
+Switching to dark mode by clicking the sun icon will change the screen colors to a dark theme, as shown in the images below:
+![Dark mode](https://github.com/eden05221/gmail_project/blob/main/images/part4/12.png)
+![Dark mode](https://github.com/eden05221/gmail_project/blob/main/images/part4/13.png)
+
 
 
 
