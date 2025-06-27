@@ -91,7 +91,7 @@ environment:
 ### Application Run Example
 The following screenshot demonstrates user registration and login to Gmail, and actions that the user can perform:
 ### Registration:
-- **Username**
+- **Username**\
   Must be **6 to 30 characters** long.  
   You can use **letters**, **numbers**, and **periods** only.
   Each username must be **unique** — no duplicates allowed.
