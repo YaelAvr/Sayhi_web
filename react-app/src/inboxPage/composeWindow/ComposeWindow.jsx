@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './ComposeWindow.css'; 
-import deleteIcon from '../labelButton/icons/spam.svg';
+import deleteIcon from '../labelButton/icons/delete.svg';
 
 function ComposeWindow({ onClose, draftData = null, onDraftSaved }) {
   const [to, setTo] = useState(draftData?.toUserName || '');
