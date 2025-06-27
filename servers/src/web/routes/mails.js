@@ -25,6 +25,9 @@ router.route('/:id/add-label')
 router.route('/:id/remove-label')
   .post(mails.removeLabelFromMail)
 
+router.route('/:id/force-add-label')
+  .post(mails.forceAddLabelToMail);
+
 router.route('/:id')  
     .get(mails.getSpecificMail)
     .delete(mails.deleteMail)
