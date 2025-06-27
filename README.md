@@ -4,25 +4,33 @@ This project simulates a simplified Gmail-like system that supports user managem
 The system includes:
 - A **Node.js (Express)** server that exposes a RESTful API.
 - A **C++** server that manages a URL blacklist using a Bloom filter (via TCP).
-
-**Note**: This project includes only backend logic. No frontend is implemented — all responses are returned in JSON format.
+- A **React** frontend showing a Gmail-like interface for users.
 
 ## System Requirements  
 To run the application using Docker:
 - Docker and Docker Compose installed.
-- All required components — including the C++ server and node.js server — are built automatically using the provided `Dockerfile.server` and `Dockerfile.webserver`.
+- All required components — including the C++ server and node.js server and react — are built automatically using the provided `Dockerfile.server` and `Dockerfile.webserver`.
 
 Project management tracking:
 - Access to the JIRA board
 
 
 ## Project Structure
-- `src/` — Source code  
-  - `cpp/` — C++ components 
-  - `py/` — Python components  
-  - `web/` — Node.js backend (Express server)  
+- `servers/` — All the backend servers
+  - `src/` — Source code
+ 	- `cpp/` — C++ components 
+ 	- `py/` — Python components  
+ 	- `web/` — Node.js backend (Express server)
+  - `data/` — Application data (e.g., storage files)
+  - `pictures/` — Contains the image of each user
+  - `tempUploads/` — Images selected during the registration process until its completion
+  - `package.json`, `package-lock.json` — Node.js dependencies  
 - `Tests/` — Project tests (cpp tests from last exercise)
-- `data/` — Application data (e.g., storage files)  
+- `react-app/` — fronted (showing the Gmail-like interface)
+  -`build/` — contains the optimized production ready version of the application
+  - `public/` — include the index.html file and fonts folder
+  - `package.json` — Node.js dependencies  
+- `node_modules/` - contains all the dependencies and libraries required for the project to run
 - `images/` — Screenshots for documentation  
 - `.vscode/` — VSCode configuration (for development only)  
 - `.gitignore` — Files and folders ignored by Git  
