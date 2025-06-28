@@ -50,10 +50,11 @@ function SideBar({
       <LabelsTitle onAddClick={onAddLabelClick} />
 
       <div className="custom-labels-section">
-        {customLabels && customLabels.map(label => (
+        {customLabels && customLabels.map((label, index) => (
           <LabelButton
             key={label.id}
             label={label}
+            index={index}
             selected={currentLabelName === label.name}
             iconSrc={ <Custom className="label-icon" alt="Custom icon" />} 
 
