@@ -29,7 +29,5 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(reactBuildPath, 'index.html'));
 });
 
-app.listen(3000, () => {
-  console.log("Server running");
-});
+app.listen(3000);
 
