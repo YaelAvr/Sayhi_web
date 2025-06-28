@@ -101,3 +101,9 @@
 .menu-item:hover {
   background-color: #f1f3f4;
 }
+
+
+.LabelButton.menu-open {
+  position: relative;   
+  z-index: 11; 
+}

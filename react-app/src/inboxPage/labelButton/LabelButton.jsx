@@ -36,7 +36,7 @@ function LabelButton({ label, onClick, selected, iconSrc, onEditClick, onDeleteC
   const isCustomLabel = onEditClick && onDeleteClick;
 
   return (
-    <div className={`LabelButton ${selected ? ' selected' : ''}`}>
+  <div className={`LabelButton ${selected ? 'selected' : ''} ${isMenuOpen ? 'menu-open' : ''}`}>
       <button className="label-main-btn" onClick={onClick}>
         {/* {iconSrc && <img className="label-icon" src={iconSrc} alt={`${label.name} icon`} />} */}
         {iconSrc && iconSrc}
