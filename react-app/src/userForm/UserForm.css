@@ -91,6 +91,7 @@
   width: inherit;
   padding-block: 0.5em;
   height: fit-content;
+  text-emphasis: none;
 }
 
 .form-btns-div {

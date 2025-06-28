@@ -21,7 +21,9 @@
 
 .LabelButton.selected {
   background-color: #d3e3fd;
-  font-weight: 500;
+}
+.LabelButton.selected p{
+  font-weight: 600;
 }
 .dark-app .LabelButton.selected {
   background-color: #7a7d81;
@@ -55,6 +57,7 @@
 .label-name {
   font-size: 0.9rem;
   color: #3c4043; 
+  margin-block: 0;
 }
 
 .dark-app .label-name {
@@ -82,8 +85,7 @@
 
 .label-menu {
   position: absolute;
-  top: 100%;
-  right: 0;
+  right: 10%;
   background: white;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -106,4 +108,11 @@
 .LabelButton.menu-open {
   position: relative;   
   z-index: 11; 
+}
+
+.open-above {
+  bottom: 20%;
+}
+.open-below {
+  top: 20%;
 }
