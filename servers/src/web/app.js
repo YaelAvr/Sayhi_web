@@ -17,6 +17,9 @@ const mailRoutes = require('./routes/mails')
 const tokenRoutes = require('./routes/tokens')
 const labelRoutes = require('./routes/labels')
 const blacklistRoutes = require('./routes/blacklist');
+const connectDB = require('./db')
+
+connectDB()
 
 app.use('/api/mails', mailRoutes)
 app.use('/api/users', userRoutes)
