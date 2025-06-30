@@ -1,68 +1,91 @@
 const fs = require('fs').promises;
 const path = require('path');
 const multer = require("multer");
-const Users = require("../models/users");
+const Users = require("../services/users");
 
 
 // This function creates a new user with the given parameters
 exports.createUser = async (req, res) => {
   const { username, displayName, password, picture, gender, birthday } = req.body;
-  const genderOptions = ["female", "male", "other"];
-
+  let missingVal = [];
+  if (!picture) {
+    missingVal.push("Picture")
+    // return res.status(400).json({ error: "Picture is required" });
+  }
   if (!username) {
-    return res.status(400).json({ error: "Username is required" });
+    missingVal.push("Username")
+
+    // return res.status(400).json({ error: "Username is required" });
   }
   if (!displayName) {
-    return res.status(400).json({ error: "Display Name is required" });
+    missingVal.push("Display Name")
   }
   if (!password) {
-    return res.status(400).json({ error: "Password is required" });
+    missingVal.push("Password")
   }
   if (!gender) {
-    return res.status(400).json({ error: "Gender is required" });
+    missingVal.push("Gender")
   }
   if (!birthday) {
-    return res.status(400).json({ error: "Birthday is required" });
-  }
-  if (!picture) {
-    return res.status(400).json({ error: "Picture is required" });
+    missingVal.push("Birthday")
   }
 
+  if (missingVal.length > 0) {
+    if(!missingVal.includes("Picture")){  try { await fs.unlink(path.resolve(picture)); } catch (e) {}}
+    return res.status(400).json({ error: "Missig: " + missingVal.join(", ") });
+    // throw new Error("Missig: " + missingVal.join(", "));
+  }
 
   try {
-    const sourcePath = path.resolve(picture); // Gets the absolute path of the picture in the tempUploads folder
-    const fileExtension = path.extname(picture); //Gets the file extension: .jpg\.png\...
-
-    // We pass `null` for the picture initially, because we don't know the final path.
-    const newUser = Users.createUser(username, displayName, password, null, gender, birthday);
-    if (!newUser) { // the username was taken.
-      await fs.unlink(sourcePath);  // Delete the temporary file
-      return res.status(400).json({ error: "This username is taken" });
-    }
-    const newUserId = newUser.id;
-    const finalFileName = `${newUserId}${fileExtension}`; // The final file name will be the user id with the original file extension 
-    const destinationPath = path.resolve('pictures', finalFileName); // The final path where the picture will be stored
-
-    // Replace fs.rename with fs.copyFile and fs.unlink
-    await fs.copyFile(sourcePath, destinationPath); // Copy the file to the new location
-    await fs.unlink(sourcePath); // Delete the original file from the temp directory
-
-    //  Update the user object with the final, permanent picture path.
-    const finalImagePath = `pictures/${finalFileName}`;
-    newUser.picture = finalImagePath;
-    res.status(201).location(`/api/users/${newUser.id}`).end();
-
+     const newUser = await Users.createUser(username, displayName, password, picture, gender, birthday);
+     res.status(201).location(`/api/users/${newUser._id}`).end();
   } catch (error) {
     // This catches errors from fs.rename or fs.unlink
     console.error('Server error during user registration:', error);
 
     // Attempt to clean up the temp file if it still exists
-    if (tempImagePath) {
-      try { await fs.unlink(path.resolve(tempImagePath)); } catch (e) { /* ignore cleanup error */ }
+    if (picture) {
+      try { await fs.unlink(path.resolve(picture)); } catch (e) { /* ignore cleanup error */ }
     }
 
-    res.status(500).json({ message: 'An internal server error occurred.' });
+    res.status(400).json({ error: err.message });
   }
+
+
+  // try {
+  //   const sourcePath = path.resolve(picture); // Gets the absolute path of the picture in the tempUploads folder
+  //   const fileExtension = path.extname(picture); //Gets the file extension: .jpg\.png\...
+
+  //   // We pass `null` for the picture initially, because we don't know the final path.
+  //   const newUser = Users.createUser(username, displayName, password, null, gender, birthday);
+  //   if (!newUser) { // the username was taken.
+  //     await fs.unlink(sourcePath);  // Delete the temporary file
+  //     return res.status(400).json({ error: "This username is taken" });
+  //   }
+  //   const newUserId = newUser.id;
+  //   const finalFileName = `${newUserId}${fileExtension}`; // The final file name will be the user id with the original file extension 
+  //   const destinationPath = path.resolve('pictures', finalFileName); // The final path where the picture will be stored
+
+  //   // Replace fs.rename with fs.copyFile and fs.unlink
+  //   await fs.copyFile(sourcePath, destinationPath); // Copy the file to the new location
+  //   await fs.unlink(sourcePath); // Delete the original file from the temp directory
+
+  //   //  Update the user object with the final, permanent picture path.
+  //   const finalImagePath = `pictures/${finalFileName}`;
+  //   newUser.picture = finalImagePath;
+  //   res.status(201).location(`/api/users/${newUser.id}`).end();
+
+  // } catch (error) {
+  //   // This catches errors from fs.rename or fs.unlink
+  //   console.error('Server error during user registration:', error);
+
+  //   // Attempt to clean up the temp file if it still exists
+  //   if (picture) {
+  //     try { await fs.unlink(path.resolve(picture)); } catch (e) { /* ignore cleanup error */ }
+  //   }
+
+  //   res.status(500).json({ message: 'An internal server error occurred.' });
+  // }
 };
 
 // Create a Valid display name
@@ -125,7 +148,7 @@ exports.validateGender = (req, res) => {
 
 //validate a given username if it's only low cased and is 6-30 letters long.
 // If the username that was provided included 'user-name@sayhi.com', only usr the first part.
-exports.validateUserName = (req, res) => {
+exports.validateUserName = async (req, res) => {
   const { username } = req.body;
   let regex = /^[a-zA-Z0-9.]+$/;
 
@@ -150,7 +173,8 @@ exports.validateUserName = (req, res) => {
 
   if (lowUsername.length < 6 || lowUsername.length > 30) return res.status(400).json({ error: "Sorry, your username must be between 6 and 30 characters long." });
 
-  const user = Users.isUserNameRegistered(lowUsername)
+  const user = await Users.isUserNameRegistered(lowUsername)
+  
   if (!user) {
     return res.status(200).json({ username: lowUsername });
   }
@@ -238,7 +262,7 @@ exports.validatePicture = (req, res) => {
 
 
 // this function returns the information of a specific user with the given id
-exports.getUserById = (req, res) => {
+exports.getUserById = async (req, res) => {
   // Check if the user id matches the id in the request header
   const userHeader = req.user.id
   const userId = req.params.id
@@ -251,7 +275,7 @@ exports.getUserById = (req, res) => {
     return res.status(400).json({ error: 'All fields are required' })
   }
 
-  const user = Users.getUserById(userId)
+  const user = await Users.getUserById(userId)
   if (!user) return res.status(404).json({ error: 'No user was found' })
 
   res
@@ -262,7 +286,7 @@ exports.getUserById = (req, res) => {
     })
 };
 
-exports.isUserNameRegistered = (req, res) => {
+exports.isUserNameRegistered = async (req, res) => {
   const username = req.params.username
 
   if (!username) return res.status(400).json({ error: "Enter an email" });
@@ -278,7 +302,7 @@ exports.isUserNameRegistered = (req, res) => {
     }
   }
 
-  const user = Users.isUserNameRegistered(lowUsername)
+  const user = await Users.isUserNameRegistered(lowUsername)
 
   if (!user) { return res.status(404).json({ exists: false, error: 'Could not find your SayHi Account' }); }
   else {
@@ -286,7 +310,7 @@ exports.isUserNameRegistered = (req, res) => {
   }
 }
 
-exports.getUserDarkMode = (req, res) => {
+exports.getUserDarkMode = async (req, res) => {
   // Check if the user id matches the id in the request header
   const userHeader = req.user.id
   const userId = req.params.id
@@ -299,7 +323,7 @@ exports.getUserDarkMode = (req, res) => {
     return res.status(400).json({ error: 'All fields are required' })
   }
 
-  const user = Users.getUserById(userId)
+  const user = await Users.getUserById(userId)
   if (!user) return res.status(404).json({ error: 'No user was found' })
 
 

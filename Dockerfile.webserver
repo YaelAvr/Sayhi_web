@@ -4,16 +4,18 @@ WORKDIR /usr/src/gmail-project
 
 COPY package*.json ./
 COPY react-app/package*.json ./react-app/
-COPY servers/package*.json ./servers/
+COPY servers/src/web/package*.json ./servers/src/web/
+
+RUN npm install
+
 
 COPY react-app/ react-app/
 COPY servers/src/web/ servers/src/web/
 COPY servers/data/ servers/data/
 
-COPY servers/pictures/ servers/pictures/
-COPY servers/tempUploads/ servers/tempUploads/
+# COPY servers/pictures/ servers/pictures/
+# COPY servers/tempUploads/ servers/tempUploads/
 
-RUN npm install
 
 EXPOSE 3000
 

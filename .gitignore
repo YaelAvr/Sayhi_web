@@ -35,9 +35,9 @@
 servers/data/BloomFilterBackup.txt
 
 #  Ignore all the pictures in the pictures and tempUploads directories
-servers/pictures/*
-servers/tempUploads/*
+servers/src/web/pictures/*
+servers/src/web/tempUploads/*
 
 # keep the place holder files
-!servers/pictures/*.txt
-!servers/tempUploads/*.txt
+!servers/src/web/pictures/*.txt
+!servers/src/web/tempUploads/*.txt
