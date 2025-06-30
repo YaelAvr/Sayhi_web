@@ -5,6 +5,6 @@ const authenticateToken = require('../middlewares/authenticateToken');
 
 router.route('/').post(controller.isUserRegistered) 
 
-router.route('/verify').get(authenticateToken, controller.verifyToken);
+router.route('/verify').get(authenticateToken, controller.verifyTokenUser);
 
 module.exports = router
