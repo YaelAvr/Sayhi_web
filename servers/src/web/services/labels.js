@@ -1,7 +1,7 @@
 const Users = require('./store');
 
 // This function creates a new label for a specific user.
-const createLabel = (user, name, options = {}) => {
+const createLabel = async (user, name, options = {}) => {
     // Check if the user already has a label with the same name
     if (user.labels.find(label => label.name === name)) {
         return null; 

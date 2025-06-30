@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-require("custom-env").env(process.env.NODE_ENV, "./config");
+require("custom-env").env('local', './config');
 
 const connectDB = async () => {
   try {
-    mongoose.connect(process.env.CONNECTION_STRING, {
+    mongoose.connect(process.env.CONNECTION_STRING ||'mongodb://localhost:27017/myapp', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
