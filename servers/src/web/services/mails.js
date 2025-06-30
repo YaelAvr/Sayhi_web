@@ -1,6 +1,8 @@
-const { isBlacklisted, addUrlToBlacklist, deleteUrlFromBlacklist } = require('./blacklist')
-const Store = require('../models/store')
-const { addMailToLabel, addMailToUserLabel, removeMailFromLabel } = require('../models/labels')
+const Mail = require('../models/mails');
+const User = require('../models/users');
+const Label = require('../models/labels');
+const { isBlacklisted, addUrlToBlacklist, deleteUrlFromBlacklist } = require('../services/blacklist');
+const { addMailToLabel, removeMailFromLabel, addMailToUserLabel } = require('../services/labels');
 
 
 
@@ -32,108 +34,84 @@ const checkLinks = async (body, subject) => {
 
 // Create a new mail object and add it to both sender and recipient
 const createMail = async (sender, recipient, subject, body, originalDraftId = null) => {
-    const  { links, isContain } = await checkLinks(body, subject)
-    const mailId = `m-${sender.id}-${sender.mailCounter++}`
-    const time = new Date().toISOString()
+  const  { links, isContain } = await checkLinks(body, subject)
+  const time = new Date();
     
-    const senderMail  = {
-        id: mailId,
-        from: sender.id,
-        to: recipient.id,
-        subject: subject || '',
-        body: body || '',
-        links,
-        labels: [],
-        time,
-        fromName: sender.displayName,
-        toName: recipient.displayName,
-        fromUserName: sender.username,
-        toUserName: recipient.username,
-        fromPicture: sender.picture,
-        isStarred: false
-    }
-    const recipientMail = {
-      id: `${mailId}-copy`,
-      from: sender.id,
-      to: recipient.id,
-      subject: subject || '',
-      body: body || '',
-      links,
-      labels: [],
-      time,
-      fromName: sender.displayName,
-      toName: recipient.displayName,
-      fromUserName: sender.username,
-      toUserName: recipient.username,
-      fromPicture: sender.picture,
-       isStarred: false
-  }
+  const baseMail = await Mail.create({
+    from: sender._id,
+    to: recipient._id,
+    subject: subject || '',
+    body: body || '',
+    links,
+    labels: [],
+    time,
+    fromName: sender.displayName,
+    toName: recipient.displayName,
+    fromUserName: sender.username,
+    toUserName: recipient.username,
+    fromPicture: sender.picture,
+    isStarred: false
+  });
+
 
   // Find label objects by name
-  const senderLabel = sender.labels.find(l => l.name === 'Sent')
-  const recipientLabel = recipient.labels.find(l => l.name === (isContain ? 'Spam' : 'Inbox'));
+  const senderLabel = await Label.findOne({ user: sender._id, name: 'Sent' });
+  const recipientLabel = await Label.findOne({ user: recipient._id, name: isContain ? 'Spam' : 'Inbox' });
 
-  if (sender.id === recipient.id) {
-    // Add mail to labels using external helper
-    addMailToLabel(senderLabel, senderMail);
-    addMailToLabel(recipientLabel, senderMail);
-    sender.mails.push(senderMail);
+  let mail;
+  if (sender._id.equals(recipient._id)) {
+    // שינוי: רק מייל אחד כאשר שולח = נמען
+    mail = await Mail.create(baseMail);
+    await addMailToLabel(senderLabel._id, mail._id);
+    await addMailToLabel(recipientLabel._id, mail._id);
   } else {
-    addMailToLabel(senderLabel, senderMail);
-    addMailToLabel(recipientLabel, recipientMail);
-    // Save the mails to the users' mailboxes
-    sender.mails.push(senderMail);
-    recipient.mails.push(recipientMail);
+    const senderMail = await Mail.create(baseMail);
+    const recipientMail = await Mail.create(baseMail);
+    await addMailToLabel(senderLabel._id, senderMail._id);
+    await addMailToLabel(recipientLabel._id, recipientMail._id);
+    mail = senderMail;
   }
 
   // If it was a draft - delete it from mails and label references
   if (originalDraftId) {
-    const originalDraft = sender.mails.find(m => m.id === originalDraftId);
-    sender.mails = sender.mails.filter(m => m.id !== originalDraftId)
-    // for (const label in sender.labels) {
-    //   sender.labels[label].mails = sender.labels[label].mails.filter(id => id !== originalDraftId)
-    // }
-    removeMailFromLabel(sender,originalDraft,'Drafts')
-
+    await Mail.findByIdAndDelete(originalDraftId);
+    await Label.updateMany({ user: sender._id }, { $pull: { mails: originalDraftId } });
   }
 
-  return senderMail;
-}
+  return mail;
+};
 
 // Return up to 50 mails from a given label, starting at the given offset
-const getMailsByLableWithOffset = (user, labelName, offset) => {
-  const label = user.labels.find(l => l.name === labelName)
-  if (!label) {
-    throw new Error('LABEL_NOT_FOUND')
-  }
+const getMailsByLableWithOffset = async (user, labelName, offset) => {
+  const label = await Label.findOne({ user: user._id, name: labelName }).populate('mails');
+  if (!label) throw new Error('LABEL_NOT_FOUND');
 
   //Sort the mails array by time
-  const labelMails = label.mails
-    .map(mailId => user.mails.find(m => m.id === mailId))
-    .filter(mail => mail !== undefined)
-    .sort((a, b) => new Date(b.time) - new Date(a.time))
-
-    //Return only up to 50 mails, depends on
-    return labelMails.slice(offset, offset + 50)
-}
+  const labelMails = label.mails.sort((a, b) => new Date(b.time) - new Date(a.time));
+  return labelMails.slice(offset, offset + 50);
+};
 
 
 // Search for query string in selected fields of user's mails
-const searchMailsByQuery = (user, query) => {
-  
+const searchMailsByQuery = async (user, query) => {
   // Convert query to lowercase for case-insensitive comparison
-    const lowerQuery = query.toLowerCase()
+  const lowerQuery = query.toLowerCase()
+  // שלב 1: שלוף את כל המיילים שהמשתמש שלח או קיבל
+  const mails = await Mail.find({
+    $or: [
+      { from: user._id },
+      { to: user._id }
+    ]
+  });
 
-  // Return only mails where the query appears in one of the relevant fields
-  return user.mails.filter(mail => {
-    return (
-            (mail.subject?.toLowerCase().includes(lowerQuery)) ||  // Check subject if exists
-            (mail.body?.toLowerCase().includes(lowerQuery)) ||     // Check body if exists
-            mail.fromName.toLowerCase().includes(lowerQuery) ||        // Check 'from' field (always exists)
-            mail.toName.toLowerCase().includes(lowerQuery)             // Check 'to' field (always exists)
-        )
-  })
-}
+  // שלב 2: סנן לפי הטקסט
+  return mails.filter(mail =>
+    mail.subject?.toLowerCase().includes(lowerQuery) ||
+    mail.body?.toLowerCase().includes(lowerQuery) ||
+    mail.fromName?.toLowerCase().includes(lowerQuery) ||
+    mail.toName?.toLowerCase().includes(lowerQuery)
+  );
+};
 
 
 // Creates a draft mail(even from an exicted draft)
@@ -153,18 +131,14 @@ const createDraft = async (sender, to, subject, body, originalDraftId = null) =>
     }
   }
 
-
-  const mailId = `m-${sender.id}-${sender.mailCounter++}`
+  const recipient = to ? await User.findOne({ username: to }) : null;
   const time = new Date().toISOString()
 
   // Check if 'to' is a valid user, if it is keeps it in recipient
-  const recipient = to ? Store.find(u => u.username === to) : null;
-
   //create mail
   const draftMail = {
-    id: mailId,
     from: sender.id,
-    to: recipient ? recipient.id : '',
+    to: recipient ? recipient.id : null,
     subject: subject || '',
     body: body || '',
     links: [],
@@ -177,14 +151,14 @@ const createDraft = async (sender, to, subject, body, originalDraftId = null) =>
     fromPicture: sender.picture,
      isStarred: false
   }
+  await draftMail.save();
 
-  const draftLabel = sender.labels.find(l => l.name === 'Drafts')
+  const draftLabel = await Label.findOne({ user: sender._id, name: 'Drafts' });
   if (!draftLabel) throw new Error('NO_DRAFT_LABEL')
   
   // Add mail to labels using external helper
-  addMailToLabel(draftLabel, draftMail)
-  // Save the mails to the users' mailboxes
-  sender.mails.push(draftMail)
+  await addMailToLabel(draftLabel._id, draft._id);
+
 
   return draftMail
 }
@@ -192,7 +166,7 @@ const createDraft = async (sender, to, subject, body, originalDraftId = null) =>
 // Adds an existing mail to a user's label by label name.
 // If the label is "Spam", the mail's links are added to the global blacklist.
 const addLabelToMail = async (user, mailId, labelName) => {
-  const mail = user.mails.find(m => m.id === mailId);
+  const mail = await Mail.findById(mailId);
   if (!mail) {
     throw new Error('MAIL_NOT_FOUND');
   }
@@ -204,52 +178,32 @@ const addLabelToMail = async (user, mailId, labelName) => {
     }
   }
 
-  addMailToUserLabel(user, mail, labelName)
+  addMailToUserLabel(user._id, mailId, labelName)
 }
 
 
 // Deletes a mail completely from user.mails and all labels.
 // If deleted from "Spam", also removes its links from the blacklist.
 const deleteMail = async (user, mailId) => {
-  const mail = user.mails.find(m => m.id === mailId)
+  const mail = await Mail.findById(mailId);
   if (!mail) {
     throw new Error('MAIL_NOT_FOUND')
   }
-
-  const isSelfMail = mail.from === mail.to;
-
-
   // If mail is in Spam, remove its links from the blacklist
-  const wasInSpam = user.labels.find(label =>
-    label.name === 'Spam' && label.mails.includes(mailId)
-  )
-  if (wasInSpam) {
-  for (const link of mail.links) {
-    try {
-      await deleteUrlFromBlacklist(link)
-    } catch (err) {
-      console.warn(`Failed to delete link ${link}: ${err.message}`)
+  const spamLabel = await Label.findOne({ user: user._id, name: 'Spam', mails: mailId });
+  if (spamLabel) {
+    for (const link of mail.links) {
+      try {
+        await deleteUrlFromBlacklist(link);
+      } catch (err) {
+        console.warn(`Failed to delete link ${link}: ${err.message}`);
+      }
     }
   }
-}
 
   // Remove the mail from all labels
-  for (const label of user.labels) {
-    if (label.mails.includes(mail.id)) {
-      removeMailFromLabel(user, mail, label.name)
-    }
-  }
-
-  // Remove the mail from user.mails
-  user.mails = user.mails.filter(m => m.id !== mailId)
-}
-
-
-
-
-
-
-
-
+  await Label.updateMany({ user: user._id }, { $pull: { mails: mailId } });
+  await Mail.findByIdAndDelete(mailId);
+};
 
 module.exports = { createMail, getMailsByLableWithOffset, searchMailsByQuery, createDraft, addLabelToMail, deleteMail }
