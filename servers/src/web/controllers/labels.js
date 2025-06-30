@@ -4,7 +4,7 @@ const { addMailToUserLabel } = require('../models/labels');
 
 
 // Create a new label for a specific user
-exports.createLabel = (req, res) => {
+exports.createLabel = async (req, res) => {
   const { name } = req.body;
 
   // Validate required fields
@@ -13,7 +13,7 @@ exports.createLabel = (req, res) => {
   }
 
   // get the auterized user user we want to add the label to
-  const user = getUserById(req.user.id);
+  const user = await getUserById(req.user.id);
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
@@ -27,9 +27,9 @@ exports.createLabel = (req, res) => {
 };
 
 // Get all labels for a specific user
-exports.getAllLabels = (req, res) => {
+exports.getAllLabels = async (req, res) => {
   // find the user we want to add the label to
-  const user = getUserById(req.user.id);
+  const user = await getUserById(req.user.id);
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
@@ -39,10 +39,10 @@ exports.getAllLabels = (req, res) => {
 };
 
 // Get a specific label for a specific user
-exports.getLabelById = (req, res) => {
+exports.getLabelById = async (req, res) => {
 
   const labelId = req.params.id;
-  const user = getUserById(req.user.id);
+  const user = await getUserById(req.user.id);
 
   if (!user) return res.status(404).json({ error: "User not found" });
 
@@ -54,7 +54,7 @@ exports.getLabelById = (req, res) => {
 };
 
 // Update a specific label name of a specific user
-exports.updateLabel = (req, res) => {
+exports.updateLabel = async (req, res) => {
 
   const labelId = req.params.id;
   const { name } = req.body;
@@ -63,7 +63,7 @@ exports.updateLabel = (req, res) => {
     return res.status(400).json({ error: "Name is required" });
   }
 
-  const user = getUserById(req.user.id);
+  const user = await getUserById(req.user.id);
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }

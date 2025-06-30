@@ -50,42 +50,6 @@ exports.createUser = async (req, res) => {
 
     res.status(400).json({ error: err.message });
   }
-
-
-  // try {
-  //   const sourcePath = path.resolve(picture); // Gets the absolute path of the picture in the tempUploads folder
-  //   const fileExtension = path.extname(picture); //Gets the file extension: .jpg\.png\...
-
-  //   // We pass `null` for the picture initially, because we don't know the final path.
-  //   const newUser = Users.createUser(username, displayName, password, null, gender, birthday);
-  //   if (!newUser) { // the username was taken.
-  //     await fs.unlink(sourcePath);  // Delete the temporary file
-  //     return res.status(400).json({ error: "This username is taken" });
-  //   }
-  //   const newUserId = newUser.id;
-  //   const finalFileName = `${newUserId}${fileExtension}`; // The final file name will be the user id with the original file extension 
-  //   const destinationPath = path.resolve('pictures', finalFileName); // The final path where the picture will be stored
-
-  //   // Replace fs.rename with fs.copyFile and fs.unlink
-  //   await fs.copyFile(sourcePath, destinationPath); // Copy the file to the new location
-  //   await fs.unlink(sourcePath); // Delete the original file from the temp directory
-
-  //   //  Update the user object with the final, permanent picture path.
-  //   const finalImagePath = `pictures/${finalFileName}`;
-  //   newUser.picture = finalImagePath;
-  //   res.status(201).location(`/api/users/${newUser.id}`).end();
-
-  // } catch (error) {
-  //   // This catches errors from fs.rename or fs.unlink
-  //   console.error('Server error during user registration:', error);
-
-  //   // Attempt to clean up the temp file if it still exists
-  //   if (picture) {
-  //     try { await fs.unlink(path.resolve(picture)); } catch (e) { /* ignore cleanup error */ }
-  //   }
-
-  //   res.status(500).json({ message: 'An internal server error occurred.' });
-  // }
 };
 
 // Create a Valid display name
@@ -249,9 +213,7 @@ function isDateValid(day, month, year) {
 }
 
 exports.validatePicture = (req, res) => {
-  const file = req.file;
-
-  if (!file) {
+  if (! req.file) {
     return res.status(400).json({ error: "No file uploaded or file type is invalid." });
   }
 
@@ -267,12 +229,13 @@ exports.getUserById = async (req, res) => {
   const userHeader = req.user.id
   const userId = req.params.id
 
+
+  if (!userHeader || !userId) {
+    return res.status(400).json({ error: 'All fields are required' })
+  }
+  
   if (req.params.id !== req.user.id) {
     return res.status(403).json({ error: "Unauthorized access" });
-  }
-
-  if (!userHeader || !userId || userHeader !== userId) {
-    return res.status(400).json({ error: 'All fields are required' })
   }
 
   const user = await Users.getUserById(userId)
@@ -332,20 +295,22 @@ exports.getUserDarkMode = async (req, res) => {
     .json({ isDarkMode: user.isDarkMode })
 }
 
-exports.toggleDarkMode = (req, res) => {
+exports.toggleDarkMode = async (req, res) => {
   // Check if the user id matches the id in the request header
   const userHeader = req.user.id
   const userId = req.params.id
+
+  
+  if (!userHeader || !userId ) {
+    return res.status(400).json({ error: 'All fields are required' })
+  }
 
   if (userHeader !== userId) {
     return res.status(403).json({ error: "Unauthorized access" });
   }
 
-  if (!userHeader || !userId || userHeader !== userId) {
-    return res.status(400).json({ error: 'All fields are required' })
-  }
   try {
-    const userIsDarkMode = Users.toggleDarkMode(userId)
+    const userIsDarkMode = await Users.toggleDarkMode(userId)
     res
       .status(200)
       .json({ isDarkMode: userIsDarkMode })
