@@ -17,7 +17,6 @@ exports.createMail = async (req, res) => {
 
     // get the auterized sender from the request user
     const sender = await userService.getUserById(req.user.id);
-
     // Find the sender and recipient users in the users list
     const recipient = await userService.isUserNameRegistered(to)
 
@@ -93,6 +92,7 @@ checkIdValid = async (userId, mailId, res) => {
     }
 
     const user = await userService.getUserById(userId);
+
     if (!user) {
         res.status(404).json({ error: 'User not found' })
         return null
@@ -250,9 +250,9 @@ exports.addLabelToMail = async (req, res) => {
 
 // Controller to handle removing mail from lable
 exports.removeLabelFromMail = async (req, res) => {
-  const userId = req.user.id;
-  const mailId = req.params.id;
-  const { labelName } = req.body;
+    const userId = req.user.id;
+    const mailId = req.params.id;
+    const { labelName } = req.body;
 
   const user = await userService.getUserById(userId);
   if (!user) return res.status(404).json({ error: 'User not found' });
@@ -267,38 +267,37 @@ exports.removeLabelFromMail = async (req, res) => {
       await Mail.findByIdAndUpdate(mailId, { isStarred: false });
     }
 
-    return res.status(200).json({ message: `Removed ${labelName} from mail ${mailId}` });
-  } catch (err) {
-    if (err.message === 'LABEL_NOT_FOUND') return res.status(404).json({ error: 'Label not found' });
-    if (err.message === 'MAIL_NOT_IN_LABEL') return res.status(400).json({ error: 'Mail not in label' });
-    return res.status(500).json({ error: 'Server error' });
-  }
+        return res.status(200).json({ message: `Removed ${labelName} from mail ${mailId}` });
+    } catch (err) {
+        if (err.message === 'LABEL_NOT_FOUND') return res.status(404).json({ error: 'Label not found' });
+        if (err.message === 'MAIL_NOT_IN_LABEL') return res.status(400).json({ error: 'Mail not in label' });
+        return res.status(500).json({ error: 'Server error' });
+    }
 };
 
 // Controller to handle adding mail to default lable
 exports.forceAddLabelToMail = async (req, res) => {
-  const userId = req.user.id;
-  const mailId = req.params.id;
-  const { labelName } = req.body;
+    const userId = req.user.id;
+    const mailId = req.params.id;
+    const { labelName } = req.body;
 
-  const user = await userService.getUserById(userId);
-  if (!user) return res.status(404).json({ error: 'User not found' });
+    const user = await userService.getUserById(userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
-  const mail = await Mail.findById(mailId);
-  if (!mail) return res.status(404).json({ error: 'Mail not found' });
+    const mail = await Mail.findById(mailId);
+    if (!mail) return res.status(404).json({ error: 'Mail not found' });
 
-  const label = await Label.findOne({ user: userId, name: labelName });
-  if (!label) return res.status(404).json({ error: 'Label not found' });
+    const label = await Label.findOne({ user: userId, name: labelName });
+    if (!label) return res.status(404).json({ error: 'Label not found' });
 
-  try {
-    await labelService.addMailToLabel(label, mail);
+    try {
+      await labelService.addMailToLabel(label, mail);
 
-    if (labelName === 'starred') {
-      await Mail.findByIdAndUpdate(mailId, { isStarred: true });
-    }
+      if (labelName === 'starred') {
+        await Mail.findByIdAndUpdate(mailId, { isStarred: true });
 
-    return res.status(200).json({ message: `Force-added ${labelName} to mail ${mailId}` });
-  } catch (err) {
-    return res.status(500).json({ error: 'Server error' });
-  }
-};
+          return res.status(200).json({ message: `Force-added ${labelName} to mail ${mailId}` });
+      } catch (err) {
+          return res.status(500).json({ error: 'Server error' });
+      }
+  };

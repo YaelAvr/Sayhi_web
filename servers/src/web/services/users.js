@@ -58,14 +58,15 @@ const isUserNameRegistered = async (username) => {
   return await User.findOne({username});
 }
 
-const toggleDarkMode = (id) => {
-  const user = getUserById(id);
+const toggleDarkMode = async (id) => {
+  const user = await getUserById(id);
   if (!user) {
     throw new Error("User not found");
 
   }
   const temp = user.isDarkMode; // Store the current state
   user.isDarkMode = !temp; // Toggle dark mode
+  await user.save();
   return user.isDarkMode; // Return the new dark mode state
 }
 

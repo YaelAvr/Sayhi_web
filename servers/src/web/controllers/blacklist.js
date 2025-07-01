@@ -1,4 +1,4 @@
-const { addUrlToBlacklist, deleteUrlFromBlacklist } = require('../models/blacklist')
+const { addUrlToBlacklist, deleteUrlFromBlacklist } = require('../services/blacklist')
 
 //Add URL to blacklist 
 exports.addUrlToBlacklist = async (req, res) => {
