@@ -1,14 +1,8 @@
-const Store = require('../models/store')
-const { createMail } = require('../models/mails')
-const { getMailsByLableWithOffset } = require('../models/mails')
-const { searchMailsByQuery } = require('../models/mails')
-const { createDraft } = require('../models/mails')
-const { addLabelToMail } = require('../models/mails')
-const { deleteMail } = require('../models/mails')
-const { getUserById } = require("../models/users");
-const { isUserNameRegistered } = require("../models/users");
-const { addMailToLabel, removeMailFromLabel } = require('../models/labels')
-
+const mailService = require('../services/mails');
+const userService = require('../services/users');
+const labelService = require('../services/labels');
+const Mail = require('../models/mails');
+const Label = require('../models/labels');
 
 
 // Controller to handle creation of a new mail
@@ -22,10 +16,9 @@ exports.createMail = async (req, res) => {
     }
 
     // get the auterized sender from the request user
-    const sender = await getUserById(req.user.id);
-
+    const sender = await userService.getUserById(req.user.id);
     // Find the sender and recipient users in the users list
-    const recipient = isUserNameRegistered(to)
+    const recipient = await userService.isUserNameRegistered(to)
 
     // If either user is not found, return an error
     if (!sender || !recipient) {
@@ -43,16 +36,16 @@ exports.createMail = async (req, res) => {
 
     //if draftid was send, check if it exist
     if (originalDraftId) {
-        const draft = sender.mails.find(m => m.id === originalDraftId);
-        const draftsLabel = sender.labels.find(l => l.name === 'Drafts');
-        if (!draft || !draftsLabel || !draft.labels.includes(draftsLabel.id)) {
+        const draft = await Mail.findById(originalDraftId);
+        const draftsLabel = await Label.findOne({ user: sender.id, name: 'Drafts', mails: originalDraftId });
+        if (!draft || !draftsLabel ) {
             return res.status(400).json({ error: 'Invalid or non-draft mail ID' });
         }
     }
 
     // Try to create the mail using the createMail function
     try {
-        const mail = await createMail(sender, recipient, subject, body, originalDraftId)
+        const mail = await mailService.createMail(sender, recipient, subject, body, originalDraftId)
         // Return a success response with the new mail's location
         res.status(201).location(`/api/mails/${mail.id}`).end()
     } catch (err) {
@@ -65,12 +58,6 @@ exports.createMail = async (req, res) => {
 // Controller to Handle the request to get the user's last 50 mails by lable and offset
 
 exports.getMailsByLableWithOffset = async (req, res) => {
-    const user = await getUserById(req.user.id)
-    // If the user is not found, return an error
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' })
-    }
-    
     // Find the user in the users list
     const labelName = req.query.label
     const rawOffset = req.query.offset
@@ -84,10 +71,12 @@ exports.getMailsByLableWithOffset = async (req, res) => {
         return res.status(400).json({ error: 'Missing label name' })
     }
 
-
-
     try {
-        const mails = getMailsByLableWithOffset(user, labelName, offset)
+        const user = await userService.getUserById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+            }    
+        const mails = await mailService.getMailsByLableWithOffset(user, labelName, offset);
         res.status(200).json(mails)
     } catch (err) {
         res.status(400).json({ error: err.message })
@@ -102,13 +91,14 @@ checkIdValid = async (userId, mailId, res) => {
         return null
     }
 
-    const user = await getUserById(userId)
+    const user = await userService.getUserById(userId);
+
     if (!user) {
         res.status(404).json({ error: 'User not found' })
         return null
     }
 
-    const mail = user.mails.find(m => m.id === mailId)
+    const mail = await Mail.findById(mailId);
     if (!mail) {
         res.status(403).json({ error: "Unauthorized access to mail or mail not found" });
         return null
@@ -123,13 +113,11 @@ exports.deleteMail = async (req, res) => {
     const mailId = req.params.id
 
     // Use the helper function to validate and retrieve user and mail
-    const result = checkIdValid(userId, mailId, res)
+    const result = await checkIdValid(userId, mailId, res)
     if (!result) return
 
-    const { user, mail } = result
-
     try {
-        await deleteMail(user, mailId)
+        await mailService.deleteMail(result.user, mailId);
         res.status(204).end()
     } catch (err) {
         res.status(400).json({ error: err.message })
@@ -139,18 +127,15 @@ exports.deleteMail = async (req, res) => {
 
 
 // Controller to Handle the option to get a specific mail 
-exports.getSpecificMail = (req, res) => {
-    if (req.params.id !== req.user.id) {
-        return res.status(403).json({ error: "Unauthorized access" });
-    }
-
+exports.getSpecificMail = async (req, res) => {
+ 
     // Get the user Id
     const userId = req.user.id
     //Get the mails'id from the url
     const mailId = req.params.id
 
     // Use helper function to validate user and mail
-    const result = checkIdValid(userId, mailId, res)
+    const result = await checkIdValid(userId, mailId, res)
     if (!result) {
         return
     }
@@ -173,7 +158,7 @@ exports.searchMailsByQuery = async (req, res) => {
     }
 
     // Find user in users array
-    const user = await getUserById(userId);
+    const user = await userService.getUserById(userId);
     if (!user) {
         return res.status(404).json({ error: 'User not found' })
     }
@@ -186,7 +171,7 @@ exports.searchMailsByQuery = async (req, res) => {
     }
 
     // Call model logic to search mails
-    const results = searchMailsByQuery(user, trimmedQuery)
+    const results = await mailService.searchMailsByQuery(user, trimmedQuery);
     res.status(200).json(results)
 }
 
@@ -200,13 +185,13 @@ exports.createDraft = async (req, res) => {
     if (!userId) {
         return res.status(400).json({ error: 'Missing sender ID' })
     }
-    const sender = await getUserById(userId)
+    const sender = await userService.getUserById(userId);
     if (!sender) {
         return res.status(404).json({ error: 'Sender not found' })
     }
 
     try {
-        const draft = await createDraft(sender, to, subject, body, originalDraftId)
+        const draft = await mailService.createDraft(sender, to, subject, body, originalDraftId)
         res.status(201).json(draft)
     } catch (err) {
         if (err.message === 'DRAFT_EMPTY') {
@@ -231,18 +216,17 @@ exports.addLabelToMail = async (req, res) => {
         return res.status(400).json({ error: 'Missing user ID or label name' })
     }
 
-    const user = await getUserById(userId)
+    const user = await userService.getUserById(userId)
     if (!user) {
         return res.status(404).json({ error: 'User not found' })
     }
 
     try {
         // Add the label (with blacklist logic for "Spam")
-        await addLabelToMail(user, mailId, labelName);
+        await mailService.addLabelToMail(user, mailId, labelName);
 
         if (labelName === 'Starred') {
-            const mail = user.mails.find(m => m.id === mailId);
-            mail.isStarred = true;
+            await Mail.findByIdAndUpdate(mailId, { isStarred: true });
         }
 
         return res.status(200).json({ message: `Mail ${mailId} labeled as ${labelName}` })
@@ -270,18 +254,18 @@ exports.removeLabelFromMail = async (req, res) => {
     const mailId = req.params.id;
     const { labelName } = req.body;
 
-    const user = await getUserById(userId);
-    if (!user) return res.status(404).json({ error: 'User not found' });
+  const user = await userService.getUserById(userId);
+  if (!user) return res.status(404).json({ error: 'User not found' });
 
-    const mail = user.mails.find(m => m.id === mailId);
+  const mail = await Mail.findById(mailId);
     if (!mail) return res.status(404).json({ error: 'Mail not found' });
 
-    try {
-        removeMailFromLabel(user, mail, labelName);
+  try {
+    await labelService.removeMailFromLabel(user, mail, labelName);
 
-        if (labelName === 'Starred') {
-            mail.isStarred = false;
-        }
+    if (labelName === 'Starred') {
+      await Mail.findByIdAndUpdate(mailId, { isStarred: false });
+    }
 
         return res.status(200).json({ message: `Removed ${labelName} from mail ${mailId}` });
     } catch (err) {
@@ -297,24 +281,23 @@ exports.forceAddLabelToMail = async (req, res) => {
     const mailId = req.params.id;
     const { labelName } = req.body;
 
-    const user = await getUserById(userId);
+    const user = await userService.getUserById(userId);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    const mail = user.mails.find(m => m.id === mailId);
+    const mail = await Mail.findById(mailId);
     if (!mail) return res.status(404).json({ error: 'Mail not found' });
 
-    const label = user.labels.find(l => l.name === labelName);
+    const label = await Label.findOne({ user: userId, name: labelName });
     if (!label) return res.status(404).json({ error: 'Label not found' });
 
     try {
-        addMailToLabel(label, mail);
+      await labelService.addMailToLabel(label, mail);
 
-        if (labelName === 'starred') {
-            mail.isStarred = true;
-        }
+      if (labelName === 'starred') {
+        await Mail.findByIdAndUpdate(mailId, { isStarred: true });
 
-        return res.status(200).json({ message: `Force-added ${labelName} to mail ${mailId}` });
-    } catch (err) {
-        return res.status(500).json({ error: 'Server error' });
-    }
-};
+          return res.status(200).json({ message: `Force-added ${labelName} to mail ${mailId}` });
+      } catch (err) {
+          return res.status(500).json({ error: 'Server error' });
+      }
+  };
