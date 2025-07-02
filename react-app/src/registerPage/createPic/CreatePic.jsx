@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import  {API_STATUS_URL} from "../../config"
 import UserForm from "../../userForm/UserForm";
 import Text from "./text.json"
 
@@ -42,7 +43,7 @@ const CreatePic = (props) => {
     uploadData.append("profilePic", picture.img);
 
     try {
-      const res = await fetch("/api/users/picture", {
+      const res = await fetch(`${API_STATUS_URL}/users/picture`, {
         method: "POST",
         body: uploadData,
       });

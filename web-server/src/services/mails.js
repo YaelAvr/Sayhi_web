@@ -1,8 +1,8 @@
 const Mail = require('../models/mails');
 const User = require('../models/users');
 const Label = require('../models/labels');
-const { isBlacklisted, addUrlToBlacklist, deleteUrlFromBlacklist } = require('../services/blacklist');
-const { addMailToLabel, removeMailFromLabel, addMailToUserLabel } = require('../services/labels');
+const { isBlacklisted, addUrlToBlacklist, deleteUrlFromBlacklist } = require('./blacklist');
+const { addMailToLabel, removeMailFromLabel, addMailToUserLabel } = require('./labels');
 
 
 

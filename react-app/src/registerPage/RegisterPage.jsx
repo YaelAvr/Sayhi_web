@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import  {API_STATUS_URL} from "../config"
+
 import { useNavigate } from "react-router-dom";
 import UserForm from "../userForm/UserForm";
 import registerText from "./confirmRegisterText.json";
@@ -55,7 +57,7 @@ const RegisterPage = () => {
   const registerUser = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("/api/users/", {
+    const res = await fetch(`${API_STATUS_URL}/users/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...userData }),

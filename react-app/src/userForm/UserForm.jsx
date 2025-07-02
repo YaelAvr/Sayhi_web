@@ -23,7 +23,7 @@ function UserForm({
 }) {
   const handleKeyUp = (e) => {
     if (e.key === "Enter") {
-      buttonsConf.SubmitFunc();
+      buttonsConf.SubmitFunc(e);
     }
   };
   return (

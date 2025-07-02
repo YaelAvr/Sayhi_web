@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import  {API_STATUS_URL} from "../../config"
+
 import UserForm from "../../userForm/UserForm";
 import Text from "./text.json";
 
@@ -19,7 +21,7 @@ const CreatePassword = (props) => {
   const validatePassword = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("/api/users/password", {
+    const res = await fetch(`${API_STATUS_URL}/users/password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...password }),

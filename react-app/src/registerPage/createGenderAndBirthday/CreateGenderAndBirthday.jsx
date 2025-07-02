@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import  {API_STATUS_URL} from "../../config"
 import UserForm from "../../userForm/UserForm";
 import Text from "./text.json";
 
@@ -20,7 +21,7 @@ const CreateGenderAndBirthday = (props) => {
       : -1;
     const monthNum = monthIndex !== -1 ? monthIndex + 1 : 0;
 
-    const res = await fetch("/api/users/birthday", {
+    const res = await fetch(`${API_STATUS_URL}/users/birthday`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -44,7 +45,7 @@ const CreateGenderAndBirthday = (props) => {
 
   // Function to validate the Gender that the user entered.
   const createGender = async () => {
-    const res = await fetch("/api/users/gender", {
+    const res = await fetch(`${API_STATUS_URL}/users/gender`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ gender }),

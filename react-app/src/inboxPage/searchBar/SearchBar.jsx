@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import  {API_STATUS_URL} from "../../config"
 import './SearchBar.css';
 import searchIcon from './search.svg'; 
 
@@ -33,7 +34,7 @@ const SearchBar = ({ onFullSearch, onPreviewItemClick  }) => {
         setIsLoading(true);
         const token = localStorage.getItem('token');
         try {
-          const response = await fetch(`/api/mails/search/${encodeURIComponent(query)}`, {
+          const response = await fetch(`${API_STATUS_URL}/mails/search/${encodeURIComponent(query)}`, {
             headers: { 'Authorization': `Bearer ${token}` },
           });
           if (!response.ok) throw new Error('Preview search failed');

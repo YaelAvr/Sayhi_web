@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import  {API_STATUS_URL} from "../config"
+
 import "./InboxPage.css";
 import TopBar from "./TopBar";
 import SideBar from "./SideBar";
@@ -51,7 +53,7 @@ const InboxPage = () => {
     }
 
     try {
-      const response = await fetch("/api/labels", {
+      const response = await fetch(`${API_STATUS_URL}/labels`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -89,7 +91,7 @@ const InboxPage = () => {
     setModalError("");
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch(`/api/labels/${deletingLabel.id}`, {
+      const response = await fetch(`${API_STATUS_URL}/labels/${deletingLabel.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -112,7 +114,7 @@ const InboxPage = () => {
     const userId = getUserIdFromToken();
 
     try {
-      const response = await fetch(`/api/users/darkMode/${userId}`, {
+      const response = await fetch(`${API_STATUS_URL}/users/darkMode/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -132,7 +134,7 @@ const InboxPage = () => {
     const userId = getUserIdFromToken();
 
     try {
-      const response = await fetch(`/api/users/darkMode/${userId}`, {
+      const response = await fetch(`${API_STATUS_URL}/users/darkMode/${userId}`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -159,7 +161,7 @@ const InboxPage = () => {
 
     try {
       const res = await fetch(
-        `/api/mails/label-mails?label=${currentLabel}&offset=${offset}`,
+        `${API_STATUS_URL}/mails/label-mails?label=${currentLabel}&offset=${offset}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -187,7 +189,7 @@ const InboxPage = () => {
     setModalError("");
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch(`/api/labels/${editingLabel.id}`, {
+      const response = await fetch(`${API_STATUS_URL}/labels/${editingLabel.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -255,7 +257,7 @@ const InboxPage = () => {
       const endpoint = currentlyStarred ? "/remove-label" : "/add-label";
       const labelName = "Starred";
 
-      const res = await fetch(`/api/mails/${mailId}${endpoint}`, {
+      const res = await fetch(`${API_STATUS_URL}/mails/${mailId}${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -285,7 +287,7 @@ const InboxPage = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`/api/mails/${mailId}`, {
+      const res = await fetch(`${API_STATUS_URL}/mails/${mailId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -315,7 +317,7 @@ const InboxPage = () => {
 
     if (!updatedLabelId || !inboxLabelId || !spamLabelId) return;
 
-    await fetch(`/api/mails/${mailId}${endpoint}`, {
+    await fetch(`${API_STATUS_URL}/mails/${mailId}${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -326,7 +328,7 @@ const InboxPage = () => {
 
     if (updatedLabelId === spamLabelId) {
       if (isCurrentlyInLabel) {
-        await fetch(`/api/mails/${mailId}/force-add-label`, {
+        await fetch(`${API_STATUS_URL}/mails/${mailId}/force-add-label`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -335,7 +337,7 @@ const InboxPage = () => {
           body: JSON.stringify({ labelName: "Inbox" })
         });
       } else {
-        await fetch(`/api/mails/${mailId}/remove-label`, {
+        await fetch(`${API_STATUS_URL}/mails/${mailId}/remove-label`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -394,7 +396,7 @@ const InboxPage = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `/api/mails/search/${encodeURIComponent(trimmedQuery)}`,
+        `${API_STATUS_URL}/mails/search/${encodeURIComponent(trimmedQuery)}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

@@ -22,13 +22,13 @@ services:
 
   webserver: 
     build:
-      context: .
-      dockerfile: Dockerfile.webserver
-    volumes:
-      - ./servers/src/web/pictures:/usr/src/gmail-project/servers/src/web/pictures
-      - ./servers/src/web/tempUploads:/usr/src/gmail-project/servers/src/web/tempUploads
+      context: ./web-server
+      dockerfile: Dockerfile
+    # volumes:
+    #   - ./servers/src/web/pictures:/usr/src/gmail-project/servers/src/web/pictures
+    #   - ./servers/src/web/tempUploads:/usr/src/gmail-project/servers/src/web/tempUploads
     ports:
-      - "3000:3000"
+      - "4000:3000"
     stdin_open: true
     tty: true
     depends_on:
@@ -36,4 +36,19 @@ services:
     environment:
       SERVER_HOST: server
       SERVER_PORT: 8080
+    
+react-app: 
+    build:
+      context: ./react-app
+      dockerfile: Dockerfile
+    # volumes:
+    #   - ./servers/src/web/pictures:/usr/src/gmail-project/servers/src/web/pictures
+    #   - ./servers/src/web/tempUploads:/usr/src/gmail-project/servers/src/web/tempUploads
+    ports:
+      - "3000:80"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - web-server
+
     

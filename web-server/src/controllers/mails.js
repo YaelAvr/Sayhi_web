@@ -297,7 +297,7 @@ exports.forceAddLabelToMail = async (req, res) => {
         await Mail.findByIdAndUpdate(mailId, { isStarred: true });
 
           return res.status(200).json({ message: `Force-added ${labelName} to mail ${mailId}` });
-      } catch (err) {
+      }} catch (err) {
           return res.status(500).json({ error: 'Server error' });
       }
   };
