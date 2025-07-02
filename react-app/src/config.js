@@ -1,0 +1,1 @@
+export const API_STATUS_URL = 'http://localhost:4000/api';

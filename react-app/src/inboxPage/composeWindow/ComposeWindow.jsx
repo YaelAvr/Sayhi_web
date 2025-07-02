@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import  {API_STATUS_URL} from "../../config"
 import './ComposeWindow.css'; 
 import deleteIcon from '../labelButton/icons/delete.svg';
 
@@ -43,7 +44,7 @@ function ComposeWindow({ onClose, draftData = null, onDraftSaved }) {
     }
 
     try {
-      const response = await fetch('/api/mails/drafts', {
+      const response = await fetch(`${API_STATUS_URL}/mails/drafts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ function ComposeWindow({ onClose, draftData = null, onDraftSaved }) {
     }
 
     try {
-      const response = await fetch('/api/mails', {
+      const response = await fetch(`${API_STATUS_URL}/mails`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

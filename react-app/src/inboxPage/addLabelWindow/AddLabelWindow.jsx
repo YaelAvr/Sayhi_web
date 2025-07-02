@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import  {API_STATUS_URL} from "../../config"
+
 import GenericWindow from '../genericWindow/GenericWindow';
 import '../genericWindow/GenericWindow.css';  
 
@@ -11,7 +13,7 @@ function AddLabelWindow({ onClose, onLabelAdded }) {
     
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch('/api/labels', {
+      const response = await fetch(`${API_STATUS_URL}/labels`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

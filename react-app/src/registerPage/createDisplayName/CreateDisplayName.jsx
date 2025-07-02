@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import  {API_STATUS_URL} from "../../config"
 import UserForm from "../../userForm/UserForm";
 import Text from "./text.json"
 
@@ -11,7 +12,7 @@ const CreateDisplayName = (props) => {
   const validateDisplayName = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("/api/users/displayName", {
+    const res = await fetch(`${API_STATUS_URL}/users/displayName`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firstWord, secondWord }),

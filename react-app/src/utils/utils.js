@@ -1,3 +1,4 @@
+import  {API_STATUS_URL} from "../config"
 export function getUserIdFromToken() {
   const lsToken = localStorage.getItem("token");
   if (!lsToken) return null;
@@ -23,7 +24,7 @@ export const verifyToken = async ({ setAuthStatus }) => {
 
   // check if the token is valid
   try {
-    const res = await fetch("/api/tokens/verify", {
+    const res = await fetch(`${API_STATUS_URL}/tokens/verify`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

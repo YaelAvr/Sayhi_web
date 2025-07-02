@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import  {API_STATUS_URL} from "../config"
 import Logo from "../gmailLogo/Logo";
 import { ReactComponent as DarkModeLogo } from "./mode-icons/dark_mode.svg";
 import { ReactComponent as LightModeLogo } from "./mode-icons/light_mode.svg";
@@ -25,7 +26,7 @@ const TopBar = ({ onLogout, onFullSearch, onPreviewItemClick, isDarkMode, toggle
         const userId = getUserIdFromToken();
         const token = localStorage.getItem("token");
 
-        const res = await fetch(`/api/users/${userId}`, {
+        const res = await fetch(`${API_STATUS_URL}/users/${userId}`, {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
         });

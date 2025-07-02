@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import  {API_STATUS_URL} from "../config"
 import { useNavigate } from "react-router-dom";
 import UserForm from "../userForm/UserForm";
 import loginText from "./loginText.json";
@@ -17,7 +18,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     // Check if username and password match
-    const res = await fetch("/api/tokens/", {
+    const res = await fetch(`${API_STATUS_URL}/tokens/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -42,7 +43,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`/api/users/validation/${username}`, {
+      const res = await fetch(`${API_STATUS_URL}/users/validation/${username}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });

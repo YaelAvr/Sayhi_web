@@ -32,12 +32,14 @@
 *.app
 
 /node_modules
-servers/data/BloomFilterBackup.txt
+
+web-server/node_modules
+cpp-server/data/BloomFilterBackup.txt
 
 #  Ignore all the pictures in the pictures and tempUploads directories
-servers/src/web/pictures/*
-servers/src/web/tempUploads/*
+/web-server/pictures/*
+/web-server/tempUploads/*
 
 # keep the place holder files
-!servers/src/web/pictures/*.txt
-!servers/src/web/tempUploads/*.txt
+!/web-server/pictures/*.txt
+!/web-server/tempUploads/*.txt
