@@ -1,6 +1,6 @@
-#include "../servers/src/cpp/BackupFile.h"
-#include "../servers/src/cpp/Blacklist.h"
-#include "../servers/src/cpp/BloomFilter.h"
+#include "../src/BackupFile.h"
+#include "../src/Blacklist.h"
+#include "../src/BloomFilter.h"
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
@@ -21,13 +21,13 @@ TEST(BackupTest, CreateFile) {
     //test for out of range acses
     EXPECT_THROW(BackupFile::updateBloomFilterBeckup(11), out_of_range);
     EXPECT_THROW(BackupFile::updateBloomFilterBeckup(8), out_of_range);
-    std::remove("../servers/data/BloomFilterBackup.txt");
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // this test will find if the file was initialized correctly 
 TEST(BackupTest, InitFile) {
     BackupFile::createBackupFile(8);
-    ifstream file("../servers/data/BloomFilterBackup.txt");
+    ifstream file("../data/BloomFilterBackup.txt");
     string line;
     int count = 0;
 
@@ -48,7 +48,7 @@ TEST(BackupTest, InitFile) {
     both cases are bad. */
     EXPECT_EQ(count, 8);
     file.close();
-    std::remove("../servers/data/BloomFilterBackup.txt");
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 
@@ -59,7 +59,7 @@ TEST(BackupTest, updateBloomFilter) {
     // EXPECT_NO_THROW(BackupFile::updateBloomFilterBeckup(3), out_of_range);
     //BloomArray[4]=1
     BackupFile::updateBloomFilterBeckup(4);
-    ifstream file("../servers/data/BloomFilterBackup.txt");
+    ifstream file("../data/BloomFilterBackup.txt");
     int lineCounter = 0;
     string line;
 
@@ -74,7 +74,7 @@ TEST(BackupTest, updateBloomFilter) {
     //find if the line that represents BloomArray[4] now equal 1
     EXPECT_EQ(line, "1");
     file.close();
-    std::remove("../servers/data/BloomFilterBackup.txt");
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // this test will find if the blacklist was uptaed correctly 
@@ -83,7 +83,7 @@ TEST(BackupTest, updateBlackList) {
     
     //we want to add a URL to the list
     BackupFile::updateBlacklistBeckup("www.example.com0");
-    ifstream file("../servers/data/BloomFilterBackup.txt");
+    ifstream file("../data/BloomFilterBackup.txt");
     int lineCounter = 0;
     string line;
     string lastLine;
@@ -100,7 +100,7 @@ TEST(BackupTest, updateBlackList) {
     EXPECT_EQ(lastLine, "www.example.com0");
     EXPECT_EQ(lineCounter, 10);
     file.close();
-    std::remove("../servers/data/BloomFilterBackup.txt");
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // test if after load the bloom filter have the same bit on
@@ -120,7 +120,7 @@ TEST(BackupTest, loadToBF) {
             EXPECT_EQ(obj.getBitSign(i), 0);
         }
     }
-    std::remove("../servers/data/BloomFilterBackup.txt");
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // test if after load the blacklist have the string
@@ -133,23 +133,23 @@ TEST(BackupTest, loadToBl) {
     const std::vector<std::string>& blArray = obj.getBlacklistArr();
     EXPECT_EQ(blArray.at(0), "www.example.com0");
     EXPECT_EQ(blArray.size(), 1); //make sure that only include the url
-    std::remove("../servers/data/BloomFilterBackup.txt");
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // Test case to verify that when the backup file does not exist, the function returns 0.
 TEST(BackupTest, ReturnsFalseWhenBackupDoesNotExist) {
-    std::remove("../servers/data/BloomFilterBackup.txt");
+    std::remove("../data/BloomFilterBackup.txt");
     EXPECT_EQ(BackupFile::backupExists(), 0);
 }
 
 // Test case to verify that when the backup file exists, the function returns 1.
 TEST(BackupTest, ReturnsTrueWhenBackupExists) {
-    std::ofstream create("../servers/data/BloomFilterBackup.txt");
+    std::ofstream create("../data/BloomFilterBackup.txt");
     create.close();
 
     EXPECT_EQ(BackupFile::backupExists(), 1);
 
-    std::remove("../servers/data/BloomFilterBackup.txt");
+    std::remove("../data/BloomFilterBackup.txt");
 }
 
 // write test to make sure that a url is delted
@@ -161,7 +161,7 @@ TEST(BackupTest, DeleteBackupURL){
 
     BackupFile::deleteURL("www.example.com1");
 
-    fstream file("../servers/data/BloomFilterBackup.txt", ios::in | ios::out); 
+    fstream file("../data/BloomFilterBackup.txt", ios::in | ios::out); 
 
     string line;
 
@@ -179,5 +179,5 @@ TEST(BackupTest, DeleteBackupURL){
     }
 
     file.close();
-    std::remove("../servers/data/BloomFilterBackup.txt");
+    std::remove("../data/BloomFilterBackup.txt");
 }

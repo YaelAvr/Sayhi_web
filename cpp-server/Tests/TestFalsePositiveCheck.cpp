@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
-#include "../servers/src/cpp/Blacklist.h"
-#include "../servers/src/cpp/BloomFilter.h"
-#include "../servers/src/cpp/FalsePositiveCheck.h"
+#include "../src/Blacklist.h"
+#include "../src/BloomFilter.h"
+#include "../src/FalsePositiveCheck.h"
 #include <sstream>
 #include <iostream>
-#include "../servers/src/cpp/StdInputOutput.h"
+#include "../src/StdInputOutput.h"
 
 //Checks if the result equals to "true true"
 TEST(FalsePositive, TrueTrueResult) {

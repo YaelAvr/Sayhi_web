@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../servers/src/cpp/ServerInit.h"
+#include "../src/ServerInit.h"
 
 
 TEST(ValidPortTest, ValidPorts) {

@@ -1,24 +1,24 @@
 services:
   server:
     build:
-      context: .
-      dockerfile: Dockerfile.server
-    volumes:
-      - ./servers/data:/usr/gmail-project/servers/data 
+      context: ./cpp-server
+      dockerfile: Dockerfile
+    # volumes:
+    #   - ./servers/data:/usr/gmail-project/servers/data 
     ports:
       - "8080:8080"
 
   tests:
     build:
-      context: .
-      dockerfile: Dockerfile.server
+      context: ./cpp-server
+      dockerfile: Dockerfile
       args:
         - BUILD_TESTING=ON
-    volumes:
-      - ./servers/data:/usr/gmail-project/servers/data
+    # volumes:
+    #   - ./servers/data:/usr/gmail-project/servers/data
     stdin_open: true
     tty: true
-    command: [./build/my_tests]
+    command: [./my_tests]
 
   webserver: 
     build:

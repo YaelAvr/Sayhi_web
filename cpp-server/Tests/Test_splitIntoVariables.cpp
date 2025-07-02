@@ -2,7 +2,7 @@
 #include <utility>
 #include <vector>
 #include <string>
-#include "../servers/src/cpp/splitIntoAppropriateVariables.h"
+#include "../src/splitIntoAppropriateVariables.h"
 
 // Input: "5 10 20 30"
 // Expected output: first = 5, second = {10, 20, 30}

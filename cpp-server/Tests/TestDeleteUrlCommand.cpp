@@ -1,11 +1,11 @@
-#include "../servers/src/cpp/DeleteURLCommand.h"
-#include "../servers/src/cpp/InitHendler.h"
-#include "../servers/src/cpp/AddURLCommand.h"
-#include "../servers/src/cpp/BackupFile.h"
-#include "../servers/src/cpp/Blacklist.h"
-#include "../servers/src/cpp/BloomFilter.h"
-#include "../servers/src/cpp/BloomFilterLogic.h"
-#include "../servers/src/cpp/StdInputOutput.h"
+#include "../src/DeleteURLCommand.h"
+#include "../src/InitHendler.h"
+#include "../src/AddURLCommand.h"
+#include "../src/BackupFile.h"
+#include "../src/Blacklist.h"
+#include "../src/BloomFilter.h"
+#include "../src/BloomFilterLogic.h"
+#include "../src/StdInputOutput.h"
 #include <gtest/gtest.h>
 
 
@@ -20,7 +20,7 @@ TEST(DeleteURL, deleteUrl) {
     addCommand->execute("1 www.example.com12"); //add URL
     deleteCommand->execute("3 www.example.com12"); //remove URL
     EXPECT_FALSE(init->getBlacklist().isUrlBlacklisted("www.example.com12"));
-    std::remove("../servers/data/BloomFilterBackup.txt");
+    std::remove("../data/BloomFilterBackup.txt");
     delete io;
     delete init;
     delete addCommand;

@@ -7,7 +7,7 @@
 using namespace std;
 
 streampos BackupFile::iterArrayInFile(int cell){
-    fstream backupFile("../../data/BloomFilterBackup.txt", ios::in | ios::out); 
+    fstream backupFile("../data/BloomFilterBackup.txt", ios::in | ios::out); 
 
     string line;
     streampos pos = 0;
@@ -30,7 +30,7 @@ and initialize it with the array size
 and zeros that represent a new Bloom filter array */ 
 void BackupFile::createBackupFile(int arraySize){
     // Create a file named BloomFilterBackup and open it for writing
-    ofstream backupFile("../../data/BloomFilterBackup.txt"); 
+    ofstream backupFile("../data/BloomFilterBackup.txt"); 
 
     if (!backupFile) {
         throw runtime_error("not able to create and open file");
@@ -50,7 +50,7 @@ void BackupFile::createBackupFile(int arraySize){
 // update a specific cell in the "Bloom-filter" array to 1
  void BackupFile::updateBloomFilterBeckup(int cell) {
     // Create a file named BloomFilterBackup and open it for writing
-    fstream backupFile("../../data/BloomFilterBackup.txt", ios::in | ios::out); 
+    fstream backupFile("../data/BloomFilterBackup.txt", ios::in | ios::out); 
 
     if (!backupFile) {
         throw runtime_error("not able to open file");
@@ -74,7 +74,7 @@ void BackupFile::createBackupFile(int arraySize){
 // add a new URL to the end on the "Blacklist" array.
 void BackupFile::updateBlacklistBeckup(string url){
     // Create a file named BloomFilterBackup and open it for writing
-    ofstream backupFile("../../data/BloomFilterBackup.txt", ios_base::app); 
+    ofstream backupFile("../data/BloomFilterBackup.txt", ios_base::app); 
 
     if (!backupFile) {
         throw runtime_error("not able to open file");
@@ -88,7 +88,7 @@ void BackupFile::updateBlacklistBeckup(string url){
     into an array of a Blacklist object
 */
 void BackupFile::loadBlacklist(Blacklist& bl, int arraySize){
-    ifstream backupFile("../../data/BloomFilterBackup.txt");
+    ifstream backupFile("../data/BloomFilterBackup.txt");
     if (!backupFile) {
         throw runtime_error("not able to open file");
     }
@@ -110,7 +110,7 @@ void BackupFile::loadBlacklist(Blacklist& bl, int arraySize){
     into an array of a BloomFilter object
 */
 void BackupFile::loadBloomFilter(BloomFilter& bf, int arraySize){
-    ifstream backupFile("../../data/BloomFilterBackup.txt");
+    ifstream backupFile("../data/BloomFilterBackup.txt");
     if (!backupFile) {
         throw runtime_error("not able to open file");
     }
@@ -131,7 +131,7 @@ void BackupFile::loadBloomFilter(BloomFilter& bf, int arraySize){
 
 // The backupExists method checks if the backup file "BloomFilterBackup.txt" exists in the "../data" directory.
 int BackupFile::backupExists() {
-    std::ifstream file("../../data/BloomFilterBackup.txt");  // Attempt to open the file for reading
+    std::ifstream file("../data/BloomFilterBackup.txt");  // Attempt to open the file for reading
     if (file) {  
         // If the file is opened successfully, return 1 (file exists).
         return 1;  
@@ -144,7 +144,7 @@ int BackupFile::backupExists() {
 
 // This function will delete a url from the backup file
 void BackupFile::deleteURL(std::string url) {
-    ifstream backupFile("../../data/BloomFilterBackup.txt");
+    ifstream backupFile("../data/BloomFilterBackup.txt");
     if (!backupFile) {
         throw runtime_error("not able to open file");
     }
@@ -161,7 +161,7 @@ void BackupFile::deleteURL(std::string url) {
     backupFile.close();
 
     // replace old text with new text
-    ofstream backuptoFile("../../data/BloomFilterBackup.txt", ios::trunc);
+    ofstream backuptoFile("../data/BloomFilterBackup.txt", ios::trunc);
     if (!backuptoFile) {
         throw runtime_error("not able to open file");
     }

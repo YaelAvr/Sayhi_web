@@ -1,7 +1,7 @@
 #include <vector>
 #include <stdexcept>
 #include <gtest/gtest.h>
-#include "../servers/src/cpp/HashManager.h"
+#include "../src/HashManager.h"
 
 // Checking the functionality of hash and modulo operation
 TEST(HashManagerTest, WorkWithHash) { 

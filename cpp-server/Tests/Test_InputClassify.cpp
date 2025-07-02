@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../servers/src/cpp/InputClassify.h"
+#include "../src/InputClassify.h"
 
 
 // Test: line with command "POST" and valid URL should return 1
