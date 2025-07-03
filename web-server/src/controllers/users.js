@@ -244,7 +244,7 @@ exports.getUserById = async (req, res) => {
   res
     .status(200)
     .json({
-      id: user.id, username: user.username, displayName: user.displayName, picture: user.picture,
+      id: user._id, username: user.username, displayName: user.displayName, picture: user.picture,
       gender: user.gender, birthday: user.birthday
     })
 };

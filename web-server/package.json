@@ -5,7 +5,10 @@
   "description": "This project implements a URL blacklist system using a Bloom filter in C++. The application supports adding, checking, and deleting URLs via a TCP client-server architecture. The server is written in C++, and the client is written in JavaScript (Express). The system is designed according to SOLID principles and follows the TDD methodology.",
   "main": "web-server/src/app.js",
   "scripts": {
-    "start":  "node src/app.js"
+    "start":  "node src/app.js",
+    "server": "node src/app.js",
+  "client": "npm start --prefix ../react-app",
+  "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "cors": "^2.8.5",

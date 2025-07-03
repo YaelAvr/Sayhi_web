@@ -28,7 +28,8 @@ const createUser = async (username, displayName, password, picture, gender, birt
   //  const finalImagePath =
   newUser.picture = await uplodePic(picture, newUser._id);
   await newUser.save();
-  createDefaultLabels(newUser);
+  createDefaultLabels( newUser._id);
+  await newUser.save();
 
   return newUser;
 }
@@ -37,25 +38,20 @@ const createUser = async (username, displayName, password, picture, gender, birt
 const getUserById = async (id) => {return await User.findById(id);}
 
 //Create default labels for each new user
-const createDefaultLabels = async (user) => {
+const createDefaultLabels = async (userId) => {
   const defaults_add = ['Spam', 'Starred'];
   const defaults_noAdd = ['Inbox', 'Sent', 'Drafts'];
 
   for (const name of defaults_add) {
-    await createLabel(user, name, { isDefault: true, allowAdd: false })
+    await createLabel(userId, name, { isDefault: true, allowAdd: false })
   }
   for (const name of defaults_noAdd) {
-    await createLabel(user, name, { isDefault: true, allowAdd: false })
+    await createLabel(userId, name, { isDefault: true, allowAdd: false })
   }
-  // createLabel(user, 'Inbox', { isDefault: true, allowAdd: false })
-  // createLabel(user, 'Starred', { isDefault: true })
-  // createLabel(user, 'Sent', { isDefault: true, allowAdd: false })
-  // createLabel(user, 'Drafts', { isDefault: true, allowAdd: false })
-  // createLabel(user, 'Spam', { isDefault: true })
 }
 
-const isUserNameRegistered = async (username) => {
-  return await User.findOne({username});
+const isUserNameRegistered = async (usernameVal) => {
+  return await User.findOne({username: usernameVal});
 }
 
 const toggleDarkMode = async (id) => {

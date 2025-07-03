@@ -12,11 +12,13 @@ exports.isUserRegistered = async (req, res) => {
 
     try {
         const user = await Tokens.isUserRegistered(username, password);
+
+        const token =Tokens.generateToken(user)        
         // Generate a JWT token for the user
         // The token contains the user id and username, and expires in 1 hour.
         res
             .status(201)
-            .json(Tokens.generateToken(user))
+            .json({token})
     } catch (err) {
         return res.status(404).json({ error: err.message });
 
