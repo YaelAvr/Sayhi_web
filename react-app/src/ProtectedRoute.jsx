@@ -8,7 +8,13 @@ const ProtectedRoute = ({ children }) => {
 
   // check once when the component mounts
   useEffect(() => {
+    try{
     verifyToken({ setAuthStatus });
+
+    } catch(e){
+      console.error("Fetch failed:", e);
+
+    }
   }, []);
 
   if (authStatus === "pending") {
