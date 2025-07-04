@@ -3,7 +3,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-require('custom-env').env(true, __dirname, 'config'); //לא עובד טוב
+// require('custom-env').env(true, __dirname, 'config'); //לא עובד טוב
+require('dotenv').config({ path: path.join(__dirname, './config/.env') });
+
 
 app.use(cors());
 
