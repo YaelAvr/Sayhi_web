@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- אייקון האווטאר של השולח -->
+    <ImageView
+        android:id="@+id/icon_avatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@android:drawable/ic_menu_myplaces"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <!-- שם השולח (מודגש) -->
+    <TextView
+        android:id="@+id/text_from"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toEndOf="@id/icon_avatar"
+        app:layout_constraintTop_toTopOf="@id/icon_avatar"
+        app:layout_constraintEnd_toStartOf="@id/text_time"
+        tools:text="Sender Name" />
+
+    <!-- נושא המייל -->
+    <TextView
+        android:id="@+id/text_subject"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintStart_toStartOf="@id/text_from"
+        app:layout_constraintTop_toBottomOf="@id/text_from"
+        app:layout_constraintEnd_toEndOf="@id/text_from"
+        tools:text="This is the mail subject" />
+
+    <!-- תצוגה מקדימה של תוכן המייל -->
+    <TextView
+        android:id="@+id/text_preview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintStart_toStartOf="@id/text_subject"
+        app:layout_constraintTop_toBottomOf="@id/text_subject"
+        app:layout_constraintEnd_toEndOf="@id/text_subject"
+        tools:text="And this is a short preview of the mail content..." />
+
+    <!-- זמן קבלת המייל -->
+    <TextView
+        android:id="@+id/text_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/text_from"
+        tools:text="10:42 AM" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

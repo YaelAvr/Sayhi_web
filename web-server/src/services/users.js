@@ -39,15 +39,11 @@ const getUserById = async (id) => {return await User.findById(id);}
 
 //Create default labels for each new user
 const createDefaultLabels = async (userId) => {
-  const defaults_add = ['Spam', 'Starred'];
-  const defaults_noAdd = ['Inbox', 'Sent', 'Drafts'];
-
-  for (const name of defaults_add) {
-    await createLabel(userId, name, { isDefault: true, allowAdd: false })
-  }
-  for (const name of defaults_noAdd) {
-    await createLabel(userId, name, { isDefault: true, allowAdd: false })
-  }
+  createLabel(userId, 'Inbox', { isDefault: true, allowAdd: false })
+  createLabel(userId, 'Starred', { isDefault: true })
+  createLabel(userId, 'Sent', { isDefault: true, allowAdd: false })
+  createLabel(userId, 'Drafts', { isDefault: true, allowAdd: false })
+  createLabel(userId, 'Spam', { isDefault: true })
 }
 
 const isUserNameRegistered = async (usernameVal) => {
