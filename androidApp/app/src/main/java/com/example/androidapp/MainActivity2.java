@@ -88,7 +88,6 @@ public class MainActivity2 extends AppCompatActivity {
             fetchLabelsForNav();
         }
 
-        // ======================= תחילת קוד חדש =======================
         // מציאת כפתור הוספת הלייבל והגדרת לחיצה עליו
         ImageButton addLabelButton = navigationView.findViewById(R.id.button_add_label);
         if (addLabelButton != null) {
@@ -96,7 +95,6 @@ public class MainActivity2 extends AppCompatActivity {
                 addNewMockLabel(); // קריאה לפונקציה חדשה
             });
         }
-        // ======================= סוף קוד חדש =======================
     }
 
     private void fetchLabelsForNav() {
@@ -104,88 +102,142 @@ public class MainActivity2 extends AppCompatActivity {
 
         Label label1 = new Label();
         label1.setId("1");
-        label1.setName("Work");
+        label1.setName("inbox");
         mockLabels.add(label1);
 
         Label label2 = new Label();
         label2.setId("2");
-        label2.setName("Personal");
+        label2.setName("starred");
         mockLabels.add(label2);
 
         Label label3 = new Label();
         label3.setId("3");
-        label3.setName("Groceries");
+        label3.setName("drafts");
         mockLabels.add(label3);
 
         Label label4 = new Label();
         label4.setId("4");
-        label4.setName("University");
+        label4.setName("spam");
         mockLabels.add(label4);
 
         Label label5 = new Label();
         label5.setId("5");
-        label5.setName("Important");
+        label5.setName("sent");
         mockLabels.add(label5);
 
         labelsAdapter.setLabels(mockLabels);
-        Toast.makeText(this, "Displaying mock data", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.toast_displaying_mock_data, Toast.LENGTH_SHORT).show();
     }
+
+    private void fetchLabelsForNavvvvvvv() {
+        // 1. יצירת מופע של TokenManager
+        TokenManager tokenManager = new TokenManager(this);
+
+        // 2. קריאת הטוקן מה-SharedPreferences
+        String token = tokenManager.getToken();
+
+        // 3. בדיקה אם קיים טוקן (מקביל ל- `if (!token)` ב-React)
+        if (token == null) {
+            // המשתמש לא מחובר. צריך להעביר אותו למסך הלוגין.
+            // לדוגמה:
+            // Intent intent = new Intent(this, LoginActivity.class);
+            // startActivity(intent);
+            // finish(); // סוגר את ה-Activity הנוכחי
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_LONG).show();
+            return; // עוצרים את הפונקציה
+        }
+
+        // 4. אם יש טוקן, נשלח אותו בבקשה
+        String authToken = "Bearer " + token;
+
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        Call<List<Label>> call = apiService.getLabels(authToken);
+
+        call.enqueue(new Callback<List<Label>>() {
+            @Override
+            public void onResponse(Call<List<Label>> call, Response<List<Label>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    labelsAdapter.setLabels(response.body());
+                } else {
+                    // יכול להיות שהטוקן פג תוקף
+                    Toast.makeText(MainActivity2.this, "Failed to load labels: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Label>> call, Throwable t) {
+                Toast.makeText(MainActivity2.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void fetchLabelsForNavwithHardCoded() {
+        // --- נשתול כאן טוקן קבוע לבדיקות ---
+        // 1. השג טוקן תקין מהשרת שלך (למשל, דרך Postman או מהאפליקציה הקיימת ב-React).
+        // 2. הדבק אותו כאן.
+        String hardcodedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"; // <--- הדבק כאן את הטוקן האמיתי שלך
+
+        // 3. אין צורך לבדוק אם הטוקן קיים, כי אנחנו יודעים שהוא שם.
+        String authToken = "Bearer " + hardcodedToken;
+
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        Call<List<Label>> call = apiService.getLabels(authToken);
+
+        call.enqueue(new Callback<List<Label>>() {
+            @Override
+            public void onResponse(Call<List<Label>> call, Response<List<Label>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // הצלחה! הנתונים מהשרת יוצגו
+                    labelsAdapter.setLabels(response.body());
+                    Toast.makeText(MainActivity2.this, "Labels loaded from API!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // שגיאה מהשרת (אולי הטוקן ששתלת לא תקין או פג תוקף)
+                    Toast.makeText(MainActivity2.this, "API Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Label>> call, Throwable t) {
+                // שגיאת רשת
+                Toast.makeText(MainActivity2.this, "Network Failure: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 
     // ======================= תחילת פונקציה חדשה =======================
     private void addNewMockLabel() {
-        // 1. יצירת ה-AlertDialog Builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add New Label");
+        // 1. "ניפוח" (Inflate) של קובץ ה-Layout שיצרנו
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_label, null);
+        final EditText inputLabelName = dialogView.findViewById(R.id.input_label_name);
 
-        // 2. יצירת ה-EditText (שדה הקלט) עבור הדיאלוג
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setHint("Enter label name");
+        // 2. יצירת ה-AlertDialog וקישור ה-View שלנו אליו
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_add_new_label)
+                .setView(dialogView) // <-- כאן אנחנו משתמשים ב-Layout מה-XML
+                .setPositiveButton(R.string.dialog_button_add, (dialog, which) -> {
+                    String labelName = inputLabelName.getText().toString().trim();
 
-        // הגדרת padding כדי שזה ייראה טוב
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        input.setLayoutParams(lp);
+                    if (!labelName.isEmpty()) {
+                        Label newLabel = new Label();
+                        newLabel.setId("local_" + System.currentTimeMillis());
+                        newLabel.setName(labelName);
 
-        // הוספת ה-EditText לדיאלוג (עם קונטיינר כדי שיהיה padding)
-        FrameLayout container = new FrameLayout(this);
-        FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-        params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-        input.setLayoutParams(params);
-        container.addView(input);
-        builder.setView(container);
-
-        // 3. הגדרת כפתור "אישור" (Add)
-        builder.setPositiveButton("Add", (dialog, which) -> {
-            String labelName = input.getText().toString().trim();
-
-            // בדיקה שהמשתמש באמת הכניס טקסט
-            if (!labelName.isEmpty()) {
-                // יצירת אובייקט Label חדש
-                Label newLabel = new Label();
-                newLabel.setId("local_" + System.currentTimeMillis()); // ID מקומי זמני
-                newLabel.setName(labelName);
-
-                // הוספה ל-Adapter
-                if (labelsAdapter != null) {
-                    labelsAdapter.addLabel(newLabel);
-                    if (navLabelsRecyclerView != null) {
-                        navLabelsRecyclerView.scrollToPosition(labelsAdapter.getItemCount() - 1);
+                        if (labelsAdapter != null) {
+                            labelsAdapter.addLabel(newLabel);
+                            if (navLabelsRecyclerView != null) {
+                                navLabelsRecyclerView.scrollToPosition(labelsAdapter.getItemCount() - 1);
+                            }
+                        }
+                        Toast.makeText(this, getString(R.string.toast_label_added, labelName), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, R.string.toast_label_name_cannot_be_empty, Toast.LENGTH_SHORT).show();
                     }
-                }
-                Toast.makeText(this, "Added: " + labelName, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Label name cannot be empty", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // 4. הגדרת כפתור "ביטול" (Cancel)
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
-        // 5. הצגת הדיאלוג
-        builder.show();
+                })
+                .setNegativeButton(R.string.dialog_button_cancel, null) // null פשוט יסגור את הדיאלוג
+                .show();
     }
     // ======================= סוף פונקציה חדשה =======================
 
