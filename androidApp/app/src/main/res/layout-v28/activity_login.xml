@@ -29,7 +29,7 @@
                 android:id="@+id/imageView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/sayhilogo" />
+                app:srcCompat="@drawable/say_hi_logo" />
 
             <TextView
                 android:layout_width="wrap_content"
