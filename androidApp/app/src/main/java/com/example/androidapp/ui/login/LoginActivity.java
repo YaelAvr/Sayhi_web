@@ -1,30 +1,14 @@
 package com.example.androidapp.ui.login;
 
-import android.app.Activity;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androidapp.R;
-import com.example.androidapp.ui.login.LoginViewModel;
-import com.example.androidapp.ui.login.LoginViewModelFactory;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.androidapp.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -33,7 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
 
     private EditText inputField;
-    private Button actionButton;
+    private Button nextBtn;
     private TextView statusText;
     private boolean isPasswordMode = false;
     private String username;
@@ -41,8 +25,35 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Inflate the layout using View Binding
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        // Set the root of the binding as the content view
+        setContentView(binding.getRoot());
 
-        setContentView(R.layout.activity_login);
+        // Now, access your views directly from the binding object.
+        // The names are automatically converted from snake_case to camelCase.
+        // This is null-safe. If the ID doesn't exist, your project won't even build.
+        binding.formTitle.setText("Sign in");
+        binding.formDescriptionText.setText("to continue to your SayHi account");
+        /* setContentView(R.layout.activity_login);
+
+        TextView title = findViewById(R.id.form_title);
+        if (title == null) {
+            Log.e("DEBUG", "form_title is NULL!");
+        } else {
+            title.setText("Sign in");
+        }
+//        title.setText("Sign in");
+        TextView text = findViewById(R.id.form_description_text);
+//        text.setText("to continue to your SayHi account");
+
+        if (text == null) {
+            Log.e("DEBUG", "form_description_text is NULL!");
+        } else {
+            text.setText("to continue to your SayHi account");
+        }*/
+
+
 //        binding = ActivityLoginBinding.inflate(getLayoutInflater());
 //        setContentView(binding.getRoot());
 //

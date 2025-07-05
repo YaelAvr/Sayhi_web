@@ -24,13 +24,19 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/form_title"
+
+            style="@style/formTitle"
+            android:text=""
+
             />
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/form_description_text"
+            android:text=""
+            style="@style/formDText"
             />
         <EditText
             android:id="@+id/liUsername"
@@ -94,8 +100,8 @@
                 android:text="@string/create_an_account_btn"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/loginNextBtn"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/loginNextBtn"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
@@ -106,9 +112,9 @@
                 android:enabled="false"
                 android:text="@string/nextBtn"
                 android:textSize="16sp"
+                app:layout_constraintLeft_toRightOf="@+id/loginBackBtn"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/loginBackBtn"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
