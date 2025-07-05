@@ -8,6 +8,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.androidapp.ui.login.LoginActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -22,7 +24,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // מעבר אוטומטי ל-MainActivity2
-        Intent intent = new Intent(this, MainActivity2.class);
+//        Intent intent = new Intent(this, MainActivity2.class);
+        Intent intent = new Intent(this, LoginActivity.class);
+
         startActivity(intent);
+        finish();
     }
 }
