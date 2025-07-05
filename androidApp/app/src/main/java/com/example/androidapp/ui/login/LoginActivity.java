@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.androidapp.R;
 import com.example.androidapp.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -16,7 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
 
-    private EditText inputField;
+    private EditText edForm;
     private Button nextBtn;
     private Button backBtn;
     private TextView statusText;
@@ -43,18 +44,35 @@ public class LoginActivity extends AppCompatActivity {
 
         nextBtn = binding.loginNextBtn;
         backBtn = binding.loginBackBtn;
+        edForm = binding.liInput;
 
         nextBtn.setOnClickListener(v -> {
             if (isPasswordMode){
-                // TO--DO: api call to token and move to register
-            } else {
+                // TO--DO: api call to token and move to inbox
+            } else if(!edForm.getText().toString().isEmpty()) {
                 isPasswordMode=true;
-                EditText edForm = binding.liInput;
+
                 title.setText("Hi "); //TO-DO: add "+ display name" that return from API
                 explainText.setText(edForm.getText().toString() + "@sayhi.com"); // TO-DO: replace with API username
                 edForm.setText("");
-                edForm.setHint("Enter your Password");
-                backBtn.setText("Back");
+                edForm.setHint(R.string.login_password_hint);
+                backBtn.setText(R.string.backBtn);
+            } else {
+                runOnUiThread(() -> Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show());
+            }
+        });
+
+        backBtn.setOnClickListener(v -> {
+            if (isPasswordMode){
+                isPasswordMode=false;
+                title.setText("Sign in");
+                explainText.setText("to continue to your SayHi account");
+                edForm.setText("");
+                edForm.setHint(R.string.login_email_hint);
+                backBtn.setText(R.string.create_an_account_btn);
+            } else {
+                // TO--DO: move to register
+
             }
         });
 
