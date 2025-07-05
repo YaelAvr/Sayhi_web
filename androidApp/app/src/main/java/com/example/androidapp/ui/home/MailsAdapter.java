@@ -13,7 +13,7 @@ import com.example.androidapp.R;
 import java.text.SimpleDateFormat; // <-- הוסף את ה-import הזה
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale; // <-- הוסף את ה-import הזה
+import java.util.Locale;
 
 public class MailsAdapter extends RecyclerView.Adapter<MailsAdapter.MailViewHolder> {
 

@@ -52,13 +52,13 @@ public class MainActivity2 extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -95,6 +95,7 @@ public class MainActivity2 extends AppCompatActivity {
                 addNewMockLabel(); // קריאה לפונקציה חדשה
             });
         }
+        setupNavigationListener();
     }
 
     private void fetchLabelsForNav() {
@@ -252,6 +253,52 @@ public class MainActivity2 extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    // hide the toolbar when create mail window is open
+    public void hideMainToolbar() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+    }
+
+    public void showMainToolbar() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().show();
+        }
+    }
+
+    // hide the envelope button when create mail window is open
+    public void hideFloatingActionButton() {
+        if (binding.appBarMain.fab != null) {
+            binding.appBarMain.fab.hide();
+        }
+    }
+
+    public void showFloatingActionButton() {
+        if (binding.appBarMain.fab != null) {
+            binding.appBarMain.fab.show();
+        }
+    }
+
+    private void setupNavigationListener() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            // המאזין הזה יופעל בכל פעם שהמשתמש מנווט למסך חדש.
+            // 'destination' הוא היעד החדש.
+
+            // עכשיו נבדוק מהו היעד ונקבע את נראות הרכיבים.
+            if (destination.getId() == R.id.editNewMailFragment) {
+                // אם הגענו למסך כתיבת המייל, הסתר הכל.
+                hideMainToolbar();
+                hideFloatingActionButton();
+            } else {
+                // בכל מסך אחר, הצג הכל.
+                showMainToolbar();
+                showFloatingActionButton();
+            }
+        });
     }
 
 }
