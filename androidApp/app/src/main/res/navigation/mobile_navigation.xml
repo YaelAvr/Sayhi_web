@@ -9,7 +9,15 @@
         android:id="@+id/nav_home"
         android:name="com.example.androidapp.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_editNewMailFragment"
+            app:destination="@id/editNewMailFragment"
+            app:enterAnim="@null"
+            app:exitAnim="@null"
+            app:popEnterAnim="@null"
+            app:popExitAnim="@null" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_gallery"
@@ -22,4 +30,8 @@
         android:name="com.example.androidapp.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/editNewMailFragment"
+        android:name="com.example.androidapp.EditNewMailFragment"
+        android:label="EditNewMailFragment" />
 </navigation>
