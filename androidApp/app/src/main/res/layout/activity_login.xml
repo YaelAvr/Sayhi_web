@@ -39,7 +39,7 @@
             style="@style/formDText"
             />
         <EditText
-            android:id="@+id/liUsername"
+            android:id="@+id/liInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="no"
@@ -96,12 +96,13 @@
                 android:id="@+id/loginBackBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:enabled="false"
+                android:backgroundTint="@android:color/transparent"
                 android:text="@string/create_an_account_btn"
+                android:textColor="@color/btnBlue"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/loginNextBtn"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/loginNextBtn"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
@@ -109,9 +110,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="61dp"
-                android:enabled="false"
                 android:text="@string/nextBtn"
                 android:textSize="16sp"
+                android:backgroundTint="@color/btnBlue"
+
                 app:layout_constraintLeft_toRightOf="@+id/loginBackBtn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

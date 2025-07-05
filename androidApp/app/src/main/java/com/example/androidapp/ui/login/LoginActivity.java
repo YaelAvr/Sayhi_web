@@ -18,7 +18,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText inputField;
     private Button nextBtn;
+    private Button backBtn;
     private TextView statusText;
+    private TextView title;
+    private TextView explainText;
     private boolean isPasswordMode = false;
     private String username;
 
@@ -33,8 +36,28 @@ public class LoginActivity extends AppCompatActivity {
         // Now, access your views directly from the binding object.
         // The names are automatically converted from snake_case to camelCase.
         // This is null-safe. If the ID doesn't exist, your project won't even build.
-        binding.formTitle.setText("Sign in");
-        binding.formDescriptionText.setText("to continue to your SayHi account");
+        title=binding.formTitle;
+        explainText= binding.formDescriptionText;
+        title.setText("Sign in");
+        explainText.setText("to continue to your SayHi account");
+
+        nextBtn = binding.loginNextBtn;
+        backBtn = binding.loginBackBtn;
+
+        nextBtn.setOnClickListener(v -> {
+            if (isPasswordMode){
+                // TO--DO: api call to token and move to register
+            } else {
+                isPasswordMode=true;
+                EditText edForm = binding.liInput;
+                title.setText("Hi "); //TO-DO: add "+ display name" that return from API
+                explainText.setText(edForm.getText().toString() + "@sayhi.com"); // TO-DO: replace with API username
+                edForm.setText("");
+                edForm.setHint("Enter your Password");
+                backBtn.setText("Back");
+            }
+        });
+
         /* setContentView(R.layout.activity_login);
 
         TextView title = findViewById(R.id.form_title);

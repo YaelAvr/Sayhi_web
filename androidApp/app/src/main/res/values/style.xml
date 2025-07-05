@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="logoText">
-        <item name="android:layout_gravity">center_vertical|left</item>
+        <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_marginLeft">2dp</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textStyle">bold</item>
