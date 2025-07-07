@@ -39,7 +39,7 @@ router.use((err, req, res, next) => {
         next(err);
 });
 
-router.route('/validation/:username').post(controller.isUserNameRegistered)
+router.route('/validation/:username').get(controller.isUserNameRegistered)
 
 router.route('/:id')
         .get(authenticateToken, controller.getUserById)

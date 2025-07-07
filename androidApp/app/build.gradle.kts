@@ -53,6 +53,8 @@ dependencies {
     implementation(libs.legacy.support.v4)
     implementation(libs.swiperefreshlayout)
     implementation(libs.annotation)
+    implementation(libs.room.common.jvm)
+    implementation(libs.room.runtime.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
