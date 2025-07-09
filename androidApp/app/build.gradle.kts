@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.annotation)
     implementation(libs.room.common.jvm)
     implementation(libs.room.runtime.android)
+    annotationProcessor(libs.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

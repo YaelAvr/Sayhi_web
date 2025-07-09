@@ -14,6 +14,7 @@ navigationUi = "2.6.0"
 legacySupportV4 = "1.0.0"
 swiperefreshlayout = "1.1.0"
 annotation = "1.9.1"
+roomVersion = "2.6.1"
 roomCommonJvm = "2.7.2"
 roomRuntimeAndroid = "2.7.2"
 
@@ -34,6 +35,7 @@ swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefre
 annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
 
 
 [plugins]

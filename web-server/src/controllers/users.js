@@ -269,7 +269,7 @@ exports.isUserNameRegistered = async (req, res) => {
 
   if (!user) { return res.status(404).json({ exists: false, error: 'Could not find your SayHi Account' }); }
   else {
-    return res.status(200).json({ displayName: user.displayName, username: user.username });
+    return res.status(200).json({ exists: true, displayName: user.displayName, username: user.username });
   }
 }
 
