@@ -1,24 +1,43 @@
 package com.example.androidapp.ui.login;
 
-import android.util.Patterns;
+import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.androidapp.R;
-import com.example.androidapp.data.LoginRepository;
 import com.example.androidapp.data.Result;
-import com.example.androidapp.data.model.User;
+import com.example.androidapp.data.repository.UserRepository;
 
 public class LoginViewModel extends ViewModel {
 
+
+    private final MutableLiveData<Result<RegisteredUserView>> userResult = new MutableLiveData<>();
+    private final UserRepository repository;
+
+    public LoginViewModel(Context context) {
+        repository = new UserRepository(context);
+    }
+
+    public LiveData<Result<RegisteredUserView>> getUserResult() {
+        return userResult;
+    }
+
+    public void verifySignedUsername(String username) {
+        repository.verifySignedUsername(username, userResult);
+    }
+/*
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
+    private UserRepository userRepository;
 
-    LoginViewModel(LoginRepository loginRepository) {
-        this.loginRepository = loginRepository;
+
+//    LoginViewModel(LoginRepository loginRepository) {
+//        this.loginRepository = loginRepository;
+//    }
+    LoginViewModel(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     LiveData<LoginFormState> getLoginFormState() {
@@ -35,11 +54,13 @@ public class LoginViewModel extends ViewModel {
 
         if (result instanceof Result.Success) {
             User data = ((Result.Success<User>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+            loginResult.setValue(new LoginResult(new RegisteredUserView(data.getDisplayName())));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
     }
+//    public void enterUsername
+
 
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
@@ -68,7 +89,8 @@ public class LoginViewModel extends ViewModel {
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
         // TO-DO: add API call
+        return true;
 
 //        return password != null && password.trim().length() > 5;
-    }
+    }*/
 }

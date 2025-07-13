@@ -1,6 +1,7 @@
 package com.example.androidapp.data.WebApi;
 
 import com.example.androidapp.data.model.User;
+import com.example.androidapp.ui.login.RegisteredUserView;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -16,5 +17,5 @@ public interface UserServicesAPI {
     Call<User> createUser(@Body User newUser);
 
     @GET("users/validation/{username}")
-    Call<User> verifySignedUsername(@Path("username") String username);
+    Call<RegisteredUserView> verifySignedUsername(@Path("username") String username);
 }

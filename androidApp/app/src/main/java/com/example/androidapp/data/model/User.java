@@ -1,5 +1,6 @@
 package com.example.androidapp.data.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,33 +10,33 @@ import androidx.room.PrimaryKey;
 @Entity
 public class User {
     @PrimaryKey
+    @NonNull
     private String id;
     private String displayName;
     private String userName;
-//    private String password;
+
+    //    private String password;
     private String pictureURL;
     private boolean isDarkMode;
 
-    public User() {
-    }
 
-    public User(String id, String displayName, String userName, String pictureURL, boolean isDarkMode) {
+    public User(@NonNull String id, String displayName, String userName, String pictureURL, boolean isDarkMode) {
         this.id = id;
         this.displayName = displayName;
         this.userName = userName;
         this.pictureURL = pictureURL;
         this.isDarkMode = isDarkMode;
     }
-    public User(String userId, String displayName) {
+    public User(@NonNull String userId, String displayName) {
         this.id = userId;
         this.displayName = displayName;
     }
 
-    public String getUserId() {
+    public String getId() {
         return id;
     }
 
-    public void setUserId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
     public String getDisplayName() {

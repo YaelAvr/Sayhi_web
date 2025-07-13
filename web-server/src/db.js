@@ -5,7 +5,9 @@ require('custom-env').env(true, __dirname, 'config');
 
 const connectDB = async () => {
   try {
-    mongoose.connect(process.env.CONNECTION_STRING ||'mongodb://localhost:27017/gmailDB', {
+    console.log("CONNECTION_STRING: "+process.env.CONNECTION_STRING);
+    
+    mongoose.connect(process.env.CONNECTION_STRING , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
