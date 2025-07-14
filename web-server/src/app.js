@@ -12,13 +12,11 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.json());
-
 // // // --- Serve React Build ---
 // const reactBuildPath = path.join(__dirname, '..', '..', '..', 'react-app', 'build');
 // app.use(express.static(reactBuildPath));
 
-// --- NEW: Serve the permanent 'pictures' folder statically ---
+// Serve the permanent 'pictures' folder statically ---
 // This allows the client to access final images via URLs like /pictures/user_123.jpg
 app.use('/pictures', express.static(path.join(__dirname, '..',  'pictures')));
 
@@ -42,5 +40,12 @@ app.use('/api/blacklist', blacklistRoutes)
 //   res.sendFile(path.join(reactBuildPath, 'index.html'));
 // });
 
-app.listen(4000);
+
+const PORT = process.env.PORT || 5000;
+const HOST = process.env.HOST || '0.0.0.0';
+
+// app.listen(4000);
+app.listen(PORT, HOST, () => {
+  console.log(`Server running at http://${HOST}:${PORT}`);
+});
 

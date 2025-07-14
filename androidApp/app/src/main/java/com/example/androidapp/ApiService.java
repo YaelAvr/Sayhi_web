@@ -1,9 +1,10 @@
 package com.example.androidapp;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import java.util.List;
 
 public interface ApiService {
     @GET("api/labels")

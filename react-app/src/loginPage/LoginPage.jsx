@@ -44,7 +44,6 @@ const LoginPage = () => {
 
     try {
       const res = await fetch(`${API_STATUS_URL}/users/validation/${username}`, {
-        method: "POST",
         headers: { "Content-Type": "application/json" },
       });
 

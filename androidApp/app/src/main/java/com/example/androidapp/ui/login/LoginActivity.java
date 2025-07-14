@@ -1,6 +1,7 @@
 package com.example.androidapp.ui.login;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -8,11 +9,15 @@ import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.androidapp.R;
+import com.example.androidapp.data.Result;
+import com.example.androidapp.data.repository.UserRepository;
 import com.example.androidapp.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
+    private MutableLiveData<Result<RegisteredUserView>> loginResult = new MutableLiveData<>();
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
@@ -26,6 +31,9 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isPasswordMode = false;
     private String username;
 
+//    private UserApi userApi;
+
+    private UserRepository userRepository;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,17 +54,42 @@ public class LoginActivity extends AppCompatActivity {
         backBtn = binding.loginBackBtn;
         edForm = binding.liInput;
 
-        nextBtn.setOnClickListener(v -> {
-            if (isPasswordMode){
-                // TO--DO: api call to token and move to inbox
-            } else if(!edForm.getText().toString().isEmpty()) {
-                isPasswordMode=true;
+        userRepository=new UserRepository(this);
 
-                title.setText("Hi "); //TO-DO: add "+ display name" that return from API
-                explainText.setText(edForm.getText().toString() + "@sayhi.com"); // TO-DO: replace with API username
+        loginViewModel = new LoginViewModel(this);
+//        userApi =new UserApi();
+
+        loginViewModel.getUserResult().observe(this, result -> {
+            Log.i("errorType", "result on click " + result);
+
+            if (result instanceof Result.Success) {
+                RegisteredUserView user = ((Result.Success<RegisteredUserView>) result).getData();
+                isPasswordMode=true;
+                title.setText("Hi "+user.getDisplayName()); //TO-DO: add "+ display name" that return from API
+                explainText.setText(user.getUsername() + "@sayhi.com"); // TO-DO: replace with API username
                 edForm.setText("");
                 edForm.setHint(R.string.login_password_hint);
                 backBtn.setText(R.string.backBtn);
+            } else if (result instanceof Result.Error) {
+                Exception e = ((Result.Error) result).getError();
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        nextBtn.setOnClickListener(v -> {
+            Log.i("errorType", "isPasswordMode on click " + isPasswordMode);
+
+            if (isPasswordMode){
+                // TO--DO: api call to token and move to inbox
+            } else if(!edForm.getText().toString().isEmpty()) {
+                String username = edForm.getText().toString();
+//                userRepository.verifySignedUsername(username, loginResult);
+//                Result<User> result = loginRepository.login(username, password);
+                loginViewModel.verifySignedUsername(username);
+
+
+
+
             } else {
                 runOnUiThread(() -> Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show());
             }
@@ -183,7 +216,7 @@ public class LoginActivity extends AppCompatActivity {
 //        });
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
+    private void updateUiWithUser(RegisteredUserView model) {
 //        String welcome = getString(R.string.welcome) + model.getDisplayName();
 //        // TODO : initiate successful logged in experience
 //        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();

@@ -19,7 +19,6 @@ import com.example.androidapp.Mail;
 import com.example.androidapp.R;
 
 import java.util.ArrayList;
-import java.util.Collections; // <-- הוסף import
 import java.util.Date;
 import java.util.List;
 

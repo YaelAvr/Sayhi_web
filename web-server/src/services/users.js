@@ -29,9 +29,9 @@ const createUser = async (username, displayName, password, picture, gender, birt
   newUser.picture = await uplodePic(picture, newUser._id);
   await newUser.save();
    createDefaultLabels( newUser._id);
-  await newUser.save();
+  // await newUser.save();
 
-  return newUser;
+  return await newUser.save();;
 }
 
 

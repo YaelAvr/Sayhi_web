@@ -3,10 +3,12 @@ package com.example.androidapp;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ImageButton; // <-- הוסף את ה-import הזה
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -19,17 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidapp.databinding.ActivityMain2Binding;
 import com.example.androidapp.ui.gallery.LabelsAdapter;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import android.text.InputType;
-import android.widget.EditText;
-import androidx.appcompat.app.AlertDialog;
-import android.widget.FrameLayout;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import retrofit2.Call;
 import retrofit2.Callback;
