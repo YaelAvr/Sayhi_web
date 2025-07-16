@@ -1,4 +1,4 @@
-package com.example.androidapp;
+package com.example.androidapp.ui.editmail;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle; // <-- Import חדש
 import androidx.navigation.Navigation;
 
+import com.example.androidapp.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class EditNewMailFragment extends Fragment {

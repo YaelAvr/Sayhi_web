@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 // import androidx.annotation.NonNull; // הסרנו את ה-import
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.androidapp.Label;
+import com.example.androidapp.model.Label;
 import com.example.androidapp.R;
 import java.util.ArrayList;
 import java.util.List;

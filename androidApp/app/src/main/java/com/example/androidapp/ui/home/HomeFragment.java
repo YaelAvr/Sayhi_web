@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout; // <-- הוסף import
 
-import com.example.androidapp.Mail;
+import com.example.androidapp.data.model.MailEntity;
+import com.example.androidapp.model.Mail;
 import com.example.androidapp.R;
 
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerViewMails;
     private MailsAdapter mailsAdapter;
+    private MailViewModel mailViewModel;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +42,21 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mailViewModel = new ViewModelProvider(
+                this,
+                new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())
+        ).get(MailViewModel.class);
+
+        mailViewModel.getAllMails().observe(getViewLifecycleOwner(), mailEntities -> {
+            List<Mail> mails = new ArrayList<>();
+            for (MailEntity entity : mailEntities) {
+                mails.add(toMail(entity));
+            }
+            mailsAdapter.setMails(mails);
+            if (mailEntities.isEmpty()) {
+                insertMockMails();
+            }
+        });
 
         // מציאת הרכיבים מה-XML, כולל החדש
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
@@ -47,7 +66,7 @@ public class HomeFragment extends Fragment {
         setupSwipeToRefresh(); // קריאה לפונקציה חדשה שמגדירה את הרענון
 
         // טעינה ראשונית של הנתונים
-        loadMockMails();
+//        loadMockMails();
 
 //        if (getActivity() != null) {
 //            Log.d("MyFabCheck", "Fragment is attached to an Activity.");
@@ -112,6 +131,65 @@ public class HomeFragment extends Fragment {
         mailsAdapter.setMails(mockMails);
     }
 
+
+
+    private void insertMockMails() {
+        MailEntity mail1 = new MailEntity();
+        mail1.setId("m1");
+        mail1.setFromUserId("u1");
+        mail1.setFromName("Google");
+        mail1.setFromUserName("support");
+        mail1.setFromPicture(null);
+        mail1.setToUserId("u2");
+        mail1.setToUserName("yael");
+        mail1.setToName("Yael");
+        mail1.setSubject("Security Alert");
+        mail1.setBody("A new sign-in was detected on your account.");
+        mail1.setLinks(new ArrayList<>());
+        mail1.setLabelIds(new ArrayList<>());
+        mail1.setTime(new Date());
+        mail1.setStarred(false);
+        mail1.setRead(false);
+
+        MailEntity mail2 = new MailEntity();
+        mail2.setId("m2");
+        mail2.setFromUserId("u3");
+        mail2.setFromName("LinkedIn");
+        mail2.setFromUserName("linkedin");
+        mail2.setFromPicture(null);
+        mail2.setToUserId("u2");
+        mail2.setToUserName("yael");
+        mail2.setToName("Yael");
+        mail2.setSubject("Someone viewed your profile");
+        mail2.setBody("You had 3 profile views this week.");
+        mail2.setLinks(new ArrayList<>());
+        mail2.setLabelIds(new ArrayList<>());
+        mail2.setTime(new Date(System.currentTimeMillis() - 3600_000L * 5)); // לפני 5 שעות
+        mail2.setStarred(true);
+        mail2.setRead(true);
+
+        MailEntity mail3 = new MailEntity();
+        mail3.setId("m3");
+        mail3.setFromUserId("u4");
+        mail3.setFromName("Tami");
+        mail3.setFromUserName("tami");
+        mail3.setFromPicture(null);
+        mail3.setToUserId("u2");
+        mail3.setToUserName("yael");
+        mail3.setToName("Yael");
+        mail3.setSubject("Team Meeting Notes");
+        mail3.setBody("Please find the summary of today's meeting attached.");
+        mail3.setLinks(new ArrayList<>());
+        mail3.setLabelIds(new ArrayList<>());
+        mail3.setTime(new Date(System.currentTimeMillis() - 86400_000L)); // אתמול
+        mail3.setStarred(false);
+        mail3.setRead(false);
+
+        mailViewModel.insert(mail1);
+        mailViewModel.insert(mail2);
+        mailViewModel.insert(mail3);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -138,5 +216,17 @@ public class HomeFragment extends Fragment {
                 Log.e("HomeFragment", "FAB is still null in onResume");
             }
         }
+    }
+
+    private Mail toMail(MailEntity entity) {
+        return new Mail(
+                entity.getFromName(),
+                entity.getSubject(),
+                entity.getBody(),
+                entity.getTime(),
+                entity.isRead(),
+                entity.isStarred(),
+                entity.getFromPicture()
+        );
     }
 }

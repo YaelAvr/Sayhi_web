@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.androidapp.Mail;
+import com.example.androidapp.model.Mail;
 import com.example.androidapp.R;
 
 import java.text.SimpleDateFormat; // <-- הוסף את ה-import הזה

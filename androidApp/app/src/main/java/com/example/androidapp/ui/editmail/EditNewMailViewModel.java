@@ -1,4 +1,4 @@
-package com.example.androidapp;
+package com.example.androidapp.ui.editmail;
 
 import androidx.lifecycle.ViewModel;
 

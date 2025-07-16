@@ -1,19 +1,36 @@
 package com.example.androidapp.ui.gallery;
 
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+import com.example.androidapp.data.model.LabelEntity;
+import com.example.androidapp.data.repository.LabelRepository;
 
-    private final MutableLiveData<String> mText;
+import java.util.List;
 
-    public GalleryViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+public class GalleryViewModel extends AndroidViewModel {
+
+    private final LabelRepository labelRepository;
+    private final LiveData<List<LabelEntity>> allLabels;
+
+    public GalleryViewModel(Application application) {
+        super(application);
+        labelRepository = new LabelRepository(application);
+        allLabels = labelRepository.getAllLabels();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<LabelEntity>> getAllLabels() {
+        return allLabels;
+    }
+
+    // פעולות עזר כמו insert/delete אם תרצי להשתמש בלייבלים דמה
+    public void insert(LabelEntity label) {
+        labelRepository.insertLabel(label);
+    }
+
+    public void clear() {
+        labelRepository.clearAllLabels();
     }
 }

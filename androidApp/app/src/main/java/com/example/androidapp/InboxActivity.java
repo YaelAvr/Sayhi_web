@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -18,7 +19,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidapp.data.model.LabelEntity;
 import com.example.androidapp.databinding.ActivityMain2Binding;
+import com.example.androidapp.model.Label;
+import com.example.androidapp.ui.gallery.LabelViewModel;
 import com.example.androidapp.ui.gallery.LabelsAdapter;
 import com.google.android.material.navigation.NavigationView;
 
@@ -29,13 +33,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity2 extends AppCompatActivity {
+
+public class InboxActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMain2Binding binding;
 
     private LabelsAdapter labelsAdapter;
     private RecyclerView navLabelsRecyclerView;
+    private LabelViewModel labelViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,11 @@ public class MainActivity2 extends AppCompatActivity {
 
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        labelViewModel = new ViewModelProvider(
+                this,
+                new ViewModelProvider.AndroidViewModelFactory(getApplication())
+        ).get(LabelViewModel.class);
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
@@ -81,6 +93,14 @@ public class MainActivity2 extends AppCompatActivity {
             navLabelsRecyclerView.setAdapter(labelsAdapter);
             fetchLabelsForNav();
         }
+
+        labelViewModel.getAllLabels().observe(this, labelEntities -> {
+            List<Label> labels = new ArrayList<>();
+            for (LabelEntity entity : labelEntities) {
+                labels.add(toLabel(entity));
+            }
+            labelsAdapter.setLabels(labels);
+        });
 
         // מציאת כפתור הוספת הלייבל והגדרת לחיצה עליו
         ImageButton addLabelButton = navigationView.findViewById(R.id.button_add_label);
@@ -155,13 +175,13 @@ public class MainActivity2 extends AppCompatActivity {
                     labelsAdapter.setLabels(response.body());
                 } else {
                     // יכול להיות שהטוקן פג תוקף
-                    Toast.makeText(MainActivity2.this, "Failed to load labels: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InboxActivity.this, "Failed to load labels: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Label>> call, Throwable t) {
-                Toast.makeText(MainActivity2.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(InboxActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -185,17 +205,17 @@ public class MainActivity2 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     // הצלחה! הנתונים מהשרת יוצגו
                     labelsAdapter.setLabels(response.body());
-                    Toast.makeText(MainActivity2.this, "Labels loaded from API!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InboxActivity.this, "Labels loaded from API!", Toast.LENGTH_SHORT).show();
                 } else {
                     // שגיאה מהשרת (אולי הטוקן ששתלת לא תקין או פג תוקף)
-                    Toast.makeText(MainActivity2.this, "API Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InboxActivity.this, "API Error: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Label>> call, Throwable t) {
                 // שגיאת רשת
-                Toast.makeText(MainActivity2.this, "Network Failure: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(InboxActivity.this, "Network Failure: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -204,34 +224,31 @@ public class MainActivity2 extends AppCompatActivity {
 
     // ======================= תחילת פונקציה חדשה =======================
     private void addNewMockLabel() {
-        // 1. "ניפוח" (Inflate) של קובץ ה-Layout שיצרנו
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_label, null);
         final EditText inputLabelName = dialogView.findViewById(R.id.input_label_name);
 
-        // 2. יצירת ה-AlertDialog וקישור ה-View שלנו אליו
         new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_title_add_new_label)
-                .setView(dialogView) // <-- כאן אנחנו משתמשים ב-Layout מה-XML
+                .setView(dialogView)
                 .setPositiveButton(R.string.dialog_button_add, (dialog, which) -> {
                     String labelName = inputLabelName.getText().toString().trim();
 
                     if (!labelName.isEmpty()) {
-                        Label newLabel = new Label();
-                        newLabel.setId("local_" + System.currentTimeMillis());
-                        newLabel.setName(labelName);
+                        LabelEntity labelEntity = new LabelEntity();
+                        labelEntity.setId("local_" + System.currentTimeMillis());
+                        labelEntity.setName(labelName);
+                        labelEntity.setDefault(false);
+                        labelEntity.setAllowAdd(true);
+                        labelEntity.setUser("local_user");
 
-                        if (labelsAdapter != null) {
-                            labelsAdapter.addLabel(newLabel);
-                            if (navLabelsRecyclerView != null) {
-                                navLabelsRecyclerView.scrollToPosition(labelsAdapter.getItemCount() - 1);
-                            }
-                        }
+                        labelViewModel.insert(labelEntity);
+
                         Toast.makeText(this, getString(R.string.toast_label_added, labelName), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, R.string.toast_label_name_cannot_be_empty, Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton(R.string.dialog_button_cancel, null) // null פשוט יסגור את הדיאלוג
+                .setNegativeButton(R.string.dialog_button_cancel, null)
                 .show();
     }
     // ======================= סוף פונקציה חדשה =======================
@@ -293,6 +310,16 @@ public class MainActivity2 extends AppCompatActivity {
                 showFloatingActionButton();
             }
         });
+    }
+    private Label toLabel(LabelEntity entity) {
+        Label label = new Label();
+        label.setId(entity.getId());
+        label.setName(entity.getName());
+        label.setMails(entity.getMails());
+        label.setDefault(entity.isDefault());
+        label.setAllowAdd(entity.isAllowAdd());
+        label.setUser(entity.getUser());
+        return label;
     }
 
 }

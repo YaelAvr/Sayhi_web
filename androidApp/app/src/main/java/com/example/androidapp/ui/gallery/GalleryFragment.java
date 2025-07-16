@@ -4,35 +4,30 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.androidapp.ApiService;
-import com.example.androidapp.Label;
+import com.example.androidapp.model.Label;
 import com.example.androidapp.R;
-import com.example.androidapp.RetrofitClient;
+import com.example.androidapp.data.model.LabelEntity;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class GalleryFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private ProgressBar progressBar;
     private LabelsAdapter adapter;
+    private LabelViewModel labelViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // "ניפוח" התצוגה של הפרגמנט
         return inflater.inflate(R.layout.fragment_gallery, container, false);
     }
 
@@ -40,54 +35,56 @@ public class GalleryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // קישור הרכיבים מה-XML
         recyclerView = view.findViewById(R.id.recyclerViewLabels);
-        progressBar = view.findViewById(R.id.progressBar);
-
-        // הגדרת ה-RecyclerView וה-Adapter
-        setupRecyclerView();
-
-        // ביצוע קריאת ה-API
-        fetchLabels();
-    }
-
-    private void setupRecyclerView() {
         adapter = new LabelsAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+
+        labelViewModel = new ViewModelProvider(
+                this,
+                new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())
+        ).get(LabelViewModel.class);
+        labelViewModel.getAllLabels().observe(getViewLifecycleOwner(), labelEntities -> {
+            List<Label> labels = new ArrayList<>();
+            for (LabelEntity entity : labelEntities) {
+                labels.add(toLabel(entity));
+            }
+            adapter.setLabels(labels);
+        });
+
+        // לצורך בדיקה בלבד - הכנסת תוויות דמה
+        insertMockLabels(); // אפשר למחוק את זה אחר כך
     }
 
-    private void fetchLabels() {
-        progressBar.setVisibility(View.VISIBLE); // הצג את סרגל ההתקדמות
+    private Label toLabel(LabelEntity entity) {
+        Label label = new Label();
+        label.setId(entity.getId());
+        label.setName(entity.getName());
+        label.setMails(entity.getMails());
+        label.setDefault(entity.isDefault());
+        label.setAllowAdd(entity.isAllowAdd());
+        label.setUser(entity.getUser());
+        return label;
+    }
 
-        // !!! חשוב מאוד !!!
-        // עליך להשיג את טוקן האימות שלך (למשל, אחרי שהמשתמש התחבר)
-        // כרגע נשים כאן ערך דמה. החלף אותו בטוקן האמיתי שלך.
-        String authToken = "Bearer YOUR_ACTUAL_TOKEN_HERE";
+    private void insertMockLabels() {
+        labelViewModel.clear();
 
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        Call<List<Label>> call = apiService.getLabels(authToken);
+        LabelEntity label1 = new LabelEntity();
+        label1.setId("1");
+        label1.setName("Important");
+        label1.setDefault(true);
+        label1.setAllowAdd(true);
+        label1.setUser("user1");
 
-        call.enqueue(new Callback<List<Label>>() {
-            @Override
-            public void onResponse(Call<List<Label>> call, Response<List<Label>> response) {
-                progressBar.setVisibility(View.GONE); // הסתר את סרגל ההתקדמות
+        LabelEntity label2 = new LabelEntity();
+        label2.setId("2");
+        label2.setName("School");
+        label2.setDefault(false);
+        label2.setAllowAdd(true);
+        label2.setUser("user1");
 
-                if (response.isSuccessful() && response.body() != null) {
-                    // הקריאה הצליחה! עדכן את ה-Adapter עם הנתונים
-                    adapter.setLabels(response.body());
-                } else {
-                    // שגיאה מהשרת (למשל, 401 Unauthorized, 404 Not Found)
-                    Toast.makeText(getContext(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Label>> call, Throwable t) {
-                progressBar.setVisibility(View.GONE); // הסתר את סרגל ההתקדמות
-                // שגיאת רשת (אין אינטרנט, שרת לא זמין)
-                Toast.makeText(getContext(), "Failure: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        labelViewModel.insert(label1);
+        labelViewModel.insert(label2);
     }
 }
