@@ -15,7 +15,7 @@
         android:theme="@style/Theme.AndroidApp"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".ui.registration.RegistrationActivity"
             android:exported="false"
             android:label="@string/title_activity_registration"
             android:theme="@style/Theme.AndroidApp" />
