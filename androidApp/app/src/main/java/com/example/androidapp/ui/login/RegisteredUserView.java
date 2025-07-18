@@ -14,6 +14,7 @@ public class RegisteredUserView {
         exists=true;
     }
 
+
     public RegisteredUserView(RegisteredUserView ruv){
         displayName= ruv.displayName;
         userName = ruv.userName;
