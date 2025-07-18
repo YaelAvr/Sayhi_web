@@ -65,14 +65,14 @@ public class UserApi {
         call.enqueue(new Callback<RegisteredUserView>() {
             @Override
             public void onResponse(Call<RegisteredUserView> call, Response<RegisteredUserView> response) {
-                Log.i("errorType", "response " + username);
+                Log.i("errorType", "UserApi: response " + username);
 
                 if(response.isSuccessful() && response.body() != null){
                    RegisteredUserView res = new RegisteredUserView(response.body().getDisplayName(), response.body().getUsername());
-                    Log.i("errorType", "response.isSuccessful() && response.body() != null ");
+                    Log.i("errorType", "UserApi: response.isSuccessful() && response.body() != null ");
 
                    if (res.isExists()) {
-                       Log.i("errorType", "in isExist if" + res.getUsername());
+                       Log.i("errorType", "UserApi: in isExist if" + res.getUsername());
 
 //                       if (result instanceof Result.Success) {
 //                           setLoggedInUser(((Result.Success<User>) result).getData());
@@ -91,19 +91,52 @@ public class UserApi {
                        }
                    } catch (Exception e) {
                    }
-                   Log.i("errorType", errorMsg);
+                   Log.i("UserApi: errorType", errorMsg);
                    liveData.postValue(new Result.Error(new Exception(errorMsg)));
                }
-
-
             }
 
             @Override
             public void onFailure(Call<RegisteredUserView> call, Throwable t) {
-                liveData.postValue(new Result.Error(new Exception("שגיאת רשת: " + t.getMessage(), t)));
+                liveData.postValue(new Result.Error(new Exception("Network error: " + t.getMessage(), t)));
             }
-
         });
+    }
+
+    public void getAllUsers() {
+        Log.i("UserApi", "get all func" );
+        //TO-DO: fix get username in DAO and then fix this func to match
+
+
+//        Log.i("UserApi", "before but in " );
+//
+//        Call<List<User>> call = userServiceAPI.getAllUsers();
+//        call.enqueue(new Callback<List<User>>() {
+//            @Override
+//            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    List<User> users = response.body();
+//                    for (User user : users) {
+//                        Log.i("UserApi", "User: " + user.getUserName() + ", Name: " + user.getDisplayName());
+//                    }
+//
+//                    new Thread(() -> {
+//                        userDao.deleteAllUsers();
+//                        for (User user : users) {
+//                            userDao.insertUser(user);
+//                        }
+//                    }).start();
+//
+//                } else {
+//                    Log.e("UserApi", "Failed to fetch users: " + response.code());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<User>> call, Throwable t) {
+//                Log.e("UserApi", "Network error: " + t.getMessage(), t);
+//            }
+//        });
     }
 
 
