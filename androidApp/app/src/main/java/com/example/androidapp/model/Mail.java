@@ -1,4 +1,4 @@
-package com.example.androidapp;
+package com.example.androidapp.model;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;

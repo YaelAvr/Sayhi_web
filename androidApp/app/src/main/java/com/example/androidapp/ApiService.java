@@ -1,5 +1,7 @@
 package com.example.androidapp;
 
+import com.example.androidapp.model.Label;
+
 import java.util.List;
 
 import retrofit2.Call;

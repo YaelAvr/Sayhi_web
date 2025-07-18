@@ -32,6 +32,6 @@
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/editNewMailFragment"
-        android:name="com.example.androidapp.EditNewMailFragment"
+        android:name="com.example.androidapp.ui.editmail.EditNewMailFragment"
         android:label="EditNewMailFragment" />
 </navigation>
