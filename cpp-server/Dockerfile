@@ -1,4 +1,4 @@
-FROM gcc:latestMore
+FROM gcc:latest
 
 ARG BUILD_TESTING=OFF
 
@@ -8,40 +8,10 @@ WORKDIR /usr/gmail-project/cpp-server
 
 COPY . .
 
-
 RUN mkdir -p build
-WORKDIR /usr/gmail-project/build
+WORKDIR /usr/gmail-project/cpp-server/build
 
 
 RUN cmake -DBUILD_TESTING=${BUILD_TESTING} .. && make
 
 CMD ["./my_program", "8080", "30", "2", "1"]
-
-
-
-# FROM gcc:latest
-
-# ARG BUILD_TESTING=OFF
-# RUN apt-get update && apt-get install -y cmake
-
-# WORKDIR /usr/gmail-project/cpp-server
-
-
-# # # Copy only the files essential for the C++ build. 
-# # COPY CMakeLists.txt .
-
-# # Copy the source code directories.
-# # By copying only these specific folders, we avoid invalidating the cache when
-# # unrelated files change.
-# # COPY servers/src/cpp/ ./servers/src/cpp/
-# # COPY Tests/ ./Tests/
-
-# COPY . .
-
-# RUN mkdir -p /usr/gmail-project && ln -s /usr/gmail-project/servers/data /data
-
-# RUN mkdir build && \
-#     cd build && \
-#     cmake -DBUILD_TESTING=${BUILD_TESTING} .. && make -j$(nproc)
-
-# CMD ["./build/my_program", "8080", "30", "2", "1"]

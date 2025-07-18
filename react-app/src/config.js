@@ -1,1 +1,1 @@
-export const API_STATUS_URL = 'http://localhost:4000/api';
+export const API_STATUS_URL = 'http://0.0.0.0:3000/api';

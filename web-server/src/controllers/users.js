@@ -31,7 +31,8 @@ exports.createUser = async (req, res) => {
   }
 
   if (missingVal.length > 0) {
-    if(!missingVal.includes("Picture")){  try { await fs.unlink(path.resolve(picture)); } catch (e) {}}
+    //להחזיר
+    // if(!missingVal.includes("Picture")){  try { await fs.unlink(path.resolve(picture)); } catch (e) {}}
     return res.status(400).json({ error: "Missig: " + missingVal.join(", ") });
     // throw new Error("Missig: " + missingVal.join(", "));
   }
@@ -48,7 +49,16 @@ exports.createUser = async (req, res) => {
       try { await fs.unlink(path.resolve(picture)); } catch (e) { /* ignore cleanup error */ }
     }
 
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getAllUserNames = async (req, res) => {
+  try {
+    const users = await Users.getAllUserNames();
+    res.status(200).json(users.map(u => u.username));
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve users' });
   }
 };
 
