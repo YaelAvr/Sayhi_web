@@ -3,52 +3,63 @@ services:
     build:
       context: ./cpp-server
       dockerfile: Dockerfile
-    # volumes:
-    #   - ./servers/data:/usr/gmail-project/servers/data 
     ports:
       - "8080:8080"
 
-  tests:
-    build:
-      context: ./cpp-server
-      dockerfile: Dockerfile
-      args:
-        - BUILD_TESTING=ON
-    # volumes:
-    #   - ./servers/data:/usr/gmail-project/servers/data
-    stdin_open: true
-    tty: true
-    command: [./my_tests]
+  # tests:
+  #   build:
+  #     context: ./cpp-server
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - BUILD_TESTING=ON
+  #   # volumes:
+  #   #   - ./servers/data:/usr/gmail-project/servers/data
+  #   stdin_open: true
+  #   tty: true
+  #   command: [./my_tests]
 
   webserver: 
     build:
       context: ./web-server
       dockerfile: Dockerfile
-    # volumes:
-    #   - ./servers/src/web/pictures:/usr/src/gmail-project/servers/src/web/pictures
-    #   - ./servers/src/web/tempUploads:/usr/src/gmail-project/servers/src/web/tempUploads
     ports:
-      - "4000:3000"
+      - "3000:3000"
     stdin_open: true
     tty: true
     depends_on:
       - server
-    environment:
-      SERVER_HOST: server
-      SERVER_PORT: 8080
-    
-react-app: 
-    build:
-      context: ./react-app
-      dockerfile: Dockerfile
-    # volumes:
-    #   - ./servers/src/web/pictures:/usr/src/gmail-project/servers/src/web/pictures
-    #   - ./servers/src/web/tempUploads:/usr/src/gmail-project/servers/src/web/tempUploads
-    ports:
-      - "3000:80"
-    stdin_open: true
-    tty: true
-    depends_on:
-      - web-server
+      - db
+    env_file:
+      - .env
+    networks:
+        - backend
 
-    
+
+  db:
+    image: mongo:latest
+    container_name: db
+    restart: always
+    ports:
+        - "27017:27017"
+    volumes:
+        - mongo-data:/data/db
+    networks:
+        - backend
+
+  # react-app: 
+  #   build:
+  #     context: ./react-app
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "4000:80"
+  #   stdin_open: true
+  #   tty: true
+  #   depends_on:
+  #     - webserver
+
+volumes:
+  mongo-data:
+
+networks:
+  backend:
+    driver: bridge

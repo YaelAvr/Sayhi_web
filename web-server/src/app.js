@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 // require('custom-env').env(true, __dirname, 'config'); //לא עובד טוב
-require('dotenv').config({ path: path.join(__dirname, './config/.env') });
+
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+// require('dotenv').config({ path: path.join(__dirname, './config/.env') });
 
 
 app.use(cors());
@@ -41,8 +43,8 @@ app.use('/api/blacklist', blacklistRoutes)
 // });
 
 
-const PORT = process.env.PORT || 5000;
-const HOST = process.env.HOST || '0.0.0.0';
+const PORT = process.env.WEB_PORT || 3000;
+const HOST = process.env.WEB_HOST || '0.0.0.0';
 
 // app.listen(4000);
 app.listen(PORT, HOST, () => {

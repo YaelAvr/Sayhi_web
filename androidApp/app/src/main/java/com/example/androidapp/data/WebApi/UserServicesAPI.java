@@ -3,6 +3,8 @@ package com.example.androidapp.data.WebApi;
 import com.example.androidapp.data.model.User;
 import com.example.androidapp.ui.login.RegisteredUserView;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -12,6 +14,9 @@ import retrofit2.http.Path;
 public interface UserServicesAPI {
     @GET("users/{id}")
     Call<User> getUser(@Path("id") String userId);
+
+    @GET("users/allUsernames")
+    Call<List<User>> getAllUsers();
 
     @POST("users")
     Call<User> createUser(@Body User newUser);

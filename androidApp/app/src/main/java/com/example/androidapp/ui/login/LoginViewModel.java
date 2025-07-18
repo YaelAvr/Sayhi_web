@@ -26,6 +26,12 @@ public class LoginViewModel extends ViewModel {
     public void verifySignedUsername(String username) {
         repository.verifySignedUsername(username, userResult);
     }
+    public void getAllUsers() {repository.getAllUsers();}
+
+    public void reload(){
+        repository.reload();
+    }
+
 /*
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();

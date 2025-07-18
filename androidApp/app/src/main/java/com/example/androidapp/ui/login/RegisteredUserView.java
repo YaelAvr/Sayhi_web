@@ -8,6 +8,7 @@ public class RegisteredUserView {
     private final String userName;
     private final boolean exists;
 
+
     public RegisteredUserView(String displayName, String userName) {
         this.displayName = displayName;
         this.userName = userName;

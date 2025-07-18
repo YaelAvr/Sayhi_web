@@ -15,7 +15,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.androidapp.R;
 import com.example.androidapp.data.Result;
-import com.example.androidapp.data.repository.UserRepository;
 import com.example.androidapp.databinding.ActivityLoginBinding;
 import com.example.androidapp.ui.registration.RegistrationActivity;
 
@@ -37,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
 //    private UserApi userApi;
 
-    private UserRepository userRepository;
+//    private UserRepository userRepository;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +57,10 @@ public class LoginActivity extends AppCompatActivity {
         backBtn = binding.loginBackBtn;
         edForm = binding.liInput;
 
-        userRepository=new UserRepository(this);
+//        userRepository=new UserRepository(this);
 
         loginViewModel = new LoginViewModel(this);
+        loginViewModel.reload();
 //        userApi =new UserApi();
 
         loginViewModel.getUserResult().observe(this, result -> {

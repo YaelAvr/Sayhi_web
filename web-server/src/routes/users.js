@@ -23,6 +23,11 @@ router.route('/birthday')
 router.route('/picture')
         .post(uploadTemp.single('profilePic'), controller.validatePicture)
 
+
+router.route('/allUsernames')
+        .get(controller.getAllUserNames)
+
+
 // This will catch any errors (like from Multer) from the routes defined ABOVE it.
 router.use((err, req, res, next) => {
         console.log('Error handled by user routes specific handler:', err.message);
@@ -47,5 +52,6 @@ router.route('/:id')
 router.route('/darkMode/:id')
         .get(authenticateToken, controller.getUserDarkMode)
         .patch(authenticateToken, controller.toggleDarkMode)
+
 
 module.exports = router

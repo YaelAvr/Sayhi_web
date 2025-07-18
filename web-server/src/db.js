@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const path = require('path'); 
-require('custom-env').env(true, __dirname, 'config');
+
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+
+// require('custom-env').env(true, __dirname, 'config');
 // require("custom-env").env('local', './config');
 
 const connectDB = async () => {

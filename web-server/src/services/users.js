@@ -37,6 +37,8 @@ const createUser = async (username, displayName, password, picture, gender, birt
 
 const getUserById = async (id) => {return await User.findById(id);}
 
+const getAllUserNames = async () => { return  await User.find({}, "username");};
+
 //Create default labels for each new user
 const createDefaultLabels = async (userId) => {
   createLabel(userId, 'Inbox', { isDefault: true, allowAdd: false })
@@ -89,7 +91,7 @@ const uplodePic = async (picture, userId) => {
     if (picture) {
       try { await fs.unlink(path.resolve(picture)); } catch (e) { /* ignore cleanup error */ }
     }
-    User.deleteOne({id})
+    await User.deleteOne({userId})
     throw new Error('An internal server error occurred.');
 
   }
@@ -101,5 +103,6 @@ module.exports = {
   createUser,
   getUserById,
   isUserNameRegistered,
-  toggleDarkMode
+  toggleDarkMode,
+  getAllUserNames
 }
