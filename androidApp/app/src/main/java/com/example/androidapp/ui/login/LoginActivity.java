@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Intent;
+
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +17,8 @@ import com.example.androidapp.R;
 import com.example.androidapp.data.Result;
 import com.example.androidapp.data.repository.UserRepository;
 import com.example.androidapp.databinding.ActivityLoginBinding;
+import com.example.androidapp.ui.registration.RegistrationActivity;
+
 
 public class LoginActivity extends AppCompatActivity {
     private MutableLiveData<Result<RegisteredUserView>> loginResult = new MutableLiveData<>();
@@ -104,7 +108,8 @@ public class LoginActivity extends AppCompatActivity {
                 edForm.setHint(R.string.login_email_hint);
                 backBtn.setText(R.string.create_an_account_btn);
             } else {
-                // TO--DO: move to register
+                Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+                startActivity(intent);
 
             }
         });
