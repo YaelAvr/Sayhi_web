@@ -16,6 +16,8 @@ import androidx.navigation.Navigation;
 
 import com.example.androidapp.R;
 import com.example.androidapp.ui.registration.RegistrationViewModel;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 public class NameFragment extends Fragment {
 
@@ -60,6 +62,11 @@ public class NameFragment extends Fragment {
             viewModel.setFirstName(firstName);
             viewModel.setLastName(lastName);
 
+            NavController navController = NavHostFragment.findNavController(NameFragment.this);
+            navController.navigate(R.id.action_nameFragment_to_dateAndGenderFragment);
+
         });
+
     }
+
 }
