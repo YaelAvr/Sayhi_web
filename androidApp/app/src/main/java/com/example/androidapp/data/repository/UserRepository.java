@@ -8,17 +8,21 @@ import androidx.room.Room;
 
 import com.example.androidapp.data.Result;
 import com.example.androidapp.data.WebApi.UserApi;
+import com.example.androidapp.data.dao.RegisteredUserDao;
 import com.example.androidapp.data.dao.UserDao;
 import com.example.androidapp.data.db.AppDB;
+import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.User;
-import com.example.androidapp.ui.login.RegisteredUserView;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class UserRepository {
     private UserDao userDao;
+    private RegisteredUserDao regDao;
     private UserApi userApi;
+
+    private User user = null;
 
     private UsersData usersData;
     public UserRepository(Context context) {
@@ -26,7 +30,8 @@ public class UserRepository {
                 .allowMainThreadQueries()
                 .build();
         this.userDao = db.userDao();
-        this.userApi= new UserApi(context, userDao);
+        this.regDao=db.registeredUserDao();
+        this.userApi= new UserApi(context, userDao, regDao);
     }
 
     class UsersData extends MutableLiveData<List<User>>{
@@ -57,11 +62,26 @@ public class UserRepository {
         userDao.deleteUser(user);
     }
 
-    public void verifySignedUsername(String username, MutableLiveData<Result<RegisteredUserView>> loginResult ){
+    public void verifySignedUsername(String username, MutableLiveData<Result<RegisteredUser>> loginResult ){
         userApi.verifySignedUsername(username, loginResult);
     }
-    public void getAllUsers() {userApi.getAllUsers();}
+    public void getAllUsers() {userApi.fetchAllUsersToDao();}
     public void reload(){
-        userApi.getAllUsers();
+        userApi.fetchAllUsersToDao();
+    }
+
+    private void setLoggedInUser(User user) {
+        this.user = user;
+        // If user credentials will be cached in local storage, it is recommended it be encrypted
+        // @see https://developer.android.com/training/articles/keystore
+    }
+
+    public Result<User> login(String username, String password) {
+        // handle login
+        Result<User> result = userApi.login(username, password);
+        if (result instanceof Result.Success) {
+            setLoggedInUser(((Result.Success<User>) result).getData());
+        }
+        return result;
     }
 }

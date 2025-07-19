@@ -37,7 +37,31 @@ const createUser = async (username, displayName, password, picture, gender, birt
 
 const getUserById = async (id) => {return await User.findById(id);}
 
-const getAllUserNames = async () => { return  await User.find({}, "username");};
+// const getAllUsers = async () => { 
+//   // return  await User.find({}, "username");
+//   return  await User.find({});
+
+// };
+
+const getAllUsers = async () => { 
+  const usersFromDb = await User.find({});
+  
+  // Map the array to a new format 
+  // that will only include informetion
+  // relevent "registered users" 
+  const usersForClient = usersFromDb.map(user => {
+    return {
+      id: user._id, // Create the 'id' field
+      username: user.username,
+      displayName: user.displayName
+      // ,
+      // picture: user.picture,
+      // isDarkMode: user.isDarkMode
+    };
+  });
+
+  return usersForClient;
+};
 
 //Create default labels for each new user
 const createDefaultLabels = async (userId) => {
@@ -104,5 +128,5 @@ module.exports = {
   getUserById,
   isUserNameRegistered,
   toggleDarkMode,
-  getAllUserNames
+  getAllUsers
 }
