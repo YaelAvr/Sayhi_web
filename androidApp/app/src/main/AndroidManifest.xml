@@ -23,11 +23,11 @@
             android:name=".ui.login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
-        <!--activity
-            android:name=".MainActivity2"
+        <activity
+            android:name=".InboxActivity"
             android:exported="false"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.AndroidApp.NoActionBar" -->
+            android:label="@string/title_activity_inbox"
+            android:theme="@style/Theme.AndroidApp.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

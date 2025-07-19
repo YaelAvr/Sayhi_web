@@ -24,8 +24,8 @@ router.route('/picture')
         .post(uploadTemp.single('profilePic'), controller.validatePicture)
 
 
-router.route('/allUsernames')
-        .get(controller.getAllUserNames)
+router.route('/all')
+        .get(controller.getAllUsers)
 
 
 // This will catch any errors (like from Multer) from the routes defined ABOVE it.

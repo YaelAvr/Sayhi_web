@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
@@ -11,12 +13,19 @@ import androidx.room.PrimaryKey;
 public class User {
     @PrimaryKey
     @NonNull
+    @SerializedName("_id")
     private String id;
+
+    @SerializedName("displayName")
     private String displayName;
+    @SerializedName("username")
     private String userName;
 
     //    private String password;
+    @SerializedName("picture")
     private String pictureURL;
+
+    @SerializedName("isDarkMode")
     private boolean isDarkMode;
 
 

@@ -1,26 +1,27 @@
 package com.example.androidapp.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Intent;
-
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.androidapp.R;
 import com.example.androidapp.data.Result;
+import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.databinding.ActivityLoginBinding;
 import com.example.androidapp.ui.registration.RegistrationActivity;
 
 
 public class LoginActivity extends AppCompatActivity {
-    private MutableLiveData<Result<RegisteredUserView>> loginResult = new MutableLiveData<>();
+//    private MutableLiveData<Result<RegisteredUserView>> loginResult = new MutableLiveData<>();
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
@@ -45,38 +46,31 @@ public class LoginActivity extends AppCompatActivity {
         // Set the root of the binding as the content view
         setContentView(binding.getRoot());
 
-        // Now, access your views directly from the binding object.
-        // The names are automatically converted from snake_case to camelCase.
-        // This is null-safe. If the ID doesn't exist, your project won't even build.
+
         title=binding.formTitle;
         explainText= binding.formDescriptionText;
-        title.setText("Sign in");
-        explainText.setText("to continue to your SayHi account");
 
         nextBtn = binding.loginNextBtn;
         backBtn = binding.loginBackBtn;
         edForm = binding.liInput;
+        final ProgressBar loadingProgressBar = binding.loading;
 
-//        userRepository=new UserRepository(this);
+        updateUiToGetUsername();
+
 
         loginViewModel = new LoginViewModel(this);
-        loginViewModel.reload();
-//        userApi =new UserApi();
+        loginViewModel.getAllUsers();
 
         loginViewModel.getUserResult().observe(this, result -> {
             Log.i("errorType", "result on click " + result);
-
+            loadingProgressBar.setVisibility(View.GONE);
             if (result instanceof Result.Success) {
-                RegisteredUserView user = ((Result.Success<RegisteredUserView>) result).getData();
-                isPasswordMode=true;
-                title.setText("Hi "+user.getDisplayName()); //TO-DO: add "+ display name" that return from API
-                explainText.setText(user.getUsername() + "@sayhi.com"); // TO-DO: replace with API username
-                edForm.setText("");
-                edForm.setHint(R.string.login_password_hint);
-                backBtn.setText(R.string.backBtn);
+                RegisteredUser user = ((Result.Success<RegisteredUser>) result).getData();
+                updateUiWithUser(user);
             } else if (result instanceof Result.Error) {
                 Exception e = ((Result.Error) result).getError();
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                edForm.setError(e.getMessage());
             }
         });
 
@@ -84,30 +78,27 @@ public class LoginActivity extends AppCompatActivity {
             Log.i("errorType", "isPasswordMode on click " + isPasswordMode);
 
             if (isPasswordMode){
+                loadingProgressBar.setVisibility(View.VISIBLE);
                 // TO--DO: api call to token and move to inbox
             } else if(!edForm.getText().toString().isEmpty()) {
                 String username = edForm.getText().toString();
 //                userRepository.verifySignedUsername(username, loginResult);
 //                Result<User> result = loginRepository.login(username, password);
                 loginViewModel.verifySignedUsername(username);
-
-
-
-
             } else {
+                edForm.setError("Username is required");
+
                 runOnUiThread(() -> Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show());
             }
         });
 
         backBtn.setOnClickListener(v -> {
             if (isPasswordMode){
-                isPasswordMode=false;
-                title.setText("Sign in");
-                explainText.setText("to continue to your SayHi account");
-                edForm.setText("");
-                edForm.setHint(R.string.login_email_hint);
-                backBtn.setText(R.string.create_an_account_btn);
+                // go back to enter username part
+                updateUiToGetUsername();
+
             } else {
+                // go to registration page
                 Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
                 startActivity(intent);
 
@@ -221,7 +212,35 @@ public class LoginActivity extends AppCompatActivity {
 //        });
     }
 
-    private void updateUiWithUser(RegisteredUserView model) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // This will now be called every time the activity comes to the foreground.
+        Log.i("LoginActivity", "onResume called, fetching all users.");
+        loginViewModel.getAllUsers();
+    }
+
+    private void updateUiWithUser(RegisteredUser user) {
+        isPasswordMode=true;
+        title.setText("Hi "+user.getDisplayName()); //TO-DO: add "+ display name" that return from API
+        explainText.setText(user.getUserName() + "@sayhi.com"); // TO-DO: replace with API username
+        edForm.setText("");
+        edForm.setHint(R.string.login_password_hint);
+        backBtn.setText(R.string.backBtn);
+
+//        String welcome = getString(R.string.welcome) + model.getDisplayName();
+//        // TODO : initiate successful logged in experience
+//        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+    }
+
+    private void updateUiToGetUsername() {
+        isPasswordMode=false;
+        title.setText("Sign in");
+        explainText.setText("to continue to your SayHi account");
+        edForm.setText("");
+        edForm.setHint(R.string.login_email_hint);
+        backBtn.setText(R.string.create_an_account_btn);
+
 //        String welcome = getString(R.string.welcome) + model.getDisplayName();
 //        // TODO : initiate successful logged in experience
 //        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
