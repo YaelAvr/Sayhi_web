@@ -7,19 +7,20 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.androidapp.data.Result;
+import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.repository.UserRepository;
 
 public class LoginViewModel extends ViewModel {
 
 
-    private final MutableLiveData<Result<RegisteredUserView>> userResult = new MutableLiveData<>();
+    private final MutableLiveData<Result<RegisteredUser>> userResult = new MutableLiveData<>();
     private final UserRepository repository;
 
     public LoginViewModel(Context context) {
         repository = new UserRepository(context);
     }
 
-    public LiveData<Result<RegisteredUserView>> getUserResult() {
+    public LiveData<Result<RegisteredUser>> getUserResult() {
         return userResult;
     }
 

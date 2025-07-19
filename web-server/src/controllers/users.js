@@ -53,10 +53,12 @@ exports.createUser = async (req, res) => {
   }
 };
 
-exports.getAllUserNames = async (req, res) => {
+exports.getAllUsers = async (req, res) => {
   try {
-    const users = await Users.getAllUserNames();
-    res.status(200).json(users.map(u => u.username));
+    const users = await Users.getAllUsers();
+    // res.status(200).json(users.map(u => u.username));
+    res.status(200).json(users);
+
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve users' });
   }

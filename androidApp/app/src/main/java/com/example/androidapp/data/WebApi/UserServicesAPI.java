@@ -1,5 +1,6 @@
 package com.example.androidapp.data.WebApi;
 
+import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.User;
 import com.example.androidapp.ui.login.RegisteredUserView;
 
@@ -15,8 +16,8 @@ public interface UserServicesAPI {
     @GET("users/{id}")
     Call<User> getUser(@Path("id") String userId);
 
-    @GET("users/allUsernames")
-    Call<List<User>> getAllUsers();
+    @GET("users/all")
+    Call<List<RegisteredUser>> getAllUsers();
 
     @POST("users")
     Call<User> createUser(@Body User newUser);
