@@ -3,8 +3,10 @@ package com.example.androidapp.ui.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         nextBtn = binding.loginNextBtn;
         backBtn = binding.loginBackBtn;
         edForm = binding.liInput;
+        final ProgressBar loadingProgressBar = binding.loading;
 
         updateUiToGetUsername();
 
@@ -60,13 +63,14 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel.getUserResult().observe(this, result -> {
             Log.i("errorType", "result on click " + result);
-
+            loadingProgressBar.setVisibility(View.GONE);
             if (result instanceof Result.Success) {
                 RegisteredUser user = ((Result.Success<RegisteredUser>) result).getData();
                 updateUiWithUser(user);
             } else if (result instanceof Result.Error) {
                 Exception e = ((Result.Error) result).getError();
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                edForm.setError(e.getMessage());
             }
         });
 
@@ -74,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.i("errorType", "isPasswordMode on click " + isPasswordMode);
 
             if (isPasswordMode){
+                loadingProgressBar.setVisibility(View.VISIBLE);
                 // TO--DO: api call to token and move to inbox
             } else if(!edForm.getText().toString().isEmpty()) {
                 String username = edForm.getText().toString();
@@ -81,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
 //                Result<User> result = loginRepository.login(username, password);
                 loginViewModel.verifySignedUsername(username);
             } else {
+                edForm.setError("Username is required");
+
                 runOnUiThread(() -> Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show());
             }
         });
@@ -203,6 +210,14 @@ public class LoginActivity extends AppCompatActivity {
 ////                        passwordEditText.getText().toString());
 //            }
 //        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // This will now be called every time the activity comes to the foreground.
+        Log.i("LoginActivity", "onResume called, fetching all users.");
+        loginViewModel.getAllUsers();
     }
 
     private void updateUiWithUser(RegisteredUser user) {

@@ -2,12 +2,14 @@ package com.example.androidapp.ui.login;
 
 import androidx.annotation.Nullable;
 
+import com.example.androidapp.data.model.User;
+
 /**
  * Authentication result : success (user details) or error message.
  */
 public class LoginResult {
     @Nullable
-    private RegisteredUserView success;
+    private User success;
     @Nullable
     private Integer error;
     @Nullable
@@ -22,12 +24,12 @@ public class LoginResult {
         this.error = error;
     }
 
-    public LoginResult(@Nullable RegisteredUserView success) {
+    public LoginResult(@Nullable User success) {
         this.success = success;
     }
 
     @Nullable
-    RegisteredUserView getSuccess() {
+    User getSuccess() {
         return success;
     }
 

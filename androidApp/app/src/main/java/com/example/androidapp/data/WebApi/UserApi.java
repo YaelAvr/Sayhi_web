@@ -12,6 +12,7 @@ import com.example.androidapp.data.dao.UserDao;
 import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.User;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -171,8 +172,26 @@ public class UserApi {
                 Log.e("UserApi", "Network error: " + t.getMessage(), t);
             }
         });
+
     }
 
+    public Result<User> login(String username, String password) {
+
+        try {
+            // TODO: handle loggedInUser authentication
+            User fakeUser =
+                    new User(
+                            java.util.UUID.randomUUID().toString(),
+                            "Jane Doe");
+            return new Result.Success<>(fakeUser);
+        } catch (Exception e) {
+            return new Result.Error(new IOException("Error logging in", e));
+        }
+    }
+
+    public void logout() {
+        // TODO: revoke authentication
+    }
 
     // TO-DO: add create user fundtion for register
 

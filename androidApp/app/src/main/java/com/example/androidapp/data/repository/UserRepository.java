@@ -22,6 +22,8 @@ public class UserRepository {
     private RegisteredUserDao regDao;
     private UserApi userApi;
 
+    private User user = null;
+
     private UsersData usersData;
     public UserRepository(Context context) {
         AppDB db = Room.databaseBuilder(context, AppDB.class, "UsersDB")
@@ -66,5 +68,20 @@ public class UserRepository {
     public void getAllUsers() {userApi.fetchAllUsersToDao();}
     public void reload(){
         userApi.fetchAllUsersToDao();
+    }
+
+    private void setLoggedInUser(User user) {
+        this.user = user;
+        // If user credentials will be cached in local storage, it is recommended it be encrypted
+        // @see https://developer.android.com/training/articles/keystore
+    }
+
+    public Result<User> login(String username, String password) {
+        // handle login
+        Result<User> result = userApi.login(username, password);
+        if (result instanceof Result.Success) {
+            setLoggedInUser(((Result.Success<User>) result).getData());
+        }
+        return result;
     }
 }
