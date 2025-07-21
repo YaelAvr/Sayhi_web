@@ -16,6 +16,8 @@ public class RegistrationViewModel extends ViewModel {
 
     // מגדר
     private final MutableLiveData<String> gender = new MutableLiveData<>();
+    private String username;
+
 
     public void setFirstName(String name) { firstName.setValue(name); }
     public void setLastName(String name) { lastName.setValue(name); }
@@ -28,7 +30,13 @@ public class RegistrationViewModel extends ViewModel {
     public void setGender(String g) {
         gender.setValue(g);
     }
+    public void setUsername(String username) {
+        this.username = username;
+    }
     public LiveData<String> getFirstName() { return firstName; }
     public LiveData<String> getLastName() { return lastName; }
     public LiveData<String> getGender() { return gender; }
+    public String getUsername() { return username;
+    }
         }
+
