@@ -78,7 +78,7 @@ public class DateAndGenderFragment extends Fragment {
             viewModel.setGender(gender);
 
             NavController navController = NavHostFragment.findNavController(this);
-            navController.navigate(R.id.action_nameFragment_to_dateAndGenderFragment);
+            navController.navigate(R.id.action_dateAndGenderFragment_to_usernameFragment);
         });
     }
 

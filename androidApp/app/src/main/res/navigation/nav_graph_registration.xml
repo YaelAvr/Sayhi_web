@@ -15,10 +15,18 @@
         android:name="com.example.androidapp.ui.registration.DateAndGenderFragment"
         android:label="Date and Gender"
         tools:layout="@layout/fragment_date_and_gender" />
+    <fragment
+        android:id="@+id/usernameFragment"
+        android:name="com.example.androidapp.ui.registration.UsernameFragment"
+        android:label="Username"
+        tools:layout="@layout/fragment_username" />
     <!-- פעולה שמנווטת מהפרגמנט של השם לפרגמנט של תאריך ומגדר -->
     <action
         android:id="@+id/action_nameFragment_to_dateAndGenderFragment"
         app:destination="@id/dateAndGenderFragment" />
+    <action
+        android:id="@+id/action_dateAndGenderFragment_to_usernameFragment"
+        app:destination="@id/usernameFragment" />
 
 
 </navigation>
