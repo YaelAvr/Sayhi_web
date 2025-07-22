@@ -305,7 +305,7 @@ public class InboxActivity extends AppCompatActivity {
             // 'destination' הוא היעד החדש.
 
             // עכשיו נבדוק מהו היעד ונקבע את נראות הרכיבים.
-            if (destination.getId() == R.id.editNewMailFragment) {
+            if (destination.getId() == R.id.editNewMailFragment || destination.getId() == R.id.singleMailFragment) {
                 // אם הגענו למסך כתיבת המייל, הסתר הכל.
                 hideMainToolbar();
                 hideFloatingActionButton();

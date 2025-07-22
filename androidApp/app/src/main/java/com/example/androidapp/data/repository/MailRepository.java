@@ -37,4 +37,8 @@ public class MailRepository {
     public void clearAllMails() {
         executorService.execute(mailDao::clearAllMails);
     }
+
+    public LiveData<MailEntity> getMailById(String id) {
+        return mailDao.getMailById(id);
+    }
 }
