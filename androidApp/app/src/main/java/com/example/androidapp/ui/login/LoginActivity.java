@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel.getUserResult().observe(this, result -> {
             Log.i("errorType", "result on click " + result);
-            loadingProgressBar.setVisibility(View.GONE);
+            loadingProgressBar.setVisibility(View.INVISIBLE);
             if (result instanceof Result.Success) {
                 RegisteredUser user = ((Result.Success<RegisteredUser>) result).getData();
                 Log.i("getUserResult", "result on click " + user);
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel.getLoginResult().observe(this, result -> {
             Log.i("getLoginResult", " getLoginResult result on click o" + result);
-            loadingProgressBar.setVisibility(View.GONE);
+            loadingProgressBar.setVisibility(View.INVISIBLE);
             if (result instanceof Result.Success) {
                 String token = ((Result.Success<String>) result).getData();
                 Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
