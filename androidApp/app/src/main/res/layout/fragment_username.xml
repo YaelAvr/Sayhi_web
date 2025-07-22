@@ -23,7 +23,7 @@
         android:id="@+id/titleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Choose your email address"
+        android:text="How you will sign in"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/logoInclude"
@@ -34,12 +34,13 @@
     <!-- כותרת משנית -->
     <TextView
         android:id="@+id/subTitleText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Enter your username"
+        android:text="Create a SayHi address for signing in to your SayHi Account"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@id/titleText"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp" />
 
     <!-- שדה קלט לשם משתמש עם סיומת קבועה -->
@@ -73,6 +74,18 @@
             android:textSize="16sp"
             android:textColor="@android:color/darker_gray"/>
     </LinearLayout>
+
+    <!-- טקסט הסבר -->
+    <TextView
+        android:id="@+id/explainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You can use letters, numbers and periods"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@id/username_input_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"/>
 
     <!-- כפתור Next -->
     <Button
