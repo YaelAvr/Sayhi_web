@@ -58,17 +58,6 @@ public class UserRepository {
             }).start();
         }
     }
-//    public User getUserById(String id) {
-//        return userDao.getUserById(id);
-//    }
-
-    public void insertUser(User user) {
-        userDao.insertUser(user);
-    }
-
-    public void deleteUser(User user) {
-        userDao.deleteUser(user);
-    }
 
     public void verifySignedUsername(String username, MutableLiveData<Result<RegisteredUser>> loginResult ){
         userApi.verifySignedUsername(username, loginResult);
