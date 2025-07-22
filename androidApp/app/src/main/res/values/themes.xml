@@ -16,6 +16,7 @@
     </style>
 
     <style name="Theme.AndroidApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="Theme.AndroidApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- Toolbar custom style -->
