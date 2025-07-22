@@ -86,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                 // go to registration page
                 Intent intent = new Intent(LoginActivity.this, InboxActivity.class);
                 startActivity(intent);
-//                updateUiWithUser(user);
             } else if (result instanceof Result.Error) {
                 Exception e = ((Result.Error) result).getError();
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -103,13 +102,10 @@ public class LoginActivity extends AppCompatActivity {
                 String password = edForm.getText().toString();
 
                 loginViewModel.login(m_username, password);
-//                Log.i("setOnClick", "isPasswordMode on click " + isPasswordMode);
 
-                // TO--DO: api call to token and move to inbox
             } else if(!edForm.getText().toString().isEmpty()) {
                 String username = edForm.getText().toString();
-//                userRepository.verifySignedUsername(username, loginResult);
-//                Result<User> result = loginRepository.login(username, password);
+
                 loginViewModel.verifySignedUsername(username);
             } else {
                 edForm.setError("Username is required");
@@ -137,7 +133,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // This will be called every time the activity comes to the foreground.
-        Log.i("LoginActivity", "onResume called, fetching all users.");
         loginViewModel.getAllUsers();
     }
 
@@ -152,10 +147,6 @@ public class LoginActivity extends AppCompatActivity {
         edForm.setHint(R.string.login_password_hint);
         edForm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         backBtn.setText(R.string.backBtn);
-
-//        String welcome = getString(R.string.welcome) + model.getDisplayName();
-//        // TODO : initiate successful logged in experience
-//        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
     private void updateUiToGetUsername() {
@@ -166,10 +157,6 @@ public class LoginActivity extends AppCompatActivity {
         edForm.setHint(R.string.login_email_hint);
         edForm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         backBtn.setText(R.string.create_an_account_btn);
-
-//        String welcome = getString(R.string.welcome) + model.getDisplayName();
-//        // TODO : initiate successful logged in experience
-//        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
