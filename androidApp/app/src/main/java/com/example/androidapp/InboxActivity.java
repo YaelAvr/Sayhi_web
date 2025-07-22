@@ -47,7 +47,7 @@ public class InboxActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+//
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -66,8 +66,23 @@ public class InboxActivity extends AppCompatActivity {
 //            }
 //        });
 
+        labelsAdapter = new LabelsAdapter();
+
+        // 2. נגדיר את ה-Observer. עכשיו זה בטוח כי labelsAdapter כבר קיים.
+        labelViewModel.getAllLabels().observe(this, labelEntities -> {
+            List<Label> labels = new ArrayList<>();
+            for (LabelEntity entity : labelEntities) {
+                labels.add(toLabel(entity));
+            }
+            // הפעולה הזו בטוחה כעת
+            labelsAdapter.setLabels(labels);
+        });
+
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+
+
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
@@ -78,6 +93,7 @@ public class InboxActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        // 3. נמצא את הרכיבים באמצעות navigationView.findViewById - זו הדרך הנכונה למבנה ה-XML שלך.
         TextView navHomeButton = navigationView.findViewById(R.id.nav_home_button);
         if (navHomeButton != null) {
             navHomeButton.setOnClickListener(v -> {
@@ -88,25 +104,16 @@ public class InboxActivity extends AppCompatActivity {
 
         navLabelsRecyclerView = navigationView.findViewById(R.id.nav_labels_recycler_view);
         if (navLabelsRecyclerView != null) {
-            labelsAdapter = new LabelsAdapter();
+            // נקשר את המתאם שיצרנו קודם ל-RecyclerView
             navLabelsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             navLabelsRecyclerView.setAdapter(labelsAdapter);
             fetchLabelsForNav();
         }
 
-        labelViewModel.getAllLabels().observe(this, labelEntities -> {
-            List<Label> labels = new ArrayList<>();
-            for (LabelEntity entity : labelEntities) {
-                labels.add(toLabel(entity));
-            }
-            labelsAdapter.setLabels(labels);
-        });
-
-        // מציאת כפתור הוספת הלייבל והגדרת לחיצה עליו
         ImageButton addLabelButton = navigationView.findViewById(R.id.button_add_label);
         if (addLabelButton != null) {
             addLabelButton.setOnClickListener(v -> {
-                addNewMockLabel(); // קריאה לפונקציה חדשה
+                addNewMockLabel();
             });
         }
         setupNavigationListener();
@@ -300,7 +307,7 @@ public class InboxActivity extends AppCompatActivity {
             // 'destination' הוא היעד החדש.
 
             // עכשיו נבדוק מהו היעד ונקבע את נראות הרכיבים.
-            if (destination.getId() == R.id.editNewMailFragment) {
+            if (destination.getId() == R.id.editNewMailFragment || destination.getId() == R.id.singleMailFragment) {
                 // אם הגענו למסך כתיבת המייל, הסתר הכל.
                 hideMainToolbar();
                 hideFloatingActionButton();

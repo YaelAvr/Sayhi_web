@@ -18,4 +18,7 @@ public interface MailDao {
 
     @Query("DELETE FROM mails")
     void clearAllMails();
+
+    @Query("SELECT * FROM mails WHERE id = :id")
+    LiveData<MailEntity> getMailById(String id);
 }

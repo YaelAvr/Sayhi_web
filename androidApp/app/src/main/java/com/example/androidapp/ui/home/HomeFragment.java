@@ -219,7 +219,7 @@ public class HomeFragment extends Fragment {
     }
 
     private Mail toMail(MailEntity entity) {
-        return new Mail(
+        Mail mail = new Mail(
                 entity.getFromName(),
                 entity.getSubject(),
                 entity.getBody(),
@@ -228,5 +228,8 @@ public class HomeFragment extends Fragment {
                 entity.isStarred(),
                 entity.getFromPicture()
         );
+        mail.setId(entity.getId());
+        return mail;
     }
+
 }

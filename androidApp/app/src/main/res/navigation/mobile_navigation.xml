@@ -34,4 +34,14 @@
         android:id="@+id/editNewMailFragment"
         android:name="com.example.androidapp.ui.editmail.EditNewMailFragment"
         android:label="EditNewMailFragment" />
+    <fragment
+        android:id="@+id/singleMailFragment"
+        android:name="com.example.androidapp.ui.home.SingleMailFragment"
+        android:label="Single Mail"
+        tools:layout="@layout/fragment_single_mail">
+
+        <argument
+            android:name="mailId"
+            app:argType="string" />
+    </fragment>
 </navigation>
