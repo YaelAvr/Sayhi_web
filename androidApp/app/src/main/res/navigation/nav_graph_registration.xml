@@ -20,6 +20,13 @@
         android:name="com.example.androidapp.ui.registration.UsernameFragment"
         android:label="Username"
         tools:layout="@layout/fragment_username" />
+
+    <fragment
+        android:id="@+id/passwordFragment"
+        android:name="com.example.androidapp.ui.registration.PasswordFragment"
+        android:label="Password"
+        tools:layout="@layout/fragment_password" />
+
     <!-- פעולה שמנווטת מהפרגמנט של השם לפרגמנט של תאריך ומגדר -->
     <action
         android:id="@+id/action_nameFragment_to_dateAndGenderFragment"
@@ -28,5 +35,7 @@
         android:id="@+id/action_dateAndGenderFragment_to_usernameFragment"
         app:destination="@id/usernameFragment" />
 
-
+    <action
+        android:id="@+id/action_usernameFragment_to_passwordFragment"
+        app:destination="@id/passwordFragment" />
 </navigation>

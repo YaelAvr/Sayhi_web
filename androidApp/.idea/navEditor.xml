@@ -139,12 +139,34 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="action_dateAndGenderFragment_to_usernameFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_nameFragment_to_dateAndGenderFragment">
                     <value>
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_usernameFragment_to_passwordFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="dateAndGenderFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="passwordFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">

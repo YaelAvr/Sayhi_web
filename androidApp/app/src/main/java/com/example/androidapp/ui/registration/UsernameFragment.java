@@ -44,8 +44,8 @@ public class UsernameFragment extends Fragment {
             // בהמשך נבדוק מול API אם הוא תקין
             if (!username.isEmpty()) {
                 registrationViewModel.setUsername(username);
-
-            //להוסיף הפניה לעמוד הבא
+                NavController navController = NavHostFragment.findNavController(this);
+                navController.navigate(R.id.action_usernameFragment_to_passwordFragment);
             } else {
                 editTextUsername.setError("Username cannot be empty");
             }
