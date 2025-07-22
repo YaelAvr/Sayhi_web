@@ -1,12 +1,13 @@
 package com.example.androidapp.ui.home;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
+import com.example.androidapp.data.Result; // <-- Import חדש
 import com.example.androidapp.data.model.MailEntity;
 import com.example.androidapp.data.repository.MailRepository;
 import com.example.androidapp.model.Mail;
@@ -14,17 +15,46 @@ import com.example.androidapp.model.Mail;
 import java.util.List;
 
 public class MailViewModel extends AndroidViewModel {
+
     private final MailRepository repository;
-    private final LiveData<List<MailEntity>> allMails;
+
+    // LiveData לעבודה עם מסד נתונים פנימי (נשאר למקרה הצורך)
+    private final LiveData<List<MailEntity>> allMailsFromDb;
+
+    // LiveData חדש שיחזיק את התוצאה מה-API
+    private final MutableLiveData<Result<List<Mail>>> mailsApiResult = new MutableLiveData<>();
 
     public MailViewModel(@NonNull Application application) {
         super(application);
         repository = new MailRepository(application);
-        allMails = repository.getAllMails();
+        allMailsFromDb = repository.getAllMails(); // מאתחלים את ה-LiveData מה-DB
     }
 
+    // --- מתודות חדשות לעבודה עם ה-API ---
+
+    /**
+     * חושף את תוצאת ה-API החוצה, כדי שה-Fragment יוכל להאזין לה.
+     */
+    public LiveData<Result<List<Mail>>> getMailsResult() {
+        return mailsApiResult;
+    }
+
+    /**
+     * המתודה ש-InboxActivity קורא לה כדי להתחיל את טעינת המיילים.
+     * זו המתודה שהייתה חסרה לך.
+     */
+    public void fetchMailsByLabel(String labelId) {
+        // קריאה ל-Repository שיבצע את קריאת ה-API
+        repository.getMailsByLabel(labelId, result -> {
+            mailsApiResult.postValue(result);
+        });
+    }
+
+
+    // --- מתודות קיימות לעבודה עם Room (מסד נתונים פנימי) ---
+
     public LiveData<List<MailEntity>> getAllMails() {
-        return allMails;
+        return allMailsFromDb;
     }
 
     public void insert(MailEntity mail) {
@@ -42,9 +72,10 @@ public class MailViewModel extends AndroidViewModel {
     public LiveData<Mail> getMailById(String id) {
         return Transformations.map(repository.getMailById(id), entity -> {
             if (entity == null) return null;
-            return toMail(entity); // פונקציה שממירה מ־MailEntity ל־Mail
+            return toMail(entity);
         });
     }
+
     private Mail toMail(MailEntity entity) {
         Mail mail = new Mail(
                 entity.getFromName(),
@@ -58,5 +89,4 @@ public class MailViewModel extends AndroidViewModel {
         mail.setId(entity.getId());
         return mail;
     }
-
 }

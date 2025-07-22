@@ -7,32 +7,36 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-// import androidx.annotation.NonNull; // הסרנו את ה-import
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidapp.model.Label;
 import com.example.androidapp.R;
+import com.example.androidapp.ui.home.HomeViewModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class LabelsAdapter extends RecyclerView.Adapter<LabelsAdapter.LabelViewHolder> {
 
     private List<Label> labels = new ArrayList<>();
+    private final LabelViewModel viewModel; // <-- תוקן!
 
-    // הוסר @NonNull
+    public LabelsAdapter(LabelViewModel viewModel) { // <-- תוקן!
+        this.viewModel = viewModel;
+    }
+
     @Override
-    public LabelViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { // הוסר @NonNull מהפרמטר
+    public LabelViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_label, parent, false);
         return new LabelViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(LabelViewHolder holder, int position) {
-        try {
-            // כל הקוד המקורי שלך נמצא כאן
-            Label currentLabel = labels.get(position);
-            String labelName = currentLabel.getName();
+        Label currentLabel = labels.get(position);
 
-            // בודקים אם הרכיבים קיימים לפני שמשתמשים בהם
+        // הקוד שלך להצגת המידע - הוא תקין ונשאר פה
+        try {
+            String labelName = currentLabel.getName();
             if (holder.textViewLabelName != null) {
                 if (labelName == null || labelName.isEmpty()) {
                     holder.textViewLabelName.setText("(No Name)");
@@ -40,30 +44,27 @@ public class LabelsAdapter extends RecyclerView.Adapter<LabelsAdapter.LabelViewH
                     holder.textViewLabelName.setText(labelName);
                 }
             }
-
             if (holder.iconLabel != null) {
-                int iconResId = R.drawable.ic_custom_label; // ערך ברירת מחדל
+                int iconResId = R.drawable.ic_custom_label;
                 if (labelName != null && !labelName.isEmpty()) {
                     Context context = holder.itemView.getContext();
                     String resourceName = "ic_" + labelName.toLowerCase();
                     int foundResId = context.getResources().getIdentifier(resourceName, "drawable", context.getPackageName());
-                    if (foundResId != 0) {
-                        iconResId = foundResId;
-                    }
+                    if (foundResId != 0) { iconResId = foundResId; }
                 }
                 holder.iconLabel.setImageResource(iconResId);
             }
-
         } catch (Exception e) {
-            // ================== זה החלק החשוב! ==================
-            // אם בכל זאת מתרחשת קריסה, נציג אותה על המסך
-            Toast.makeText(
-                    holder.itemView.getContext(),
-                    "Crash in Adapter: " + e.getMessage(), // <-- זה יציג את הודעת השגיאה המדויקת
-                    Toast.LENGTH_LONG
-            ).show();
-            // =======================================================
+            Toast.makeText(holder.itemView.getContext(), "Crash in Adapter: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+
+        // ======================= החלק החשוב ששכחת =======================
+        // כאן אנחנו מגדירים מה קורה כשלוחצים על שורת הלייבל כולה
+        holder.itemView.setOnClickListener(v -> {
+            // קוראים למתודה ב-ViewModel שהגדרנו קודם
+            viewModel.onLabelClicked(currentLabel);
+        });
+        // ===================================================================
     }
 
     @Override
@@ -76,16 +77,15 @@ public class LabelsAdapter extends RecyclerView.Adapter<LabelsAdapter.LabelViewH
         notifyDataSetChanged();
     }
 
-    public void addLabel(Label label) {
-        this.labels.add(label);
-        notifyItemInserted(labels.size() - 1);
-    }
+    // אין צורך במתודה הזו אם משתמשים ב-LiveData
+    // public void addLabel(Label label) { ... }
 
-    static class LabelViewHolder extends RecyclerView.ViewHolder {
+    // ================== שינוי: הסרנו את המילה 'static' ==================
+    class LabelViewHolder extends RecyclerView.ViewHolder {
         ImageView iconLabel;
         TextView textViewLabelName;
 
-        public LabelViewHolder(View itemView) { // הוסר @NonNull מהפרמטר
+        public LabelViewHolder(View itemView) {
             super(itemView);
             iconLabel = itemView.findViewById(R.id.icon_label);
             textViewLabelName = itemView.findViewById(R.id.textViewLabelName);

@@ -2,26 +2,49 @@ package com.example.androidapp.data.repository;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
+import com.example.androidapp.data.WebApi.MailAPI;
+import com.example.androidapp.data.Result;
+import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.data.dao.MailDao;
 import com.example.androidapp.data.db.AppDB;
 import com.example.androidapp.data.model.MailEntity;
-
+import com.example.androidapp.model.Mail;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class MailRepository {
 
+    // --- משתנים לעבודה עם מסד נתונים פנימי (Room) ---
     private final MailDao mailDao;
     private final ExecutorService executorService;
 
+    // --- משתנים לעבודה עם הרשת (API) ---
+    private final MailAPI mailAPI;
+    private final TokenManager tokenManager;
+
+    // --- Callback להחזרת תוצאות מה-API ---
+    public interface MailCallback {
+        void onComplete(Result<List<Mail>> result);
+    }
+
     public MailRepository(Application application) {
+        // אתחול לעבודה עם Room
         AppDB db = AppDB.getInstance(application);
         mailDao = db.mailDao();
         executorService = Executors.newSingleThreadExecutor();
+
+        // אתחול לעבודה עם ה-API, לפי המבנה החדש
+        this.mailAPI = new MailAPI();
+        this.tokenManager = new TokenManager(application);
     }
 
+    // --- מתודות קיימות לעבודה עם Room ---
     public LiveData<List<MailEntity>> getAllMails() {
         return mailDao.getAllMails();
     }
@@ -40,5 +63,32 @@ public class MailRepository {
 
     public LiveData<MailEntity> getMailById(String id) {
         return mailDao.getMailById(id);
+    }
+
+    // --- מתודה חדשה לעבודה עם ה-API ---
+    public void getMailsByLabel(String labelId, final MailCallback callback) {
+        String token = tokenManager.getToken();
+        if (token == null) {
+            callback.onComplete(new Result.Error(new Exception("User not logged in")));
+            return;
+        }
+        String authToken = "Bearer " + token;
+
+        // שימוש ב-mailAPI החדש והספציפי
+        mailAPI.getMailsByLabel(labelId, authToken).enqueue(new Callback<List<Mail>>() {
+            @Override
+            public void onResponse(Call<List<Mail>> call, Response<List<Mail>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onComplete(new Result.Success<>(response.body()));
+                } else {
+                    callback.onComplete(new Result.Error(new Exception("API Error loading mails: " + response.code())));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Mail>> call, Throwable t) {
+                callback.onComplete(new Result.Error(new Exception("Network Error loading mails: " + t.getMessage())));
+            }
+        });
     }
 }
