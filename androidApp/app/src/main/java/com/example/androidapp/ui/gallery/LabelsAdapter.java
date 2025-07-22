@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 // import androidx.annotation.NonNull; // הסרנו את ה-import
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidapp.model.Label;
@@ -25,27 +26,44 @@ public class LabelsAdapter extends RecyclerView.Adapter<LabelsAdapter.LabelViewH
     }
 
     @Override
-    public void onBindViewHolder(LabelViewHolder holder, int position) { // הוסר @NonNull מהפרמטר
-        Label currentLabel = labels.get(position);
-        holder.textViewLabelName.setText(currentLabel.getName());
+    public void onBindViewHolder(LabelViewHolder holder, int position) {
+        try {
+            // כל הקוד המקורי שלך נמצא כאן
+            Label currentLabel = labels.get(position);
+            String labelName = currentLabel.getName();
 
-        // --- לוגיקה דינמית למציאת אייקון ---
-        int iconResId;
-        Context context = holder.itemView.getContext();
+            // בודקים אם הרכיבים קיימים לפני שמשתמשים בהם
+            if (holder.textViewLabelName != null) {
+                if (labelName == null || labelName.isEmpty()) {
+                    holder.textViewLabelName.setText("(No Name)");
+                } else {
+                    holder.textViewLabelName.setText(labelName);
+                }
+            }
 
-        // בניית שם המשאב לפי קונבנציה: "ic_" + "שם הלייבל באותיות קטנות"
-        String resourceName = "ic_" + currentLabel.getName().toLowerCase();
+            if (holder.iconLabel != null) {
+                int iconResId = R.drawable.ic_custom_label; // ערך ברירת מחדל
+                if (labelName != null && !labelName.isEmpty()) {
+                    Context context = holder.itemView.getContext();
+                    String resourceName = "ic_" + labelName.toLowerCase();
+                    int foundResId = context.getResources().getIdentifier(resourceName, "drawable", context.getPackageName());
+                    if (foundResId != 0) {
+                        iconResId = foundResId;
+                    }
+                }
+                holder.iconLabel.setImageResource(iconResId);
+            }
 
-        // חיפוש ה-ID של המשאב
-        iconResId = context.getResources().getIdentifier(resourceName, "drawable", context.getPackageName());
-
-        // אם לא נמצא ID (התוצאה היא 0), השתמש באייקון ברירת מחדל
-        if (iconResId == 0) {
-            iconResId = R.drawable.ic_custom_label;
+        } catch (Exception e) {
+            // ================== זה החלק החשוב! ==================
+            // אם בכל זאת מתרחשת קריסה, נציג אותה על המסך
+            Toast.makeText(
+                    holder.itemView.getContext(),
+                    "Crash in Adapter: " + e.getMessage(), // <-- זה יציג את הודעת השגיאה המדויקת
+                    Toast.LENGTH_LONG
+            ).show();
+            // =======================================================
         }
-
-        // הגדרת האייקון ב-ImageView
-        holder.iconLabel.setImageResource(iconResId);
     }
 
     @Override

@@ -33,6 +33,7 @@ public class EditNewMailFragment extends Fragment {
 
         setupToolbar(view);
         setupMenu(); // קריאה לפונקציה החדשה שמגדירה את התפריט
+        setupSendButton(view);
     }
 
     private void setupToolbar(View view) {
@@ -72,5 +73,20 @@ public class EditNewMailFragment extends Fragment {
                 return false; // אם לא טיפלנו, החזר false
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
+    private void setupSendButton(View view) {
+        // מצא את הכפתור לפי ה-ID שהגדרנו ב-XML
+        com.google.android.material.button.MaterialButton sendButton = view.findViewById(R.id.button_send);
+
+        // הגדר מאזין ללחיצות
+        if (sendButton != null) {
+            sendButton.setOnClickListener(v -> {
+                // כרגע, רק נקפיץ הודעה כדי לוודא שזה עובד
+                Toast.makeText(getContext(), "כפתור 'שלח' נלחץ!", Toast.LENGTH_SHORT).show();
+
+                // כאן בעתיד תוסיף את הלוגיקה של איסוף המידע ושליחת המייל
+            });
+        }
     }
 }
