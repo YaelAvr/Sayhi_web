@@ -26,6 +26,7 @@ Project management tracking:
   - `tempUploads/` — Images selected during the registration process until its completion
   - `package.json`, `package-lock.json` — Node.js dependencies  
 - `Tests/` — Project tests (cpp tests from last exercise)
+- `android-app/`          # Android frontend (Gmail-like app)
 - `react-app/` — fronted (showing the Gmail-like interface)
   -`build/` — contains the optimized production ready version of the application
   - `public/` — include the index.html file and fonts folder
