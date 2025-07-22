@@ -141,8 +141,8 @@ public class LoginActivity extends AppCompatActivity {
         m_username = user.getUserName();
         Log.i("updateUiWithUser", "m_username: " +m_username );
 
-        title.setText("Hi "+user.getDisplayName()); //TO-DO: add "+ display name" that return from API
-        explainText.setText(getString(R.string.app_sig,user.getUserName())); // TO-DO: replace with API username
+        title.setText("Hi "+user.getDisplayName());
+        explainText.setText(getString(R.string.app_sig,user.getUserName()));
         edForm.setText("");
         edForm.setHint(R.string.login_password_hint);
         edForm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUiToGetUsername() {
         isPasswordMode=false;
-        title.setText("Sign in");
+        title.setText(R.string.action_sign_in_short);
         explainText.setText("to continue to your SayHi account");
         edForm.setText("");
         edForm.setHint(R.string.login_email_hint);
