@@ -1,11 +1,14 @@
 package com.example.androidapp.ui.home;
 
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidapp.model.Mail;
 import com.example.androidapp.R;
@@ -51,6 +54,14 @@ public class MailsAdapter extends RecyclerView.Adapter<MailsAdapter.MailViewHold
             holder.textFrom.setTypeface(null, Typeface.NORMAL);
             holder.textSubject.setTypeface(null, Typeface.NORMAL);
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("mailId", currentMail.getId());
+
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.singleMailFragment, bundle);
+        });
 
         // בעתיד: כאן יהיה קוד לטעינת תמונה מ-currentMail.getFromPicture() לתוך holder.iconAvatar
     }

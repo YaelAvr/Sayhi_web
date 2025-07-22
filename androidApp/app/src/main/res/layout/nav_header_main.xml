@@ -14,23 +14,28 @@
     android:gravity="bottom">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@mipmap/ic_launcher_round"
-        android:contentDescription="@string/nav_header_desc"
-        android:id="@+id/imageView" />
+        android:id="@+id/profile_image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_menu_camera"
+        android:scaleType="centerCrop"
+        android:contentDescription="Profile image" />
 
     <TextView
+        android:id="@+id/display_name_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="@string/nav_header_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:paddingTop="8dp"
+        android:text="Display Name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"/>
 
     <TextView
+        android:id="@+id/username_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_header_subtitle"
-        android:id="@+id/textView" />
+        android:text="username@sayhi.com"
+        android:textColor="@android:color/white"/>
 </LinearLayout>
