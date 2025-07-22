@@ -77,4 +77,9 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+
+
 }
