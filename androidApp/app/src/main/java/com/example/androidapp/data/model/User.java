@@ -13,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
 public class User {
     @PrimaryKey
     @NonNull
-    @SerializedName("_id")
+    @SerializedName("id")
     private String id;
 
     @SerializedName("displayName")

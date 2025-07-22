@@ -257,7 +257,8 @@ exports.getUserById = async (req, res) => {
     .status(200)
     .json({
       id: user._id, username: user.username, displayName: user.displayName, picture: user.picture,
-      gender: user.gender, birthday: user.birthday
+      // gender: user.gender, birthday: user.birthday,
+       isDarkMode: user.isDarkMode
     })
 };
 

@@ -3,10 +3,12 @@ package com.example.androidapp.data.repository;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import com.example.androidapp.data.Result;
+import com.example.androidapp.data.WebApi.TokenApi;
 import com.example.androidapp.data.WebApi.UserApi;
 import com.example.androidapp.data.dao.RegisteredUserDao;
 import com.example.androidapp.data.dao.UserDao;
@@ -22,22 +24,28 @@ public class UserRepository {
     private RegisteredUserDao regDao;
     private UserApi userApi;
 
+    private TokenApi tokenApi;
+
     private User user = null;
 
     private UsersData usersData;
+    private Context context;
     public UserRepository(Context context) {
+        this.context = context;
         AppDB db = Room.databaseBuilder(context, AppDB.class, "UsersDB")
                 .allowMainThreadQueries()
                 .build();
         this.userDao = db.userDao();
         this.regDao=db.registeredUserDao();
-        this.userApi= new UserApi(context, userDao, regDao);
+        usersData = new UsersData();
+        this.userApi= new UserApi(context, userDao, regDao, usersData);
+        this.tokenApi= new TokenApi(context);
     }
 
-    class UsersData extends MutableLiveData<List<User>>{
+    class UsersData extends MutableLiveData<List<RegisteredUser>>{
         public UsersData(){
             super();
-            setValue(new LinkedList<User>());
+            setValue(new LinkedList<RegisteredUser>());
         }
 
         @Override
@@ -50,9 +58,9 @@ public class UserRepository {
             }).start();
         }
     }
-    public User getUserById(String id) {
-        return userDao.getUserById(id);
-    }
+//    public User getUserById(String id) {
+//        return userDao.getUserById(id);
+//    }
 
     public void insertUser(User user) {
         userDao.insertUser(user);
@@ -65,7 +73,7 @@ public class UserRepository {
     public void verifySignedUsername(String username, MutableLiveData<Result<RegisteredUser>> loginResult ){
         userApi.verifySignedUsername(username, loginResult);
     }
-    public void getAllUsers() {userApi.fetchAllUsersToDao();}
+    public void getAllUsers() { userApi.fetchAllUsersToDao();}
     public void reload(){
         userApi.fetchAllUsersToDao();
     }
@@ -76,12 +84,12 @@ public class UserRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public Result<User> login(String username, String password) {
-        // handle login
-        Result<User> result = userApi.login(username, password);
-        if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<User>) result).getData());
-        }
-        return result;
+    public MutableLiveData<Result<String>> login(String username, String password) {
+        return tokenApi.login(username, password);
+    }
+
+    // This method already exists
+    public LiveData<Result<User>> getUserById(String userId) {
+        return userApi.getUserById(userId);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.androidapp;
+package com.example.androidapp.data.auth;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,9 +17,7 @@ public class TokenManager {
 
     // פונקציה לשמירת הטוקן
     public void saveToken(String token) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(TOKEN_KEY, token);
-        editor.apply();
+        prefs.edit().putString(TOKEN_KEY, token).apply();
     }
 
     // פונקציה לקריאת הטוקן
@@ -29,8 +27,6 @@ public class TokenManager {
 
     // פונקציה למחיקת הטוקן (שימושי ב-Logout)
     public void deleteToken() {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove(TOKEN_KEY);
-        editor.apply();
+        prefs.edit().remove(TOKEN_KEY).apply();
     }
 }
