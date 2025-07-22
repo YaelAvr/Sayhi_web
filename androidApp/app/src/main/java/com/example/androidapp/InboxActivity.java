@@ -1,6 +1,7 @@
 package com.example.androidapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -19,12 +20,15 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidapp.data.Result;
 import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.data.model.LabelEntity;
+import com.example.androidapp.data.model.User;
 import com.example.androidapp.databinding.ActivityMain2Binding;
 import com.example.androidapp.model.Label;
 import com.example.androidapp.ui.gallery.LabelViewModel;
 import com.example.androidapp.ui.gallery.LabelsAdapter;
+import com.example.androidapp.ui.loggedInUser.LoggedInUserViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -39,6 +43,8 @@ public class InboxActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMain2Binding binding;
+
+    private LoggedInUserViewModel userViewModel;
 
     private LabelsAdapter labelsAdapter;
     private RecyclerView navLabelsRecyclerView;
@@ -58,6 +64,25 @@ public class InboxActivity extends AppCompatActivity {
         ).get(LabelViewModel.class);
 
         setSupportActionBar(binding.appBarMain.toolbar);
+
+        userViewModel = new LoggedInUserViewModel(this);
+
+        userViewModel.fetchCurrentUserProfile();
+
+
+        userViewModel.getUserProfile().observe(this, result -> {
+            Log.i("inbox", " " );
+//            loadingProgressBar.setVisibility(View.GONE);
+            if (result instanceof Result.Success) {
+                User user = ((Result.Success<User>) result).getData();
+                Log.i("getUserResult", "user display name:  " + user.getDisplayName());
+
+            } else if (result instanceof Result.Error) {
+                Exception e = ((Result.Error) result).getError();
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
 //        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
 //            @Override

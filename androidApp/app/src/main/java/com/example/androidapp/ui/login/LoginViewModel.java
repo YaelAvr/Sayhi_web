@@ -23,6 +23,8 @@ public class LoginViewModel extends ViewModel {
     private final UserRepository repository;
     private final TokenManager tokenManager;
 
+
+
     public LoginViewModel(Context context) {
         repository = new UserRepository(context);
         tokenManager = new TokenManager(context);
@@ -49,14 +51,12 @@ public class LoginViewModel extends ViewModel {
 
             if (matcher.matches()) {
                 finalString = matcher.group(1);
-//                Log.d("USERNAME", "Username is: " + username);
             } else {
                 userResult.postValue(new Result.Error(new Exception("Invalid Username")));
 
             }
 
         }
-//        return verifySignedUsername(finalString);
         repository.verifySignedUsername(finalString, userResult);
     }
 
@@ -80,18 +80,6 @@ public class LoginViewModel extends ViewModel {
             loginResult.removeSource(source);
         });
 
-
-        // can be launched in a separate asynchronous job
-//         repository.login(username, password,loginResult);
-//        MutableLiveData<Result<String>> result = repository.login(username, password,loginResult);
-//
-//        if (result.getValue() instanceof Result.Success) {
-//            String data = ((Result.Success<String>) result.getValue()).getData();
-//            loginResult.setValue(new Result.Success<>(new LoginResult(data)));
-//        } else {
-//            loginResult.setValue(result.getValue());
-//        }
-
     }
     public void loginDataChanged(String username, String password) {
 //        if (!isUserNameValid(username)) {
@@ -109,59 +97,5 @@ public class LoginViewModel extends ViewModel {
         repository.reload();
     }
 
-/*
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private LoginRepository loginRepository;
-    private UserRepository userRepository;
 
-
-//    LoginViewModel(LoginRepository loginRepository) {
-//        this.loginRepository = loginRepository;
-//    }
-    LoginViewModel(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    LiveData<LoginFormState> getLoginFormState() {
-        return loginFormState;
-    }
-
-    LiveData<LoginResult> getLoginResult() {
-        return loginResult;
-    }
-
-    public void login(String username, String password) {
-        // can be launched in a separate asynchronous job
-        Result<User> result = loginRepository.login(username, password);
-
-        if (result instanceof Result.Success) {
-            User data = ((Result.Success<User>) result).getData();
-            loginResult.setValue(new LoginResult(new RegisteredUserView(data.getDisplayName())));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
-    }
-//    public void enterUsername
-
-
-    public void loginDataChanged(String username, String password) {
-        if (!isUserNameValid(username)) {
-            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
-        } else if (!isPasswordValid(password)) {
-            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
-        } else {
-            loginFormState.setValue(new LoginFormState(true));
-        }
-    }
-*/
-
-
-    // A placeholder password validation check
-    private boolean isPasswordValid(String password) {
-        // TO-DO: add API call
-        return true;
-
-//        return password != null && password.trim().length() > 5;
-    }
 }

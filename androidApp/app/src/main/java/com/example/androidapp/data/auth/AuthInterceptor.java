@@ -13,7 +13,6 @@ public class AuthInterceptor implements Interceptor {
         this.tokenManager = tokenManager;
     }
 
-
     @Override
     public Response intercept(Chain chain) throws IOException {
         String token = tokenManager.getToken();

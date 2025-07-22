@@ -77,4 +77,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+    implementation("com.auth0:java-jwt:4.4.0")
 }

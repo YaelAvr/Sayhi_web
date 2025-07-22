@@ -3,6 +3,7 @@ package com.example.androidapp.data.repository;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
@@ -57,9 +58,9 @@ public class UserRepository {
             }).start();
         }
     }
-    public User getUserById(String id) {
-        return userDao.getUserById(id);
-    }
+//    public User getUserById(String id) {
+//        return userDao.getUserById(id);
+//    }
 
     public void insertUser(User user) {
         userDao.insertUser(user);
@@ -84,22 +85,11 @@ public class UserRepository {
     }
 
     public MutableLiveData<Result<String>> login(String username, String password) {
-//        // handle login
-//        MutableLiveData<Result<String>> result = tokenApi.login(username, password);
-//        if (result.getValue() instanceof Result.Success) {
-//            String jwt = result.getValue().toString();
-//
-//            // שמירת JWT
-//            SharedPreferences prefs = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
-//            prefs.edit().putString("jwt_token", jwt).apply();
-//
-////            callback.onResponse(call, response);
-//
-//
-//            //לישמור את התוקן
-////            setLoggedInUser(((Result.Success<String>) result.getValue()).getData());
-//        }
-//        return result;
         return tokenApi.login(username, password);
+    }
+
+    // This method already exists
+    public LiveData<Result<User>> getUserById(String userId) {
+        return userApi.getUserById(userId);
     }
 }

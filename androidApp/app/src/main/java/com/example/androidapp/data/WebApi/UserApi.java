@@ -3,10 +3,13 @@ package com.example.androidapp.data.WebApi;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androidapp.R;
 import com.example.androidapp.data.Result;
+import com.example.androidapp.data.auth.AuthInterceptor;
+import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.data.dao.RegisteredUserDao;
 import com.example.androidapp.data.dao.UserDao;
 import com.example.androidapp.data.model.RegisteredUser;
@@ -14,6 +17,7 @@ import com.example.androidapp.data.model.User;
 
 import java.util.List;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,32 +38,47 @@ public class UserApi {
         this.regDao = regDao;
         this.context = context;
         this.usersListData=usersListData;
-        String baseUrl = this.context.getString(R.string.BaseUrl);
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
+
+        TokenManager tokenManager = new TokenManager(context);
+        AuthInterceptor authInterceptor = new AuthInterceptor(tokenManager);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(authInterceptor).build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(context.getString(R.string.BaseUrl))
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         userServiceAPI = retrofit.create(UserServicesAPI.class);
     }
 
-    public void getUser(String id) {
+    public LiveData<Result<User>> getUserById(String id) {
+        MutableLiveData<Result<User>> userLiveData = new MutableLiveData<>();
+
         Call<User> call = userServiceAPI.getUser(id);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                new Thread(()->{
-                    userDao.deleteAllUsers();
-                    userDao.insertUser(response.body());
-                }).start();
+                if (response.isSuccessful() && response.body() != null) {
+                    userLiveData.postValue(new Result.Success<>(response.body()));
+
+                    new Thread(()->{
+                        userDao.deleteAllUsers();
+                        userDao.insertUser(response.body());
+                    }).start();
+                } else {
+                    userLiveData.postValue(new Result.Error(new Exception(response.message())));
+                }
+
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                userLiveData.postValue(new Result.Error(new Exception(t.getMessage())));
             }
         });
+        return userLiveData;
     }
     public void verifySignedUsername(String username, MutableLiveData<Result<RegisteredUser>> liveData){
         Log.i("errorType", "verify passed username" + username);
