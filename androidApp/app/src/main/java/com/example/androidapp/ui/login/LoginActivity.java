@@ -9,9 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidapp.InboxActivity;
@@ -70,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                 updateUiWithUser(user);
             } else if (result instanceof Result.Error) {
                 Exception e = ((Result.Error) result).getError();
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 edForm.setError(e.getMessage());
             }
         });
@@ -80,15 +77,12 @@ public class LoginActivity extends AppCompatActivity {
             loadingProgressBar.setVisibility(View.INVISIBLE);
             if (result instanceof Result.Success) {
                 String token = ((Result.Success<String>) result).getData();
-                Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
-                Log.i("getLoginResult", "token: " + token);
 
                 // go to registration page
                 Intent intent = new Intent(LoginActivity.this, InboxActivity.class);
                 startActivity(intent);
             } else if (result instanceof Result.Error) {
                 Exception e = ((Result.Error) result).getError();
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 edForm.setError(e.getMessage());
             }
         });
@@ -109,8 +103,6 @@ public class LoginActivity extends AppCompatActivity {
                 loginViewModel.verifySignedUsername(username);
             } else {
                 edForm.setError("Username is required");
-
-                runOnUiThread(() -> Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show());
             }
         });
 
@@ -157,9 +149,5 @@ public class LoginActivity extends AppCompatActivity {
         edForm.setHint(R.string.login_email_hint);
         edForm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         backBtn.setText(R.string.create_an_account_btn);
-    }
-
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 }

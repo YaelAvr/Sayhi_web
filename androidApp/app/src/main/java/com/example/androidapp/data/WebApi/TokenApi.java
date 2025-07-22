@@ -1,7 +1,6 @@
 package com.example.androidapp.data.WebApi;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -42,7 +41,7 @@ public class TokenApi {
         try {
             JsonObject jsonBody = new JsonObject();
 
-            // 2. Add properties to it. The keys are the JSON field names.
+            // Add properties to it. The keys are the JSON field names.
             jsonBody.addProperty("username", username);
             jsonBody.addProperty("password", password);
 
@@ -53,9 +52,7 @@ public class TokenApi {
                     if (response.isSuccessful() && response.body() != null) {
                         JsonObject responseObject = response.body();
                         if (responseObject.has("token")) {
-                            // 3. Extract the token value as a string.
                             String token = responseObject.get("token").getAsString();
-                            // 4. Wrap the token in your Result.Success class.
                             tokenLiveData.postValue(new Result.Success<>(token));
                         }
 //                        else {
@@ -65,7 +62,6 @@ public class TokenApi {
 //                        String registeredUserList =response.body();
 //                        tokenLiveData.postValue(new Result.Success<>(registeredUserList));
                     } else {
-                        Log.e("tokenApi", "Failed to fetch users: " + response.message());
                         tokenLiveData.postValue(new Result.Error(new Exception(response.message())));
                     }
                 }
@@ -73,8 +69,6 @@ public class TokenApi {
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
                     tokenLiveData.postValue(new Result.Error(new Exception(t.getMessage())));
-
-                    Log.e("TokenApi", "Network error: " + t.getMessage(), t);
                 }
             });
         } catch (Exception e) {

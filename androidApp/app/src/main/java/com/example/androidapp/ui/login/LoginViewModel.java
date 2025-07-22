@@ -23,8 +23,6 @@ public class LoginViewModel extends ViewModel {
     private final UserRepository repository;
     private final TokenManager tokenManager;
 
-
-
     public LoginViewModel(Context context) {
         repository = new UserRepository(context);
         tokenManager = new TokenManager(context);
