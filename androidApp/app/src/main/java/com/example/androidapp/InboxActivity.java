@@ -79,7 +79,6 @@ public class InboxActivity extends AppCompatActivity {
 
             } else if (result instanceof Result.Error) {
                 Exception e = ((Result.Error) result).getError();
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });

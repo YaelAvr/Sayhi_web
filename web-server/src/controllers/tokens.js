@@ -18,7 +18,7 @@ exports.isUserRegistered = async (req, res) => {
             .status(201)
             .json({ token })
     } catch (err) {
-        if (err.message === "User not found" || err.message === "Incorrect password") {
+        if (err.message === "User not found" || err.message === 'Wrong password. Please try again.') {
             return res.status(401).json({ error: err.message });
         }
         res.status(500).json({ error: "Internal server error" });

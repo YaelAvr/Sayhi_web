@@ -15,6 +15,10 @@
         android:theme="@style/Theme.AndroidApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.landingPage.LandingPageActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AndroidApp" />
+        <activity
             android:name=".ui.registration.RegistrationActivity"
             android:exported="false"
             android:label="@string/title_activity_registration"
