@@ -21,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.androidapp.R;
 
@@ -74,10 +76,8 @@ public class ProfilePictureFragment extends Fragment {
             }
 
             // TODO: Later - send the file to the API using Retrofit
-
-            // Example navigation:
-            // NavController navController = NavHostFragment.findNavController(this);
-            // navController.navigate(R.id.action_profilePictureFragment_to_nextStepFragment);
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_profilePictureFragment_to_summaryFragment);
         });
     }
 
