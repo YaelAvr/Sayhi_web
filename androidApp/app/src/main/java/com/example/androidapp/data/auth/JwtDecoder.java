@@ -12,7 +12,6 @@ public class JwtDecoder {
     public String getUserId(String token) {
         try {
             DecodedJWT decodedJWT = JWT.decode(token);
-            // "id" must match the key you used on your server
             return decodedJWT.getClaim("id").asString();
         } catch (Exception e) {
             // This will happen if the token is malformed
