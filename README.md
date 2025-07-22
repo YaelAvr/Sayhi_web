@@ -5,6 +5,7 @@ The system includes:
 - A **Node.js (Express)** server that exposes a RESTful API.
 - A **C++** server that manages a URL blacklist using a Bloom filter (via TCP).
 - A **React** frontend showing a Gmail-like interface for users.
+- An **Android** application that connects to the Node.js server.
 
 ## System Requirements  
 To run the application using Docker:
@@ -26,7 +27,7 @@ Project management tracking:
   - `tempUploads/` — Images selected during the registration process until its completion
   - `package.json`, `package-lock.json` — Node.js dependencies  
 - `Tests/` — Project tests (cpp tests from last exercise)
-- `android-app/`          # Android frontend (Gmail-like app)
+- `android-app/`          Android frontend (Gmail-like app)
 - `react-app/` — fronted (showing the Gmail-like interface)
   -`build/` — contains the optimized production ready version of the application
   - `public/` — include the index.html file and fonts folder
