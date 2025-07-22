@@ -5,7 +5,7 @@ The system includes:
 - A **Node.js (Express)** server that exposes a RESTful API.
 - A **C++** server that manages a URL blacklist using a Bloom filter (via TCP).
 - A **React** frontend showing a Gmail-like interface for users.
-- An **Android** application that connects to the Node.js server.
+- An **Android** Gmail application that connects to the Node.js server.
 
 ## System Requirements  
 To run the application using Docker:
