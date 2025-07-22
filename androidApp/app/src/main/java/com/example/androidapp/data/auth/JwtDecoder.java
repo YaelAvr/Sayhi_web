@@ -27,7 +27,6 @@ public class JwtDecoder {
     public String getUsername(String token) {
         try {
             DecodedJWT decodedJWT = JWT.decode(token);
-            // "username" must match the key you used on your server
             return decodedJWT.getClaim("username").asString();
         } catch (Exception e) {
             return null;
