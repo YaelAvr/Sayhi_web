@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">SayHi</string>
     <string name="BaseUrl">http://10.0.2.2:3000/api/</string>
+    <string name="app_sig">%1$s@sayHi.com</string>
 
 
     <string name="title_activity_inbox">Inbox</string>

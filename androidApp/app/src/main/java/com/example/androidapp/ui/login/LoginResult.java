@@ -2,14 +2,16 @@ package com.example.androidapp.ui.login;
 
 import androidx.annotation.Nullable;
 
-import com.example.androidapp.data.model.User;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Authentication result : success (user details) or error message.
  */
 public class LoginResult {
     @Nullable
-    private User success;
+    private String success;
+    @SerializedName("token")
+    private String token;
     @Nullable
     private Integer error;
     @Nullable
@@ -24,13 +26,13 @@ public class LoginResult {
         this.error = error;
     }
 
-    public LoginResult(@Nullable User success) {
-        this.success = success;
+    public LoginResult(@Nullable String token) {
+        this.token = token;
     }
 
     @Nullable
-    User getSuccess() {
-        return success;
+    String getToken() {
+        return token;
     }
 
     @Nullable

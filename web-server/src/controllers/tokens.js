@@ -1,8 +1,6 @@
 const Tokens = require("../services/tokens");
 const { getUserById } = require("../services/users");
 
-
-
 // this function checks if a user is registered by matching username and password
 // and returns the user id if found, otherwise returns an error.
 exports.isUserRegistered = async (req, res) => {
@@ -12,19 +10,20 @@ exports.isUserRegistered = async (req, res) => {
 
     try {
         const user = await Tokens.isUserRegistered(username, password);
+        const token = Tokens.generateToken(user)
 
-        const token =Tokens.generateToken(user)        
         // Generate a JWT token for the user
         // The token contains the user id and username, and expires in 1 hour.
         res
             .status(201)
-            .json({token})
+            .json({ token })
     } catch (err) {
-        return res.status(404).json({ error: err.message });
-
+        if (err.message === "User not found" || err.message === "Incorrect password") {
+            return res.status(401).json({ error: err.message });
+        }
+        res.status(500).json({ error: "Internal server error" });
     }
 }
-
 
 exports.verifyTokenUser = async (req, res) => {
     const user = await getUserById(req.user.id);
