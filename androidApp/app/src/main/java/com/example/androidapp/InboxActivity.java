@@ -59,44 +59,8 @@ public class InboxActivity extends AppCompatActivity {
         mailViewModel = new ViewModelProvider(this).get(MailViewModel.class);
         userViewModel = new LoggedInUserViewModel(this);
 
-        userViewModel.fetchCurrentUserProfile();
 
-
-        userViewModel.getUserProfile().observe(this, result -> {
-            Log.i("inbox", " " );
-//            loadingProgressBar.setVisibility(View.GONE);
-            if (result instanceof Result.Success) {
-                User user = ((Result.Success<User>) result).getData();
-                Log.i("getUserResult", "user display name:  " + user.getDisplayName());
-
-            } else if (result instanceof Result.Error) {
-                Exception e = ((Result.Error) result).getError();
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-//        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
-        labelsAdapter = new LabelsAdapter();
-
-        // 2. נגדיר את ה-Observer. עכשיו זה בטוח כי labelsAdapter כבר קיים.
-        labelViewModel.getAllLabels().observe(this, labelEntities -> {
-            List<Label> labels = new ArrayList<>();
-            for (LabelEntity entity : labelEntities) {
-                labels.add(toLabel(entity));
-            }
-            // הפעולה הזו בטוחה כעת
-            labelsAdapter.setLabels(labels);
-        });
-
-
+        // ================== 2. הגדרת הניווט הראשי ==================
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
@@ -113,15 +77,15 @@ public class InboxActivity extends AppCompatActivity {
         // ================== 3. הגדרת רשימת הלייבלים בתפריט ==================
         navLabelsRecyclerView = navigationView.findViewById(R.id.nav_labels_recycler_view);
         if (navLabelsRecyclerView != null) {
+            // יוצרים את ה-Adapter פעם אחת ומעבירים לו את ה-ViewModel
             labelsAdapter = new LabelsAdapter(labelViewModel);
             navLabelsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             navLabelsRecyclerView.setAdapter(labelsAdapter);
         }
 
-        // כפתור הוספת לייבל חדש
         ImageButton addLabelButton = navigationView.findViewById(R.id.button_add_label);
         if (addLabelButton != null) {
-            addLabelButton.setOnClickListener(v -> addNewMockLabel());
+            addLabelButton.setOnClickListener(v -> addNewLabel());
         }
 
 
@@ -130,12 +94,9 @@ public class InboxActivity extends AppCompatActivity {
         // --- מאזין לתוצאות קריאת ה-API של הלייבלים ---
         labelViewModel.getLabelsApiResult().observe(this, result -> {
             if (result instanceof Result.Success) {
-                // הצלחה! קבלנו רשימה של לייבלים מהשרת
                 List<Label> apiLabels = ((Result.Success<List<Label>>) result).getData();
-                // עדכן את המתאם עם הנתונים החדשים שהגיעו
                 labelsAdapter.setLabels(apiLabels);
             } else if (result instanceof Result.Error) {
-                // שגיאה מהשרת או מהרשת
                 Exception error = ((Result.Error) result).getError();
                 Toast.makeText(this, "Error loading labels: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -144,7 +105,6 @@ public class InboxActivity extends AppCompatActivity {
         // --- מאזין ללחיצות על הלייבלים ---
         labelViewModel.getSelectedLabelId().observe(this, labelId -> {
             if (labelId == null) return;
-
             drawer.closeDrawers();
             Toast.makeText(this, "Loading mails for label: " + labelId, Toast.LENGTH_SHORT).show();
             mailViewModel.fetchMailsByLabel(labelId);
@@ -155,7 +115,7 @@ public class InboxActivity extends AppCompatActivity {
             if (result instanceof Result.Success) {
                 User user = ((Result.Success<User>) result).getData();
                 Log.i("InboxActivity", "User profile loaded: " + user.getDisplayName());
-                // בעתיד: עדכן את ה-Header עם פרטי המשתמש
+                // כאן תוכלי לעדכן את ה-Header בתפריט עם פרטי המשתמש
             } else if (result instanceof Result.Error) {
                 Toast.makeText(this, ((Result.Error) result).getError().getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -164,29 +124,52 @@ public class InboxActivity extends AppCompatActivity {
 
         // ================== 5. טעינת נתונים ראשונית ==================
         userViewModel.fetchCurrentUserProfile();
-        labelViewModel.fetchLabelsFromApi(); // <-- הפעלת טעינת הלייבלים מהשרת
+        labelViewModel.fetchLabelsFromApi();
     }
 
-    // הפונקציה toLabel שהייתה לך אינה נחוצה יותר כאן, כי אנחנו לא ממירים מ-Entity
-    // אבל פונקציית addNewMockLabel עדיין יכולה להישאר אם את רוצה להוסיף לייבלים מקומית
-    private void addNewMockLabel() {
-        //... הלוגיקה של הוספת לייבל נשארת כמו שהיא
+    /**
+     * פותח דיאלוג להוספת לייבל חדש.
+     * בעתיד, צריך לחבר את זה לקריאת API שיוצרת לייבל חדש בשרת.
+     */
+    private void addNewLabel() {
+        final EditText input = new EditText(this);
+        new AlertDialog.Builder(this)
+                .setTitle("Add New Label")
+                .setView(input)
+                .setPositiveButton("Add", (dialog, which) -> {
+                    String labelName = input.getText().toString().trim();
+                    if (!labelName.isEmpty()) {
+                        // בעתיד: labelViewModel.createNewLabel(labelName);
+                        Toast.makeText(this, "Label '" + labelName + "' added (locally for now).", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
-    // --- שאר המתודות שלך (onCreateOptionsMenu, onSupportNavigateUp, וכו') נשארות כמו שהן ---
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // ...
+        getMenuInflater().inflate(R.menu.main_activity2, menu);
         return true;
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        // ...
-        return super.onSupportNavigateUp();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 
     private void setupNavigationListener() {
-        // ...
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            boolean isFullScreen = destination.getId() == R.id.editNewMailFragment || destination.getId() == R.id.singleMailFragment;
+            if (isFullScreen) {
+                if (getSupportActionBar() != null) getSupportActionBar().hide();
+                if (binding.appBarMain.fab != null) binding.appBarMain.fab.hide();
+            } else {
+                if (getSupportActionBar() != null) getSupportActionBar().show();
+                if (binding.appBarMain.fab != null) binding.appBarMain.fab.show();
+            }
+        });
     }
-    }
+}
