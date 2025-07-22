@@ -1,9 +1,13 @@
 package com.example.androidapp.ui.registration;
 
 
+import android.net.Uri;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import java.io.File;
 
 public class RegistrationViewModel extends ViewModel {
 
@@ -18,6 +22,7 @@ public class RegistrationViewModel extends ViewModel {
     private final MutableLiveData<String> gender = new MutableLiveData<>();
     private String username;
     private String password;
+    private File profilePictureFile;
 
 
 
@@ -38,6 +43,9 @@ public class RegistrationViewModel extends ViewModel {
     public void setPassword(String password) {
         this.password = password;
     }
+    public void setProfilePictureFile(File file) {
+        this.profilePictureFile = file;
+    }
     public LiveData<String> getFirstName() { return firstName; }
     public LiveData<String> getLastName() { return lastName; }
     public LiveData<String> getGender() { return gender; }
@@ -46,6 +54,8 @@ public class RegistrationViewModel extends ViewModel {
     public String getPassword() {
         return password;
     }
-
+    public File getProfilePictureFile() {
+        return profilePictureFile;
+    }
 }
 
