@@ -59,8 +59,44 @@ public class InboxActivity extends AppCompatActivity {
         mailViewModel = new ViewModelProvider(this).get(MailViewModel.class);
         userViewModel = new LoggedInUserViewModel(this);
 
+        userViewModel.fetchCurrentUserProfile();
 
-        // ================== 2. הגדרת הניווט הראשי ==================
+
+        userViewModel.getUserProfile().observe(this, result -> {
+            Log.i("inbox", " " );
+//            loadingProgressBar.setVisibility(View.GONE);
+            if (result instanceof Result.Success) {
+                User user = ((Result.Success<User>) result).getData();
+                Log.i("getUserResult", "user display name:  " + user.getDisplayName());
+
+            } else if (result instanceof Result.Error) {
+                Exception e = ((Result.Error) result).getError();
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+//        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+
+        labelsAdapter = new LabelsAdapter();
+
+        // 2. נגדיר את ה-Observer. עכשיו זה בטוח כי labelsAdapter כבר קיים.
+        labelViewModel.getAllLabels().observe(this, labelEntities -> {
+            List<Label> labels = new ArrayList<>();
+            for (LabelEntity entity : labelEntities) {
+                labels.add(toLabel(entity));
+            }
+            // הפעולה הזו בטוחה כעת
+            labelsAdapter.setLabels(labels);
+        });
+
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 

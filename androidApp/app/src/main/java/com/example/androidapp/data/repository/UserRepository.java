@@ -58,17 +58,6 @@ public class UserRepository {
             }).start();
         }
     }
-//    public User getUserById(String id) {
-//        return userDao.getUserById(id);
-//    }
-
-    public void insertUser(User user) {
-        userDao.insertUser(user);
-    }
-
-    public void deleteUser(User user) {
-        userDao.deleteUser(user);
-    }
 
     public void verifySignedUsername(String username, MutableLiveData<Result<RegisteredUser>> loginResult ){
         userApi.verifySignedUsername(username, loginResult);
@@ -80,15 +69,11 @@ public class UserRepository {
 
     private void setLoggedInUser(User user) {
         this.user = user;
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
     }
 
     public MutableLiveData<Result<String>> login(String username, String password) {
         return tokenApi.login(username, password);
     }
-
-    // This method already exists
     public LiveData<Result<User>> getUserById(String userId) {
         return userApi.getUserById(userId);
     }

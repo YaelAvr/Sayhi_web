@@ -9,9 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidapp.InboxActivity;
@@ -62,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel.getUserResult().observe(this, result -> {
             Log.i("errorType", "result on click " + result);
-            loadingProgressBar.setVisibility(View.GONE);
+            loadingProgressBar.setVisibility(View.INVISIBLE);
             if (result instanceof Result.Success) {
                 RegisteredUser user = ((Result.Success<RegisteredUser>) result).getData();
                 Log.i("getUserResult", "result on click " + user);
@@ -70,26 +68,21 @@ public class LoginActivity extends AppCompatActivity {
                 updateUiWithUser(user);
             } else if (result instanceof Result.Error) {
                 Exception e = ((Result.Error) result).getError();
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 edForm.setError(e.getMessage());
             }
         });
 
         loginViewModel.getLoginResult().observe(this, result -> {
             Log.i("getLoginResult", " getLoginResult result on click o" + result);
-            loadingProgressBar.setVisibility(View.GONE);
+            loadingProgressBar.setVisibility(View.INVISIBLE);
             if (result instanceof Result.Success) {
                 String token = ((Result.Success<String>) result).getData();
-                Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
-                Log.i("getLoginResult", "token: " + token);
 
                 // go to registration page
                 Intent intent = new Intent(LoginActivity.this, InboxActivity.class);
                 startActivity(intent);
-//                updateUiWithUser(user);
             } else if (result instanceof Result.Error) {
                 Exception e = ((Result.Error) result).getError();
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 edForm.setError(e.getMessage());
             }
         });
@@ -103,18 +96,13 @@ public class LoginActivity extends AppCompatActivity {
                 String password = edForm.getText().toString();
 
                 loginViewModel.login(m_username, password);
-//                Log.i("setOnClick", "isPasswordMode on click " + isPasswordMode);
 
-                // TO--DO: api call to token and move to inbox
             } else if(!edForm.getText().toString().isEmpty()) {
                 String username = edForm.getText().toString();
-//                userRepository.verifySignedUsername(username, loginResult);
-//                Result<User> result = loginRepository.login(username, password);
+
                 loginViewModel.verifySignedUsername(username);
             } else {
                 edForm.setError("Username is required");
-
-                runOnUiThread(() -> Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show());
             }
         });
 
@@ -137,7 +125,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // This will be called every time the activity comes to the foreground.
-        Log.i("LoginActivity", "onResume called, fetching all users.");
         loginViewModel.getAllUsers();
     }
 
@@ -146,33 +133,21 @@ public class LoginActivity extends AppCompatActivity {
         m_username = user.getUserName();
         Log.i("updateUiWithUser", "m_username: " +m_username );
 
-        title.setText("Hi "+user.getDisplayName()); //TO-DO: add "+ display name" that return from API
-        explainText.setText(getString(R.string.app_sig,user.getUserName())); // TO-DO: replace with API username
+        title.setText("Hi "+user.getDisplayName());
+        explainText.setText(getString(R.string.app_sig,user.getUserName()));
         edForm.setText("");
         edForm.setHint(R.string.login_password_hint);
         edForm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         backBtn.setText(R.string.backBtn);
-
-//        String welcome = getString(R.string.welcome) + model.getDisplayName();
-//        // TODO : initiate successful logged in experience
-//        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
     private void updateUiToGetUsername() {
         isPasswordMode=false;
-        title.setText("Sign in");
+        title.setText(R.string.action_sign_in_short);
         explainText.setText("to continue to your SayHi account");
         edForm.setText("");
         edForm.setHint(R.string.login_email_hint);
         edForm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         backBtn.setText(R.string.create_an_account_btn);
-
-//        String welcome = getString(R.string.welcome) + model.getDisplayName();
-//        // TODO : initiate successful logged in experience
-//        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-    }
-
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 }

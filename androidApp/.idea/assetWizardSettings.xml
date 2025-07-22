@@ -16,6 +16,7 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+<<<<<<< HEAD
                         <option name="children">
                           <map>
                             <entry key="clipartAsset">
@@ -36,6 +37,13 @@
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="outputName" value="circle_background" />
                             <entry key="sourceFile" value="C:\yael\mitkadem\gmail project\gmail_project\react-app\src\inboxPage\labelButton\icons\customLabel.svg" />
+=======
+                        <option name="values">
+                          <map>
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="sayhilogo" />
+                            <entry key="sourceFile" value="C:\bar-ilan\code-hw\adv-code\project\gmail_project\react-app\src\gmailLogo\sayHiLogo.svg" />
+>>>>>>> 63b0b3f5a33019d2352ebae9247172e709744b10
                           </map>
                         </option>
                       </PersistentState>
