@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // מעבר אוטומטי ל-MainActivity2
-        Intent intent = new Intent(this, InboxActivity.class);
-//        Intent intent = new Intent(this, LoginActivity.class);
+        //Intent intent = new Intent(this, InboxActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
 
         startActivity(intent);
         finish();
