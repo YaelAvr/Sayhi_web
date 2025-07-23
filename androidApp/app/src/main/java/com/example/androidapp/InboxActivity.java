@@ -65,7 +65,8 @@ public class InboxActivity extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+        // הגדרת היעדים העליונים בתפריט (רק nav_home כרגע)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home)
                 .setOpenableLayout(drawer)
                 .build();
 
@@ -78,7 +79,6 @@ public class InboxActivity extends AppCompatActivity {
         // ================== 3. הגדרת רשימת הלייבלים בתפריט ==================
         navLabelsRecyclerView = navigationView.findViewById(R.id.nav_labels_recycler_view);
         if (navLabelsRecyclerView != null) {
-            // יוצרים את ה-Adapter פעם אחת ומעבירים לו את ה-ViewModel
             labelsAdapter = new LabelsAdapter(labelViewModel);
             navLabelsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             navLabelsRecyclerView.setAdapter(labelsAdapter);
@@ -95,16 +95,13 @@ public class InboxActivity extends AppCompatActivity {
         labelViewModel.getLabelsApiResult().observe(this, result -> {
             if (result instanceof Result.Success) {
                 List<Label> apiLabels = ((Result.Success<List<Label>>) result).getData();
-                Log.d("LabelsAPI", "Successfully received " + apiLabels.size() + " labels from server.");
                 labelsAdapter.setLabels(apiLabels);
             } else if (result instanceof Result.Error) {
                 Exception error = ((Result.Error) result).getError();
-                Log.e("LabelsAPI", "Error loading labels from server: " + error.getMessage());
                 Toast.makeText(this, "Error loading labels: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
-        // --- מאזין ללחיצות על הלייבלים ---
         labelViewModel.getSelectedLabelId().observe(this, labelId -> {
             if (labelId == null) return;
             drawer.closeDrawers();
@@ -112,46 +109,31 @@ public class InboxActivity extends AppCompatActivity {
             mailViewModel.fetchMailsByLabel(labelId);
         });
 
-        // --- מאזין לפרטי המשתמש ---
         userViewModel.getUserProfile().observe(this, result -> {
             if (result instanceof Result.Success) {
                 User user = ((Result.Success<User>) result).getData();
-                Log.i("InboxActivity", "User profile loaded: " + user.getDisplayName());
                 updateNavHeader(user);
             } else if (result instanceof Result.Error) {
                 Toast.makeText(this, ((Result.Error) result).getError().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        // ====================== הוספנו את ה-Observer הזה ======================
-        // --- מאזין לתוצאה של יצירת לייבל חדש ---
         labelViewModel.getCreateLabelResult().observe(this, result -> {
             if (result instanceof Result.Success) {
                 Label newLabel = ((Result.Success<Label>) result).getData();
                 Toast.makeText(this, "Label '" + newLabel.getName() + "' created successfully!", Toast.LENGTH_SHORT).show();
-
-                // אחרי שהלייבל נוצר בהצלחה, נרענן את כל רשימת הלייבלים מהשרת
-                // כדי שהרשימה בתפריט תתעדכן
                 labelViewModel.fetchLabelsFromApi();
-
             } else if (result instanceof Result.Error) {
                 Exception error = ((Result.Error) result).getError();
                 Toast.makeText(this, "Failed to create label: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
-
-
-
         // ================== 5. טעינת נתונים ראשונית ==================
         userViewModel.fetchCurrentUserProfile();
         labelViewModel.fetchLabelsFromApi();
     }
 
-    /**
-     * פותח דיאלוג להוספת לייבל חדש.
-     * בעתיד, צריך לחבר את זה לקריאת API שיוצרת לייבל חדש בשרת.
-     */
     private void addNewLabel() {
         final EditText input = new EditText(this);
         new AlertDialog.Builder(this)
@@ -161,7 +143,6 @@ public class InboxActivity extends AppCompatActivity {
                     String labelName = input.getText().toString().trim();
                     if (!labelName.isEmpty()) {
                         labelViewModel.createLabel(labelName);
-//                        Toast.makeText(this, "Label '" + labelName + "' added (locally for now).", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", null)
@@ -195,26 +176,17 @@ public class InboxActivity extends AppCompatActivity {
     }
 
     private void updateNavHeader(User user) {
-        // במבנה ה-XML שלך, ה-Header הוא חלק מה-NavigationView עצמו,
-        // לכן אנחנו יכולים לחפש את הרכיבים ישירות ממנו.
         NavigationView navigationView = binding.navView;
-
-        // מצא את רכיבי הטקסט ישירות ב-navigationView
         TextView displayNameTextView = navigationView.findViewById(R.id.display_name_text);
         TextView emailTextView = navigationView.findViewById(R.id.username_text);
 
         if (user != null) {
             if (displayNameTextView != null) {
                 displayNameTextView.setText(user.getDisplayName());
-            } else {
-                Log.e("InboxActivity", "display_name_text TextView not found in nav_header_main.xml");
             }
-
             if (emailTextView != null) {
                 String fullEmail = user.getUserName() + "@sayhi.com";
                 emailTextView.setText(fullEmail);
-            } else {
-                Log.e("InboxActivity", "username_text TextView not found in nav_header_main.xml");
             }
         }
     }
