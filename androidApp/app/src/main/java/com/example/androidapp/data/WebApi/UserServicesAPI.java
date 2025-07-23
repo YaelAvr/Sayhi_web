@@ -1,5 +1,6 @@
 package com.example.androidapp.data.WebApi;
 
+import com.example.androidapp.data.model.NewUserRequest;
 import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.Registration.PasswordRequest;
 import com.example.androidapp.data.model.Registration.PasswordResponse;
@@ -30,7 +31,7 @@ public interface UserServicesAPI {
     Call<List<RegisteredUser>> getAllUsers();
 
     @POST("users")
-    Call<User> createUser(@Body User newUser);
+    Call<User> createUser(@Body NewUserRequest newUser);
 
     @GET("users/validation/{username}")
     Call<RegisteredUserView> verifySignedUsername(@Path("username") String username);
