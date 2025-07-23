@@ -3,6 +3,8 @@ package com.example.androidapp.data.WebApi;
 import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.User;
 import com.example.androidapp.ui.login.RegisteredUserView;
+import com.example.androidapp.data.model.Registration.DisplayNameRequest;
+import com.example.androidapp.data.model.Registration.DisplayNameResponse;
 
 import java.util.List;
 
@@ -24,4 +26,6 @@ public interface UserServicesAPI {
 
     @GET("users/validation/{username}")
     Call<RegisteredUserView> verifySignedUsername(@Path("username") String username);
+    @POST("users/displayName")
+    Call<DisplayNameResponse> validateDisplayName(@Body DisplayNameRequest request);
 }

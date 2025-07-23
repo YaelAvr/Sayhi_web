@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 public class NameFragment extends Fragment {
+
 
     private EditText editTextFirstName;  // שדה לשם פרטי
     private EditText editTextLastName;   // שדה לשם משפחה
@@ -39,34 +41,37 @@ public class NameFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // איתחול ViewModel משותף לכל שלבי ההרשמה
         viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
+        viewModel.initRepo(requireContext());
 
-        // קישור ל־EditText וכפתור
         editTextFirstName = view.findViewById(R.id.editTextFirstName);
         editTextLastName = view.findViewById(R.id.editTextLastName);
         buttonNext = view.findViewById(R.id.buttonNext);
 
-        // לחיצה על כפתור Next
         buttonNext.setOnClickListener(v -> {
             String firstName = editTextFirstName.getText().toString().trim();
             String lastName = editTextLastName.getText().toString().trim();
 
-            // ולידציה: חובה שם פרטי
             if (TextUtils.isEmpty(firstName)) {
                 editTextFirstName.setError("First name is required");
                 return;
             }
 
-            // שמירת השם ב־ViewModel
             viewModel.setFirstName(firstName);
             viewModel.setLastName(lastName);
-
-            NavController navController = NavHostFragment.findNavController(NameFragment.this);
-            navController.navigate(R.id.action_nameFragment_to_dateAndGenderFragment);
-
+            viewModel.validateDisplayName();
         });
 
+        viewModel.getDisplayNameResult().observe(getViewLifecycleOwner(), result -> {
+            if (result instanceof Result.Success) {
+                NavController navController = NavHostFragment.findNavController(NameFragment.this);
+                navController.navigate(R.id.action_nameFragment_to_dateAndGenderFragment);
+            } else if (result instanceof Result.Error) {
+                Toast.makeText(getContext(),
+                        ((Result.Error<?>) result).getError().getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

@@ -13,6 +13,8 @@ import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.data.dao.RegisteredUserDao;
 import com.example.androidapp.data.dao.UserDao;
 import com.example.androidapp.data.model.RegisteredUser;
+import com.example.androidapp.data.model.Registration.DisplayNameRequest;
+import com.example.androidapp.data.model.Registration.DisplayNameResponse;
 import com.example.androidapp.data.model.User;
 
 import java.util.List;
@@ -136,5 +138,31 @@ public class UserApi {
             }
         });
 
+    }
+
+    //sign in:
+    public void validateDisplayName(String firstName, String lastName, MutableLiveData<Result<String>> liveData) {
+        DisplayNameRequest request = new DisplayNameRequest(firstName, lastName == null ? "" : lastName);
+
+        Call<DisplayNameResponse> call = userServiceAPI.validateDisplayName(request);
+        call.enqueue(new Callback<DisplayNameResponse>() {
+            @Override
+            public void onResponse(Call<DisplayNameResponse> call, Response<DisplayNameResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    liveData.postValue(new Result.Success<>(response.body().getDisplayName()));
+                } else {
+                    String errorMsg = "Unknown error";
+                    try {
+                        errorMsg = response.errorBody().string();
+                    } catch (Exception ignored) {}
+                    liveData.postValue(new Result.Error(new Exception(errorMsg)));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DisplayNameResponse> call, Throwable t) {
+                liveData.postValue(new Result.Error(new Exception(t.getMessage())));
+            }
+        });
     }
 }
