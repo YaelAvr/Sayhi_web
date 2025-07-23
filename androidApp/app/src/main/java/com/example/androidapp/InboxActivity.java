@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -24,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidapp.data.Result;
 import com.example.androidapp.data.auth.SessionExpiredException;
 import com.example.androidapp.data.auth.TokenManager;
-import com.example.androidapp.data.model.LabelEntity;
 import com.example.androidapp.data.model.User;
 import com.example.androidapp.databinding.ActivityMain2Binding;
 import com.example.androidapp.model.Label;
@@ -113,28 +111,7 @@ public class InboxActivity extends AppCompatActivity {
             addLabelButton.setOnClickListener(v -> addNewLabel());
         }
 
-            /**
-         * A new method to handle the session expiration logic cleanly.
-         */
-        private void handleSessionExpired() {
-            // Show a message to the user
-            Toast.makeText(this, "Session expired. Please log in again.", Toast.LENGTH_LONG).show();
 
-            // 1. Delete the invalid token from storage
-            tokenManager.deleteToken();
-
-            // 2. Create an intent to go back to the landing/login page
-            Intent intent = new Intent(this, LandingPageActivity.class);
-
-            // 3. Clear the activity stack so the user can't press "back" to get into the app
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-            // 4. Start the new activity
-            startActivity(intent);
-
-            // 5. Finish the current (InboxActivity)
-            finish();
-        }
 
         // ================== 4. הגדרת המאזינים (Observers) המרכזיים ==================
 
@@ -189,6 +166,28 @@ public class InboxActivity extends AppCompatActivity {
         // ================== 5. טעינת נתונים ראשונית ==================
         userViewModel.fetchCurrentUserProfile();
         labelViewModel.fetchLabelsFromApi();
+    }
+    /**
+     * A new method to handle the session expiration logic cleanly.
+     */
+    private void handleSessionExpired() {
+        // Show a message to the user
+        Toast.makeText(this, "Session expired. Please log in again.", Toast.LENGTH_LONG).show();
+
+        // 1. Delete the invalid token from storage
+        tokenManager.deleteToken();
+
+        // 2. Create an intent to go back to the landing/login page
+        Intent intent = new Intent(this, LandingPageActivity.class);
+
+        // 3. Clear the activity stack so the user can't press "back" to get into the app
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        // 4. Start the new activity
+        startActivity(intent);
+
+        // 5. Finish the current (InboxActivity)
+        finish();
     }
 
     private void addNewLabel() {

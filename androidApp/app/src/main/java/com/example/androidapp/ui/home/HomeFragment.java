@@ -1,9 +1,6 @@
 package com.example.androidapp.ui.home;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +14,12 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.androidapp.R;
-import com.example.androidapp.data.model.LabelEntity;
-import com.example.androidapp.R;
-import com.example.androidapp.data.Result; // <-- Import חדש
-import com.example.androidapp.data.model.User;
+import com.example.androidapp.data.Result;
+import com.example.androidapp.data.model.MailEntity;
 import com.example.androidapp.model.Mail;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class HomeFragment extends Fragment {

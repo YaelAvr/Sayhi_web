@@ -12,7 +12,10 @@ import com.example.androidapp.data.auth.AuthInterceptor;
 import com.example.androidapp.data.auth.SessionExpiredException;
 import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.data.dao.MailDao;
+import com.example.androidapp.model.Mail;
 import com.google.gson.JsonObject;
+
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -81,8 +84,8 @@ public class MailApi {
         return resultLiveData;
     }
 
-//    public Call<List<Mail>> getMailsByLabel(String labelId, int offset) {
-//        return mailServicesAPI.getMailsByLabel(labelId, offset); // <-- העברנו אותו הלאה
-//    }
+    public Call<List<Mail>> getMailsByLabel(String labelId, int offset) {
+        return mailServicesAPI.getMailsByLabel(labelId, offset); // <-- העברנו אותו הלאה
+    }
 
 }

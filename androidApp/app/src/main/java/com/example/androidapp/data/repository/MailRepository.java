@@ -8,17 +8,17 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.androidapp.data.Result;
 import com.example.androidapp.data.WebApi.MailApi;
-import com.example.androidapp.data.WebApi.MailAPI;
-import com.example.androidapp.data.Result;
 import com.example.androidapp.data.dao.MailDao;
 import com.example.androidapp.data.db.AppDB;
 import com.example.androidapp.data.model.MailEntity;
-import com.google.gson.JsonObject;
 import com.example.androidapp.model.Mail;
+import com.google.gson.JsonObject;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -134,5 +134,11 @@ public class MailRepository {
                 callback.onComplete(new Result.Error(new Exception("Network Error loading mails: " + t.getMessage())));
             }
         });
+    }
+    public LiveData<Result<List<MailEntity>>> refreshMailsForLabel(String labelName) {
+        // This would call a new method in your MailApi to fetch mails from the server
+        // and then save the new list to the Room database.
+        // For now, we'll assume this logic exists.
+        return mailApi.getMailsByLabel(labelName,0); // Example method
     }
 }

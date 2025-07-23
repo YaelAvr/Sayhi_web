@@ -38,12 +38,20 @@ public class EditNewMailViewModel extends AndroidViewModel {
             if (result instanceof Result.Success) {
                 // This is an asynchronous "fire-and-forget" refresh.
                 // The UI will update automatically when the data arrives.
-                //TODO: cancle // after merge
-             /*   mailRepository.refreshMailsForLabel("Sent");
-                mailRepository.refreshMailsForLabel("Inbox"); // The recipient's inbox*/
+                //TODO: call refreshMailsForLabel
+                int offset = 0;
+
+            /*    mailRepository.getMailsByLabel(labelId, offset, result -> { // <-- העברנו את ה-offset
+                    mailsApiResult.postValue(result);
+                });
+                mailRepository.refreshMailsForLabel("Sent");
+                mailRepository.refreshMailsForLabel("Inbox"); // The recipient's inbox
+            */
             }
+
         });
     }
+
 
     public JsonObject setApiReqJSON(String to, String subject, String body) {
         String finalTo;
