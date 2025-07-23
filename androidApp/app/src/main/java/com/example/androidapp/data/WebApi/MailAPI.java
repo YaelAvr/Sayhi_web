@@ -120,4 +120,30 @@ public class MailAPI {
         });
         return resultLiveData;
     }
+    public LiveData<Result<Void>> deleteMail(String mailId) {
+        MutableLiveData<Result<Void>> resultLiveData = new MutableLiveData<>();
+
+        Call<Void> call = mailServicesAPI.deleteMail(mailId);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) { // קוד 204, המחיקה הצליחה
+                    resultLiveData.postValue(new Result.Success<>(null));
+                } else {
+                    // בדוק אם השגיאה היא בגלל פג תוקף הטוקן
+                    if (response.code() == 401 || response.code() == 403) {
+                        resultLiveData.postValue(new Result.Error(new SessionExpiredException()));
+                    } else {
+                        resultLiveData.postValue(new Result.Error(new Exception("Error: " + response.message())));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                resultLiveData.postValue(new Result.Error(new Exception(t.getMessage())));
+            }
+        });
+        return resultLiveData;
+    }
 }
