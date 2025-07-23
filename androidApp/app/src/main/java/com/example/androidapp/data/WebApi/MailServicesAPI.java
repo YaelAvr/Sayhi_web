@@ -37,6 +37,6 @@ public interface MailServicesAPI {
     @DELETE("mails/{id}")
     Call<Void> deleteMail(@Path("id") String mailId);
 
-    @POST("mails/add-label")
+    @POST("mails/{id}/add-label")
     Call<Void> addLabelToMail(@Body JsonObject body);
 }

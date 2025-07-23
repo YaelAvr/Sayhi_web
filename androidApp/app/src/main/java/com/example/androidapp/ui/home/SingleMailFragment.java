@@ -1,7 +1,6 @@
 package com.example.androidapp.ui.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,8 +86,19 @@ public class SingleMailFragment extends Fragment {
         });
 
         addToLabelButton.setOnClickListener(v -> {
-            Toast.makeText(requireContext(), "בקרוב...", Toast.LENGTH_SHORT).show();
+            AddToLabelDialogFragment dialog = AddToLabelDialogFragment.newInstance();
+
+            dialog.setListener(selectedLabelNames -> {
+                for (String label : selectedLabelNames) {
+                    mailViewModel.addLabelToMail(currentMailId, label);
+                }
+                mailViewModel.findMailById(currentMailId);
+                Toast.makeText(getContext(), "label added successfully", Toast.LENGTH_SHORT).show();
+            });
+
+            dialog.show(getParentFragmentManager(), "add_to_label");
         });
+
     }
 
     private void observeViewModel() {
