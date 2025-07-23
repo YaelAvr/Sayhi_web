@@ -21,19 +21,18 @@ public class User {
     @SerializedName("username")
     private String userName;
 
-    //    private String password;
     @SerializedName("picture")
-    private String pictureURL;
+    private String picture;
 
     @SerializedName("isDarkMode")
     private boolean isDarkMode;
 
 
-    public User(@NonNull String id, String displayName, String userName, String pictureURL, boolean isDarkMode) {
+    public User(@NonNull String id, String displayName, String userName, String picture, boolean isDarkMode) {
         this.id = id;
         this.displayName = displayName;
         this.userName = userName;
-        this.pictureURL = pictureURL;
+        this.picture = picture;
         this.isDarkMode = isDarkMode;
     }
     public User(@NonNull String userId, String displayName) {
@@ -63,21 +62,12 @@ public class User {
         this.userName = userName;
     }
 
-
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-
-    public String getPictureURL() {
-        return pictureURL;
+    public String getPicture() {
+        return picture;
     }
 
-    public void setPictureURL(String pictureURL) {
-        this.pictureURL = pictureURL;
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
     public boolean isDarkMode() {
@@ -87,5 +77,6 @@ public class User {
     public void setDarkMode(boolean darkMode) {
         isDarkMode = darkMode;
     }
+
 
 }

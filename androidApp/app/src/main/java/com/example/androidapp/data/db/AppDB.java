@@ -16,8 +16,8 @@ import com.example.androidapp.data.model.MailEntity;
 import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.User;
 
-@Database(entities = {LabelEntity.class, User.class, MailEntity.class, RegisteredUser.class}, version = 4)
-@TypeConverters({StringListConverter.class, DateConverter.class})
+@Database(entities = {LabelEntity.class, User.class, MailEntity.class, RegisteredUser.class}, version = 5)
+@TypeConverters({StringListConverter.class, DateConverter.class, UserConverter.class, LabelListConverter.class})
 public abstract class AppDB extends RoomDatabase {
 
     private static volatile AppDB INSTANCE;

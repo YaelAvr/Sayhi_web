@@ -1,7 +1,6 @@
 package com.example.androidapp.ui.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.androidapp.R;
-import com.example.androidapp.data.Result; // <-- Import חדש
+import com.example.androidapp.data.Result;
+import com.example.androidapp.data.model.MailEntity;
 import com.example.androidapp.model.Mail;
 
 import java.util.List;
@@ -97,13 +97,29 @@ public class HomeFragment extends Fragment {
             if (fab != null) {
                 fab.setOnClickListener(v -> {
                     if (getView() != null) {
-                        Navigation.findNavController(getView()).navigate(R.id.action_nav_home_to_editNewMailFragment);
+                        Bundle args = new Bundle();
+                        args.putString("mode", "new"); // מציין שזה מייל חדש
+                        Navigation.findNavController(getView())
+                                .navigate(R.id.action_nav_home_to_editNewMailFragment, args);
                     }
                 });
-            }
+             }
         }
     }
 
-    // הפונקציות toMail, insertMockMails, loadMockMails נמחקות מכאן
-    // כי אנחנו כבר לא משתמשים בנתוני דמה או ב-MailEntity בקובץ הזה.
+
+    private Mail toMail(MailEntity entity) {
+        Mail mail = new Mail(
+                entity.getFromName(),
+                entity.getSubject(),
+                entity.getBody(),
+                entity.getTime(),
+                entity.isRead(),
+                entity.isStarred(),
+                entity.getFromPicture()
+        );
+        mail.setId(entity.getId());
+        return mail;
+    }
+
 }

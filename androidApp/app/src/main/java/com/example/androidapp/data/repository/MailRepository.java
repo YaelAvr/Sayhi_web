@@ -1,17 +1,24 @@
 package com.example.androidapp.data.repository;
 
 import android.app.Application;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
-import com.example.androidapp.data.WebApi.MailAPI;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.androidapp.data.Result;
+import com.example.androidapp.data.WebApi.MailAPI;
 import com.example.androidapp.data.dao.MailDao;
 import com.example.androidapp.data.db.AppDB;
 import com.example.androidapp.data.model.MailEntity;
 import com.example.androidapp.model.Mail;
+import com.google.gson.JsonObject;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,11 +28,9 @@ public class MailRepository {
 
     // --- משתנים לעבודה עם מסד נתונים פנימי (Room) ---
     private final MailDao mailDao;
+    private final MailAPI mailApi;
     private final ExecutorService executorService;
-
-    // --- משתנה לעבודה עם הרשת (API) ---
-    private final MailAPI mailAPI;
-
+    
     // --- Callback להחזרת תוצאות מה-API ---
     public interface MailCallback {
         void onComplete(Result<List<Mail>> result);
@@ -36,9 +41,24 @@ public class MailRepository {
         AppDB db = AppDB.getInstance(application);
         mailDao = db.mailDao();
         executorService = Executors.newSingleThreadExecutor();
+        mailApi = new MailAPI(application, mailDao);
+    }
 
-        // אתחול לעבודה עם ה-API, עם העברת Context לבנאי
-        this.mailAPI = new MailAPI(application);
+    class MailsData extends MutableLiveData<List<MailEntity>> {
+        public MailsData(){
+            super();
+            setValue(new LinkedList<MailEntity>());
+        }
+
+        @Override
+        protected void onActive() {
+            super.onActive();
+            new Thread(()->{
+                Log.i("UserRepo", "in tread " );
+                //TO-DO fix userDao function and then fix this line
+//                usersData.postValue(userDao.getAllUsernames());
+            }).start();
+        }
     }
 
     // --- מתודות קיימות לעבודה עם Room (נשארות למקרה הצורך) ---
@@ -61,11 +81,45 @@ public class MailRepository {
     public LiveData<MailEntity> getMailById(String id) {
         return mailDao.getMailById(id);
     }
+    public LiveData<Result<Void>> createMail(JsonObject jsonBody) {
+//        MediatorLiveData<Result<Void>> resultLiveData = new MediatorLiveData<>();
+//        final LiveData<Result<Void>> source = mailApi.createMail(jsonBody);
+//
+//        resultLiveData.addSource(source, apiResult -> {
+//            if (apiResult instanceof Result.Success) {
+//                // 2. The API call was successful. Get the draft object from the server.
+//                MailEntity mailFromServer = ((Result.Success<MailEntity>) apiResult).getData();
+//
+//                // 3. THIS IS THE ANSWER: Save the draft to the local Room database.
+//                // We use our executor to do this on a background thread.
+//                executorService.execute(() -> {
+//                    mailDao.insertMail(mailFromServer);
+//                });
+//
+//                // 4. Notify the ViewModel that the entire operation was a success.
+//                resultLiveData.postValue(new Result.Success<>(null));
+//
+//            } else if (apiResult instanceof Result.Error) {
+//
+//                // The API call failed. Report the error directly to the ViewModel.
+//                Exception error = ((Result.Error) apiResult).getError();
+//                resultLiveData.postValue(new Result.Error(new Exception(error.getMessage())));
+//                Log.e("mailRepo_createMail", "response.code(): " + error.getMessage());
+//
+//            }
+//            // Clean up the source
+//            resultLiveData.removeSource(source);
+//        });
+//
+//        return resultLiveData;
+        return mailApi.createMail(jsonBody);
+    }
+
 
     // --- מתודה מעודכנת לעבודה עם ה-API ---
     public void getMailsByLabel(String labelId, int offset, final MailCallback callback) {
         // אין צורך להצהיר על offset, אנחנו משתמשים בערך שהתקבל כפרמטר
-        mailAPI.getMailsByLabel(labelId, offset).enqueue(new Callback<List<Mail>>() {
+        mailApi.getMailsByLabel(labelId, offset).enqueue(new Callback<List<Mail>>() {
             @Override
             public void onResponse(Call<List<Mail>> call, Response<List<Mail>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -81,4 +135,10 @@ public class MailRepository {
             }
         });
     }
+//    public LiveData<Result<List<MailEntity>>> refreshMailsForLabel(String labelName) {
+//        // This would call a new method in your MailApi to fetch mails from the server
+//        // and then save the new list to the Room database.
+//        // For now, we'll assume this logic exists.
+//        return mailApi.getMailsByLabel(labelName,0); // Example method
+//    }
 }

@@ -17,6 +17,10 @@
             app:exitAnim="@null"
             app:popEnterAnim="@null"
             app:popExitAnim="@null" />
+        <argument
+            android:name="draftId"
+            app:argType="string"
+            android:defaultValue="" />
     </fragment>
 
     <fragment
