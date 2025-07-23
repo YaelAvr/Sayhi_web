@@ -10,4 +10,19 @@ public class DisplayNameRequest {
     }
 
     // Getters & setters
+    public String getFirstWord() {
+        return firstWord;
+    }
+
+    public void setFirstWord(String firstWord) {
+        this.firstWord = firstWord;
+    }
+
+    public String getSecondWord() {
+        return secondWord;
+    }
+
+    public void setSecondWord(String secondWord) {
+        this.secondWord = secondWord;
+    }
 }

@@ -82,4 +82,7 @@ public class UserRepository {
     public void validateDisplayName(String firstName, String lastName, MutableLiveData<Result<String>> resultLiveData) {
         userApi.validateDisplayName(firstName, lastName, resultLiveData);
     }
+    public void validateUsername(String username, MutableLiveData<Result<String>> resultLiveData) {
+        userApi.validateUsername(username, resultLiveData);
+    }
 }
