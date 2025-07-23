@@ -3,6 +3,7 @@ package com.example.androidapp.data.WebApi;
 import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.Registration.PasswordRequest;
 import com.example.androidapp.data.model.Registration.PasswordResponse;
+import com.example.androidapp.data.model.Registration.PictureResponse;
 import com.example.androidapp.data.model.Registration.UsernameRequest;
 import com.example.androidapp.data.model.Registration.UsernameResponse;
 import com.example.androidapp.data.model.User;
@@ -12,10 +13,13 @@ import com.example.androidapp.data.model.Registration.DisplayNameResponse;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface UserServicesAPI {
@@ -40,4 +44,8 @@ public interface UserServicesAPI {
 
     @POST("users/password")
     Call<PasswordResponse> validatePassword(@Body PasswordRequest request);
+    @Multipart
+    @POST("users/picture")
+    Call<PictureResponse> validatePicture(@Part MultipartBody.Part file);
 }
+

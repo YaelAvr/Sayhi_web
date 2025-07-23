@@ -33,6 +33,11 @@ public class RegistrationViewModel extends ViewModel {
     private final MutableLiveData<Result<String>> passwordResult = new MutableLiveData<>();
 
     private File profilePictureFile;
+    private final MutableLiveData<Result<String>> pictureResult = new MutableLiveData<>();
+    private String profilePictureUrl;
+
+
+
 
     public void initRepo(Context context) {
         if (userRepository == null) {
@@ -50,7 +55,6 @@ public class RegistrationViewModel extends ViewModel {
     public void setGender(String g) { gender.setValue(g); }
     public void setUsername(String username) { this.username = username; }
     public void setPassword(String password) { this.password = password; }
-    public void setProfilePictureFile(File file) { this.profilePictureFile = file; }
 
     // === Getters ===
     public LiveData<String> getFirstName() { return firstName; }
@@ -59,7 +63,6 @@ public class RegistrationViewModel extends ViewModel {
 
     public String getUsername() { return username; }
     public String getPassword() { return password; }
-    public File getProfilePictureFile() { return profilePictureFile; }
 
     public Integer getBirthDay() { return birthDay.getValue(); }
     public Integer getBirthMonth() { return birthMonth.getValue(); }
@@ -144,8 +147,33 @@ public class RegistrationViewModel extends ViewModel {
 
         userRepository.validatePassword(password, confirm, passwordResult);
     }
-
     public LiveData<Result<String>> getPasswordResult() {
         return passwordResult;
+    }
+
+    public void setProfilePictureFile(File file) {
+        this.profilePictureFile = file;
+        pictureResult.setValue(null); // Reset
+        userRepository.validatePicture(file, pictureResult);
+    }
+
+    public File getProfilePictureFile() {
+        return profilePictureFile;
+    }
+
+    public MutableLiveData<Result<String>> getPictureResult() {
+        return pictureResult;
+    }
+
+    public void setProfilePictureUrl(String url) {
+        this.profilePictureUrl = url;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void validatePicture(File pictureFile) {
+        userRepository.validatePicture(pictureFile, pictureResult);
     }
 }

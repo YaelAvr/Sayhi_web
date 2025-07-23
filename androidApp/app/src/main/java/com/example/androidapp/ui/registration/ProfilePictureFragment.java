@@ -25,6 +25,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.androidapp.R;
+import com.example.androidapp.data.Result;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -68,16 +69,26 @@ public class ProfilePictureFragment extends Fragment {
         // Launch image picker on click
         buttonChooseImage.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
+        registrationViewModel.getPictureResult().observe(getViewLifecycleOwner(), result -> {
+            if (result instanceof Result.Success) {
+                String url = ((Result.Success<String>) result).getData();
+                registrationViewModel.setProfilePictureUrl(url);  // נשמר ל־summary ולשליחת הנתונים לשרת
+                NavController navController = NavHostFragment.findNavController(this);
+                navController.navigate(R.id.action_profilePictureFragment_to_summaryFragment);
+            } else if (result instanceof Result.Error) {
+                Toast.makeText(requireContext(), ((Result.Error) result).getError().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // שינוי קטן בכפתור הבא – מבצע קריאה לשרת במקום לעבור מיד
         buttonNext.setOnClickListener(v -> {
-            // Check that a file was selected
-            if (registrationViewModel.getProfilePictureFile() == null) {
+            File selectedFile = registrationViewModel.getProfilePictureFile();
+            if (selectedFile == null) {
                 Toast.makeText(requireContext(), "Please choose a profile picture", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // TODO: Later - send the file to the API using Retrofit
-            NavController navController = NavHostFragment.findNavController(this);
-            navController.navigate(R.id.action_profilePictureFragment_to_summaryFragment);
+            registrationViewModel.validatePicture(selectedFile);
         });
     }
 

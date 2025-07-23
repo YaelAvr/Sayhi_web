@@ -18,15 +18,20 @@ import com.example.androidapp.data.model.Registration.DisplayNameRequest;
 import com.example.androidapp.data.model.Registration.DisplayNameResponse;
 import com.example.androidapp.data.model.Registration.PasswordRequest;
 import com.example.androidapp.data.model.Registration.PasswordResponse;
+import com.example.androidapp.data.model.Registration.PictureResponse;
 import com.example.androidapp.data.model.Registration.UsernameRequest;
 import com.example.androidapp.data.model.Registration.UsernameResponse;
 import com.example.androidapp.data.model.User;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -228,6 +233,37 @@ public class UserApi {
 
             @Override
             public void onFailure(Call<PasswordResponse> call, Throwable t) {
+                liveData.postValue(new Result.Error(new Exception(t.getMessage())));
+            }
+        });
+    }
+
+    public void validatePicture(File file, MutableLiveData<Result<String>> liveData) {
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("profilePic", file.getName(), requestFile);
+
+        Call<PictureResponse> call = userServiceAPI.validatePicture(body);
+        call.enqueue(new Callback<PictureResponse>() {
+            @Override
+            public void onResponse(Call<PictureResponse> call, Response<PictureResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    liveData.postValue(new Result.Success<>(response.body().getTempImageUrl()));
+                } else {
+                    String errorMsg = "Invalid image or upload failed";
+                    try {
+                        String errorBody = response.errorBody().string();
+                        Log.e("API_ERROR", "Picture validation failed: " + errorBody); //
+                        JSONObject jsonObject = new JSONObject(errorBody);
+                        errorMsg = jsonObject.optString("error", errorMsg);
+                    } catch (Exception e) {
+                        Log.e("API_ERROR", "Error parsing errorBody", e);
+                    }
+                    liveData.postValue(new Result.Error(new Exception(errorMsg)));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PictureResponse> call, Throwable t) {
                 liveData.postValue(new Result.Error(new Exception(t.getMessage())));
             }
         });
