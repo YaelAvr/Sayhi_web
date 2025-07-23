@@ -94,12 +94,20 @@ public class RegistrationViewModel extends ViewModel {
     public void clearAll() {
         firstName.setValue(null);
         lastName.setValue(null);
+        displayNameResult.setValue(null);
+
         birthDay.setValue(null);
         birthMonth.setValue(null);
         birthYear.setValue(null);
+
         gender.setValue(null);
+
         username = null;
+        usernameResult.setValue(null);
+
         password = null;
+        passwordResult.setValue(null);
+
         profilePictureFile = null;
     }
 
