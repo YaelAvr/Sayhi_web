@@ -4,6 +4,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androidapp.data.Result;
@@ -17,7 +18,8 @@ public class MailViewModel extends AndroidViewModel {
     private final MailRepository repository;
     private final MutableLiveData<Result<List<Mail>>> mailsApiResult = new MutableLiveData<>();
     private final MutableLiveData<Mail> selectedMail = new MutableLiveData<>();
-    private LiveData<Result<Void>> deleteResult;
+    private final MediatorLiveData<Result<Void>> deleteResult = new MediatorLiveData<>();
+    private LiveData<Result<Void>> deleteSource; // משתנה שיחזיק את המקור הנוכחי
 
     public MailViewModel(@NonNull Application application) {
         super(application);
@@ -54,13 +56,22 @@ public class MailViewModel extends AndroidViewModel {
     // --- שאר הקוד נשאר זהה לחלוטין ---
 
     public void deleteMail(String mailId) {
-        deleteResult = repository.deleteMailById(mailId);
+        // אם כבר האזנו למחיקה קודמת, ננתק את ההאזנה
+        if (deleteSource != null) {
+            deleteResult.removeSource(deleteSource);
+        }
+
+        // 1. קבל את "צינור המידע" החדש מה-Repository
+        deleteSource = repository.deleteMailById(mailId);
+
+        // 2. חבר את הצינור החדש ל-deleteResult שהפרגמנט מאזין לו
+        deleteResult.addSource(deleteSource, result -> {
+            // 3. כשהתוצאה מגיעה, עדכן את ה-deleteResult
+            deleteResult.setValue(result);
+        });
     }
 
     public LiveData<Result<Void>> getDeleteResult() {
-        if (deleteResult == null) {
-            deleteResult = new MutableLiveData<>();
-        }
         return deleteResult;
     }
 
