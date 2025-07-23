@@ -39,7 +39,7 @@ exports.createUser = async (req, res) => {
 
   try {
      const newUser = await Users.createUser(username, displayName, password, picture, gender, birthday);
-     res.status(201).location(`/api/users/${newUser._id}`).end();
+     res.status(201).json({ success: true });
   } catch (error) {
     // This catches errors from fs.rename or fs.unlink
     console.error('Server error during user registration:', error);

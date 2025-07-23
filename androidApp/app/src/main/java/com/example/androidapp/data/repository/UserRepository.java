@@ -13,6 +13,7 @@ import com.example.androidapp.data.WebApi.UserApi;
 import com.example.androidapp.data.dao.RegisteredUserDao;
 import com.example.androidapp.data.dao.UserDao;
 import com.example.androidapp.data.db.AppDB;
+import com.example.androidapp.data.model.NewUserRequest;
 import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.User;
 
@@ -91,5 +92,8 @@ public class UserRepository {
     }
     public void validatePicture(File file, MutableLiveData<Result<String>> liveData) {
         userApi.validatePicture(file, liveData);
+    }
+    public void createUser(NewUserRequest newUser, MutableLiveData<Result<User>> resultLiveData) {
+        userApi.createUser(newUser, resultLiveData);
     }
 }

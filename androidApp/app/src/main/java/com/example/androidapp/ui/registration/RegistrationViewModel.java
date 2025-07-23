@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.androidapp.data.model.NewUserRequest;
+import com.example.androidapp.data.model.User;
 import com.example.androidapp.data.repository.UserRepository;
 
 import java.io.File;
@@ -14,6 +16,7 @@ import java.io.File;
 
 public class RegistrationViewModel extends ViewModel {
     private UserRepository userRepository;
+    private final MutableLiveData<Result<User>> createUserResult = new MutableLiveData<>();
 
     private final MutableLiveData<String> firstName = new MutableLiveData<>();
     private final MutableLiveData<String> lastName = new MutableLiveData<>();
@@ -176,4 +179,10 @@ public class RegistrationViewModel extends ViewModel {
     public void validatePicture(File pictureFile) {
         userRepository.validatePicture(pictureFile, pictureResult);
     }
+
+    public LiveData<Result<User>> getCreateUserResult() { return createUserResult; }
+    public void createUser(NewUserRequest newUser) {
+        userRepository.createUser(newUser, createUserResult);
+    }
+
 }

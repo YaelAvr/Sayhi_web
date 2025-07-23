@@ -13,6 +13,7 @@ import com.example.androidapp.data.auth.SessionExpiredException;
 import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.data.dao.RegisteredUserDao;
 import com.example.androidapp.data.dao.UserDao;
+import com.example.androidapp.data.model.NewUserRequest;
 import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.Registration.DisplayNameRequest;
 import com.example.androidapp.data.model.Registration.DisplayNameResponse;
@@ -265,6 +266,32 @@ public class UserApi {
             @Override
             public void onFailure(Call<PictureResponse> call, Throwable t) {
                 liveData.postValue(new Result.Error(new Exception(t.getMessage())));
+            }
+        });
+    }
+
+    public void createUser(NewUserRequest newUser, MutableLiveData<Result<User>> resultLiveData) {
+        Call<User> call = userServiceAPI.createUser(newUser);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    User createdUser = response.body();
+                    resultLiveData.postValue(new Result.Success<>(createdUser));
+                } else {
+                    String errorMsg = "Failed to create user";
+                    try {
+                        String errorBody = response.errorBody().string();
+                        JSONObject jsonObject = new JSONObject(errorBody);
+                        errorMsg = jsonObject.optString("error", errorMsg);
+                    } catch (Exception ignored) {}
+                    resultLiveData.postValue(new Result.Error(new Exception(errorMsg)));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                resultLiveData.postValue(new Result.Error(new Exception(t.getMessage())));
             }
         });
     }
