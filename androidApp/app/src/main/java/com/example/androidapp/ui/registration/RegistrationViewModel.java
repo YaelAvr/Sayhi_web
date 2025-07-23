@@ -70,6 +70,22 @@ public class RegistrationViewModel extends ViewModel {
         if (day == null || month == null || year == null) return "";
         return String.format("%02d/%02d/%04d", day, month, year);
     }
+    //API format
+    public String getFormattedBirthdayWithMonthName() {
+        Integer day = getBirthDay();
+        Integer month = getBirthMonth();
+        Integer year = getBirthYear();
+
+        if (day == null || month == null || year == null) return "";
+
+        String[] monthNames = {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        };
+
+        String monthName = monthNames[month - 1];
+        return String.format("%d %s %d", day, monthName, year);
+    }
 
     // Reset all fields (used when restarting the registration)
     public void clearAll() {
