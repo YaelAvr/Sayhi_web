@@ -127,11 +127,14 @@ public class InboxActivity extends AppCompatActivity {
             }
         });
 
-        labelViewModel.getSelectedLabelId().observe(this, labelId -> {
-            if (labelId == null) return;
+        labelViewModel.getSelectedLabelName().observe(this, labelName -> { // <-- השתנה ל-getSelectedLabelName
+            if (labelName == null) return;
+
             drawer.closeDrawers();
-            Toast.makeText(this, "Loading mails for label: " + labelId, Toast.LENGTH_SHORT).show();
-            mailViewModel.fetchMailsByLabel(labelId);
+            Toast.makeText(this, "Loading mails for label: " + labelName, Toast.LENGTH_SHORT).show();
+
+            // קוראים למתודה עם שם הלייבל, כפי שהשרת מצפה
+            mailViewModel.fetchMailsByLabel(labelName);
         });
 
          userViewModel.getUserProfile().observe(this, result -> {
@@ -255,7 +258,7 @@ public class InboxActivity extends AppCompatActivity {
 
         // ================== קוד לטעינת התמונה ==================
         if (profileImageView != null) {
-            String imageUrl = user.getPictureURL();
+            String imageUrl = user.getPicture();
             Log.d("GlideDebug", "url of pic " + imageUrl);
 
             // בדיקה שנייה: נוודא שכתובת התמונה אינה null ואינה ריקה
