@@ -15,6 +15,8 @@ import com.example.androidapp.data.dao.UserDao;
 import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.Registration.DisplayNameRequest;
 import com.example.androidapp.data.model.Registration.DisplayNameResponse;
+import com.example.androidapp.data.model.Registration.PasswordRequest;
+import com.example.androidapp.data.model.Registration.PasswordResponse;
 import com.example.androidapp.data.model.Registration.UsernameRequest;
 import com.example.androidapp.data.model.Registration.UsernameResponse;
 import com.example.androidapp.data.model.User;
@@ -195,6 +197,33 @@ public class UserApi {
             @Override
             public void onFailure(Call<UsernameResponse> call, Throwable t) {
                 resultLiveData.postValue(new Result.Error(new Exception(t.getMessage())));
+            }
+        });
+    }
+
+    public void validatePassword(String password, String confirm, MutableLiveData<Result<String>> liveData) {
+        PasswordRequest request = new PasswordRequest(password, confirm);
+
+        Call<PasswordResponse> call = userServiceAPI.validatePassword(request);
+        call.enqueue(new Callback<PasswordResponse>() {
+            @Override
+            public void onResponse(Call<PasswordResponse> call, Response<PasswordResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    liveData.postValue(new Result.Success<>(response.body().getPassword()));
+                } else {
+                    String errorMsg = "Password validation failed";
+                    try {
+                        String errorBody = response.errorBody().string();
+                        JSONObject jsonObject = new JSONObject(errorBody);
+                        errorMsg = jsonObject.optString("error", errorMsg);
+                    } catch (Exception ignored) {}
+                    liveData.postValue(new Result.Error(new Exception(errorMsg)));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PasswordResponse> call, Throwable t) {
+                liveData.postValue(new Result.Error(new Exception(t.getMessage())));
             }
         });
     }

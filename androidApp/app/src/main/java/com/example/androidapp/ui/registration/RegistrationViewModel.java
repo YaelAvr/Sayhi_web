@@ -30,6 +30,8 @@ public class RegistrationViewModel extends ViewModel {
     private String username;
     private final MutableLiveData<Result<String>> usernameResult = new MutableLiveData<>();
     private String password;
+    private final MutableLiveData<Result<String>> passwordResult = new MutableLiveData<>();
+
     private File profilePictureFile;
 
     public void initRepo(Context context) {
@@ -124,5 +126,18 @@ public class RegistrationViewModel extends ViewModel {
 
     public LiveData<Result<String>> getUsernameResult() {
         return usernameResult;
+    }
+
+    public void validatePassword(String password, String confirm) {
+        if (password == null || confirm == null) {
+            passwordResult.setValue(new Result.Error(new Exception("Password fields are required")));
+            return;
+        }
+
+        userRepository.validatePassword(password, confirm, passwordResult);
+    }
+
+    public LiveData<Result<String>> getPasswordResult() {
+        return passwordResult;
     }
 }

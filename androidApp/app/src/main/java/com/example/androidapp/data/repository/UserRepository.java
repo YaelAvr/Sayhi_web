@@ -85,4 +85,7 @@ public class UserRepository {
     public void validateUsername(String username, MutableLiveData<Result<String>> resultLiveData) {
         userApi.validateUsername(username, resultLiveData);
     }
+    public void validatePassword(String password, String confirm, MutableLiveData<Result<String>> resultLiveData) {
+        userApi.validatePassword(password, confirm, resultLiveData);
+    }
 }
