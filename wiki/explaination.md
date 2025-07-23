@@ -12,6 +12,7 @@ If you're using a remote cluster (e.g., MongoDB Atlas), verify that the connecti
 ### 2. Create `.env` File in VS Code
 In **Visual Studio Code**, create a `.env` file in the **root directory** of the project with the necessary environment variables.
 ![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/p5/files.png)
+
 The .env file:
 ![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/p5/env.png)
 
