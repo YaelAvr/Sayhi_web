@@ -9,11 +9,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.androidapp.data.auth.JwtDecoder;
 import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.ui.landingPage.LandingPageActivity;
 
 public class MainActivity extends AppCompatActivity {
     private TokenManager tokenManager;
+    private JwtDecoder jwtDecoder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +31,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Instantiate your TokenManager
         tokenManager = new TokenManager(this);
+        jwtDecoder = new JwtDecoder();
 
         Intent intent;
+        String token = tokenManager.getToken();
+
         // Check if a token exists
-        if (tokenManager.getToken() == null) {
+        if (token == null || jwtDecoder.isTokenExpired(token)) {
             intent = new Intent(this, LandingPageActivity.class);
 
         } else {

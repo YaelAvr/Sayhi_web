@@ -1,12 +1,13 @@
 package com.example.androidapp.ui.home;
 
 import android.os.Bundle;
-import android.os.Handler; // <-- הוסף import
-import android.os.Looper; // <-- הוסף import
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -14,13 +15,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout; // <-- הוסף import
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.androidapp.data.model.MailEntity;
-import com.example.androidapp.model.Mail;
 import com.example.androidapp.R;
+import com.example.androidapp.data.model.LabelEntity;
+import com.example.androidapp.data.model.MailEntity;
+import com.example.androidapp.data.model.User;
+import com.example.androidapp.model.Mail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -132,62 +136,56 @@ public class HomeFragment extends Fragment {
     }
 
 
-
     private void insertMockMails() {
-        MailEntity mail1 = new MailEntity();
-        mail1.setId("m1");
-        mail1.setFromUserId("u1");
-        mail1.setFromName("Google");
-        mail1.setFromUserName("support");
-        mail1.setFromPicture(null);
-        mail1.setToUserId("u2");
-        mail1.setToUserName("yael");
-        mail1.setToName("Yael");
-        mail1.setSubject("Security Alert");
-        mail1.setBody("A new sign-in was detected on your account.");
-        mail1.setLinks(new ArrayList<>());
-        mail1.setLabelIds(new ArrayList<>());
-        mail1.setTime(new Date());
-        mail1.setStarred(false);
+        // First, create some mock User and Label objects to use
+        User fromUser = new User("u1", "Google", "support", null, false);
+        User toUser = new User("u2", "Yael", "yael", null, false);
+        LabelEntity inboxLabel = new LabelEntity("label1", "Inbox", null, true, false, "u2");
+
+        // Now, create the MailEntity using the full constructor
+        MailEntity mail1 = new MailEntity(
+                "m1", // id
+                fromUser, // from (as a User object)
+                toUser,   // to (as a User object)
+                "Security Alert", // subject
+                "A new sign-in was detected on your account.", // body
+                new ArrayList<>(), // links
+                Collections.singletonList(inboxLabel), // labels (as a List<LabelEntity>)
+                new Date(), // time
+                fromUser.getDisplayName(), // fromName
+                toUser.getDisplayName(),   // toName
+                fromUser.getUserName(),    // fromUserName
+                toUser.getUserName(),      // toUserName
+                null, // fromPicture
+                false // isStarred
+        );
+        // We set isRead separately since it's not in the constructor
         mail1.setRead(false);
 
-        MailEntity mail2 = new MailEntity();
-        mail2.setId("m2");
-        mail2.setFromUserId("u3");
-        mail2.setFromName("LinkedIn");
-        mail2.setFromUserName("linkedin");
-        mail2.setFromPicture(null);
-        mail2.setToUserId("u2");
-        mail2.setToUserName("yael");
-        mail2.setToName("Yael");
-        mail2.setSubject("Someone viewed your profile");
-        mail2.setBody("You had 3 profile views this week.");
-        mail2.setLinks(new ArrayList<>());
-        mail2.setLabelIds(new ArrayList<>());
-        mail2.setTime(new Date(System.currentTimeMillis() - 3600_000L * 5)); // לפני 5 שעות
-        mail2.setStarred(true);
+        // We can create another one
+        User fromUser2 = new User("u3", "LinkedIn", "linkedin", null, false);
+        MailEntity mail2 = new MailEntity(
+                "m2",
+                fromUser2,
+                toUser,
+                "Someone viewed your profile",
+                "You had 3 profile views this week.",
+                new ArrayList<>(),
+                Collections.singletonList(inboxLabel),
+                new Date(System.currentTimeMillis() - 3600_000L * 5),
+                fromUser2.getDisplayName(),
+                toUser.getDisplayName(),
+                fromUser2.getUserName(),
+                toUser.getUserName(),
+                null,
+                true // isStarred
+        );
         mail2.setRead(true);
 
-        MailEntity mail3 = new MailEntity();
-        mail3.setId("m3");
-        mail3.setFromUserId("u4");
-        mail3.setFromName("Tami");
-        mail3.setFromUserName("tami");
-        mail3.setFromPicture(null);
-        mail3.setToUserId("u2");
-        mail3.setToUserName("yael");
-        mail3.setToName("Yael");
-        mail3.setSubject("Team Meeting Notes");
-        mail3.setBody("Please find the summary of today's meeting attached.");
-        mail3.setLinks(new ArrayList<>());
-        mail3.setLabelIds(new ArrayList<>());
-        mail3.setTime(new Date(System.currentTimeMillis() - 86400_000L)); // אתמול
-        mail3.setStarred(false);
-        mail3.setRead(false);
-
+        // Insert them into the database via the ViewModel
         mailViewModel.insert(mail1);
         mailViewModel.insert(mail2);
-        mailViewModel.insert(mail3);
+
     }
 
     @Override
@@ -218,15 +216,20 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    // This function translates the complex "raw ingredients"
+    // into the simple "plated meal" for the UI.
     private Mail toMail(MailEntity entity) {
+        String fromName = (entity.getFrom() != null) ? entity.getFrom().getDisplayName() : "Unknown Sender";
+        String fromPicture = (entity.getFrom() != null) ? entity.getFrom().getPicture() : null;
+
         Mail mail = new Mail(
-                entity.getFromName(),
+                fromName,
                 entity.getSubject(),
                 entity.getBody(),
                 entity.getTime(),
                 entity.isRead(),
                 entity.isStarred(),
-                entity.getFromPicture()
+                fromPicture
         );
         mail.setId(entity.getId());
         return mail;

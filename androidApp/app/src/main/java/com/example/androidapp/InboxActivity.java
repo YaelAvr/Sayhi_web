@@ -1,5 +1,6 @@
 package com.example.androidapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidapp.data.Result;
+import com.example.androidapp.data.auth.SessionExpiredException;
 import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.data.model.LabelEntity;
 import com.example.androidapp.data.model.User;
@@ -28,6 +30,7 @@ import com.example.androidapp.databinding.ActivityMain2Binding;
 import com.example.androidapp.model.Label;
 import com.example.androidapp.ui.gallery.LabelViewModel;
 import com.example.androidapp.ui.gallery.LabelsAdapter;
+import com.example.androidapp.ui.landingPage.LandingPageActivity;
 import com.example.androidapp.ui.loggedInUser.LoggedInUserViewModel;
 import com.google.android.material.navigation.NavigationView;
 
@@ -43,6 +46,7 @@ public class InboxActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMain2Binding binding;
+    private TokenManager tokenManager;
 
     private LoggedInUserViewModel userViewModel;
 
@@ -65,20 +69,28 @@ public class InboxActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
-        userViewModel = new LoggedInUserViewModel(this);
+        tokenManager = new TokenManager(this);
 
+        userViewModel = new LoggedInUserViewModel(this);
         userViewModel.fetchCurrentUserProfile();
 
 
         userViewModel.getUserProfile().observe(this, result -> {
-            Log.i("inbox", " " );
-//            loadingProgressBar.setVisibility(View.GONE);
             if (result instanceof Result.Success) {
                 User user = ((Result.Success<User>) result).getData();
-                Log.i("getUserResult", "user display name:  " + user.getDisplayName());
+                Log.i("getUserProfile", "user display name:  " + user.getDisplayName());
 
             } else if (result instanceof Result.Error) {
                 Exception e = ((Result.Error) result).getError();
+
+                // Check if the error is our special session exception
+                if (e instanceof SessionExpiredException) {
+                    // The token is invalid/expired. Handle the logout flow.
+                    handleSessionExpired();
+                } else {
+                    // It's a different kind of error (e.g., no internet).
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -142,6 +154,29 @@ public class InboxActivity extends AppCompatActivity {
             });
         }
         setupNavigationListener();
+    }
+
+    /**
+     * A new method to handle the session expiration logic cleanly.
+     */
+    private void handleSessionExpired() {
+        // Show a message to the user
+        Toast.makeText(this, "Session expired. Please log in again.", Toast.LENGTH_LONG).show();
+
+        // 1. Delete the invalid token from storage
+        tokenManager.deleteToken();
+
+        // 2. Create an intent to go back to the landing/login page
+        Intent intent = new Intent(this, LandingPageActivity.class);
+
+        // 3. Clear the activity stack so the user can't press "back" to get into the app
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        // 4. Start the new activity
+        startActivity(intent);
+
+        // 5. Finish the current (InboxActivity)
+        finish();
     }
 
     private void fetchLabelsForNav() {

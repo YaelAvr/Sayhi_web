@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.androidapp.R;
 import com.example.androidapp.data.Result;
 import com.example.androidapp.data.auth.AuthInterceptor;
+import com.example.androidapp.data.auth.SessionExpiredException;
 import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.data.dao.RegisteredUserDao;
 import com.example.androidapp.data.dao.UserDao;
@@ -68,7 +69,13 @@ public class UserApi {
                         userDao.insertUser(response.body());
                     }).start();
                 } else {
-                    userLiveData.postValue(new Result.Error(new Exception(response.message())));
+                    // Check if the error code is 401 (Unauthorized) or 403 (Forbidden).
+                    if (response.code() == 401 || response.code() == 403) {
+                        // This is a special error that means the session has expired.
+                        userLiveData.postValue(new Result.Error(new SessionExpiredException()));
+                    } else {
+                        userLiveData.postValue(new Result.Error(new Exception(response.message())));
+                    }
                 }
 
             }
@@ -81,8 +88,6 @@ public class UserApi {
         return userLiveData;
     }
     public void verifySignedUsername(String username, MutableLiveData<Result<RegisteredUser>> liveData){
-        Log.i("errorType", "verify passed username" + username);
-
         new Thread(() -> {
             try {
                 RegisteredUser user = regDao.getUserByUsername(username);

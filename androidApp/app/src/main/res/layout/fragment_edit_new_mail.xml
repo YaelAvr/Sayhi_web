@@ -13,13 +13,15 @@
         android:id="@+id/toolbar_edit_mail"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:navigationIcon="@drawable/ic_close"/>
+        app:navigationIcon="@drawable/ic_close"
+        app:title="Edit Mail"
+        />
 
     <!-- קו הפרדה ויזואלי -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E0E0E0" />
+        android:background="@color/view_line" />
 
     <!-- שאר הקוד שלך נשאר כמעט זהה -->
     <EditText
@@ -35,7 +37,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E0E0E0" />
+        android:background="@color/view_line" />
 
     <EditText
         android:id="@+id/mail_subject"
@@ -50,7 +52,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E0E0E0" />
+        android:background="@color/view_line" />
 
     <EditText
         android:id="@+id/mail_body"
@@ -61,6 +63,7 @@
         android:hint="@string/compose_email"
         android:inputType="textMultiLine"
         android:padding="15dp"
+        android:scrollbars="vertical"
         android:background="@android:color/transparent"
         android:textSize="18sp" />
 
