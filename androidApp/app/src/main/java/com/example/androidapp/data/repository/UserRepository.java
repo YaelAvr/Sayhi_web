@@ -77,4 +77,9 @@ public class UserRepository {
     public LiveData<Result<User>> getUserById(String userId) {
         return userApi.getUserById(userId);
     }
+
+    //sign in:
+    public void validateDisplayName(String firstName, String lastName, MutableLiveData<Result<String>> resultLiveData) {
+        userApi.validateDisplayName(firstName, lastName, resultLiveData);
+    }
 }
