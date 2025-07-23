@@ -15,7 +15,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -173,29 +172,29 @@ public class InboxActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main); // התאימי ל-ID של NavHostFragment שלך
-
-        NavBackStackEntry currentBackStackEntry = navController.getCurrentBackStackEntry();
-
-        if (currentBackStackEntry != null) {
-            currentBackStackEntry.getSavedStateHandle()
-                    .getLiveData("shouldRefresh")
-                    .observe(this, shouldRefresh -> {
-                        if (Boolean.TRUE.equals(shouldRefresh)) {
-                            // הפעולה שתרצי לבצע אחרי החזרה
-                            mailViewModel.fetchMailsByLabel("Inbox");
-//                            mailViewModel.fetchMailsByLabel("Draft");
-
-                            // remove in order to prevent second call
-                            currentBackStackEntry.getSavedStateHandle().remove("shouldRefresh");
-                        }
-                    });
-        }
-
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main); // התאימי ל-ID של NavHostFragment שלך
+//
+//        NavBackStackEntry currentBackStackEntry = navController.getCurrentBackStackEntry();
+//
+//        if (currentBackStackEntry != null) {
+//            currentBackStackEntry.getSavedStateHandle()
+//                    .getLiveData("shouldRefresh")
+//                    .observe(this, shouldRefresh -> {
+//                        if (Boolean.TRUE.equals(shouldRefresh)) {
+//                            // הפעולה שתרצי לבצע אחרי החזרה
+//                            mailViewModel.fetchMailsByLabel("Inbox");
+////                            mailViewModel.fetchMailsByLabel("Draft");
+//
+//                            // remove in order to prevent second call
+//                            currentBackStackEntry.getSavedStateHandle().remove("shouldRefresh");
+//                        }
+//                    });
+//        }
+//
+//    }
 
     /**
      * A new method to handle the session expiration logic cleanly.

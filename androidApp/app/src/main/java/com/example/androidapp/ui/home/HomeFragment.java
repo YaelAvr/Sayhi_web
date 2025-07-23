@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment {
 
         // --- 3. טעינה ראשונית של תיבת הדואר הנכנס ---
         // בפעם הראשונה שהמסך עולה, נציג את המיילים מה-inbox כברירת מחדל
-        mailViewModel.fetchMailsByLabel("inbox");
+        mailViewModel.fetchMailsByLabel("Inbox");
     }
 
     private void setupRecyclerView() {
@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             // בעתיד, אפשר להוסיף כאן לוגיקה מורכבת יותר שתזכור מה הלייבל האחרון שנבחר
             // כרגע, כל רענון יטען מחדש את תיבת הדואר הנכנס
-            mailViewModel.fetchMailsByLabel("inbox");
+            mailViewModel.fetchMailsByLabel("Inbox");
         });
     }
 
