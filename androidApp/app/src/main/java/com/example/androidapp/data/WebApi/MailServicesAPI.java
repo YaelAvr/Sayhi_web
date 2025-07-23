@@ -6,6 +6,8 @@ import com.example.androidapp.model.Mail;
 import com.google.gson.JsonObject;
 
 import java.util.List;
+import com.google.gson.JsonObject; // <-- ודא שהייבוא קיים
+
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -34,4 +36,7 @@ public interface MailServicesAPI {
 
     @DELETE("mails/{id}")
     Call<Void> deleteMail(@Path("id") String mailId);
+
+    @POST("mails/add-label")
+    Call<Void> addLabelToMail(@Body JsonObject body);
 }
