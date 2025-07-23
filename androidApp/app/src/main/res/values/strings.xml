@@ -95,4 +95,6 @@
     <string name="to">To</string>
     <string name="subject">Subject</string>
     <string name="compose_email">Compose email</string>
+    <string name="delete">delete</string>
+    <string name="add_to_label">add to label</string>
 </resources>

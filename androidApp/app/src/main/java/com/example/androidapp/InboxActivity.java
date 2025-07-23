@@ -137,6 +137,7 @@ public class InboxActivity extends AppCompatActivity {
             if (result instanceof Result.Success) {
                 User user = ((Result.Success<User>) result).getData();
                 Log.i("getUserProfile", "user display name:  " + user.getDisplayName());
+                updateNavHeader(user);
 
             } else if (result instanceof Result.Error) {
                 Exception e = ((Result.Error) result).getError();

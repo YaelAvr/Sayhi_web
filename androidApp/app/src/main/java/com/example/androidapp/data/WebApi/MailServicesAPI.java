@@ -4,6 +4,8 @@ import com.example.androidapp.model.Mail;
 import com.google.gson.JsonObject;
 
 import java.util.List;
+import com.google.gson.JsonObject; // <-- ודא שהייבוא קיים
+
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -11,11 +13,14 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.DELETE; // <-- הוסף את הייבוא הזה
+import retrofit2.http.Path;
 
 public interface MailServicesAPI {
     @POST("mails")
     Call<Void> createMail(@Body JsonObject mailJson);
     @GET("mails/{id}")
+    Call<Mail> getMailById(@Path("id") String userId);
     Call<Mail> getMailById(@Path("id") String userId);
 
 
@@ -27,4 +32,10 @@ public interface MailServicesAPI {
 
     @POST("mails/drafts")
     Call<Mail> createDraft(@Body JsonObject mailJson);
+
+    @DELETE("mails/{id}")
+    Call<Void> deleteMail(@Path("id") String mailId);
+
+    @POST("mails/{id}/add-label")
+    Call<Void> addLabelToMail(@Body JsonObject body);
 }

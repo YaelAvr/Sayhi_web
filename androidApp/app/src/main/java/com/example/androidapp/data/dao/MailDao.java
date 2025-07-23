@@ -21,4 +21,7 @@ public interface MailDao {
 
     @Query("SELECT * FROM mails WHERE id = :id")
     LiveData<MailEntity> getMailById(String id);
+
+    @Query("DELETE FROM mails WHERE id = :mailId")
+    void deleteMailById(String mailId);
 }

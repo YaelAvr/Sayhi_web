@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,6 +18,8 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.androidapp.R;
+import com.example.androidapp.data.model.NewUserRequest;
+import com.example.androidapp.data.Result;
 import com.example.androidapp.ui.login.LoginActivity;
 
 import java.io.File;
@@ -53,6 +57,16 @@ public class SummaryFragment extends Fragment {
 
         textViewName.setText(name);
         textViewEmail.setText(email);
+        // מאזין לתוצאה מה-API
+        viewModel.getCreateUserResult().observe(getViewLifecycleOwner(), result -> {
+            if (result instanceof Result.Success) {
+                Intent intent = new Intent(requireContext(), LoginActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
+            } else if (result instanceof Result.Error) {
+                String error = ((Result.Error) result).getError().getMessage();
+            }
+        });
 
         // כפתור התחלה מחדש
         buttonRestart.setOnClickListener(v -> {
@@ -62,7 +76,19 @@ public class SummaryFragment extends Fragment {
 
         // כפתור סיום הרשמה
         buttonConfirm.setOnClickListener(v -> {
-            // TODO: שמירת המשתמש בפועל תתבצע דרך הרפוזיטורי + DAO בהמשך
+            String username = viewModel.getUsername();
+            String displayName = viewModel.getFirstName().getValue();
+            String password = viewModel.getPassword();
+            String picture = viewModel.getProfilePictureUrl();  // זה אמור להיות URL מהשרת
+            String gender = viewModel.getGender().getValue();
+            String birthday = viewModel.getFormattedBirthdayWithMonthName();
+
+            // יצירת אובייקט בקשת משתמש חדש
+            NewUserRequest newUserRequest = new NewUserRequest(
+                    username, displayName, password, picture, gender, birthday
+            );
+
+            viewModel.createUser(newUserRequest);  // קריאה ל־API
             viewModel.clearAll();
             Intent intent = new Intent(requireContext(), LoginActivity.class);
             startActivity(intent);
