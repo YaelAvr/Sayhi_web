@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -69,12 +71,7 @@ public class InboxActivity extends AppCompatActivity {
         mailViewModel = new ViewModelProvider(this).get(MailViewModel.class);
         userViewModel = new LoggedInUserViewModel(this);
 
-        userViewModel.fetchCurrentUserProfile();
-
-
         userViewModel.getUserProfile().observe(this, result -> {
-            Log.i("inbox", " " );
-//            loadingProgressBar.setVisibility(View.GONE);
             if (result instanceof Result.Success) {
                 User user = ((Result.Success<User>) result).getData();
                 Log.i("getUserResult", "user display name:  " + user.getDisplayName());
@@ -169,9 +166,37 @@ public class InboxActivity extends AppCompatActivity {
         });
 
         // ================== 5. טעינת נתונים ראשונית ==================
+        mailViewModel.fetchMailsByLabel("Inbox");
+
         userViewModel.fetchCurrentUserProfile();
         labelViewModel.fetchLabelsFromApi();
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main); // התאימי ל-ID של NavHostFragment שלך
+
+        NavBackStackEntry currentBackStackEntry = navController.getCurrentBackStackEntry();
+
+        if (currentBackStackEntry != null) {
+            currentBackStackEntry.getSavedStateHandle()
+                    .getLiveData("shouldRefresh")
+                    .observe(this, shouldRefresh -> {
+                        if (Boolean.TRUE.equals(shouldRefresh)) {
+                            // הפעולה שתרצי לבצע אחרי החזרה
+                            mailViewModel.fetchMailsByLabel("Inbox");
+//                            mailViewModel.fetchMailsByLabel("Draft");
+
+                            // remove in order to prevent second call
+                            currentBackStackEntry.getSavedStateHandle().remove("shouldRefresh");
+                        }
+                    });
+        }
+
+    }
+
     /**
      * A new method to handle the session expiration logic cleanly.
      */
@@ -280,5 +305,37 @@ public class InboxActivity extends AppCompatActivity {
                 profileImageView.setImageResource(R.drawable.ic_menu_camera);
             }
         }
+    }
+
+    // Inside MainActivity.java
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // We use a switch statement to handle clicks on different menu items
+        if(item.getItemId() ==  R.id.action_settings) {
+
+            Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
+            handleSessionExpired();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+//        switch (item.getItemId()) {
+//            case R.id.action_settings:
+//                // User chose the "Settings" item.
+//                Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show();
+//                // TODO: Navigate to your SettingsFragment or SettingsActivity
+//                return true;
+//
+//            case R.id.action_logout:
+//                // User chose the "Logout" item.
+//                Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
+//                // TODO: Add your user logout logic here
+//                return true;
+//
+//            default:
+//                // If we got here, the user's action was not recognized.
+//                // Invoke the superclass to handle it.
+//                return super.onOptionsItemSelected(item);
+//        }
     }
 }

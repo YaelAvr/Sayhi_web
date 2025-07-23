@@ -71,8 +71,6 @@ public class MailAPI {
                         resultLiveData.postValue(new Result.Error(new Exception(response.message())));
                     }
                 }
-
-
             }
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
@@ -87,5 +85,39 @@ public class MailAPI {
     public Call<List<Mail>> getMailsByLabel(String labelId, int offset) {
         return mailServicesAPI.getMailsByLabel(labelId, offset); // <-- העברנו אותו הלאה
     }
+    public LiveData<Result<Mail>> createDraft(JsonObject jsonBody) {
+        MutableLiveData<Result<Mail>> resultLiveData = new MutableLiveData<>();
 
+//        CreateMailRequest request = new CreateMailRequest(to, subject, body);
+        Call<Mail> call = mailServicesAPI.createDraft(jsonBody);
+
+        call.enqueue(new Callback<Mail>() {
+            @Override
+            public void onResponse(Call<Mail> call, Response<Mail> response) {
+                if (response.isSuccessful() && response.body()!=null) {
+                    Log.i("mailApi_createMail", "isSuccessful response.code(): " + response.code());
+
+                    resultLiveData.postValue(new Result.Success<>(response.body()));
+
+                } else {
+                    Log.e("mailApi_createdl", "response.code(): " + response.code()+" "+response.message());
+                    // Check if the error code is 401 (Unauthorized) or 403 (Forbidden).
+                    if (response.code() == 401 || response.code() == 403) {
+                        // This is a special error that means the session has expired.
+                        resultLiveData.postValue(new Result.Error(new SessionExpiredException()));
+
+                    } else {
+                        resultLiveData.postValue(new Result.Error(new Exception(response.message())));
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<Mail> call, Throwable t) {
+                Log.e("mailApi_created", "response.getMessage(): " + t.getMessage());
+
+                resultLiveData.postValue(new Result.Error(new Exception(t.getMessage())));
+            }
+        });
+        return resultLiveData;
+    }
 }

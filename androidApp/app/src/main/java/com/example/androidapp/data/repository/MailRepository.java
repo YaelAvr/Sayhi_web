@@ -135,6 +135,9 @@ public class MailRepository {
             }
         });
     }
+    public LiveData<Result<Mail>> createDraft(JsonObject jsonBody) {
+        return mailApi.createDraft(jsonBody);
+    }
 //    public LiveData<Result<List<MailEntity>>> refreshMailsForLabel(String labelName) {
 //        // This would call a new method in your MailApi to fetch mails from the server
 //        // and then save the new list to the Room database.

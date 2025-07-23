@@ -8,6 +8,7 @@ import androidx.lifecycle.MediatorLiveData;
 
 import com.example.androidapp.data.Result;
 import com.example.androidapp.data.repository.MailRepository;
+import com.example.androidapp.model.Mail;
 import com.google.gson.JsonObject;
 
 public class EditNewMailViewModel extends AndroidViewModel {
@@ -31,24 +32,6 @@ public class EditNewMailViewModel extends AndroidViewModel {
         sendResult.addSource(source, result -> {
             sendResult.setValue(result);
             sendResult.removeSource(source);
-
-            // 3. THE REFRESH: If the send was successful, tell the repository
-            //    to refresh the data for the "Sent" and "Inbox" labels.
-            //    This will update the local database with the new mail.
-            if (result instanceof Result.Success) {
-                // This is an asynchronous "fire-and-forget" refresh.
-                // The UI will update automatically when the data arrives.
-                //TODO: call refreshMailsForLabel
-                int offset = 0;
-
-            /*    mailRepository.getMailsByLabel(labelId, offset, result -> { // <-- העברנו את ה-offset
-                    mailsApiResult.postValue(result);
-                });
-                mailRepository.refreshMailsForLabel("Sent");
-                mailRepository.refreshMailsForLabel("Inbox"); // The recipient's inbox
-            */
-            }
-
         });
     }
 
@@ -72,7 +55,6 @@ public class EditNewMailViewModel extends AndroidViewModel {
         jsonBody.addProperty("to", finalTo);
         jsonBody.addProperty("subject", finalSubject);
         jsonBody.addProperty("body", finalBody);
-//        jsonBody.addProperty("originalDraftId", null);
 
         return jsonBody;
     }
@@ -80,5 +62,29 @@ public class EditNewMailViewModel extends AndroidViewModel {
     // You could also have a saveDraft method
     public void saveDraftOnExit(String to, String subject, String body) {
         // Logic to save draft if the user navigates away
+        JsonObject jsonBody = setApiReqJSON(to, subject, body);
+
+
+        final LiveData<Result<Mail>> source = mailRepository.createDraft(jsonBody);
+        sendResult.addSource(source, result -> {
+
+            // 3. THE REFRESH: If the send was successful, tell the repository
+            //    to refresh the data for the "Sent" and "Inbox" labels.
+            //    This will update the local database with the new mail.
+            if (result instanceof Result.Success) {
+                sendResult.setValue(new Result.Success<>(null));
+//                MailEntity draft = ((Result.Success<Mail>) result).getData();
+//
+//                mailRepository.insertMail(draft);
+
+
+            } else if (result instanceof Result.Error) {
+                String errorMessage = ((Result.Error) result).getError().getMessage();
+                sendResult.setValue(new Result.Error(new Exception(errorMessage)));
+            }
+            sendResult.removeSource(source);
+        });
     }
+
+
 }

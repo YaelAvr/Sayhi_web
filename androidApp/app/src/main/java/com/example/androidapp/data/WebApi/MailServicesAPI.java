@@ -1,7 +1,5 @@
 package com.example.androidapp.data.WebApi;
 
-import com.example.androidapp.data.model.Draft;
-import com.example.androidapp.data.model.MailEntity;
 import com.example.androidapp.model.Mail;
 import com.google.gson.JsonObject;
 
@@ -18,7 +16,7 @@ public interface MailServicesAPI {
     @POST("mails")
     Call<Void> createMail(@Body JsonObject mailJson);
     @GET("mails/{id}")
-    Call<MailEntity> getMailById(@Path("id") String userId);
+    Call<Mail> getMailById(@Path("id") String userId);
 
 
     @GET("mails/label-mails")
@@ -28,5 +26,5 @@ public interface MailServicesAPI {
     );
 
     @POST("mails/drafts")
-    Call<Draft> createDraft(@Body JsonObject mailJson);
+    Call<Mail> createDraft(@Body JsonObject mailJson);
 }

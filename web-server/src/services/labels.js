@@ -107,7 +107,7 @@ const addMailToUserLabel = async (userId, mailId, labelName) => {
     }
 
     // Add the mail to the label
-    await addMailToLabel(label.id, mailId);
+    await addMailToLabel(label._id, mailId);
    
     return true;
 };
