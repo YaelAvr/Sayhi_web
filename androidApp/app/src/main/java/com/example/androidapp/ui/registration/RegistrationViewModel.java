@@ -13,11 +13,11 @@ import java.io.File;
 
 
 public class RegistrationViewModel extends ViewModel {
+    private UserRepository userRepository;
 
     private final MutableLiveData<String> firstName = new MutableLiveData<>();
     private final MutableLiveData<String> lastName = new MutableLiveData<>();
     private final MutableLiveData<Result<String>> displayNameResult = new MutableLiveData<>();
-    private UserRepository userRepository;
 
     // Birthday (day, month, year)
     private final MutableLiveData<Integer> birthDay = new MutableLiveData<>();
@@ -28,6 +28,7 @@ public class RegistrationViewModel extends ViewModel {
     private final MutableLiveData<String> gender = new MutableLiveData<>();
 
     private String username;
+    private final MutableLiveData<Result<String>> usernameResult = new MutableLiveData<>();
     private String password;
     private File profilePictureFile;
 
@@ -112,5 +113,16 @@ public class RegistrationViewModel extends ViewModel {
 
     public LiveData<Result<String>> getDisplayNameResult() {
         return displayNameResult;
+    }
+    public void validateUsername() {
+        if (username == null || username.isEmpty()) {
+            usernameResult.setValue(new Result.Error(new Exception("Username is required")));
+            return;
+        }
+        userRepository.validateUsername(username, usernameResult);
+    }
+
+    public LiveData<Result<String>> getUsernameResult() {
+        return usernameResult;
     }
 }

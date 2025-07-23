@@ -15,7 +15,11 @@ import com.example.androidapp.data.dao.UserDao;
 import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.Registration.DisplayNameRequest;
 import com.example.androidapp.data.model.Registration.DisplayNameResponse;
+import com.example.androidapp.data.model.Registration.UsernameRequest;
+import com.example.androidapp.data.model.Registration.UsernameResponse;
 import com.example.androidapp.data.model.User;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -153,7 +157,9 @@ public class UserApi {
                 } else {
                     String errorMsg = "Unknown error";
                     try {
-                        errorMsg = response.errorBody().string();
+                        String errorBody = response.errorBody().string();
+                        JSONObject jsonObject = new JSONObject(errorBody);
+                        errorMsg = jsonObject.optString("error", errorMsg);
                     } catch (Exception ignored) {}
                     liveData.postValue(new Result.Error(new Exception(errorMsg)));
                 }
@@ -162,6 +168,33 @@ public class UserApi {
             @Override
             public void onFailure(Call<DisplayNameResponse> call, Throwable t) {
                 liveData.postValue(new Result.Error(new Exception(t.getMessage())));
+            }
+        });
+    }
+
+    public void validateUsername(String username, MutableLiveData<Result<String>> resultLiveData) {
+        UsernameRequest request = new UsernameRequest(username);
+
+        Call<UsernameResponse> call = userServiceAPI.validateUserName(request);
+        call.enqueue(new Callback<UsernameResponse>() {
+            @Override
+            public void onResponse(Call<UsernameResponse> call, Response<UsernameResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    resultLiveData.postValue(new Result.Success<>(response.body().getUsername()));
+                } else {
+                    String errorMsg = "Username invalid";
+                    try {
+                        String errorBody = response.errorBody().string();
+                        JSONObject jsonObject = new JSONObject(errorBody);
+                        errorMsg = jsonObject.optString("error", errorMsg);
+                    } catch (Exception ignored) {}
+                    resultLiveData.postValue(new Result.Error(new Exception(errorMsg)));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UsernameResponse> call, Throwable t) {
+                resultLiveData.postValue(new Result.Error(new Exception(t.getMessage())));
             }
         });
     }
