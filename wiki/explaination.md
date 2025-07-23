@@ -19,7 +19,7 @@ The .env file:
 
 ---
 
-### 3. Run Docker Compose (in WSL)
+### 3. Run Docker Compose in WSL terminal in VS Code
 Open a **WSL terminal** and navigate to the project root.  
 Run the following command to build and start all services:
 
