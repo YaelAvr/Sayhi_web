@@ -1,6 +1,8 @@
 package com.example.androidapp.data.WebApi;
 
 import com.example.androidapp.data.model.RegisteredUser;
+import com.example.androidapp.data.model.Registration.PasswordRequest;
+import com.example.androidapp.data.model.Registration.PasswordResponse;
 import com.example.androidapp.data.model.Registration.UsernameRequest;
 import com.example.androidapp.data.model.Registration.UsernameResponse;
 import com.example.androidapp.data.model.User;
@@ -35,4 +37,7 @@ public interface UserServicesAPI {
 
     @POST("users/userName")
     Call<UsernameResponse> validateUserName(@Body UsernameRequest request);
+
+    @POST("users/password")
+    Call<PasswordResponse> validatePassword(@Body PasswordRequest request);
 }
