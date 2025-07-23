@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.androidapp.data.Result;
 import com.example.androidapp.data.auth.SessionExpiredException;
 import com.example.androidapp.data.auth.TokenManager;
@@ -125,11 +127,14 @@ public class InboxActivity extends AppCompatActivity {
             }
         });
 
-        labelViewModel.getSelectedLabelId().observe(this, labelId -> {
-            if (labelId == null) return;
+        labelViewModel.getSelectedLabelName().observe(this, labelName -> { // <-- השתנה ל-getSelectedLabelName
+            if (labelName == null) return;
+
             drawer.closeDrawers();
-            Toast.makeText(this, "Loading mails for label: " + labelId, Toast.LENGTH_SHORT).show();
-            mailViewModel.fetchMailsByLabel(labelId);
+            Toast.makeText(this, "Loading mails for label: " + labelName, Toast.LENGTH_SHORT).show();
+
+            // קוראים למתודה עם שם הלייבל, כפי שהשרת מצפה
+            mailViewModel.fetchMailsByLabel(labelName);
         });
 
          userViewModel.getUserProfile().observe(this, result -> {
@@ -235,14 +240,44 @@ public class InboxActivity extends AppCompatActivity {
         NavigationView navigationView = binding.navView;
         TextView displayNameTextView = navigationView.findViewById(R.id.display_name_text);
         TextView emailTextView = navigationView.findViewById(R.id.username_text);
+        ImageView profileImageView = navigationView.findViewById(R.id.profile_image);
 
-        if (user != null) {
-            if (displayNameTextView != null) {
-                displayNameTextView.setText(user.getDisplayName());
-            }
-            if (emailTextView != null) {
-                String fullEmail = user.getUserName() + "@sayhi.com";
-                emailTextView.setText(fullEmail);
+        // בדיקה ראשונה: נוודא שאובייקט המשתמש אינו null
+        if (user == null) {
+            return;
+        }
+
+        // עדכון שדות הטקסט
+        if (displayNameTextView != null) {
+            displayNameTextView.setText(user.getDisplayName());
+        }
+        if (emailTextView != null) {
+            String fullEmail = user.getUserName() + "@sayhi.com";
+            emailTextView.setText(fullEmail);
+        }
+
+        // ================== קוד לטעינת התמונה ==================
+        if (profileImageView != null) {
+            String imageUrl = user.getPicture();
+            Log.d("GlideDebug", "url of pic " + imageUrl);
+
+            // בדיקה שנייה: נוודא שכתובת התמונה אינה null ואינה ריקה
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                // אם הכתובת תקינה, נבנה את הכתובת המלאה ונטען עם Glide
+                String baseUrl = "http://10.0.2.2:3000"; // כתובת בסיס נקייה
+                String fullImageUrl = baseUrl + "/" + imageUrl;
+
+                Log.d("GlideDebug", "טוען תמונה מהכתובת: " + fullImageUrl);
+
+                Glide.with(this)
+                        .load(fullImageUrl)
+                        .placeholder(R.drawable.ic_menu_camera) // תמונה זמנית
+                        .error(R.drawable.ic_menu_camera)       // תמונה במקרה של שגיאה
+                        .circleCrop()                           // חיתוך לעיגול
+                        .into(profileImageView);                // הצגה ברכיב זה
+            } else {
+                // אם למשתמש אין כתובת תמונה, נציג את תמונת ברירת המחדל
+                profileImageView.setImageResource(R.drawable.ic_menu_camera);
             }
         }
     }

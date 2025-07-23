@@ -20,6 +20,8 @@ public class LabelViewModel extends AndroidViewModel {
     // LiveData חדש שיחזיק את התוצאה מה-API
     private final MutableLiveData<Result<List<Label>>> labelsApiResult = new MutableLiveData<>();
     private final MutableLiveData<Result<Label>> createLabelResult = new MutableLiveData<>();
+    private final MutableLiveData<String> selectedLabelName = new MutableLiveData<>();
+
 
 
     public LabelViewModel(@NonNull Application application) {
@@ -70,7 +72,13 @@ public class LabelViewModel extends AndroidViewModel {
      */
     public void onLabelClicked(Label label) {
         if (label != null && label.getId() != null) {
-            selectedLabelId.setValue(label.getId());
+            selectedLabelName.setValue(label.getName());
         }
     }
+
+    public LiveData<String> getSelectedLabelName() {
+        return selectedLabelName;
+    }
+
+
 }
