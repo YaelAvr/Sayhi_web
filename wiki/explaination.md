@@ -28,7 +28,6 @@ docker compose up --build
 
 
 ## Important Notes
-
 - When **registering a new user**, the **username must contain lowercase letters only**.  
   Uppercase usernames (e.g., `Dana123`) are not allowed. Use `dana123` instead.
 
