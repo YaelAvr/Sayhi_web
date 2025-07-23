@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import com.example.androidapp.data.Result;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -68,7 +68,7 @@ public class NameFragment extends Fragment {
                 navController.navigate(R.id.action_nameFragment_to_dateAndGenderFragment);
             } else if (result instanceof Result.Error) {
                 Toast.makeText(getContext(),
-                        ((Result.Error<?>) result).getError().getMessage(),
+                        ((Result.Error) result).getError().getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
         });

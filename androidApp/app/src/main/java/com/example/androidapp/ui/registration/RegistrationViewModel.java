@@ -1,8 +1,7 @@
 package com.example.androidapp.ui.registration;
-
 import android.content.Context;
 import android.net.Uri;
-
+import com.example.androidapp.data.Result;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
