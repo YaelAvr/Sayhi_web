@@ -19,6 +19,8 @@ public class LabelViewModel extends AndroidViewModel {
 
     // LiveData חדש שיחזיק את התוצאה מה-API
     private final MutableLiveData<Result<List<Label>>> labelsApiResult = new MutableLiveData<>();
+    private final MutableLiveData<Result<Label>> createLabelResult = new MutableLiveData<>();
+
 
     public LabelViewModel(@NonNull Application application) {
         super(application);
@@ -51,6 +53,16 @@ public class LabelViewModel extends AndroidViewModel {
      */
     public LiveData<String> getSelectedLabelId() {
         return selectedLabelId;
+    }
+
+    public LiveData<Result<Label>> getCreateLabelResult() {
+        return createLabelResult;
+    }
+
+    public void createLabel(String name) {
+        repository.createLabel(name, result -> {
+            createLabelResult.postValue(result);
+        });
     }
 
     /**

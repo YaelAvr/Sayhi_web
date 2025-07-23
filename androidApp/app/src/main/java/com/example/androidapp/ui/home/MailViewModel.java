@@ -45,7 +45,9 @@ public class MailViewModel extends AndroidViewModel {
      */
     public void fetchMailsByLabel(String labelId) {
         // קריאה ל-Repository שיבצע את קריאת ה-API
-        repository.getMailsByLabel(labelId, result -> {
+        int offset = 0;
+
+        repository.getMailsByLabel(labelId, offset, result -> { // <-- העברנו את ה-offset
             mailsApiResult.postValue(result);
         });
     }

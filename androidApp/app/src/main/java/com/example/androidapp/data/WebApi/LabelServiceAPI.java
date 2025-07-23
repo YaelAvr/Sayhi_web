@@ -5,13 +5,15 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Body; // <-- הוסף import
+import retrofit2.http.POST; // <-- הוסף import
+import java.util.Map; // <-- הוסף import
 
 public interface LabelServiceAPI {
+    // הסרנו את הפרמטר @Header("Authorization") String token
+    @GET("labels")
+    Call<List<Label>> getLabels();
 
-    @GET("api/labels") // <-- עדכני לנתיב הנכון שלך
-    Call<List<Label>> getLabels(@Header("Authorization") String token);
-
-    // אם בעתיד תרצי להוסיף לייבל דרך ה-API, תוסיפי כאן:
-    // @POST("api/labels")
-    // Call<Void> createLabel(...);
+    @POST("labels")
+    Call<Label> createLabel(@Body Map<String, String> body);
 }

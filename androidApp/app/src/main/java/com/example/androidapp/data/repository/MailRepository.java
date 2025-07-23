@@ -4,7 +4,6 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 import com.example.androidapp.data.WebApi.MailAPI;
 import com.example.androidapp.data.Result;
-import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.data.dao.MailDao;
 import com.example.androidapp.data.db.AppDB;
 import com.example.androidapp.data.model.MailEntity;
@@ -24,9 +23,8 @@ public class MailRepository {
     private final MailDao mailDao;
     private final ExecutorService executorService;
 
-    // --- משתנים לעבודה עם הרשת (API) ---
+    // --- משתנה לעבודה עם הרשת (API) ---
     private final MailAPI mailAPI;
-    private final TokenManager tokenManager;
 
     // --- Callback להחזרת תוצאות מה-API ---
     public interface MailCallback {
@@ -39,12 +37,11 @@ public class MailRepository {
         mailDao = db.mailDao();
         executorService = Executors.newSingleThreadExecutor();
 
-        // אתחול לעבודה עם ה-API, לפי המבנה החדש
-        this.mailAPI = new MailAPI();
-        this.tokenManager = new TokenManager(application);
+        // אתחול לעבודה עם ה-API, עם העברת Context לבנאי
+        this.mailAPI = new MailAPI(application);
     }
 
-    // --- מתודות קיימות לעבודה עם Room ---
+    // --- מתודות קיימות לעבודה עם Room (נשארות למקרה הצורך) ---
     public LiveData<List<MailEntity>> getAllMails() {
         return mailDao.getAllMails();
     }
@@ -65,17 +62,10 @@ public class MailRepository {
         return mailDao.getMailById(id);
     }
 
-    // --- מתודה חדשה לעבודה עם ה-API ---
-    public void getMailsByLabel(String labelId, final MailCallback callback) {
-        String token = tokenManager.getToken();
-        if (token == null) {
-            callback.onComplete(new Result.Error(new Exception("User not logged in")));
-            return;
-        }
-        String authToken = "Bearer " + token;
-
-        // שימוש ב-mailAPI החדש והספציפי
-        mailAPI.getMailsByLabel(labelId, authToken).enqueue(new Callback<List<Mail>>() {
+    // --- מתודה מעודכנת לעבודה עם ה-API ---
+    public void getMailsByLabel(String labelId, int offset, final MailCallback callback) {
+        // אין צורך להצהיר על offset, אנחנו משתמשים בערך שהתקבל כפרמטר
+        mailAPI.getMailsByLabel(labelId, offset).enqueue(new Callback<List<Mail>>() {
             @Override
             public void onResponse(Call<List<Mail>> call, Response<List<Mail>> response) {
                 if (response.isSuccessful() && response.body() != null) {

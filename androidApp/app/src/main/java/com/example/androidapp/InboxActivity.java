@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -91,13 +92,14 @@ public class InboxActivity extends AppCompatActivity {
 
         // ================== 4. הגדרת המאזינים (Observers) המרכזיים ==================
 
-        // --- מאזין לתוצאות קריאת ה-API של הלייבלים ---
         labelViewModel.getLabelsApiResult().observe(this, result -> {
             if (result instanceof Result.Success) {
                 List<Label> apiLabels = ((Result.Success<List<Label>>) result).getData();
+                Log.d("LabelsAPI", "Successfully received " + apiLabels.size() + " labels from server.");
                 labelsAdapter.setLabels(apiLabels);
             } else if (result instanceof Result.Error) {
                 Exception error = ((Result.Error) result).getError();
+                Log.e("LabelsAPI", "Error loading labels from server: " + error.getMessage());
                 Toast.makeText(this, "Error loading labels: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -115,11 +117,30 @@ public class InboxActivity extends AppCompatActivity {
             if (result instanceof Result.Success) {
                 User user = ((Result.Success<User>) result).getData();
                 Log.i("InboxActivity", "User profile loaded: " + user.getDisplayName());
-                // כאן תוכלי לעדכן את ה-Header בתפריט עם פרטי המשתמש
+                updateNavHeader(user);
             } else if (result instanceof Result.Error) {
                 Toast.makeText(this, ((Result.Error) result).getError().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        // ====================== הוספנו את ה-Observer הזה ======================
+        // --- מאזין לתוצאה של יצירת לייבל חדש ---
+        labelViewModel.getCreateLabelResult().observe(this, result -> {
+            if (result instanceof Result.Success) {
+                Label newLabel = ((Result.Success<Label>) result).getData();
+                Toast.makeText(this, "Label '" + newLabel.getName() + "' created successfully!", Toast.LENGTH_SHORT).show();
+
+                // אחרי שהלייבל נוצר בהצלחה, נרענן את כל רשימת הלייבלים מהשרת
+                // כדי שהרשימה בתפריט תתעדכן
+                labelViewModel.fetchLabelsFromApi();
+
+            } else if (result instanceof Result.Error) {
+                Exception error = ((Result.Error) result).getError();
+                Toast.makeText(this, "Failed to create label: " + error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+
 
 
         // ================== 5. טעינת נתונים ראשונית ==================
@@ -139,8 +160,8 @@ public class InboxActivity extends AppCompatActivity {
                 .setPositiveButton("Add", (dialog, which) -> {
                     String labelName = input.getText().toString().trim();
                     if (!labelName.isEmpty()) {
-                        // בעתיד: labelViewModel.createNewLabel(labelName);
-                        Toast.makeText(this, "Label '" + labelName + "' added (locally for now).", Toast.LENGTH_SHORT).show();
+                        labelViewModel.createLabel(labelName);
+//                        Toast.makeText(this, "Label '" + labelName + "' added (locally for now).", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", null)
@@ -171,5 +192,30 @@ public class InboxActivity extends AppCompatActivity {
                 if (binding.appBarMain.fab != null) binding.appBarMain.fab.show();
             }
         });
+    }
+
+    private void updateNavHeader(User user) {
+        // במבנה ה-XML שלך, ה-Header הוא חלק מה-NavigationView עצמו,
+        // לכן אנחנו יכולים לחפש את הרכיבים ישירות ממנו.
+        NavigationView navigationView = binding.navView;
+
+        // מצא את רכיבי הטקסט ישירות ב-navigationView
+        TextView displayNameTextView = navigationView.findViewById(R.id.display_name_text);
+        TextView emailTextView = navigationView.findViewById(R.id.username_text);
+
+        if (user != null) {
+            if (displayNameTextView != null) {
+                displayNameTextView.setText(user.getDisplayName());
+            } else {
+                Log.e("InboxActivity", "display_name_text TextView not found in nav_header_main.xml");
+            }
+
+            if (emailTextView != null) {
+                String fullEmail = user.getUserName() + "@sayhi.com";
+                emailTextView.setText(fullEmail);
+            } else {
+                Log.e("InboxActivity", "username_text TextView not found in nav_header_main.xml");
+            }
+        }
     }
 }

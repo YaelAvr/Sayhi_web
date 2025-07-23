@@ -7,13 +7,13 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 
+import retrofit2.http.Query;
+
 public interface MailServiceAPI {
 
-    @GET("api/mails/{labelId}") // <-- עדכן לנתיב הנכון בסרבר שלך
+    @GET("mails/label-mails")
     Call<List<Mail>> getMailsByLabel(
-            @Path("labelId") String labelId,
-            @Header("Authorization") String token
+            @Query("label") String labelName,
+            @Query("offset") int offset // <-- הוספנו את הפרמטר הזה
     );
-
-    // בעתיד, קריאות נוספות שקשורות למיילים יתווספו כאן
 }
