@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast; // <-- Import חדש
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,9 +13,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.androidapp.model.Label;
 import com.example.androidapp.R;
-import com.example.androidapp.data.model.LabelEntity;
+import com.example.androidapp.data.Result; // <-- Import חדש
+import com.example.androidapp.model.Label;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,56 +36,38 @@ public class GalleryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = view.findViewById(R.id.recyclerViewLabels);
-        adapter = new LabelsAdapter();
+        // --- 1. אתחול ה-ViewModel ---
+        // חשוב לאתחל את ה-ViewModel לפני ה-Adapter
+        labelViewModel = new ViewModelProvider(this).get(LabelViewModel.class);
+
+        // --- 2. אתחול ה-RecyclerView וה-Adapter ---
+        recyclerView = view.findViewById(R.id.recyclerViewLabels); // ודא שזה ה-ID הנכון בקובץ ה-XML שלך
+
+        // יצירת ה-Adapter והעברת ה-ViewModel, כפי שהקונסטרוקטור דורש
+        adapter = new LabelsAdapter(labelViewModel);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        labelViewModel = new ViewModelProvider(
-                this,
-                new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())
-        ).get(LabelViewModel.class);
-        labelViewModel.getAllLabels().observe(getViewLifecycleOwner(), labelEntities -> {
-            List<Label> labels = new ArrayList<>();
-            for (LabelEntity entity : labelEntities) {
-                labels.add(toLabel(entity));
+        // --- 3. הגדרת המאזין (Observer) לתוצאות מה-API ---
+        labelViewModel.getLabelsApiResult().observe(getViewLifecycleOwner(), result -> {
+            if (result instanceof Result.Success) {
+                // הצלחה! קבלנו רשימה של לייבלים מהשרת
+                List<Label> apiLabels = ((Result.Success<List<Label>>) result).getData();
+                adapter.setLabels(apiLabels);
+            } else if (result instanceof Result.Error) {
+                // שגיאה מהשרת או מהרשת
+                Exception error = ((Result.Error) result).getError();
+                Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
-            adapter.setLabels(labels);
         });
 
-        // לצורך בדיקה בלבד - הכנסת תוויות דמה
-        insertMockLabels(); // אפשר למחוק את זה אחר כך
+        // --- 4. טעינה ראשונית של הנתונים ---
+        // קריאה למתודה שתפעיל את קריאת ה-API
+        labelViewModel.fetchLabelsFromApi();
     }
 
-    private Label toLabel(LabelEntity entity) {
-        Label label = new Label();
-        label.setId(entity.getId());
-        label.setName(entity.getName());
-        label.setMails(entity.getMails());
-        label.setDefault(entity.isDefault());
-        label.setAllowAdd(entity.isAllowAdd());
-        label.setUser(entity.getUser());
-        return label;
-    }
-
-    private void insertMockLabels() {
-        labelViewModel.clear();
-
-        LabelEntity label1 = new LabelEntity();
-        label1.setId("1");
-        label1.setName("Important");
-        label1.setDefault(true);
-        label1.setAllowAdd(true);
-        label1.setUser("user1");
-
-        LabelEntity label2 = new LabelEntity();
-        label2.setId("2");
-        label2.setName("School");
-        label2.setDefault(false);
-        label2.setAllowAdd(true);
-        label2.setUser("user1");
-
-        labelViewModel.insert(label1);
-        labelViewModel.insert(label2);
-    }
+    // הפונקציות toLabel ו-insertMockLabels אינן נחוצות יותר בקובץ הזה,
+    // מכיוון שאנחנו לא עובדים יותר עם LabelEntity ונתוני דמה כאן.
+    // אפשר למחוק אותן בבטחה.
 }

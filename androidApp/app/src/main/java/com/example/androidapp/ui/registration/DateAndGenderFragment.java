@@ -92,7 +92,7 @@ public class DateAndGenderFragment extends Fragment {
     }
 
     private void setupGenderSpinner() {
-        String[] genders = {"Other", "Female", "Male"};
+        String[] genders = {"other", "female", "male"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_spinner_item, genders);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -111,7 +111,6 @@ public class DateAndGenderFragment extends Fragment {
         if (day < 1 || day > 31 || year < 1900) return false;
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         if (year >= currentYear) return false;
-        // בדיקה פשוטה לחודשים קצרים
         if ((month == 3 || month == 5 || month == 8 || month == 10) && day > 30) return false;
         // בדיקה לפברואר – עם שנה מעוברת
         if (month == 1) {  // פברואר (0-based: ינואר=0, פברואר=1)

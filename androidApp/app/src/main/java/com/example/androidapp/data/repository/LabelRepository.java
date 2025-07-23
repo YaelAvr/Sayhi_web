@@ -2,24 +2,45 @@ package com.example.androidapp.data.repository;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
+import com.example.androidapp.data.WebApi.LabelAPI; // <-- ודא שה-import מהמקום הנכון
+import com.example.androidapp.data.Result;
 import com.example.androidapp.data.dao.LabelDao;
 import com.example.androidapp.data.db.AppDB;
 import com.example.androidapp.data.model.LabelEntity;
+import com.example.androidapp.model.Label;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LabelRepository {
 
+    // --- משתנים לעבודה עם מסד נתונים פנימי (Room) ---
     private final LabelDao labelDao;
     private final ExecutorService executorService;
 
-    public LabelRepository(Application application) {
-        AppDB  db = AppDB.getInstance(application);
-        labelDao = db.labelDao();
-        executorService = Executors.newSingleThreadExecutor();
+    // --- משתנה לעבודה עם הרשת (API) ---
+    private final LabelAPI labelAPI;
+
+    // --- Callback להחזרת תוצאות מה-API ---
+    public interface LabelApiCallback {
+        void onComplete(Result<List<Label>> result);
     }
 
+    public LabelRepository(Application application) {
+        // אתחול לעבודה עם Room
+        AppDB db = AppDB.getInstance(application);
+        labelDao = db.labelDao();
+        executorService = Executors.newSingleThreadExecutor();
+
+        // אתחול לעבודה עם ה-API, עם העברת Context לבנאי
+        this.labelAPI = new LabelAPI(application);
+    }
+
+    // --- מתודות קיימות לעבודה עם Room (נשארות למקרה הצורך) ---
     public LiveData<List<LabelEntity>> getAllLabels() {
         return labelDao.getAllLabels();
     }
@@ -34,5 +55,52 @@ public class LabelRepository {
 
     public void clearAllLabels() {
         executorService.execute(labelDao::clearAllLabels);
+    }
+
+    // --- מתודה מעודכנת לעבודה עם ה-API ---
+    public void fetchLabelsFromApi(final LabelApiCallback callback) {
+        // אין צורך יותר לקחת את הטוקן ידנית!
+        // ה-AuthInterceptor עושה את זה בשבילנו.
+
+        // פשוט קוראים למתודה getLabels, שעכשיו לא דורשת טוקן כפרמטר
+        labelAPI.getLabels().enqueue(new Callback<List<Label>>() {
+            @Override
+            public void onResponse(Call<List<Label>> call, Response<List<Label>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onComplete(new Result.Success<>(response.body()));
+                } else {
+                    // אם קיבלנו שגיאה, ייתכן שהטוקן לא תקין או פג תוקף
+                    callback.onComplete(new Result.Error(new Exception("API Error loading labels: " + response.code())));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Label>> call, Throwable t) {
+                callback.onComplete(new Result.Error(new Exception("Network Error loading labels: " + t.getMessage())));
+            }
+        });
+    }
+
+    public interface CreateLabelCallback {
+        void onComplete(Result<Label> result);
+    }
+
+    public void createLabel(String name, final CreateLabelCallback callback) {
+        labelAPI.createLabel(name).enqueue(new Callback<Label>() {
+            @Override
+            public void onResponse(Call<Label> call, Response<Label> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onComplete(new Result.Success<>(response.body()));
+                } else {
+                    // שגיאה, למשל "שם כבר קיים"
+                    callback.onComplete(new Result.Error(new Exception("Failed to create label: " + response.code())));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Label> call, Throwable t) {
+                callback.onComplete(new Result.Error(new Exception("Network error: " + t.getMessage())));
+            }
+        });
     }
 }
