@@ -21,6 +21,18 @@ public class LabelEntity {
     private boolean allowAdd;
     private String user;
 
+    public LabelEntity() {
+    }
+
+    public LabelEntity(@NonNull String id, String name, List<String> mails, boolean isDefault, boolean allowAdd, String user) {
+        this.id = id;
+        this.name = name;
+        this.mails = mails;
+        this.isDefault = isDefault;
+        this.allowAdd = allowAdd;
+        this.user = user;
+    }
+
     // Getters ו-Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }

@@ -55,12 +55,6 @@ public class TokenApi {
                             String token = responseObject.get("token").getAsString();
                             tokenLiveData.postValue(new Result.Success<>(token));
                         }
-//                        else {
-//                            // This is an unexpected success response (e.g., 200 OK but no token).
-//                            tokenLiveData.postValue(new Result.Error(new Exception(response.message())));
-//                        }
-//                        String registeredUserList =response.body();
-//                        tokenLiveData.postValue(new Result.Success<>(registeredUserList));
                     } else {
                         tokenLiveData.postValue(new Result.Error(new Exception(response.message())));
                     }

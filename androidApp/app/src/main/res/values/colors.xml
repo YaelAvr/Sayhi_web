@@ -9,4 +9,6 @@
     <color name="colorPrimary">#D93023</color>
     <color name="colorPrimaryDark">#B71C1C</color>
     <color name="colorOnPrimary">#FFFFFF</color>
+
+    <color name="view_line">#E0E0E0</color>
 </resources>
