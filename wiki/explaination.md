@@ -25,7 +25,7 @@ Run the following command to build and start all services:
 
 ```bash
 docker compose up --build
-``
+```
 
 ## Important Notes
 - When **registering a new user**, the **username must contain lowercase letters only**.  
