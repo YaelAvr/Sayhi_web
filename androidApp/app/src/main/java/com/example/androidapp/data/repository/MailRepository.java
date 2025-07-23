@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androidapp.data.Result;
-import com.example.androidapp.data.WebApi.MailApi;
+import com.example.androidapp.data.WebApi.MailAPI;
 import com.example.androidapp.data.dao.MailDao;
 import com.example.androidapp.data.db.AppDB;
 import com.example.androidapp.data.model.MailEntity;
@@ -28,7 +28,7 @@ public class MailRepository {
 
     // --- משתנים לעבודה עם מסד נתונים פנימי (Room) ---
     private final MailDao mailDao;
-    private final MailApi mailApi;
+    private final MailAPI mailApi;
     private final ExecutorService executorService;
     
     // --- Callback להחזרת תוצאות מה-API ---
@@ -41,7 +41,7 @@ public class MailRepository {
         AppDB db = AppDB.getInstance(application);
         mailDao = db.mailDao();
         executorService = Executors.newSingleThreadExecutor();
-        mailApi = new MailApi(application, mailDao);
+        mailApi = new MailAPI(application, mailDao);
     }
 
     class MailsData extends MutableLiveData<List<MailEntity>> {
@@ -135,10 +135,10 @@ public class MailRepository {
             }
         });
     }
-    public LiveData<Result<List<MailEntity>>> refreshMailsForLabel(String labelName) {
-        // This would call a new method in your MailApi to fetch mails from the server
-        // and then save the new list to the Room database.
-        // For now, we'll assume this logic exists.
-        return mailApi.getMailsByLabel(labelName,0); // Example method
-    }
+//    public LiveData<Result<List<MailEntity>>> refreshMailsForLabel(String labelName) {
+//        // This would call a new method in your MailApi to fetch mails from the server
+//        // and then save the new list to the Room database.
+//        // For now, we'll assume this logic exists.
+//        return mailApi.getMailsByLabel(labelName,0); // Example method
+//    }
 }
