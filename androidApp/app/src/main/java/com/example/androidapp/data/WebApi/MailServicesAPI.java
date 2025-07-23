@@ -13,12 +13,14 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.DELETE; // <-- הוסף את הייבוא הזה
+import retrofit2.http.Path;
 
 public interface MailServicesAPI {
     @POST("mails")
     Call<Void> createMail(@Body JsonObject mailJson);
     @GET("mails/{id}")
-    Call<MailEntity> getMailById(@Path("id") String userId);
+    Call<Mail> getMailById(@Path("id") String userId);
 
 
     @GET("mails/label-mails")
@@ -29,4 +31,7 @@ public interface MailServicesAPI {
 
     @POST("mails/drafts")
     Call<Draft> createDraft(@Body JsonObject mailJson);
+
+    @DELETE("mails/{id}")
+    Call<Void> deleteMail(@Path("id") String mailId);
 }

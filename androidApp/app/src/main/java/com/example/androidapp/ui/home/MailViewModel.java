@@ -16,67 +16,60 @@ public class MailViewModel extends AndroidViewModel {
 
     private final MailRepository repository;
     private final MutableLiveData<Result<List<Mail>>> mailsApiResult = new MutableLiveData<>();
-
-    // ================== הוספנו LiveData חדש למייל הנבחר ==================
     private final MutableLiveData<Mail> selectedMail = new MutableLiveData<>();
-    // ====================================================================
+    private LiveData<Result<Void>> deleteResult;
 
     public MailViewModel(@NonNull Application application) {
         super(application);
         repository = new MailRepository(application);
     }
 
-    // --- מתודות לעבודה עם ה-API ---
+    // --- שינוי מרכזי: הפונקציה הזו עכשיו קוראת ל-API ---
+    public void findMailById(String mailId) {
+        // קורא ל-Repository כדי לקבל מייל בודד
+        LiveData<Result<Mail>> resultSource = repository.getMailById(mailId);
+
+        // מאזין לתוצאה מה-Repository
+        resultSource.observeForever(new androidx.lifecycle.Observer<Result<Mail>>() {
+            @Override
+            public void onChanged(Result<Mail> result) {
+                if (result instanceof Result.Success) {
+                    // אם ההצלחה, עדכן את ה-selectedMail שה-Fragment מאזין לו
+                    selectedMail.postValue(((Result.Success<Mail>) result).getData());
+                } else {
+                    // אם נכשל, עדכן ל-null
+                    selectedMail.postValue(null);
+                }
+                // חשוב להסיר את המאזין כדי למנוע דליפות זיכרון
+                resultSource.removeObserver(this);
+            }
+        });
+    }
+
+    // הפונקציה שה-Fragment מאזין לה נשארת זהה
+    public LiveData<Mail> getSelectedMail() {
+        return selectedMail;
+    }
+
+    // --- שאר הקוד נשאר זהה לחלוטין ---
+
+    public void deleteMail(String mailId) {
+        deleteResult = repository.deleteMailById(mailId);
+    }
+
+    public LiveData<Result<Void>> getDeleteResult() {
+        if (deleteResult == null) {
+            deleteResult = new MutableLiveData<>();
+        }
+        return deleteResult;
+    }
+
     public LiveData<Result<List<Mail>>> getMailsResult() {
         return mailsApiResult;
     }
 
     public void fetchMailsByLabel(String labelId) {
-        // אנחנו קובעים את ה-offset ל-0 כדי לקבל את המיילים הראשונים
         int offset = 0;
-
-        // עכשיו הקריאה כוללת את כל הפרמטרים הנדרשים
-        repository.getMailsByLabel(labelId, offset, new MailRepository.MailCallback() {
-            @Override
-            public void onComplete(Result<List<Mail>> result) {
-                mailsApiResult.postValue(result);
-            }
-        });
+        repository.getMailsByLabel(labelId, offset, result -> mailsApiResult.postValue(result));
     }
-
-    // ================== זו המתודה המתוקנת והחשובה ==================
-    /**
-     * מחזיר LiveData שמכיל את המייל שנבחר.
-     * ה-SingleMailFragment יאזין לזה.
-     */
-    public LiveData<Mail> getSelectedMail() {
-        return selectedMail;
-    }
-
-    /**
-     * מחפש מייל לפי ID ברשימה שכבר נטענה מה-API
-     * ומעדכן את ה-LiveData של המייל הנבחר.
-     * @param mailId ה-ID של המייל שיש למצוא.
-     */
-    public void findMailById(String mailId) {
-        // ודא שתוצאת ה-API אינה null והיא הצלחה
-        Result<List<Mail>> result = mailsApiResult.getValue();
-        if (result instanceof Result.Success) {
-            List<Mail> currentMails = ((Result.Success<List<Mail>>) result).getData();
-            if (currentMails != null) {
-                // עבור על כל המיילים ברשימה
-                for (Mail mail : currentMails) {
-                    // אם מצאנו מייל עם ה-ID המתאים
-                    if (mail.getId().equals(mailId)) {
-                        // עדכן את ה-LiveData והפסק את החיפוש
-                        selectedMail.setValue(mail);
-                        return;
-                    }
-                }
-            }
-        }
-        // אם לא מצאנו את המייל (או שאין רשימה), עדכן ל-null
-        selectedMail.setValue(null);
-    }
-    // ====================================================================
 }

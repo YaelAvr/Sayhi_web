@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androidapp.data.Result;
@@ -44,6 +45,32 @@ public class MailRepository {
         mailApi = new MailAPI(application, mailDao);
     }
 
+    public LiveData<Result<Void>> deleteMailById(String mailId) {
+        MediatorLiveData<Result<Void>> resultLiveData = new MediatorLiveData<>();
+
+        // 1. בצע את קריאת ה-API למחיקה בשרת
+        final LiveData<Result<Void>> source = mailApi.deleteMail(mailId);
+
+        // 2. האזן לתוצאה מהשרת
+        resultLiveData.addSource(source, apiResult -> {
+            if (apiResult instanceof Result.Success) {
+                // 3. אם המחיקה בשרת הצליחה, מחק מה-DB המקומי
+                executorService.execute(() -> {
+                    mailDao.deleteMailById(mailId);
+                });
+                // 4. דווח ל-ViewModel שהכל הצליח
+                resultLiveData.postValue(new Result.Success<>(null));
+            } else if (apiResult instanceof Result.Error) {
+                // 5. אם המחיקה בשרת נכשלה, העבר את השגיאה ל-ViewModel
+                resultLiveData.postValue(apiResult);
+            }
+            // נקה את המקור כדי למנוע האזנה כפולה
+            resultLiveData.removeSource(source);
+        });
+
+        return resultLiveData;
+    }
+
     class MailsData extends MutableLiveData<List<MailEntity>> {
         public MailsData(){
             super();
@@ -78,8 +105,26 @@ public class MailRepository {
         executorService.execute(mailDao::clearAllMails);
     }
 
-    public LiveData<MailEntity> getMailById(String id) {
-        return mailDao.getMailById(id);
+    public LiveData<Result<Mail>> getMailById(String mailId) {
+        MutableLiveData<Result<Mail>> resultLiveData = new MutableLiveData<>();
+
+        mailApi.getMailById(mailId).enqueue(new Callback<Mail>() {
+            @Override
+            public void onResponse(Call<Mail> call, Response<Mail> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    resultLiveData.postValue(new Result.Success<>(response.body()));
+                } else {
+                    resultLiveData.postValue(new Result.Error(new Exception("Failed to fetch mail: " + response.message())));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Mail> call, Throwable t) {
+                resultLiveData.postValue(new Result.Error(new Exception(t.getMessage())));
+            }
+        });
+
+        return resultLiveData;
     }
     public LiveData<Result<Void>> createMail(JsonObject jsonBody) {
 //        MediatorLiveData<Result<Void>> resultLiveData = new MediatorLiveData<>();
