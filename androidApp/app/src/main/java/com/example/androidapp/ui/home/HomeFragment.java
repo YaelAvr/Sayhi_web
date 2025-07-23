@@ -204,9 +204,11 @@ public class HomeFragment extends Fragment {
             View fab = getActivity().findViewById(R.id.fab);
             if (fab != null) {
                 fab.setOnClickListener(v -> {
-                    // חשוב מאוד: צריך להשתמש ב-getView() כדי לקבל את ה-NavController מתוך Fragment
                     if (getView() != null) {
-                        Navigation.findNavController(getView()).navigate(R.id.action_nav_home_to_editNewMailFragment);
+                        Bundle args = new Bundle();
+                        args.putString("mode", "new"); // מציין שזה מייל חדש
+                        Navigation.findNavController(getView())
+                                .navigate(R.id.action_nav_home_to_editNewMailFragment, args);
                     }
                 });
             } else {
