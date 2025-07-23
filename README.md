@@ -48,7 +48,7 @@ Project management tracking:
 All the information can be found in the explanation.md inside the wiki folder.
 
 ## Application Run Example
-All the information can be found in the runnigexample.md inside the wiki folder.
+All the information can be found in the runnig example.md inside the wiki folder.
 
 
 
