@@ -14,6 +14,7 @@ In **Visual Studio Code**, create a `.env` file in the **root directory** of the
 ![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/p5/files.png)
 
 The .env file:
+
 ![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/p5/env.png)
 
 ---
