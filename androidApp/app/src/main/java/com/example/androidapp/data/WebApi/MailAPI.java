@@ -45,6 +45,8 @@ public class MailAPI {
         mailDao = md;
     }
 
+
+
     public LiveData<Result<Void>> createMail(JsonObject jsonBody) {
 
         MutableLiveData<Result<Void>> resultLiveData = new MutableLiveData<>();
@@ -85,6 +87,10 @@ public class MailAPI {
     public Call<List<Mail>> getMailsByLabel(String labelId, int offset) {
         return mailServicesAPI.getMailsByLabel(labelId, offset); // <-- העברנו אותו הלאה
     }
+    public Call<Mail> getMailById(String mailId) {
+        // פשוט קוראים לפונקציה בממשק ה-Retrofit ומחזירים את התוצאה
+        return mailServicesAPI.getMailById(mailId);
+    }
     public LiveData<Result<Mail>> createDraft(JsonObject jsonBody) {
         MutableLiveData<Result<Mail>> resultLiveData = new MutableLiveData<>();
 
@@ -113,7 +119,6 @@ public class MailAPI {
             }
             @Override
             public void onFailure(Call<Mail> call, Throwable t) {
-                Log.e("mailApi_created", "response.getMessage(): " + t.getMessage());
 
                 resultLiveData.postValue(new Result.Error(new Exception(t.getMessage())));
             }
@@ -130,7 +135,6 @@ public class MailAPI {
                 if (response.isSuccessful()) { // קוד 204, המחיקה הצליחה
                     resultLiveData.postValue(new Result.Success<>(null));
                 } else {
-                    // בדוק אם השגיאה היא בגלל פג תוקף הטוקן
                     if (response.code() == 401 || response.code() == 403) {
                         resultLiveData.postValue(new Result.Error(new SessionExpiredException()));
                     } else {

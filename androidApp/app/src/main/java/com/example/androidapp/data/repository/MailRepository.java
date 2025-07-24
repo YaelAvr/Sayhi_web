@@ -104,7 +104,6 @@ public class MailRepository {
     public void clearAllMails() {
         executorService.execute(mailDao::clearAllMails);
     }
-
     public LiveData<Result<Mail>> getMailById(String mailId) {
         MutableLiveData<Result<Mail>> resultLiveData = new MutableLiveData<>();
 
@@ -125,7 +124,26 @@ public class MailRepository {
         });
 
         return resultLiveData;
+}
+    public void getMailsByLabel(String labelId, int offset, final MailCallback callback) {
+        // אין צורך להצהיר על offset, אנחנו משתמשים בערך שהתקבל כפרמטר
+        mailApi.getMailsByLabel(labelId, offset).enqueue(new Callback<List<Mail>>() {
+            @Override
+            public void onResponse(Call<List<Mail>> call, Response<List<Mail>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onComplete(new Result.Success<>(response.body()));
+                } else {
+                    callback.onComplete(new Result.Error(new Exception("API Error loading mails: " + response.code())));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Mail>> call, Throwable t) {
+                callback.onComplete(new Result.Error(new Exception("Network Error loading mails: " + t.getMessage())));
+            }
+        });
     }
+
     public LiveData<Result<Void>> createMail(JsonObject jsonBody) {
 //        MediatorLiveData<Result<Void>> resultLiveData = new MediatorLiveData<>();
 //        final LiveData<Result<Void>> source = mailApi.createMail(jsonBody);
@@ -161,25 +179,6 @@ public class MailRepository {
     }
 
 
-    // --- מתודה מעודכנת לעבודה עם ה-API ---
-    public void getMailsByLabel(String labelId, int offset, final MailCallback callback) {
-        // אין צורך להצהיר על offset, אנחנו משתמשים בערך שהתקבל כפרמטר
-        mailApi.getMailsByLabel(labelId, offset).enqueue(new Callback<List<Mail>>() {
-            @Override
-            public void onResponse(Call<List<Mail>> call, Response<List<Mail>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onComplete(new Result.Success<>(response.body()));
-                } else {
-                    callback.onComplete(new Result.Error(new Exception("API Error loading mails: " + response.code())));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Mail>> call, Throwable t) {
-                callback.onComplete(new Result.Error(new Exception("Network Error loading mails: " + t.getMessage())));
-            }
-        });
-    }
     public LiveData<Result<Mail>> createDraft(JsonObject jsonBody) {
         return mailApi.createDraft(jsonBody);
     }
