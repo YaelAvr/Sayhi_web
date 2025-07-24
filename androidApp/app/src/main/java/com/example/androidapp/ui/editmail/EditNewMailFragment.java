@@ -1,7 +1,6 @@
 package com.example.androidapp.ui.editmail;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.Navigation;
 
 import com.example.androidapp.R;
@@ -22,10 +22,14 @@ public class EditNewMailFragment extends Fragment {
     private EditNewMailViewModel viewModel;
     private EditText toEditText, subjectEditText, bodyEditText;
 
+    private String mode;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(EditNewMailViewModel.class);
+        mode = getArguments() != null ? getArguments().getString("mode", "new") : "new";
+
         return inflater.inflate(R.layout.fragment_edit_new_mail, container, false);
     }
 
@@ -36,9 +40,7 @@ public class EditNewMailFragment extends Fragment {
         subjectEditText = view.findViewById(R.id.mail_subject);
         bodyEditText = view.findViewById(R.id.mail_body);
 
-
         setupToolbar(view); // X button
-//        setupMenu(); // קריאה לפונקציה החדשה שמגדירה את התפריט
         setupSendButton(view);
         observeViewModel();
     }
@@ -46,74 +48,58 @@ public class EditNewMailFragment extends Fragment {
     private void observeViewModel() {
         viewModel.getSendResult().observe(getViewLifecycleOwner(), result -> {
             if (result instanceof Result.Success) {
-                Toast.makeText(getContext(), "Mail created!", Toast.LENGTH_SHORT).show();
-                // Navigate back after success
+                NavBackStackEntry backStackEntry =
+                        Navigation.findNavController(requireView())
+                                .getPreviousBackStackEntry();
+
+                if (backStackEntry != null) {
+                    backStackEntry.getSavedStateHandle().set("shouldRefresh", true);
+                }
+
                 Navigation.findNavController(requireView()).navigateUp();
             } else if (result instanceof Result.Error) {
                 String errorMessage = ((Result.Error) result).getError().getMessage();
-                Log.e("fregment_getSendResult", "response.code(): " +errorMessage);
 
                 Toast.makeText(getContext(), "Error: " + errorMessage, Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    // this is the X button the create a draft
     private void setupToolbar(View view) {
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar_edit_mail);
         toolbar.setNavigationOnClickListener(v -> {
-            // הטיפול בכפתור הניווט (X) יישאר כאן אם תרצי התנהגות שונה מכפתור ה"אחורה" הראשי.
-            // אם לא, אפשר למחוק את זה ולטפל רק ב-onOptionsItemSelected.
-            // כרגע נשאיר את זה כך שיחזור אחורה.
             if (getView() != null) {
+                if(!toEditText.getText().toString().trim().isEmpty()) {
+                    saveAsDraft(); // פונקציה שתשמור ל־DAO
+                    Toast.makeText(getContext(), "Saved as draft", Toast.LENGTH_SHORT).show();
+                }
                 Navigation.findNavController(getView()).navigateUp();
             }
         });
     }
 
-  /*  private void setupMenu() {
-        // הדרך החדשה והמודרנית להוסיף תפריט ל-Fragment
-        requireActivity().addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                // אם תרצי להוסיף כפתורים לתפריט (למשל 'Send', 'Attach'), תעשי את זה כאן.
-                // לדוגמה: menuInflater.inflate(R.menu.edit_mail_menu, menu);
-            }
 
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                // כאן מטפלים בלחיצות על פריטי התפריט, כולל כפתור ה"בית/חזור".
-                if (menuItem.getItemId() == android.R.id.home) {
-                    // הלוגיקה של שמירה כטיוטה תיכנס כאן
-                    Toast.makeText(getContext(), "Back button pressed. Saving as draft...", Toast.LENGTH_SHORT).show();
-
-                    // אחרי הלוגיקה, נחזור אחורה
-                    if (getActivity() != null) {
-                        getActivity().onBackPressed();
-                    }
-                    return true; // ציין שטיפלנו באירוע
-                }
-                return false; // אם לא טיפלנו, החזר false
-            }
-        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
-    }*/
-
+    // define a send button
     private void setupSendButton(View view) {
-        // מצא את הכפתור לפי ה-ID שהגדרנו ב-XML
         com.google.android.material.button.MaterialButton sendButton = view.findViewById(R.id.button_send);
 
-        // הגדר מאזין ללחיצות
         if (sendButton != null) {
             sendButton.setOnClickListener(v -> {
-
                 String to = toEditText.getText().toString().trim();
                 String subject = subjectEditText.getText().toString().trim();
                 String body = bodyEditText.getText().toString().trim();
-                viewModel.sendMail(to, subject, body);
-                // כרגע, רק נקפיץ הודעה כדי לוודא שזה עובד
-//                Toast.makeText(getContext(), "כפתור 'שלח' נלחץ!", Toast.LENGTH_SHORT).show();
-
-                // כאן בעתיד תוסיף את הלוגיקה של איסוף המידע ושליחת המייל
+                viewModel.sendMail(to, subject, body); // go to view model
             });
         }
     }
+
+    private void saveAsDraft(){
+        String to = ((EditText) requireView().findViewById(R.id.mail_to)).getText().toString().trim();
+        String subject = ((EditText) requireView().findViewById(R.id.mail_subject)).getText().toString().trim();
+        String body = ((EditText) requireView().findViewById(R.id.mail_body)).getText().toString().trim();
+
+        viewModel.saveDraftOnExit(to, subject, body);
+    }
+
 }

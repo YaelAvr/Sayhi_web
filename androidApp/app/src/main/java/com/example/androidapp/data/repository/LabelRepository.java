@@ -18,29 +18,23 @@ import retrofit2.Response;
 
 public class LabelRepository {
 
-    // --- משתנים לעבודה עם מסד נתונים פנימי (Room) ---
     private final LabelDao labelDao;
     private final ExecutorService executorService;
-
-    // --- משתנה לעבודה עם הרשת (API) ---
     private final LabelAPI labelAPI;
 
-    // --- Callback להחזרת תוצאות מה-API ---
     public interface LabelApiCallback {
         void onComplete(Result<List<Label>> result);
     }
 
     public LabelRepository(Application application) {
-        // אתחול לעבודה עם Room
+        // init Room
         AppDB db = AppDB.getInstance(application);
         labelDao = db.labelDao();
         executorService = Executors.newSingleThreadExecutor();
 
-        // אתחול לעבודה עם ה-API, עם העברת Context לבנאי
         this.labelAPI = new LabelAPI(application);
     }
 
-    // --- מתודות קיימות לעבודה עם Room (נשארות למקרה הצורך) ---
     public LiveData<List<LabelEntity>> getAllLabels() {
         return labelDao.getAllLabels();
     }
@@ -59,10 +53,6 @@ public class LabelRepository {
 
     // --- מתודה מעודכנת לעבודה עם ה-API ---
     public void fetchLabelsFromApi(final LabelApiCallback callback) {
-        // אין צורך יותר לקחת את הטוקן ידנית!
-        // ה-AuthInterceptor עושה את זה בשבילנו.
-
-        // פשוט קוראים למתודה getLabels, שעכשיו לא דורשת טוקן כפרמטר
         labelAPI.getLabels().enqueue(new Callback<List<Label>>() {
             @Override
             public void onResponse(Call<List<Label>> call, Response<List<Label>> response) {

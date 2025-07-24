@@ -1,11 +1,12 @@
 package com.example.androidapp.ui.registration;
+
 import android.content.Context;
-import android.net.Uri;
-import com.example.androidapp.data.Result;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.androidapp.data.Result;
 import com.example.androidapp.data.model.NewUserRequest;
 import com.example.androidapp.data.model.User;
 import com.example.androidapp.data.repository.UserRepository;
@@ -38,9 +39,6 @@ public class RegistrationViewModel extends ViewModel {
     private File profilePictureFile;
     private final MutableLiveData<Result<String>> pictureResult = new MutableLiveData<>();
     private String profilePictureUrl;
-
-
-
 
     public void initRepo(Context context) {
         if (userRepository == null) {
@@ -92,7 +90,7 @@ public class RegistrationViewModel extends ViewModel {
                 "July", "August", "September", "October", "November", "December"
         };
 
-        String monthName = monthNames[month - 1];
+        String monthName = monthNames[month];
         return String.format("%d %s %d", day, monthName, year);
     }
 
