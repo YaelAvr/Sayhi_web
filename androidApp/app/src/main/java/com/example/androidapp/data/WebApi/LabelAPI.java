@@ -1,19 +1,20 @@
 package com.example.androidapp.data.WebApi;
 
-import android.content.Context; // <-- Import חדש
-import com.example.androidapp.R; // <-- Import חדש
-import com.example.androidapp.data.WebApi.LabelServiceAPI;
-import com.example.androidapp.data.auth.AuthInterceptor; // <-- Import חדש
-import com.example.androidapp.data.auth.TokenManager; // <-- Import חדש
+import android.content.Context;
+
+import com.example.androidapp.R;
+import com.example.androidapp.data.auth.AuthInterceptor;
+import com.example.androidapp.data.auth.TokenManager;
 import com.example.androidapp.model.Label;
 
+import java.util.HashMap;
 import java.util.List;
-import okhttp3.OkHttpClient; // <-- Import חדש
+import java.util.Map;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import java.util.HashMap; // <-- הוסף import
-import java.util.Map; // <-- הוסף import
 
 public class LabelAPI {
 
@@ -38,7 +39,6 @@ public class LabelAPI {
     }
     // =======================================================
 
-    // המתודה הזו כבר לא צריכה לקבל טוקן, הוא יתווסף אוטומטית!
     public Call<List<Label>> getLabels() {
         return labelServiceAPI.getLabels();
     }

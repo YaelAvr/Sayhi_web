@@ -14,8 +14,6 @@ public class TokenManager {
 
     public void saveToken(String token) {
         prefs.edit().putString(TOKEN_KEY, token).apply();
-
-
     }
 
     public String getToken() {
@@ -24,7 +22,5 @@ public class TokenManager {
 
     public void deleteToken() {
         prefs.edit().remove(TOKEN_KEY).apply();
-
-
     }
 }

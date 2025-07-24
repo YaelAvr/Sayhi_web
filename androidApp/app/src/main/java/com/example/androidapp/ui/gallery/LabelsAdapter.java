@@ -7,10 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.androidapp.model.Label;
+
 import com.example.androidapp.R;
-import com.example.androidapp.ui.home.HomeViewModel;
+import com.example.androidapp.model.Label;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,8 +78,6 @@ public class LabelsAdapter extends RecyclerView.Adapter<LabelsAdapter.LabelViewH
         notifyDataSetChanged();
     }
 
-    // אין צורך במתודה הזו אם משתמשים ב-LiveData
-    // public void addLabel(Label label) { ... }
 
     // ================== שינוי: הסרנו את המילה 'static' ==================
     class LabelViewHolder extends RecyclerView.ViewHolder {

@@ -13,9 +13,11 @@ import com.example.androidapp.data.WebApi.UserApi;
 import com.example.androidapp.data.dao.RegisteredUserDao;
 import com.example.androidapp.data.dao.UserDao;
 import com.example.androidapp.data.db.AppDB;
+import com.example.androidapp.data.model.NewUserRequest;
 import com.example.androidapp.data.model.RegisteredUser;
 import com.example.androidapp.data.model.User;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -84,5 +86,14 @@ public class UserRepository {
     }
     public void validateUsername(String username, MutableLiveData<Result<String>> resultLiveData) {
         userApi.validateUsername(username, resultLiveData);
+    }
+    public void validatePassword(String password, String confirm, MutableLiveData<Result<String>> resultLiveData) {
+        userApi.validatePassword(password, confirm, resultLiveData);
+    }
+    public void validatePicture(File file, MutableLiveData<Result<String>> liveData) {
+        userApi.validatePicture(file, liveData);
+    }
+    public void createUser(NewUserRequest newUser, MutableLiveData<Result<User>> resultLiveData) {
+        userApi.createUser(newUser, resultLiveData);
     }
 }

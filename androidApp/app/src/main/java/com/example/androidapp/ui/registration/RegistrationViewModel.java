@@ -1,11 +1,14 @@
 package com.example.androidapp.ui.registration;
+
 import android.content.Context;
-import android.net.Uri;
-import com.example.androidapp.data.Result;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.androidapp.data.Result;
+import com.example.androidapp.data.model.NewUserRequest;
+import com.example.androidapp.data.model.User;
 import com.example.androidapp.data.repository.UserRepository;
 
 import java.io.File;
@@ -14,6 +17,7 @@ import java.io.File;
 
 public class RegistrationViewModel extends ViewModel {
     private UserRepository userRepository;
+    private final MutableLiveData<Result<User>> createUserResult = new MutableLiveData<>();
 
     private final MutableLiveData<String> firstName = new MutableLiveData<>();
     private final MutableLiveData<String> lastName = new MutableLiveData<>();
@@ -30,7 +34,11 @@ public class RegistrationViewModel extends ViewModel {
     private String username;
     private final MutableLiveData<Result<String>> usernameResult = new MutableLiveData<>();
     private String password;
+    private final MutableLiveData<Result<String>> passwordResult = new MutableLiveData<>();
+
     private File profilePictureFile;
+    private final MutableLiveData<Result<String>> pictureResult = new MutableLiveData<>();
+    private String profilePictureUrl;
 
     public void initRepo(Context context) {
         if (userRepository == null) {
@@ -48,7 +56,6 @@ public class RegistrationViewModel extends ViewModel {
     public void setGender(String g) { gender.setValue(g); }
     public void setUsername(String username) { this.username = username; }
     public void setPassword(String password) { this.password = password; }
-    public void setProfilePictureFile(File file) { this.profilePictureFile = file; }
 
     // === Getters ===
     public LiveData<String> getFirstName() { return firstName; }
@@ -57,7 +64,6 @@ public class RegistrationViewModel extends ViewModel {
 
     public String getUsername() { return username; }
     public String getPassword() { return password; }
-    public File getProfilePictureFile() { return profilePictureFile; }
 
     public Integer getBirthDay() { return birthDay.getValue(); }
     public Integer getBirthMonth() { return birthMonth.getValue(); }
@@ -84,7 +90,7 @@ public class RegistrationViewModel extends ViewModel {
                 "July", "August", "September", "October", "November", "December"
         };
 
-        String monthName = monthNames[month - 1];
+        String monthName = monthNames[month];
         return String.format("%d %s %d", day, monthName, year);
     }
 
@@ -92,12 +98,20 @@ public class RegistrationViewModel extends ViewModel {
     public void clearAll() {
         firstName.setValue(null);
         lastName.setValue(null);
+        displayNameResult.setValue(null);
+
         birthDay.setValue(null);
         birthMonth.setValue(null);
         birthYear.setValue(null);
+
         gender.setValue(null);
+
         username = null;
+        usernameResult.setValue(null);
+
         password = null;
+        passwordResult.setValue(null);
+
         profilePictureFile = null;
     }
 
@@ -125,4 +139,48 @@ public class RegistrationViewModel extends ViewModel {
     public LiveData<Result<String>> getUsernameResult() {
         return usernameResult;
     }
+
+    public void validatePassword(String password, String confirm) {
+        if (password == null || confirm == null) {
+            passwordResult.setValue(new Result.Error(new Exception("Password fields are required")));
+            return;
+        }
+
+        userRepository.validatePassword(password, confirm, passwordResult);
+    }
+    public LiveData<Result<String>> getPasswordResult() {
+        return passwordResult;
+    }
+
+    public void setProfilePictureFile(File file) {
+        this.profilePictureFile = file;
+        pictureResult.setValue(null); // Reset
+        userRepository.validatePicture(file, pictureResult);
+    }
+
+    public File getProfilePictureFile() {
+        return profilePictureFile;
+    }
+
+    public MutableLiveData<Result<String>> getPictureResult() {
+        return pictureResult;
+    }
+
+    public void setProfilePictureUrl(String url) {
+        this.profilePictureUrl = url;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void validatePicture(File pictureFile) {
+        userRepository.validatePicture(pictureFile, pictureResult);
+    }
+
+    public LiveData<Result<User>> getCreateUserResult() { return createUserResult; }
+    public void createUser(NewUserRequest newUser) {
+        userRepository.createUser(newUser, createUserResult);
+    }
+
 }

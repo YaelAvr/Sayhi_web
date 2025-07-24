@@ -137,8 +137,8 @@ const createDraft = async (sender, to, subject, body, originalDraftId = null) =>
   // Check if 'to' is a valid user, if it is keeps it in recipient
   //create mail
   const draftMail = {
-    from: sender.id,
-    to: recipient ? recipient.id : null,
+    from: sender._id,
+    to: recipient ? recipient._id : null,
     subject: subject || '',
     body: body || '',
     links: [],
@@ -151,13 +151,12 @@ const createDraft = async (sender, to, subject, body, originalDraftId = null) =>
     fromPicture: sender.picture,
      isStarred: false
   }
-  await draftMail.save();
 
   const draftLabel = await Label.findOne({ user: sender._id, name: 'Drafts' });
   if (!draftLabel) throw new Error('NO_DRAFT_LABEL')
   
   // Add mail to labels using external helper
-  await addMailToLabel(draftLabel._id, draft._id);
+  await addMailToLabel(draftLabel._id, draftMail._id);
 
 
   return draftMail

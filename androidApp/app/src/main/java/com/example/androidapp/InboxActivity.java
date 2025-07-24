@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -69,12 +70,7 @@ public class InboxActivity extends AppCompatActivity {
         mailViewModel = new ViewModelProvider(this).get(MailViewModel.class);
         userViewModel = new LoggedInUserViewModel(this);
 
-        userViewModel.fetchCurrentUserProfile();
-
-
         userViewModel.getUserProfile().observe(this, result -> {
-            Log.i("inbox", " " );
-//            loadingProgressBar.setVisibility(View.GONE);
             if (result instanceof Result.Success) {
                 User user = ((Result.Success<User>) result).getData();
                 Log.i("getUserResult", "user display name:  " + user.getDisplayName());
@@ -123,7 +119,6 @@ public class InboxActivity extends AppCompatActivity {
                 labelsAdapter.setLabels(apiLabels);
             } else if (result instanceof Result.Error) {
                 Exception error = ((Result.Error) result).getError();
-                Toast.makeText(this, "Error loading labels: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -131,7 +126,6 @@ public class InboxActivity extends AppCompatActivity {
             if (labelName == null) return;
 
             drawer.closeDrawers();
-            Toast.makeText(this, "Loading mails for label: " + labelName, Toast.LENGTH_SHORT).show();
 
             // קוראים למתודה עם שם הלייבל, כפי שהשרת מצפה
             mailViewModel.fetchMailsByLabel(labelName);
@@ -140,7 +134,6 @@ public class InboxActivity extends AppCompatActivity {
          userViewModel.getUserProfile().observe(this, result -> {
             if (result instanceof Result.Success) {
                 User user = ((Result.Success<User>) result).getData();
-                Log.i("getUserProfile", "user display name:  " + user.getDisplayName());
                 updateNavHeader(user);
 
             } else if (result instanceof Result.Error) {
@@ -169,10 +162,38 @@ public class InboxActivity extends AppCompatActivity {
             }
         });
 
-        // ================== 5. טעינת נתונים ראשונית ==================
+        // load initial data
+        mailViewModel.fetchMailsByLabel("Inbox");
+
         userViewModel.fetchCurrentUserProfile();
         labelViewModel.fetchLabelsFromApi();
     }
+
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main); // התאימי ל-ID של NavHostFragment שלך
+//
+//        NavBackStackEntry currentBackStackEntry = navController.getCurrentBackStackEntry();
+//
+//        if (currentBackStackEntry != null) {
+//            currentBackStackEntry.getSavedStateHandle()
+//                    .getLiveData("shouldRefresh")
+//                    .observe(this, shouldRefresh -> {
+//                        if (Boolean.TRUE.equals(shouldRefresh)) {
+//                            // הפעולה שתרצי לבצע אחרי החזרה
+//                            mailViewModel.fetchMailsByLabel("Inbox");
+////                            mailViewModel.fetchMailsByLabel("Draft");
+//
+//                            // remove in order to prevent second call
+//                            currentBackStackEntry.getSavedStateHandle().remove("shouldRefresh");
+//                        }
+//                    });
+//        }
+//
+//    }
+
     /**
      * A new method to handle the session expiration logic cleanly.
      */
@@ -260,9 +281,7 @@ public class InboxActivity extends AppCompatActivity {
         // ================== קוד לטעינת התמונה ==================
         if (profileImageView != null) {
             String imageUrl = user.getPicture();
-            Log.d("GlideDebug", "url of pic " + imageUrl);
 
-            // בדיקה שנייה: נוודא שכתובת התמונה אינה null ואינה ריקה
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 // אם הכתובת תקינה, נבנה את הכתובת המלאה ונטען עם Glide
                 String baseUrl = "http://10.0.2.2:3000"; // כתובת בסיס נקייה
@@ -272,14 +291,25 @@ public class InboxActivity extends AppCompatActivity {
 
                 Glide.with(this)
                         .load(fullImageUrl)
-                        .placeholder(R.drawable.ic_menu_camera) // תמונה זמנית
-                        .error(R.drawable.ic_menu_camera)       // תמונה במקרה של שגיאה
-                        .circleCrop()                           // חיתוך לעיגול
-                        .into(profileImageView);                // הצגה ברכיב זה
+                        .placeholder(R.drawable.ic_menu_camera)
+                        .error(R.drawable.ic_menu_camera)
+                        .circleCrop()
+                        .into(profileImageView);
             } else {
                 // אם למשתמש אין כתובת תמונה, נציג את תמונת ברירת המחדל
                 profileImageView.setImageResource(R.drawable.ic_menu_camera);
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // We use a switch statement to handle clicks on different menu items
+        if(item.getItemId() ==  R.id.action_settings) {
+
+            handleSessionExpired();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
