@@ -21,9 +21,6 @@ public class Draft {
     private User from;
     private User to;
 
-
-    //    private String fromUserId;
-//    private String toUserId;
     private String subject;
     private String body;
     private List<String> links;

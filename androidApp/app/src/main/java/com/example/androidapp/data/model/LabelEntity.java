@@ -33,7 +33,7 @@ public class LabelEntity {
         this.user = user;
     }
 
-    // Getters ו-Setters
+    // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

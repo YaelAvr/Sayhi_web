@@ -100,30 +100,6 @@ public class EditNewMailFragment extends Fragment {
         String body = ((EditText) requireView().findViewById(R.id.mail_body)).getText().toString().trim();
 
         viewModel.saveDraftOnExit(to, subject, body);
-//        Mail mail = new Mail(to, subject, body);
-//        mail.setDraft(true);
-//
-//        MailDao dao = MailDatabase.getInstance(requireContext()).mailDao();
-//        Executors.newSingleThreadExecutor().execute(() -> dao.insert(mail));
     }
-//    private void setupSendButton(View view) {
-//        // מצא את הכפתור לפי ה-ID שהגדרנו ב-XML
-//        com.google.android.material.button.MaterialButton sendButton = view.findViewById(R.id.button_send);
-//
-//        // הגדר מאזין ללחיצות
-//        if (sendButton != null) {
-//            sendButton.setOnClickListener(v -> {
-//
-//                String to = toEditText.getText().toString().trim();
-//                String subject = subjectEditText.getText().toString().trim();
-//                String body = bodyEditText.getText().toString().trim();
-//                viewModel.sendMail(to, subject, body);
-//                // כרגע, רק נקפיץ הודעה כדי לוודא שזה עובד
-////                Toast.makeText(getContext(), "כפתור 'שלח' נלחץ!", Toast.LENGTH_SHORT).show();
-//
-//                // כאן בעתיד תוסיף את הלוגיקה של איסוף המידע ושליחת המייל
-//            });
-//        }
-//    }
 
 }

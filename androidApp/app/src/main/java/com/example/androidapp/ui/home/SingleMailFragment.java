@@ -81,7 +81,7 @@ public class SingleMailFragment extends Fragment {
 
         deleteButton.setOnClickListener(v -> {
             deleteButton.setEnabled(false);
-            Toast.makeText(requireContext(), "מוחק...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "deleting...", Toast.LENGTH_SHORT).show();
             mailViewModel.deleteMail(currentMailId);
         });
 
@@ -110,11 +110,9 @@ public class SingleMailFragment extends Fragment {
 
         mailViewModel.getDeleteResult().observe(getViewLifecycleOwner(), result -> {
             if (result instanceof Result.Success) {
-                Toast.makeText(requireContext(), "המייל נמחק בהצלחה", Toast.LENGTH_LONG).show();
                 navigateUp();
             } else if (result instanceof Result.Error) {
                 String errorMessage = ((Result.Error) result).getError().getMessage();
-                Toast.makeText(requireContext(), "שגיאה: " + errorMessage, Toast.LENGTH_LONG).show();
                 deleteButton.setEnabled(true);
             }
         });

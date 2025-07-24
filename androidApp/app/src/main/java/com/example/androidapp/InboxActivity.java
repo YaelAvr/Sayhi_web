@@ -119,7 +119,6 @@ public class InboxActivity extends AppCompatActivity {
                 labelsAdapter.setLabels(apiLabels);
             } else if (result instanceof Result.Error) {
                 Exception error = ((Result.Error) result).getError();
-                Toast.makeText(this, "Error loading labels: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -127,7 +126,6 @@ public class InboxActivity extends AppCompatActivity {
             if (labelName == null) return;
 
             drawer.closeDrawers();
-            Toast.makeText(this, "Loading mails for label: " + labelName, Toast.LENGTH_SHORT).show();
 
             // קוראים למתודה עם שם הלייבל, כפי שהשרת מצפה
             mailViewModel.fetchMailsByLabel(labelName);
@@ -136,7 +134,6 @@ public class InboxActivity extends AppCompatActivity {
          userViewModel.getUserProfile().observe(this, result -> {
             if (result instanceof Result.Success) {
                 User user = ((Result.Success<User>) result).getData();
-                Log.i("getUserProfile", "user display name:  " + user.getDisplayName());
                 updateNavHeader(user);
 
             } else if (result instanceof Result.Error) {
@@ -165,7 +162,7 @@ public class InboxActivity extends AppCompatActivity {
             }
         });
 
-        // ================== 5. טעינת נתונים ראשונית ==================
+        // load initial data
         mailViewModel.fetchMailsByLabel("Inbox");
 
         userViewModel.fetchCurrentUserProfile();
@@ -284,9 +281,7 @@ public class InboxActivity extends AppCompatActivity {
         // ================== קוד לטעינת התמונה ==================
         if (profileImageView != null) {
             String imageUrl = user.getPicture();
-            Log.d("GlideDebug", "url of pic " + imageUrl);
 
-            // בדיקה שנייה: נוודא שכתובת התמונה אינה null ואינה ריקה
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 // אם הכתובת תקינה, נבנה את הכתובת המלאה ונטען עם Glide
                 String baseUrl = "http://10.0.2.2:3000"; // כתובת בסיס נקייה
@@ -296,10 +291,10 @@ public class InboxActivity extends AppCompatActivity {
 
                 Glide.with(this)
                         .load(fullImageUrl)
-                        .placeholder(R.drawable.ic_menu_camera) // תמונה זמנית
-                        .error(R.drawable.ic_menu_camera)       // תמונה במקרה של שגיאה
-                        .circleCrop()                           // חיתוך לעיגול
-                        .into(profileImageView);                // הצגה ברכיב זה
+                        .placeholder(R.drawable.ic_menu_camera)
+                        .error(R.drawable.ic_menu_camera)
+                        .circleCrop()
+                        .into(profileImageView);
             } else {
                 // אם למשתמש אין כתובת תמונה, נציג את תמונת ברירת המחדל
                 profileImageView.setImageResource(R.drawable.ic_menu_camera);
@@ -307,35 +302,14 @@ public class InboxActivity extends AppCompatActivity {
         }
     }
 
-    // Inside MainActivity.java
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // We use a switch statement to handle clicks on different menu items
         if(item.getItemId() ==  R.id.action_settings) {
 
-            Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
             handleSessionExpired();
                 return true;
         }
         return super.onOptionsItemSelected(item);
-//        switch (item.getItemId()) {
-//            case R.id.action_settings:
-//                // User chose the "Settings" item.
-//                Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show();
-//                // TODO: Navigate to your SettingsFragment or SettingsActivity
-//                return true;
-//
-//            case R.id.action_logout:
-//                // User chose the "Logout" item.
-//                Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
-//                // TODO: Add your user logout logic here
-//                return true;
-//
-//            default:
-//                // If we got here, the user's action was not recognized.
-//                // Invoke the superclass to handle it.
-//                return super.onOptionsItemSelected(item);
-//        }
     }
 }

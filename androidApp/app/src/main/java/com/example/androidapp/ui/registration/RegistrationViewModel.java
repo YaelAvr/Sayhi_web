@@ -40,9 +40,6 @@ public class RegistrationViewModel extends ViewModel {
     private final MutableLiveData<Result<String>> pictureResult = new MutableLiveData<>();
     private String profilePictureUrl;
 
-
-
-
     public void initRepo(Context context) {
         if (userRepository == null) {
             userRepository = new UserRepository(context.getApplicationContext());

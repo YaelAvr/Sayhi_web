@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +16,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.androidapp.R;
 import com.example.androidapp.data.Result;
-import com.example.androidapp.data.model.MailEntity;
 import com.example.androidapp.model.Mail;
 
 import java.util.List;
@@ -61,11 +59,9 @@ public class HomeFragment extends Fragment {
                 // עדכן את המתאם עם הנתונים החדשים
                 mailsAdapter.setMails(apiMails);
 
-                Toast.makeText(getContext(), "Loaded " + apiMails.size() + " mails.", Toast.LENGTH_SHORT).show();
             } else if (result instanceof Result.Error) {
                 // הצג הודעת שגיאה במקרה של כישלון
                 Exception error = ((Result.Error) result).getError();
-                Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -82,8 +78,6 @@ public class HomeFragment extends Fragment {
 
     private void setupSwipeToRefresh() {
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            // בעתיד, אפשר להוסיף כאן לוגיקה מורכבת יותר שתזכור מה הלייבל האחרון שנבחר
-            // כרגע, כל רענון יטען מחדש את תיבת הדואר הנכנס
             mailViewModel.fetchMailsByLabel("Inbox");
         });
     }
@@ -105,21 +99,6 @@ public class HomeFragment extends Fragment {
                 });
              }
         }
-    }
-
-
-    private Mail toMail(MailEntity entity) {
-        Mail mail = new Mail(
-                entity.getFromName(),
-                entity.getSubject(),
-                entity.getBody(),
-                entity.getTime(),
-                entity.isRead(),
-                entity.isStarred(),
-                entity.getFromPicture()
-        );
-        mail.setId(entity.getId());
-        return mail;
     }
 
 }
