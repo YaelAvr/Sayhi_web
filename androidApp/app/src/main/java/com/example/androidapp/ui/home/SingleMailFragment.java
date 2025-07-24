@@ -21,7 +21,6 @@ import com.example.androidapp.data.Result;
 import com.example.androidapp.model.Mail;
 
 import java.text.SimpleDateFormat;
-import java.util.List; // ודא שהייבוא הזה קיים
 import java.util.Locale;
 
 public class SingleMailFragment extends Fragment {
@@ -79,7 +78,6 @@ public class SingleMailFragment extends Fragment {
             mailViewModel.deleteMail(currentMailId);
         });
 
-        // --- כאן התיקון בלוגיקת הכפתור ---
         addToLabelButton.setOnClickListener(v -> {
             showAddToLabelDialog();
         });
@@ -101,50 +99,37 @@ public class SingleMailFragment extends Fragment {
             }
         });
 
-        // --- הוספה: האזנה לתוצאת ההוספה לתווית ---
         mailViewModel.getAddLabelResult().observe(getViewLifecycleOwner(), result -> {
             if (result instanceof Result.Success) {
-                Toast.makeText(getContext(), "המייל נוסף לתווית בהצלחה!", Toast.LENGTH_SHORT).show();
-                // אופציונלי: רענן את נתוני המייל כדי להציג את התווית החדשה אם יש לך תצוגה כזו
+                Toast.makeText(getContext(), "Mail added successfully", Toast.LENGTH_SHORT).show();
                 mailViewModel.findMailById(currentMailId);
             }
             else if (result instanceof Result.Error) {
-                // --- כאן התיקון ---
-                // 1. נשמור את תוצאת השגיאה במשתנה נפרד
                 Result.Error<Void> errorResult = (Result.Error<Void>) result;
-                // 2. נקבל את הודעת השגיאה מהמשתנה
                 String errorMessage = errorResult.getError().getMessage();
-                // 3. נציג את ההודעה הנקייה
-                Toast.makeText(getContext(), "שגיאה בהוספת התווית: " + errorMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // --- הוספה: פונקציה שמראה את הדיאלוג ומטפלת בתוצאה ---
     private void showAddToLabelDialog() {
         AddToLabelDialogFragment dialog = AddToLabelDialogFragment.newInstance();
         dialog.setListener(selectedLabelNames -> {
             if (selectedLabelNames == null || selectedLabelNames.isEmpty()) {
-                Toast.makeText(getContext(), "לא נבחרו תוויות", Toast.LENGTH_SHORT).show();
-                return; // יציאה מהפונקציה אם לא נבחר כלום
-            }
-
-            // --- בדיקת בטיחות: ודא שיש לנו ID של מייל ---
-            if (currentMailId == null || currentMailId.isEmpty()) {
-                Toast.makeText(getContext(), "שגיאה: לא זוהה מייל נוכחי", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "No labels selected", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            Toast.makeText(getContext(), "מעדכן...", Toast.LENGTH_SHORT).show();
+            if (currentMailId == null || currentMailId.isEmpty()) {
+                Toast.makeText(getContext(), "Error: No current mail detected", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Toast.makeText(getContext(), "updating...", Toast.LENGTH_SHORT).show();
 
             for (String labelName : selectedLabelNames) {
-                // --- בדיקת בטיחות: ודא ששם התווית אינו ריק ---
                 if (labelName != null && !labelName.isEmpty()) {
-                    // הדפסה ל-Logcat כדי לוודא מה אנחנו שולחים
-                    Log.d("AddLabelDebug", "שולח בקשה: mailId=" + currentMailId + ", labelName=" + labelName);
                     mailViewModel.addLabelToMail(currentMailId, labelName);
-                } else {
-                    Log.e("AddLabelDebug", "ניסיון לשלוח שם תווית ריק!");
                 }
             }
         });

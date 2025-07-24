@@ -32,14 +32,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MailViewModel extends AndroidViewModel {
 
     private final MailRepository repository;
-
-    // LiveData קיים
     private final MutableLiveData<Result<List<Mail>>> mailsApiResult = new MutableLiveData<>();
     private final MutableLiveData<Mail> selectedMail = new MutableLiveData<>();
     private final MediatorLiveData<Result<Void>> deleteResult = new MediatorLiveData<>();
     private LiveData<Result<Void>> deleteSource;
 
-    // --- הוספה: שירותים ו-LiveData חדשים לניהול תוויות ---
     private final MailServicesAPI mailServicesAPI;
     private final LabelServiceAPI labelServiceAPI;
     private final MutableLiveData<Result<List<Label>>> labelsResult = new MutableLiveData<>();
@@ -50,7 +47,6 @@ public class MailViewModel extends AndroidViewModel {
         super(application);
         repository = new MailRepository(application);
 
-        // --- הוספה: אתחול ישיר של Retrofit לשימוש ב-ViewModel ---
         TokenManager tokenManager = new TokenManager(application);
         AuthInterceptor authInterceptor = new AuthInterceptor(tokenManager);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(authInterceptor).build();
@@ -64,8 +60,6 @@ public class MailViewModel extends AndroidViewModel {
         this.mailServicesAPI = retrofit.create(MailServicesAPI.class);
         this.labelServiceAPI = retrofit.create(LabelServiceAPI.class);
     }
-
-    // --- הוספה: פונקציות לטעינת תוויות והוספת מייל לתווית ---
 
     public LiveData<Result<List<Label>>> getLabelsResult() {
         return labelsResult;
@@ -95,25 +89,21 @@ public class MailViewModel extends AndroidViewModel {
 
     public void addLabelToMail(String mailId, String labelName) {
         JsonObject body = new JsonObject();
-        body.addProperty("labelName", labelName); // גוף הבקשה מכיל רק את שם התווית
+        body.addProperty("labelName", labelName);
 
-        // קריאה ל-API עם ה-ID בנתיב והגוף בנפרד
         mailServicesAPI.addLabelToMail(mailId, body).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
                     addLabelResult.postValue(new Result.Success<>(null));
                 } else {
-                    // --- לוגיקה משופרת לטיפול בשגיאה ---
                     String errorDetails = "Code: " + response.code();
                     try {
                         if (response.errorBody() != null) {
-                            // ננסה לקרוא את גוף השגיאה שהשרת שלח
                             errorDetails = response.errorBody().string();
-                            Log.e("AddLabelError", "השרת החזיר שגיאה: " + errorDetails);
                         }
                     } catch (Exception e) {
-                        Log.e("AddLabelError", "שגיאה בקריאת גוף התגובה", e);
+                        Log.e("AddLabelError", "Error", e);
                     }
                     addLabelResult.postValue(new Result.Error(new Exception(errorDetails)));
                 }
@@ -121,14 +111,10 @@ public class MailViewModel extends AndroidViewModel {
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Log.e("AddLabelError", "כשל ברשת", t);
                 addLabelResult.postValue(new Result.Error(new Exception(t.getMessage())));
             }
         });
     }
-
-
-    // --- הקוד הקיים שלך נשאר פה ---
 
     public void findMailById(String mailId) {
         LiveData<Result<Mail>> resultSource = repository.getMailById(mailId);

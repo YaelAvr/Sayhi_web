@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="הוספה לתווית"
+        android:text="@string/select_label"
         android:textAppearance="?attr/textAppearanceTitleLarge"
         android:layout_marginBottom="16dp"/>
 
@@ -20,7 +20,6 @@
         android:maxHeight="300dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <!-- ודא שהרכיב הזה קיים בדיוק כך -->
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
