@@ -11,19 +11,19 @@ public class Result<T> {
     @Override
     public String toString() {
         if (this instanceof Result.Success) {
-            Result.Success success = (Result.Success) this;
+            Result.Success<?> success = (Result.Success<?>) this; // השתמש ב-? כדי להתאים לכל סוג
             return "Success[data=" + success.getData().toString() + "]";
         } else if (this instanceof Result.Error) {
             Result.Error error = (Result.Error) this;
-            return error.getError().toString();
-//            return "Error[exception=" + error.getError().toString() + "]";
+            return "Error[exception=" + error.getError().toString() + "]";
         }
         return "";
     }
 
-    // Success sub-class
-    public final static class Success<T> extends Result {
-        private T data;
+    // --- התיקון כאן ---
+    // Success sub-class now extends Result<T>
+    public final static class Success<T> extends Result<T> {
+        private final T data;
 
         public Success(T data) {
             this.data = data;
@@ -34,9 +34,10 @@ public class Result<T> {
         }
     }
 
-    // Error sub-class
-    public final static class Error extends Result {
-        private Exception error;
+    // --- והתיקון כאן ---
+    // Error sub-class now also extends Result<T>
+    public final static class Error<T> extends Result<T> {
+        private final Exception error;
 
         public Error(Exception error) {
             this.error = error;

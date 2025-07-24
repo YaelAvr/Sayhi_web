@@ -1,6 +1,8 @@
 package com.example.androidapp.ui.home;
 
 import android.app.Application;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -93,21 +95,33 @@ public class MailViewModel extends AndroidViewModel {
 
     public void addLabelToMail(String mailId, String labelName) {
         JsonObject body = new JsonObject();
-        body.addProperty("mailId", mailId);
-        body.addProperty("labelName", labelName);
+        body.addProperty("labelName", labelName); // גוף הבקשה מכיל רק את שם התווית
 
-        mailServicesAPI.addLabelToMail(body).enqueue(new Callback<Void>() {
+        // קריאה ל-API עם ה-ID בנתיב והגוף בנפרד
+        mailServicesAPI.addLabelToMail(mailId, body).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
                     addLabelResult.postValue(new Result.Success<>(null));
                 } else {
-                    addLabelResult.postValue(new Result.Error(new Exception("Error adding label: " + response.code())));
+                    // --- לוגיקה משופרת לטיפול בשגיאה ---
+                    String errorDetails = "Code: " + response.code();
+                    try {
+                        if (response.errorBody() != null) {
+                            // ננסה לקרוא את גוף השגיאה שהשרת שלח
+                            errorDetails = response.errorBody().string();
+                            Log.e("AddLabelError", "השרת החזיר שגיאה: " + errorDetails);
+                        }
+                    } catch (Exception e) {
+                        Log.e("AddLabelError", "שגיאה בקריאת גוף התגובה", e);
+                    }
+                    addLabelResult.postValue(new Result.Error(new Exception(errorDetails)));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                Log.e("AddLabelError", "כשל ברשת", t);
                 addLabelResult.postValue(new Result.Error(new Exception(t.getMessage())));
             }
         });

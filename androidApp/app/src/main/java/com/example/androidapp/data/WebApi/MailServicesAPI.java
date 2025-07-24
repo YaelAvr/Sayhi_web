@@ -38,5 +38,8 @@ public interface MailServicesAPI {
     Call<Void> deleteMail(@Path("id") String mailId);
 
     @POST("mails/{id}/add-label")
-    Call<Void> addLabelToMail(@Body JsonObject body);
+    Call<Void> addLabelToMail(
+            @Path("id") String mailId,
+            @Body JsonObject body
+    );
 }
