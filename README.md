@@ -85,7 +85,7 @@ environment:
 ## Screenshots
 
 ### Project Management - JIRA Board
-![JIRA Board](https://github.com/eden05221/gmail_project/blob/main/images/part4/jira.png)
+![JIRA Board](images/part4/jira.png)
 
 
 ### Application Run Example
@@ -118,39 +118,33 @@ The following screenshot demonstrates user registration and login to Gmail, and 
   Accepted formats: `.jpeg`, `.jpg`, `.png`, `.webp`, `.svg`, `.gif`.  
   Example: `https://example.com/profile.jpg`
   
-![The user registers for Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/1.png)
-![The user registers for Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/2.png)
-![The user registers for Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/3.png)
-
+![The user registers for Gmail](images/part4/1.png)
+![The user registers for Gmail](images/part4/2.png)
+![The user registers for Gmail](images/part4/3.png)
 
 ### Login:
-![The user logs in to Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/4.png)
-![The user logs in to Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/5.png)
 
+![The user logs in to Gmail](images/part4/4.png)
+![The user logs in to Gmail](images/part4/5.png)
 
 ### Actions in Gmail:
 
 Create and send a mail:
-![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/6.png)
-![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/7.png)
+
+![The user performs actions in Gmail](images/part4/6.png)
+![The user performs actions in Gmail](images/part4/7.png)
 
 Create a label and add a mail to this label:
-![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/8.png)
-![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/9.png)
-![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/10.png)
-![The user performs actions in Gmail](https://github.com/eden05221/gmail_project/blob/main/images/part4/11.png)
+
+![The user performs actions in Gmail](images/part4/8.png)
+![The user performs actions in Gmail](images/part4/9.png)
+![The user performs actions in Gmail](images/part4/10.png)
+![The user performs actions in Gmail](images/part4/11.png)
 
 Switching to dark mode by clicking the sun icon will change the screen colors to a dark theme, as shown in the images below:
-![Dark mode](https://github.com/eden05221/gmail_project/blob/main/images/part4/12.png)
-![Dark mode](https://github.com/eden05221/gmail_project/blob/main/images/part4/13.png)
 
-
-
-
-
-
-
-
+![Dark mode](images/part4/12.png)
+![Dark mode](images/part4/13.png)
 
 
 
